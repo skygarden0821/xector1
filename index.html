@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="XECTOR1">
+<meta name="theme-color" content="#050507">
+<title>XECTOR1 — Member Portal</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:     #050507;
+  --s1:     #0c0c10;
+  --s2:     #131318;
+  --s3:     #1a1a22;
+  --border: rgba(255,255,255,0.06);
+  --border2:rgba(255,255,255,0.13);
+  --white:  #f2f0ff;
+  --dim:    rgba(242,240,255,0.38);
+  --dim2:   rgba(242,240,255,0.13);
+  --lime:   #c8ff00;
+  --cyan:   #00f0ff;
+  --pink:   #ff3d80;
+  --gold:   #ffb700;
+  --green:  #00ffaa;
+  --purple: #9f6fff;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--white);font-family:'Syne',sans-serif;
+  overscroll-behavior:none;user-select:none;}
+
+/* ── NOISE ── */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");opacity:.5;}
+
+/* ── AMBIENT ── */
+.ambient{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 0%,  rgba(200,255,0,0.05) 0%,transparent 65%),
+    radial-gradient(ellipse 50% 60% at 90% 90%, rgba(0,240,255,0.03) 0%,transparent 65%),
+    radial-gradient(ellipse 40% 40% at 55% 45%, rgba(159,111,255,0.02) 0%,transparent 60%);}
+
+/* ══════════════════════════════
+   LOGIN SCREEN
+══════════════════════════════ */
+#screen-login{
+  position:fixed;inset:0;z-index:8000;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--bg);
+  transition:opacity .6s, transform .6s;
+}
+#screen-login.out{opacity:0;transform:scale(1.04);pointer-events:none;}
+
+.login-glow{position:absolute;top:-20%;left:50%;transform:translateX(-50%);
+  width:600px;height:400px;
+  background:radial-gradient(ellipse, rgba(200,255,0,0.07) 0%, transparent 70%);
+  pointer-events:none;}
+
+.login-wrap{width:100%;max-width:400px;padding:0 28px;position:relative;z-index:1;}
+
+.login-logo{text-align:center;margin-bottom:48px;}
+.login-logo-mark{font-family:'Bebas Neue',sans-serif;font-size:80px;letter-spacing:14px;
+  color:var(--white);display:block;line-height:1;
+  animation:logoReveal .8s cubic-bezier(.16,1,.3,1) both;}
+@keyframes logoReveal{from{opacity:0;letter-spacing:30px;}to{opacity:1;letter-spacing:14px;}}
+.login-logo-sub{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:5px;
+  color:var(--lime);text-transform:uppercase;margin-top:6px;
+  animation:fadeUp .6s .3s ease both;}
+
+.login-card{background:var(--s1);border:1px solid var(--border);padding:36px 32px;
+  animation:fadeUp .6s .2s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+.login-eyebrow{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:4px;
+  color:var(--dim);text-transform:uppercase;margin-bottom:28px;
+  display:flex;align-items:center;gap:10px;}
+.login-eyebrow::before{content:'';width:20px;height:1px;background:var(--border2);}
+
+.lf{margin-bottom:14px;}
+.lf label{display:block;font-family:'Space Mono',monospace;font-size:8px;
+  letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:6px;}
+.lf input{width:100%;background:var(--bg);border:1px solid var(--border);
+  padding:13px 16px;color:var(--white);font-family:'Syne',sans-serif;font-size:14px;
+  outline:none;transition:border-color .2s;border-radius:1px;}
+.lf input:focus{border-color:var(--border2);}
+.lf input::placeholder{color:var(--dim2);}
+
+.btn-login{width:100%;background:var(--lime);color:#000;border:none;
+  padding:16px;margin-top:24px;
+  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:5px;
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:12px;}
+.btn-login:hover{filter:brightness(1.08);}
+.btn-login:active{transform:scale(.98);}
+
+.login-footer{text-align:center;margin-top:20px;
+  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--dim2);}
+
+/* ══════════════════════════════
+   APP SHELL
+══════════════════════════════ */
+#app{
+  position:fixed;inset:0;z-index:100;
+  display:none;flex-direction:column;
+}
+#app.visible{display:flex;}
+
+/* TOP BAR */
+.app-topbar{
+  height:56px;flex-shrink:0;
+  background:rgba(5,5,7,0.95);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;
+  padding-top:env(safe-area-inset-top,0);
+}
+.topbar-logo{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:5px;
+  display:flex;align-items:center;gap:8px;}
+.topbar-dot{width:5px;height:5px;border-radius:50%;background:var(--lime);
+  box-shadow:0 0 6px var(--lime);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);}}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.topbar-member{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--dim);}
+.topbar-badge{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;
+  background:rgba(200,255,0,0.08);border:1px solid rgba(200,255,0,0.2);
+  color:var(--lime);padding:3px 8px;border-radius:2px;}
+
+/* CONTENT AREA */
+.app-content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative;}
+.app-content::-webkit-scrollbar{display:none;}
+
+/* BOTTOM NAV */
+.app-nav{
+  flex-shrink:0;
+  background:rgba(8,8,10,0.97);backdrop-filter:blur(24px);
+  border-top:1px solid var(--border);
+  display:flex;align-items:stretch;
+  padding-bottom:calc(var(--safe-bottom) + 4px);
+  padding-top:2px;
+}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:4px;padding:8px 4px 6px;
+  cursor:pointer;transition:all .2s;border:none;background:transparent;
+  position:relative;}
+.nav-item::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;
+  background:var(--lime);border-radius:0 0 2px 2px;opacity:0;transition:opacity .2s;}
+.nav-item.active::before{opacity:1;}
+.nav-icon{font-size:19px;transition:transform .2s;}
+.nav-item.active .nav-icon{transform:scale(1.1);}
+.nav-label{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--dim);transition:color .2s;}
+.nav-item.active .nav-label{color:var(--lime);}
+
+/* ── PAGE SYSTEM ── */
+.page{display:none;min-height:100%;animation:pageIn .3s ease;}
+.page.active{display:block;}
+@keyframes pageIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* ══════════════════════════════
+   SHARED COMPONENTS
+══════════════════════════════ */
+.section-pad{padding:28px 20px;}
+.eyebrow{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:4px;
+  text-transform:uppercase;color:var(--lime);margin-bottom:10px;
+  display:flex;align-items:center;gap:8px;}
+.eyebrow::before{content:'';width:16px;height:1px;background:var(--lime);}
+.big-title{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:3px;
+  line-height:.92;margin-bottom:12px;}
+.big-title em{color:var(--lime);font-style:normal;}
+.section-sub{font-size:12px;color:var(--dim);line-height:1.65;letter-spacing:.3px;}
+
+.card{background:var(--s1);border:1px solid var(--border);transition:border-color .2s;}
+.card:hover{border-color:var(--border2);}
+
+.tag{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;
+  padding:3px 8px;border-radius:2px;display:inline-block;}
+.tag-lime{background:rgba(200,255,0,0.08);border:1px solid rgba(200,255,0,0.2);color:var(--lime);}
+.tag-cyan{background:rgba(0,240,255,0.08);border:1px solid rgba(0,240,255,0.2);color:var(--cyan);}
+.tag-pink{background:rgba(255,61,128,0.08);border:1px solid rgba(255,61,128,0.2);color:var(--pink);}
+.tag-dim{background:var(--s2);border:1px solid var(--border);color:var(--dim);}
+
+/* ══════════════════════════════
+   HOME PAGE
+══════════════════════════════ */
+.home-hero{padding:28px 20px 20px;position:relative;overflow:hidden;}
+.home-hero-bg{position:absolute;inset:0;
+  background:radial-gradient(ellipse 100% 100% at 80% 0%, rgba(200,255,0,0.05) 0%,transparent 60%);
+  pointer-events:none;}
+.home-greeting{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;
+  color:var(--dim);text-transform:uppercase;margin-bottom:8px;}
+.home-name{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:3px;line-height:1;}
+.home-name em{color:var(--lime);font-style:normal;}
+.home-since{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;
+  color:var(--dim);margin-top:6px;}
+
+/* STREAK */
+.streak-block{margin:0 20px 2px;background:var(--s1);border:1px solid var(--border);
+  padding:16px 20px;display:flex;align-items:center;gap:16px;}
+.streak-num{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:1px;
+  color:var(--lime);line-height:1;flex-shrink:0;}
+.streak-label{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--dim);margin-bottom:6px;}
+.streak-dots{display:flex;gap:4px;flex-wrap:wrap;}
+.sd{width:8px;height:8px;border-radius:50%;background:var(--s3);}
+.sd.on{background:var(--lime);box-shadow:0 0 4px var(--lime);}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:2px 20px;}
+.kpi-card{background:var(--s1);border:1px solid var(--border);padding:18px 16px;}
+.kpi-card-label{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--dim);margin-bottom:8px;
+  display:flex;align-items:center;gap:6px;}
+.kpi-plat{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.kpi-card-val{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;line-height:1;}
+.kpi-card-delta{font-family:'Space Mono',monospace;font-size:8px;margin-top:4px;letter-spacing:1px;}
+.kpi-card-delta.up{color:var(--green);}
+.kpi-card-delta.dn{color:var(--pink);}
+
+/* ACTION LIST */
+.action-list{margin:2px 20px 20px;display:flex;flex-direction:column;gap:2px;}
+.action-row{background:var(--s1);border:1px solid var(--border);
+  padding:16px 20px;display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;transition:all .2s;}
+.action-row:hover,.action-row:active{background:var(--s2);border-color:var(--border2);}
+.ar-left{}
+.ar-label{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--dim);margin-bottom:4px;}
+.ar-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;}
+.ar-arrow{font-size:18px;color:var(--dim);transition:all .2s;}
+.action-row:hover .ar-arrow{color:var(--lime);transform:translateX(3px);}
+
+/* ══════════════════════════════
+   STATS PAGE
+══════════════════════════════ */
+.stats-header{padding:28px 20px 16px;}
+
+/* RADAR */
+.radar-card{margin:0 20px 2px;background:var(--s1);border:1px solid var(--border);padding:20px;}
+.rc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.rc-title{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--dim);}
+.rc-score{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:1px;
+  line-height:1;color:var(--lime);}
+.rc-grade{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--dim);margin-top:2px;}
+.radar-wrap{height:240px;display:flex;align-items:center;justify-content:center;}
+
+/* CHART PERIOD TABS */
+.period-tabs{display:flex;gap:2px;margin:0 20px 2px;}
+.pt{flex:1;background:var(--s1);border:1px solid var(--border);
+  padding:9px 4px;text-align:center;cursor:pointer;transition:all .2s;
+  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--dim);}
+.pt.active{background:var(--lime);border-color:var(--lime);color:#000;}
+
+/* LINE CHART */
+.line-card{margin:0 20px 2px;background:var(--s1);border:1px solid var(--border);padding:20px;}
+.lc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.lc-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;}
+.lc-sub{font-size:10px;color:var(--dim);}
+.lc-wrap{height:160px;}
+
+/* KPI METRIC SCROLL */
+.metric-scroll{display:flex;gap:2px;margin:0 20px 2px;overflow-x:auto;padding-bottom:2px;}
+.metric-scroll::-webkit-scrollbar{display:none;}
+.metric-chip{background:var(--s1);border:1px solid var(--border);
+  padding:12px 16px;flex-shrink:0;cursor:pointer;transition:all .2s;min-width:110px;}
+.metric-chip.active{border-color:var(--lime);background:rgba(200,255,0,0.05);}
+.mc-label{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--dim);margin-bottom:6px;}
+.mc-val{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;line-height:1;}
+
+/* INPUT FORM */
+.input-form{margin:2px 20px 20px;}
+.platform-block{background:var(--s1);border:1px solid var(--border);
+  padding:20px;margin-bottom:2px;position:relative;}
+.platform-block::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  opacity:0;transition:opacity .3s;}
+.platform-block:focus-within::before{opacity:1;}
+.pb-yt::before{background:var(--pink);}
+.pb-tt::before{background:var(--cyan);}
+.pb-ig::before{background:var(--purple);}
+.pb-x::before{background:var(--dim);}
+.pb-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.pb-icon{width:30px;height:30px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;font-size:14px;}
+.pb-name{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;}
+.pb-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.pf label{display:block;font-family:'Space Mono',monospace;font-size:7px;
+  letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:4px;}
+.pf input{width:100%;background:var(--bg);border:1px solid var(--border);
+  padding:9px 10px;color:var(--white);font-family:'Space Mono',monospace;font-size:12px;
+  outline:none;transition:border-color .2s;border-radius:1px;
+  -moz-appearance:textfield;}
+.pf input::-webkit-outer-spin-button,.pf input::-webkit-inner-spin-button{-webkit-appearance:none;}
+.pf input:focus{border-color:var(--border2);}
+.pf input::placeholder{color:var(--dim2);}
+
+.btn-save{width:100%;background:var(--lime);color:#000;border:none;
+  padding:15px;margin-top:4px;
+  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:5px;
+  cursor:pointer;transition:all .2s;}
+.btn-save:active{transform:scale(.98);}
+
+/* ══════════════════════════════
+   TIPS PAGE
+══════════════════════════════ */
+.tips-header{padding:28px 20px 16px;}
+.filter-row{display:flex;gap:6px;padding:0 20px 16px;overflow-x:auto;}
+.filter-row::-webkit-scrollbar{display:none;}
+.fb{background:transparent;border:1px solid var(--border);
+  padding:6px 12px;white-space:nowrap;
+  font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--dim);cursor:pointer;transition:all .2s;border-radius:2px;}
+.fb:hover{color:var(--white);border-color:var(--border2);}
+.fb.active{background:var(--lime);border-color:var(--lime);color:#000;}
+
+.tips-list{padding:0 20px 20px;display:flex;flex-direction:column;gap:8px;}
+.tip-row{background:var(--s1);border:1px solid var(--border);
+  display:flex;gap:0;cursor:pointer;transition:all .2s;overflow:hidden;}
+.tip-row:hover,.tip-row:active{background:var(--s2);border-color:var(--border2);}
+.tip-accent{width:3px;flex-shrink:0;}
+.tip-body-wrap{padding:16px 16px 14px;flex:1;}
+.tip-meta-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.tip-cat-tag{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:1px;
+  padding:2px 6px;border-radius:2px;}
+.tip-week-tag{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:1px;color:var(--dim);}
+.tip-new{background:var(--lime);color:#000;font-family:'Space Mono',monospace;
+  font-size:7px;letter-spacing:1px;padding:2px 5px;border-radius:2px;}
+.tip-title-text{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;
+  line-height:1.1;margin-bottom:6px;}
+.tip-preview{font-size:11px;color:var(--dim);line-height:1.5;letter-spacing:.2px;}
+.tip-row-icon{width:56px;display:flex;align-items:center;justify-content:center;
+  font-size:24px;flex-shrink:0;border-left:1px solid var(--border);}
+
+/* ══════════════════════════════
+   COMMUNITY PAGE
+══════════════════════════════ */
+.community-header{padding:28px 20px 16px;}
+
+.comm-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:0 20px 16px;}
+.cs-card{background:var(--s1);border:1px solid var(--border);padding:14px 16px;}
+.cs-label{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--dim);margin-bottom:6px;}
+.cs-val{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;line-height:1;}
+
+.pinned-bar{margin:0 20px 8px;background:rgba(200,255,0,0.05);
+  border:1px solid rgba(200,255,0,0.15);border-left:3px solid var(--lime);
+  padding:12px 16px;}
+.pinned-tag{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:2px;
+  color:var(--lime);text-transform:uppercase;margin-bottom:4px;}
+.pinned-text{font-size:12px;color:var(--white);line-height:1.5;font-weight:500;}
+
+.composer-wrap{margin:0 20px 8px;background:var(--s1);border:1px solid var(--border);padding:16px;}
+.composer-ta{width:100%;background:var(--bg);border:1px solid var(--border);
+  padding:10px 12px;color:var(--white);font-family:'Syne',sans-serif;font-size:12px;
+  resize:none;outline:none;transition:border-color .2s;min-height:64px;border-radius:1px;}
+.composer-ta:focus{border-color:var(--border2);}
+.composer-ta::placeholder{color:var(--dim2);}
+.composer-foot{display:flex;align-items:center;justify-content:flex-end;margin-top:8px;}
+.btn-post{background:var(--lime);color:#000;border:none;
+  padding:8px 18px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;
+  text-transform:uppercase;cursor:pointer;transition:opacity .2s;}
+.btn-post:hover{opacity:.85;}
+
+.feed{padding:0 20px 20px;display:flex;flex-direction:column;gap:6px;}
+.post-card{background:var(--s1);border:1px solid var(--border);padding:16px;}
+.post-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.post-av{width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:14px;color:#000;}
+.post-nm{font-size:12px;font-weight:700;letter-spacing:.3px;}
+.post-tm{font-family:'Space Mono',monospace;font-size:8px;color:var(--dim);margin-top:2px;}
+.post-bdg{margin-left:auto;font-family:'Space Mono',monospace;font-size:7px;
+  letter-spacing:1px;padding:2px 6px;border-radius:2px;}
+.post-txt{font-size:12px;color:var(--dim);line-height:1.6;margin-bottom:10px;}
+.post-txt strong{color:var(--white);}
+.post-ach{background:var(--s2);border:1px solid var(--border);
+  padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.ach-ico{font-size:20px;}
+.ach-lbl{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:1px;color:var(--dim);}
+.ach-val{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;line-height:1.1;}
+.post-foot{display:flex;gap:8px;}
+.react-btn{background:transparent;border:1px solid var(--border);
+  padding:5px 10px;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1px;
+  color:var(--dim);cursor:pointer;transition:all .2s;border-radius:2px;display:flex;align-items:center;gap:4px;}
+.react-btn:hover,.react-btn:active{border-color:var(--border2);color:var(--white);}
+.react-btn.liked{background:rgba(200,255,0,0.08);border-color:rgba(200,255,0,0.2);color:var(--lime);}
+
+/* ══════════════════════════════
+   BOOK PAGE (GrowUp)
+══════════════════════════════ */
+.book-header{padding:28px 20px 16px;}
+
+.session-list{padding:0 20px;display:flex;flex-direction:column;gap:2px;margin-bottom:16px;}
+.session-row{background:var(--s1);border:1px solid var(--border);
+  padding:18px 20px;cursor:pointer;transition:all .2s;position:relative;}
+.session-row.sel{border-color:var(--lime);background:rgba(200,255,0,0.04);}
+.session-row::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  opacity:0;transition:opacity .2s;}
+.session-row.sel::before{opacity:1;background:var(--lime);}
+.sr-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.sr-icon{font-size:20px;}
+.sr-type{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--dim);}
+.sr-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;line-height:1;}
+.sr-desc{font-size:11px;color:var(--dim);line-height:1.55;margin-bottom:10px;}
+.sr-bottom{display:flex;align-items:center;justify-content:space-between;}
+.sr-price{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--lime);}
+.sr-dur{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--dim);}
+.sr-check{position:absolute;top:14px;right:16px;
+  font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1px;
+  color:var(--lime);opacity:0;transition:opacity .2s;}
+.session-row.sel .sr-check{opacity:1;}
+
+/* CALENDAR */
+.cal-wrap{margin:0 20px 2px;background:var(--s1);border:1px solid var(--border);padding:20px;}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.cal-nav-btn{background:transparent;border:1px solid var(--border);
+  width:32px;height:32px;color:var(--dim);cursor:pointer;transition:all .2s;font-size:14px;}
+.cal-nav-btn:hover{border-color:var(--border2);color:var(--white);}
+.cal-month{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cal-dh{text-align:center;font-family:'Space Mono',monospace;font-size:7px;letter-spacing:1px;
+  color:var(--dim);padding:4px 0;}
+.cal-c{aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+  font-family:'Space Mono',monospace;font-size:10px;cursor:pointer;
+  transition:all .2s;border-radius:2px;border:1px solid transparent;}
+.cal-c.empty,.cal-c.past{color:var(--dim2);pointer-events:none;}
+.cal-c.avail{color:var(--white);border-color:var(--border);}
+.cal-c.avail:hover{background:var(--s2);}
+.cal-c.slot{color:var(--lime);border-color:rgba(200,255,0,0.2);}
+.cal-c.slot:hover{background:rgba(200,255,0,0.06);}
+.cal-c.sel{background:var(--lime);color:#000;border-color:var(--lime);}
+.cal-c.today{box-shadow:0 0 0 1px rgba(200,255,0,0.35);}
+
+.time-wrap{margin:0 20px 2px;background:var(--s1);border:1px solid var(--border);padding:16px 20px;}
+.tw-title{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--dim);margin-bottom:10px;}
+.tw-date{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;margin-bottom:12px;}
+.time-slots{display:flex;gap:6px;flex-wrap:wrap;}
+.ts{background:var(--bg);border:1px solid var(--border);
+  padding:8px 14px;cursor:pointer;transition:all .2s;
+  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;border-radius:2px;}
+.ts:hover{border-color:var(--border2);}
+.ts.sel{background:rgba(200,255,0,0.1);border-color:rgba(200,255,0,0.3);color:var(--lime);}
+.ts.full{opacity:.3;pointer-events:none;text-decoration:line-through;}
+
+.book-form{margin:0 20px 20px;background:var(--s1);border:1px solid var(--border);padding:20px;}
+.bf-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;margin-bottom:16px;}
+.bf-field{margin-bottom:12px;}
+.bf-field label{display:block;font-family:'Space Mono',monospace;font-size:7px;
+  letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:5px;}
+.bf-field input,.bf-field textarea,.bf-field select{
+  width:100%;background:var(--bg);border:1px solid var(--border);
+  padding:10px 12px;color:var(--white);font-family:'Syne',sans-serif;font-size:13px;
+  outline:none;transition:border-color .2s;border-radius:1px;}
+.bf-field textarea{resize:none;min-height:64px;}
+.bf-field input:focus,.bf-field textarea:focus{border-color:var(--border2);}
+
+/* ══════════════════════════════
+   MODALS
+══════════════════════════════ */
+.overlay{position:fixed;inset:0;z-index:7000;background:rgba(0,0,0,0.85);
+  backdrop-filter:blur(12px);display:none;align-items:flex-end;justify-content:center;}
+.overlay.open{display:flex;}
+.sheet{background:var(--s1);border:1px solid var(--border2);
+  border-radius:12px 12px 0 0;width:100%;max-width:600px;
+  max-height:88vh;overflow-y:auto;
+  animation:sheetUp .4s cubic-bezier(.16,1,.3,1);}
+@keyframes sheetUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.sheet-handle{width:36px;height:3px;background:var(--border2);
+  border-radius:2px;margin:12px auto 0;}
+.sheet-body{padding:20px 24px 40px;}
+.sheet-close{display:flex;justify-content:flex-end;margin-bottom:12px;}
+.sheet-close button{background:transparent;border:1px solid var(--border);
+  width:32px;height:32px;color:var(--dim);cursor:pointer;font-size:16px;
+  display:flex;align-items:center;justify-content:center;border-radius:2px;}
+
+/* SUCCESS SHEET */
+.success-sheet{padding:40px 24px 60px;text-align:center;}
+.ss-icon{font-size:48px;margin-bottom:16px;}
+.ss-title{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:4px;
+  color:var(--lime);margin-bottom:8px;}
+.ss-sub{font-size:12px;color:var(--dim);line-height:1.6;margin-bottom:24px;}
+.ss-detail{background:var(--s2);border:1px solid var(--border);padding:14px 16px;
+  margin-bottom:24px;text-align:left;}
+.ssd-row{display:flex;justify-content:space-between;padding:5px 0;
+  border-bottom:1px solid var(--border);}
+.ssd-row:last-child{border-bottom:none;}
+.ssd-l{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--dim);}
+.ssd-v{font-size:11px;font-weight:600;}
+.btn-ok{width:100%;background:var(--lime);color:#000;border:none;
+  padding:14px;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px;
+  cursor:pointer;}
+
+/* SHARE CARD SHEET */
+.share-sheet{padding:24px 24px 48px;}
+.share-card-inner{background:linear-gradient(145deg,#0d0d12,#121218);
+  border:1px solid rgba(200,255,0,0.2);border-radius:8px;padding:24px;
+  position:relative;overflow:hidden;margin-bottom:16px;}
+.share-card-inner::before{content:'';position:absolute;top:-60px;right:-60px;
+  width:180px;height:180px;
+  background:radial-gradient(circle,rgba(200,255,0,0.1),transparent 65%);pointer-events:none;}
+.sc-logo{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:5px;
+  color:var(--lime);margin-bottom:4px;}
+.sc-sub{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:2px;color:var(--dim);margin-bottom:16px;}
+.sc-name{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;line-height:1;margin-bottom:4px;}
+.sc-period{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--dim);margin-bottom:16px;}
+.sc-radar{height:160px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.sc-stat-l{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:1px;color:var(--dim);margin-bottom:2px;}
+.sc-stat-v{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;line-height:1;}
+.sc-score-row{border-top:1px solid var(--border);padding-top:12px;
+  display:flex;align-items:center;justify-content:space-between;}
+.sc-score-l{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:2px;color:var(--dim);}
+.sc-score-v{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;color:var(--lime);}
+.sc-footer-row{display:flex;justify-content:space-between;margin-top:10px;}
+.sc-tag{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:1px;color:var(--dim);}
+.sc-url{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:1px;color:var(--lime);}
+.btn-share-dl{width:100%;background:var(--lime);color:#000;border:none;
+  padding:13px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:4px;
+  cursor:pointer;}
+
+/* TOAST */
+.toast{position:fixed;bottom:calc(72px + var(--safe-bottom));left:50%;
+  transform:translateX(-50%) translateY(8px);
+  background:var(--s2);border:1px solid var(--border2);
+  padding:11px 20px;
+  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--lime);
+  opacity:0;transition:all .3s;z-index:9500;white-space:nowrap;border-radius:2px;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div class="ambient"></div>
+
+<!-- ══════════════════════════════
+     LOGIN
+══════════════════════════════ -->
+<div id="screen-login">
+  <div class="login-glow"></div>
+  <div class="login-wrap">
+    <div class="login-logo">
+      <span class="login-logo-mark">XECTOR1</span>
+      <span class="login-logo-sub">Member Portal</span>
+    </div>
+    <div class="login-card">
+      <div class="login-eyebrow">Limited Access</div>
+      <div class="lf">
+        <label>Email</label>
+        <input type="email" id="l-email" placeholder="your@email.com">
+      </div>
+      <div class="lf">
+        <label>Password</label>
+        <input type="password" id="l-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <button class="btn-login" onclick="doLogin()">
+        ENTER PORTAL <span>→</span>
+      </button>
+    </div>
+    <div class="login-footer">XECTOR1 — 招待メンバー限定</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     APP
+══════════════════════════════ -->
+<div id="app">
+
+  <!-- TOP BAR -->
+  <div class="app-topbar">
+    <div class="topbar-logo">
+      <div class="topbar-dot"></div>
+      XECTOR1
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-member" id="topbar-member">田中 雄介</span>
+      <span class="topbar-badge" id="topbar-badge">RANK #1</span>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="app-content">
+
+    <!-- ── HOME ── -->
+    <div id="page-home" class="page active">
+      <div class="home-hero">
+        <div class="home-hero-bg"></div>
+        <div class="home-greeting" id="home-greeting">Good evening</div>
+        <div class="home-name">こんにちは、<br><em id="home-name">田中</em></div>
+        <div class="home-since" id="home-since">Member since Nov 2024 — Day 129</div>
+      </div>
+
+      <div class="streak-block">
+        <div class="streak-num" id="streak-num">23</div>
+        <div>
+          <div class="streak-label">日連続アクティブ</div>
+          <div class="streak-dots" id="streak-dots"></div>
+        </div>
+      </div>
+
+      <div class="kpi-grid" id="kpi-grid"></div>
+
+      <div class="action-list">
+        <div class="action-row" onclick="goPage('stats')">
+          <div class="ar-left">
+            <div class="ar-label">Weekly Update</div>
+            <div class="ar-title">SNS数値を更新する</div>
+          </div>
+          <div class="ar-arrow">→</div>
+        </div>
+        <div class="action-row" onclick="goPage('book')">
+          <div class="ar-left">
+            <div class="ar-label">Next Session</div>
+            <div class="ar-title">面談を予約する</div>
+          </div>
+          <div class="ar-arrow">→</div>
+        </div>
+        <div class="action-row" onclick="goPage('tips')">
+          <div class="ar-left">
+            <div class="ar-label">This Week</div>
+            <div class="ar-title">最新Tipsを見る</div>
+          </div>
+          <div class="ar-arrow">→</div>
+        </div>
+        <div class="action-row" onclick="goPage('community')">
+          <div class="ar-left">
+            <div class="ar-label">Community</div>
+            <div class="ar-title">メンバーの投稿を見る</div>
+          </div>
+          <div class="ar-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STATS ── -->
+    <div id="page-stats" class="page">
+      <div class="stats-header">
+        <div class="eyebrow">Growth Analytics</div>
+        <div class="big-title">MY<br><em>STATS</em></div>
+      </div>
+
+      <div class="radar-card">
+        <div class="rc-top">
+          <div>
+            <div class="rc-title">総合スコア</div>
+            <div class="rc-score" id="radar-score">—</div>
+            <div class="rc-grade" id="radar-grade">—</div>
+          </div>
+          <button class="tag tag-lime" style="cursor:pointer;border:none;" onclick="openShareSheet()">📸 SHARE</button>
+        </div>
+        <div class="radar-wrap"><canvas id="radar-chart"></canvas></div>
+      </div>
+
+      <div class="period-tabs">
+        <div class="pt active" onclick="setPeriod('month',this)">月次</div>
+        <div class="pt" onclick="setPeriod('week',this)">週次</div>
+        <div class="pt" onclick="setPeriod('year',this)">年次</div>
+      </div>
+
+      <div class="metric-scroll" id="metric-scroll"></div>
+
+      <div class="line-card">
+        <div class="lc-header">
+          <div>
+            <div class="lc-title" id="lc-title">フォロワー推移</div>
+            <div class="lc-sub" id="lc-sub">Monthly</div>
+          </div>
+        </div>
+        <div class="lc-wrap"><canvas id="line-chart"></canvas></div>
+      </div>
+
+      <!-- INPUT -->
+      <div style="padding:16px 20px 8px;">
+        <div class="eyebrow">Update</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;">数値を入力</div>
+      </div>
+      <div class="input-form" id="input-form"></div>
+      <div style="padding:0 20px 24px;">
+        <button class="btn-save" onclick="saveStats()">SAVE & UPDATE →</button>
+      </div>
+    </div>
+
+    <!-- ── TIPS ── -->
+    <div id="page-tips" class="page">
+      <div class="tips-header">
+        <div class="eyebrow">Knowledge Base</div>
+        <div class="big-title">GROW<br><em>SMARTER</em></div>
+      </div>
+      <div class="filter-row" id="filter-row"></div>
+      <div class="tips-list" id="tips-list"></div>
+    </div>
+
+    <!-- ── COMMUNITY ── -->
+    <div id="page-community" class="page">
+      <div class="community-header">
+        <div class="eyebrow">Members Only</div>
+        <div class="big-title">COMMUNITY</div>
+      </div>
+      <div class="comm-stats" id="comm-stats"></div>
+      <div class="pinned-bar">
+        <div class="pinned-tag">📌 お知らせ</div>
+        <div class="pinned-text">3月15日(土)19:00〜 プロデュースミーティング開催。参加者は前日までに数値更新をお願いします。</div>
+      </div>
+      <div class="composer-wrap">
+        <textarea class="composer-ta" id="composer-ta" placeholder="今週の気づき、達成報告、質問など..."></textarea>
+        <div class="composer-foot">
+          <button class="btn-post" onclick="submitPost()">POST →</button>
+        </div>
+      </div>
+      <div class="feed" id="feed"></div>
+    </div>
+
+    <!-- ── BOOK ── -->
+    <div id="page-book" class="page">
+      <div class="book-header">
+        <div class="eyebrow">1on1 Session</div>
+        <div class="big-title">GROW<br><em>UP</em></div>
+      </div>
+
+      <div style="padding:0 20px 8px;">
+        <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:3px;color:var(--dim);text-transform:uppercase;margin-bottom:8px;">Step 01 — セッション選択</div>
+      </div>
+      <div class="session-list" id="session-list"></div>
+
+      <div style="padding:0 20px 8px;">
+        <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:3px;color:var(--dim);text-transform:uppercase;margin-bottom:8px;">Step 02 — 日程選択</div>
+      </div>
+      <div class="cal-wrap">
+        <div class="cal-nav">
+          <button class="cal-nav-btn" onclick="prevMonth()">←</button>
+          <div class="cal-month" id="cal-month"></div>
+          <button class="cal-nav-btn" onclick="nextMonth()">→</button>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+      </div>
+      <div class="time-wrap">
+        <div class="tw-title">Available Times</div>
+        <div class="tw-date" id="tw-date">日付を選択</div>
+        <div class="time-slots" id="time-slots"></div>
+      </div>
+
+      <div style="padding:0 20px 8px;margin-top:8px;">
+        <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:3px;color:var(--dim);text-transform:uppercase;margin-bottom:8px;">Step 03 — 情報入力</div>
+      </div>
+      <div class="book-form">
+        <div class="bf-title">予約フォーム</div>
+        <div class="bf-field"><label>お名前</label><input type="text" id="bf-name" value="田中 雄介"></div>
+        <div class="bf-field"><label>メールアドレス</label><input type="email" id="bf-email" placeholder="your@email.com"></div>
+        <div class="bf-field"><label>今月の課題（任意）</label><textarea id="bf-issue" placeholder="例：TikTokのフォロワーが伸び悩んでいる..."></textarea></div>
+        <div class="bf-field"><label>達成したいこと</label><textarea id="bf-goal" placeholder="例：次の施策を3つ決めたい..."></textarea></div>
+        <button class="btn-save" onclick="submitBooking()" id="book-btn" style="margin-top:8px;">BOOK SESSION →</button>
+      </div>
+      <div style="height:20px;"></div>
+    </div>
+
+  </div><!-- /app-content -->
+
+  <!-- BOTTOM NAV -->
+  <nav class="app-nav">
+    <button class="nav-item active" id="nav-home" onclick="goPage('home')">
+      <span class="nav-icon">⬡</span>
+      <span class="nav-label">Home</span>
+    </button>
+    <button class="nav-item" id="nav-stats" onclick="goPage('stats')">
+      <span class="nav-icon">◈</span>
+      <span class="nav-label">Stats</span>
+    </button>
+    <button class="nav-item" id="nav-tips" onclick="goPage('tips')">
+      <span class="nav-icon">💡</span>
+      <span class="nav-label">Tips</span>
+    </button>
+    <button class="nav-item" id="nav-community" onclick="goPage('community')">
+      <span class="nav-icon">⬡</span>
+      <span class="nav-label">Community</span>
+    </button>
+    <button class="nav-item" id="nav-book" onclick="goPage('book')">
+      <span class="nav-icon">◎</span>
+      <span class="nav-label">GrowUp</span>
+    </button>
+  </nav>
+
+</div><!-- /app -->
+
+<!-- ── TIP DETAIL SHEET ── -->
+<div class="overlay" id="tip-overlay" onclick="closeTipSheet(event)">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-body">
+      <div class="sheet-close"><button onclick="closeTipSheet()">✕</button></div>
+      <div id="tip-sheet-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SUCCESS SHEET ── -->
+<div class="overlay" id="success-overlay">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="success-sheet">
+      <div class="ss-icon">✦</div>
+      <div class="ss-title">BOOKED</div>
+      <div class="ss-sub">予約が確定しました。セッション前日にリマインドをお送りします。</div>
+      <div class="ss-detail" id="ss-detail"></div>
+      <button class="btn-ok" onclick="closeSuccess()">確認 — ホームへ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── SHARE SHEET ── -->
+<div class="overlay" id="share-overlay" onclick="closeShareSheet(event)">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="share-sheet">
+      <div class="sheet-close"><button onclick="closeShareSheet()">✕</button></div>
+      <div class="share-card-inner">
+        <div class="sc-logo">XECTOR1</div>
+        <div class="sc-sub">SNS Growth Report</div>
+        <div class="sc-name" id="sc-name">田中 雄介</div>
+        <div class="sc-period" id="sc-period">2025年3月</div>
+        <div class="sc-radar"><canvas id="share-radar" width="160" height="160"></canvas></div>
+        <div class="sc-grid" id="sc-grid"></div>
+        <div class="sc-score-row">
+          <div><div class="sc-score-l">総合スコア</div></div>
+          <div class="sc-score-v" id="sc-score">—</div>
+        </div>
+        <div class="sc-footer-row">
+          <span class="sc-tag" id="sc-rank-tag">MEMBER</span>
+          <span class="sc-url">xector1.jp</span>
+        </div>
+      </div>
+      <button class="btn-share-dl" onclick="showToast('スクショして拡散してください 📸')">📸 スクショ用カード</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+</body>
+</html>
+<script>
+// ══════════════════════════════
+//  DATA
+// ══════════════════════════════
+const MEMBER = { name:'田中 雄介', short:'田中', since:'2024-11-01', streak:23, rank:1 };
+
+const SNS = {
+  yt:{ sub:24100, views:1230000, posts:18, imp:450000 },
+  tt:{ sub:82000, views:890000,  posts:22, likes:340000 },
+  ig:{ sub:56000, reach:120000,  posts:12 },
+  x: { sub:31000, imp:450000,    posts:30, eng:8200 },
+};
+
+const MONTHLY = {
+  followers:[18200,19800,21100,22400,23500,24100],
+  views:    [780000,850000,920000,1050000,1150000,1230000],
+  posts:    [14,16,18,17,19,18],
+  likes:    [28000,31000,34000,38000,41000,45000],
+  imp:      [320000,350000,390000,420000,440000,450000],
+};
+const WEEKLY  = { followers:[23200,23500,23800,24100], views:[1180000,1200000,1215000,1230000], posts:[4,5,4,5], likes:[43000,44000,44500,45000], imp:[440000,445000,448000,450000] };
+const YEARLY  = { followers:[8200,18200,24100], views:[210000,780000,1230000], posts:[8,14,18], likes:[11000,28000,45000], imp:[120000,320000,450000] };
+const LABELS  = { month:['10月','11月','12月','1月','2月','3月'], week:['3/1週','3/2週','3/3週','3/4週'], year:['2023','2024','2025'] };
+
+const AXES = [
+  { key:'followers', label:'フォロワー', color:'#c8ff00', max:100000 },
+  { key:'views',     label:'再生数',     color:'#00f0ff', max:2000000 },
+  { key:'posts',     label:'投稿数',     color:'#9f6fff', max:80 },
+  { key:'likes',     label:'いいね',     color:'#ff3d80', max:500000 },
+  { key:'imp',       label:'インプレ',   color:'#ffb700', max:1000000 },
+  { key:'reach',     label:'リーチ',     color:'#00ffaa', max:300000 },
+];
+
+const METRICS = [
+  { key:'followers', label:'フォロワー' },
+  { key:'views',     label:'再生数' },
+  { key:'posts',     label:'投稿数' },
+  { key:'likes',     label:'いいね' },
+  { key:'imp',       label:'インプレ' },
+];
+
+const TIPS_DATA = [
+  { id:1, cat:'content', catLabel:'コンテンツ', color:'#00f0ff', bg:'rgba(0,240,255,0.08)', week:'Week 01', isNew:true, icon:'🎬',
+    title:'最初の3秒で全てが決まる',
+    preview:'視聴者の90%は冒頭3秒で離脱を判断します。冒頭に「結論」か「問い」を置くだけで視聴継続率が劇的に改善します。',
+    lead:'コンテンツの質より「入口の設計」が先です。どれだけ良い内容でも、最初の3秒で興味を掴めなければ誰にも届きません。',
+    points:['冒頭0〜3秒に「結論」か「強い問い」を置く','BGMや効果音でエネルギーを上げる','顔のアップ or 衝撃シーンからスタートする','テロップを最初から表示して視覚でも引き込む'],
+    body:'「今日は〇〇について話します」という導入は最も視聴者を失います。答えを先に言ってから理由を話す「結論ファースト」を徹底してください。' },
+  { id:2, cat:'algorithm', catLabel:'アルゴリズム', color:'#ffb700', bg:'rgba(255,183,0,0.08)', week:'Week 02', isNew:true, icon:'⚡',
+    title:'投稿後30分が勝負の窓',
+    preview:'TikTok・YouTubeのアルゴリズムは投稿直後の初速を最重要指標にします。投稿30分以内の集中拡散が鍵です。',
+    lead:'アルゴリズムは「人気なコンテンツ」を広めるのではなく「初速が速いコンテンツ」を広めます。',
+    points:['フォロワーに直接通知（ストーリー・X・LINEなど）','コメントへの即レスで滞在時間を伸ばす','自分でもコメントして最初のコメント欄を埋める'],
+    body:'プラットフォームは投稿直後にまず少数のユーザーにテスト配信します。そこでの反応率が高ければ次の大きな層に配信されます。' },
+  { id:3, cat:'growth', catLabel:'成長戦略', color:'#ff3d80', bg:'rgba(255,61,128,0.08)', week:'Week 03', isNew:false, icon:'📈',
+    title:'エンゲージメント率を見ろ',
+    preview:'フォロワー10万より、エンゲージメント率5%の1万フォロワーアカウントの方がビジネス価値は高い。',
+    lead:'フォロワー数は「見かけの資産」です。実際に動いてくれる人数こそが本当の影響力であり、収益に直結します。',
+    points:['TikTok: 3%以上で平均、8%以上で高エンゲージメント','Instagram: 2%以上で平均、6%以上で優秀','YouTube: 完了率40%以上、クリック率4%以上'],
+    body:'エンゲージメント率 = (いいね+コメント+シェア+保存) ÷ インプレッション × 100' },
+  { id:4, cat:'mindset', catLabel:'マインドセット', color:'#9f6fff', bg:'rgba(159,111,255,0.08)', week:'Week 04', isNew:false, icon:'🧠',
+    title:'継続できる人は仕組みを持つ',
+    preview:'モチベーションに頼った継続は必ず切れます。感情に依存しない制作フローを持つことが全ての基本です。',
+    lead:'「続けられない」のはあなたの意志の問題ではありません。仕組みが足りないだけです。',
+    points:['企画・撮影・編集・投稿の4工程を別の日に分ける','ネタ帳をメモアプリで常に開けるようにする','週次レビューで「次週の1本目」だけ決めておく'],
+    body:'「毎日投稿」は中級者以上の戦略です。初期は週2〜3本の質の高い投稿から始めてください。' },
+  { id:5, cat:'collab', catLabel:'コラボ', color:'#00ffaa', bg:'rgba(0,255,170,0.08)', week:'Week 05', isNew:false, icon:'🤝',
+    title:'コラボ相手の選び方で10倍変わる',
+    preview:'フォロワーが多い人とコラボすればいい訳ではありません。視聴者層の親和性が全てです。',
+    lead:'コラボの目的は「お互いの視聴者を交換すること」です。フォロワー数より視聴者の属性・興味の重なりを優先して選ぶ。',
+    points:['視聴者層の年齢・性別・興味が近い','フォロワー数は自分の0.5〜2倍の範囲が最適','投稿スタイルが補完関係にある'],
+    body:'「コラボしたいです」だけのDMは9割スルーされます。具体的な企画と双方のメリットを提示することが必須です。' },
+  { id:6, cat:'content', catLabel:'コンテンツ', color:'#00f0ff', bg:'rgba(0,240,255,0.08)', week:'Week 06', isNew:false, icon:'✂️',
+    title:'ショート動画の「型」を持て',
+    preview:'バズったショート動画の80%は5つの型のどれかに当てはまります。型を理解して使いこなすことで制作速度と再生数が同時に上がります。',
+    lead:'一から企画を考える必要はありません。型に自分のオリジナリティを乗せる方が圧倒的に速く、しかも伸びやすい。',
+    points:['【衝撃型】「え、これ本当に？」から始まる事実・検証','【共感型】「あるある」を刺激するシチュエーション','【学び型】「3秒で分かる〇〇」のHow-To形式','【感情型】感動・笑い・怒りの感情を動かすストーリー'],
+    body:'まず過去1ヶ月の自分の投稿を振り返り、どの型で作ったか分類してみてください。' },
+];
+
+const FILTER_CATS = [
+  { key:'all', label:'すべて' },
+  { key:'content', label:'コンテンツ' },
+  { key:'algorithm', label:'アルゴリズム' },
+  { key:'growth', label:'成長戦略' },
+  { key:'mindset', label:'マインドセット' },
+  { key:'collab', label:'コラボ' },
+];
+
+const COMM_POSTS = [
+  { id:1, name:'渡辺 拓海', av:'渡', color:'#ff3d80', time:'2時間前', badge:'RANK #1', badgeColor:'#c8ff00',
+    text:'今週で<strong>YouTubeチャンネル登録者40万人</strong>を突破しました！参加してから8ヶ月、本当に継続してよかったです。',
+    ach:{ icon:'🏆', label:'Achievement', val:'40万人 突破' }, likes:24, liked:false },
+  { id:2, name:'佐藤 美優', av:'佐', color:'#00f0ff', time:'5時間前', badge:'GROWING', badgeColor:'#00f0ff',
+    text:'TikTokのエンゲージメント率が先月比で<strong>+4.2%</strong>上がりました。投稿後30分の集中対応を始めてから明らかに初速が変わった感じがします。',
+    ach:null, likes:18, liked:false },
+  { id:3, name:'田中 雄介', av:'田', color:'#c8ff00', time:'昨日', badge:'TOP MEMBER', badgeColor:'#c8ff00',
+    text:'コラボ企画を打診するときのDMって皆さんどんな文章で送ってますか？今週3件送ったんですが全部スルーされて…。',
+    ach:null, likes:9, liked:false },
+  { id:4, name:'伊藤 さくら', av:'伊', color:'#9f6fff', time:'2日前', badge:'MEMBER', badgeColor:'rgba(242,240,255,0.3)',
+    text:'初めて<strong>Instagramリール</strong>が1万再生を超えました！「共感型」で作った動画でした。ここのTipsがめちゃくちゃ役に立ってます。',
+    ach:{ icon:'🎉', label:'First Milestone', val:'1万再生 達成' }, likes:31, liked:false },
+];
+
+const SESSIONS_DATA = [
+  { id:'strategy', icon:'⚡', type:'FLAGSHIP', name:'戦略セッション', dur:'60分',
+    desc:'現状の数値を深く分析し、次の1ヶ月の戦略を一緒に設計。月1回推奨のメインセッション。',
+    price:'¥included', priceNote:'月額費用に含まれています', color:'var(--lime)' },
+  { id:'content', icon:'🎬', type:'ADDON', name:'コンテンツ添削', dur:'45分',
+    desc:'動画・サムネイル・タイトルを実際に見ながらフィードバック。改善点を具体的に指摘します。',
+    price:'¥5,500', priceNote:'会員割引価格 (通常¥8,800)', color:'var(--cyan)' },
+  { id:'emergency', icon:'🔥', type:'URGENT', name:'緊急相談', dur:'30分',
+    desc:'「今すぐ話したい」ときのための緊急枠。バズった・炎上しそう・突然の案件など即対応。',
+    price:'¥3,300', priceNote:'会員割引価格 (通常¥5,500)', color:'var(--pink)' },
+];
+
+const SLOT_DATA = {
+  11:[{t:'10:00',a:true},{t:'14:00',a:true},{t:'19:00',a:true}],
+  12:[{t:'11:00',a:false},{t:'15:00',a:true},{t:'20:00',a:true}],
+  14:[{t:'10:00',a:true},{t:'14:00',a:false},{t:'18:00',a:true}],
+  17:[{t:'10:00',a:true},{t:'13:00',a:true},{t:'20:00',a:true}],
+  18:[{t:'11:00',a:true},{t:'16:00',a:true}],
+  20:[{t:'10:00',a:true},{t:'14:00',a:true},{t:'19:00',a:true}],
+  22:[{t:'13:00',a:true},{t:'20:00',a:true}],
+  24:[{t:'10:00',a:true},{t:'15:00',a:true}],
+  27:[{t:'11:00',a:true},{t:'14:00',a:true},{t:'20:00',a:true}],
+};
+
+// ══════════════════════════════
+//  STATE
+// ══════════════════════════════
+let appState = {
+  period:'month', metric:'followers',
+  tipFilter:'all',
+  session:null, calYear:2025, calMonth:2, calDay:null, calTime:null,
+  posts:[...COMM_POSTS],
+};
+let radarChart=null, lineChart=null, shareRadarChart=null;
+
+// ══════════════════════════════
+//  LOGIN
+// ══════════════════════════════
+function doLogin(){
+  const e=document.getElementById('l-email').value;
+  if(!e){ showToast('メールアドレスを入力してください'); return; }
+  document.getElementById('screen-login').classList.add('out');
+  setTimeout(()=>{
+    document.getElementById('screen-login').style.display='none';
+    document.getElementById('app').classList.add('visible');
+    initApp();
+  }, 600);
+}
+
+// ══════════════════════════════
+//  INIT
+// ══════════════════════════════
+function initApp(){
+  setGreeting();
+  renderStreakDots();
+  renderKPIGrid();
+  initRadar();
+  renderMetricScroll();
+  initLineChart();
+  renderInputForm();
+  renderFilterRow();
+  renderTipsList();
+  renderCommStats();
+  renderFeed();
+  renderSessionList();
+  renderCalendar();
+  renderTimeSlots(null);
+}
+
+// ── GREETING ──
+function setGreeting(){
+  const h=new Date().getHours();
+  const g = h<12?'Good morning':h<18?'Good afternoon':'Good evening';
+  document.getElementById('home-greeting').textContent=g;
+  document.getElementById('home-name').textContent=MEMBER.short;
+  const days=Math.floor((new Date()-new Date(MEMBER.since))/86400000);
+  document.getElementById('home-since').textContent=`Member since Nov 2024 — Day ${days}`;
+}
+
+// ── STREAK ──
+function renderStreakDots(){
+  const c=document.getElementById('streak-dots');
+  c.innerHTML='';
+  for(let i=0;i<14;i++){
+    const d=document.createElement('div');
+    d.className='sd'+(i<MEMBER.streak&&i<14?' on':'');
+    c.appendChild(d);
+  }
+}
+
+// ── HOME KPI ──
+function renderKPIGrid(){
+  const kpis=[
+    { label:'YouTube', plat:'#ff4040', val:fmtNum(SNS.yt.sub), delta:'+1,200', up:true },
+    { label:'TikTok',  plat:'#69d9d0', val:fmtNum(SNS.tt.sub), delta:'+340',   up:true },
+    { label:'Instagram', plat:'#e040fb', val:fmtNum(SNS.ig.sub), delta:'+180', up:true },
+    { label:'X',       plat:'#c8c8c8', val:fmtNum(SNS.x.sub),  delta:'+90',    up:true },
+  ];
+  document.getElementById('kpi-grid').innerHTML=kpis.map(k=>`
+    <div class="kpi-card">
+      <div class="kpi-card-label">
+        <span class="kpi-plat" style="background:${k.plat}"></span>${k.label}
+      </div>
+      <div class="kpi-card-val">${k.val}</div>
+      <div class="kpi-card-delta ${k.up?'up':'dn'}">${k.delta}</div>
+    </div>`).join('');
+}
+
+// ── RADAR ──
+function getRadarData(){
+  const total={
+    followers: SNS.yt.sub+SNS.tt.sub+SNS.ig.sub+SNS.x.sub,
+    views:     SNS.yt.views+SNS.tt.views,
+    posts:     SNS.yt.posts+SNS.tt.posts+SNS.ig.posts+SNS.x.posts,
+    likes:     SNS.tt.likes,
+    imp:       SNS.yt.imp+SNS.x.imp,
+    reach:     SNS.ig.reach,
+  };
+  return AXES.map(a=>Math.min((total[a.key]||0)/a.max*100,100));
+}
+function getScore(norm){ return Math.round(norm.reduce((s,v)=>s+v,0)/norm.length); }
+function getGrade(s){ return s>=80?{g:'S',c:'#c8ff00'}:s>=65?{g:'A',c:'#00f0ff'}:s>=50?{g:'B',c:'#9f6fff'}:s>=35?{g:'C',c:'#ffb700'}:{g:'D',c:'#ff3d80'}; }
+
+function initRadar(){
+  const norm=getRadarData();
+  const score=getScore(norm);
+  const grade=getGrade(score);
+  document.getElementById('radar-score').textContent=score;
+  document.getElementById('radar-score').style.color=grade.c;
+  document.getElementById('radar-grade').textContent='GRADE '+grade.g;
+
+  if(radarChart) radarChart.destroy();
+  const ctx=document.getElementById('radar-chart').getContext('2d');
+  radarChart=new Chart(ctx,{
+    type:'radar',
+    data:{ labels:AXES.map(a=>a.label), datasets:[{
+      data:norm, backgroundColor:'rgba(200,255,0,0.07)', borderColor:'#c8ff00',
+      borderWidth:2, pointBackgroundColor:AXES.map(a=>a.color),
+      pointBorderColor:'transparent', pointRadius:4,
+    }]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{
+        backgroundColor:'#131318', borderColor:'rgba(255,255,255,0.1)', borderWidth:1,
+        titleColor:'rgba(242,240,255,.5)', bodyColor:'#c8ff00',
+        titleFont:{family:'Space Mono',size:8}, bodyFont:{family:'Bebas Neue',size:18},
+        padding:10, callbacks:{ label:c=>'  '+Math.round(c.raw)+' pts' }
+      }},
+      scales:{ r:{ min:0, max:100, backgroundColor:'transparent',
+        grid:{color:'rgba(255,255,255,0.04)'}, angleLines:{color:'rgba(255,255,255,0.06)'},
+        pointLabels:{color:'rgba(242,240,255,.4)',font:{family:'Space Mono',size:9}},
+        ticks:{display:false} }}}
+  });
+}
+
+// ── METRIC SCROLL ──
+function renderMetricScroll(){
+  const data = appState.period==='month'?MONTHLY:appState.period==='week'?WEEKLY:YEARLY;
+  document.getElementById('metric-scroll').innerHTML=METRICS.map(m=>`
+    <div class="metric-chip ${appState.metric===m.key?'active':''}" onclick="selectMetric('${m.key}')">
+      <div class="mc-label">${m.label}</div>
+      <div class="mc-val">${fmtNum(data[m.key]?.[data[m.key].length-1]||0)}</div>
+    </div>`).join('');
+}
+
+function selectMetric(key){
+  appState.metric=key;
+  renderMetricScroll();
+  updateLineChart();
+  document.getElementById('lc-title').textContent=METRICS.find(m=>m.key===key).label+'推移';
+}
+
+// ── LINE CHART ──
+function initLineChart(){
+  if(lineChart) lineChart.destroy();
+  const ctx=document.getElementById('line-chart').getContext('2d');
+  const data=getLineData();
+  const grad=ctx.createLinearGradient(0,0,0,160);
+  grad.addColorStop(0,'rgba(200,255,0,0.15)');
+  grad.addColorStop(1,'rgba(200,255,0,0)');
+  lineChart=new Chart(ctx,{
+    type:'line',
+    data:{ labels:data.labels, datasets:[{
+      data:data.vals, borderColor:'#c8ff00', backgroundColor:grad,
+      borderWidth:2, pointBackgroundColor:'#c8ff00', pointBorderColor:'#050507',
+      pointBorderWidth:2, pointRadius:4, tension:0.4, fill:true,
+    }]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{
+        backgroundColor:'#131318', borderColor:'rgba(255,255,255,0.1)', borderWidth:1,
+        bodyColor:'#c8ff00', bodyFont:{family:'Bebas Neue',size:18}, padding:10,
+        callbacks:{ label:c=>'  '+fmtNum(c.raw) }
+      }},
+      scales:{
+        x:{ grid:{color:'rgba(255,255,255,0.03)'}, ticks:{color:'rgba(242,240,255,.3)',font:{family:'Space Mono',size:8}}, border:{display:false} },
+        y:{ grid:{color:'rgba(255,255,255,0.03)'}, ticks:{color:'rgba(242,240,255,.3)',font:{family:'Space Mono',size:8},callback:v=>fmtNum(v)}, border:{display:false} }
+      }
+    }
+  });
+}
+
+function getLineData(){
+  const src=appState.period==='month'?MONTHLY:appState.period==='week'?WEEKLY:YEARLY;
+  return { labels:LABELS[appState.period], vals:src[appState.metric]||src.followers };
+}
+
+function updateLineChart(){
+  const d=getLineData();
+  lineChart.data.labels=d.labels;
+  lineChart.data.datasets[0].data=d.vals;
+  lineChart.update();
+}
+
+function setPeriod(p,btn){
+  appState.period=p;
+  document.querySelectorAll('.pt').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const lbl={month:'Monthly',week:'Weekly',year:'Yearly'};
+  document.getElementById('lc-sub').textContent=lbl[p];
+  renderMetricScroll();
+  updateLineChart();
+}
+
+// ── INPUT FORM ──
+function renderInputForm(){
+  const platforms=[
+    { key:'yt', cls:'pb-yt', icon:'🎬', bg:'rgba(255,64,64,0.1)', name:'YouTube',
+      fields:[{id:'yt-sub',l:'登録者数',v:SNS.yt.sub},{id:'yt-views',l:'総再生数',v:SNS.yt.views},{id:'yt-posts',l:'月間投稿数',v:SNS.yt.posts},{id:'yt-imp',l:'インプレ',v:SNS.yt.imp}]},
+    { key:'tt', cls:'pb-tt', icon:'♪', bg:'rgba(105,217,208,0.1)', name:'TikTok',
+      fields:[{id:'tt-sub',l:'フォロワー',v:SNS.tt.sub},{id:'tt-views',l:'月間再生数',v:SNS.tt.views},{id:'tt-posts',l:'月間投稿数',v:SNS.tt.posts},{id:'tt-likes',l:'総いいね',v:SNS.tt.likes}]},
+    { key:'ig', cls:'pb-ig', icon:'◈', bg:'rgba(224,64,251,0.1)', name:'Instagram',
+      fields:[{id:'ig-sub',l:'フォロワー',v:SNS.ig.sub},{id:'ig-reach',l:'月間リーチ',v:SNS.ig.reach},{id:'ig-posts',l:'月間投稿数',v:SNS.ig.posts}]},
+    { key:'x', cls:'pb-x', icon:'✕', bg:'rgba(200,200,200,0.07)', name:'X / Twitter',
+      fields:[{id:'x-sub',l:'フォロワー',v:SNS.x.sub},{id:'x-imp',l:'月間インプレ',v:SNS.x.imp},{id:'x-posts',l:'月間投稿数',v:SNS.x.posts},{id:'x-eng',l:'エンゲージ',v:SNS.x.eng}]},
+  ];
+  document.getElementById('input-form').innerHTML=platforms.map(p=>`
+    <div class="platform-block ${p.cls}">
+      <div class="pb-head">
+        <div class="pb-icon" style="background:${p.bg}">${p.icon}</div>
+        <div class="pb-name">${p.name}</div>
+      </div>
+      <div class="pb-fields">
+        ${p.fields.map(f=>`<div class="pf"><label>${f.l}</label><input type="number" id="${f.id}" value="${f.v}"></div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function saveStats(){
+  const g=(id)=>parseFloat(document.getElementById(id)?.value)||0;
+  SNS.yt.sub=g('yt-sub')||SNS.yt.sub;
+  SNS.yt.views=g('yt-views')||SNS.yt.views;
+  SNS.tt.sub=g('tt-sub')||SNS.tt.sub;
+  SNS.tt.views=g('tt-views')||SNS.tt.views;
+  SNS.ig.sub=g('ig-sub')||SNS.ig.sub;
+  SNS.ig.reach=g('ig-reach')||SNS.ig.reach;
+  SNS.x.sub=g('x-sub')||SNS.x.sub;
+  initRadar(); renderKPIGrid(); renderMetricScroll();
+  showToast('DATA SAVED — グラフを更新しました ✓');
+  setTimeout(()=>goPage('home'),800);
+}
+
+// ── TIPS ──
+function renderFilterRow(){
+  document.getElementById('filter-row').innerHTML=FILTER_CATS.map(c=>`
+    <button class="fb ${appState.tipFilter===c.key?'active':''}" onclick="setTipFilter('${c.key}')">${c.label}</button>`).join('');
+}
+function setTipFilter(k){
+  appState.tipFilter=k;
+  renderFilterRow();
+  renderTipsList();
+}
+function renderTipsList(){
+  const list=appState.tipFilter==='all'?TIPS_DATA:TIPS_DATA.filter(t=>t.cat===appState.tipFilter);
+  document.getElementById('tips-list').innerHTML=list.map(t=>`
+    <div class="tip-row" onclick="openTipSheet(${t.id})">
+      <div class="tip-accent" style="background:${t.color}"></div>
+      <div class="tip-body-wrap">
+        <div class="tip-meta-row">
+          <span class="tip-cat-tag" style="background:${t.bg};color:${t.color};border:1px solid ${t.color}22">${t.catLabel}</span>
+          <span class="tip-week-tag">${t.week}</span>
+          ${t.isNew?'<span class="tip-new">NEW</span>':''}
+        </div>
+        <div class="tip-title-text">${t.title}</div>
+        <div class="tip-preview">${t.preview}</div>
+      </div>
+      <div class="tip-row-icon">${t.icon}</div>
+    </div>`).join('');
+}
+
+function openTipSheet(id){
+  const t=TIPS_DATA.find(x=>x.id===id);
+  if(!t) return;
+  document.getElementById('tip-sheet-content').innerHTML=`
+    <div class="tip-meta-row" style="margin-bottom:12px;">
+      <span class="tip-cat-tag" style="background:${t.bg};color:${t.color};border:1px solid ${t.color}22;padding:3px 8px;border-radius:2px;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;">${t.catLabel}</span>
+      <span style="font-family:'Space Mono',monospace;font-size:8px;color:var(--dim);letter-spacing:1px;margin-left:8px;">${t.week}</span>
+    </div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;line-height:1.05;margin-bottom:16px;">${t.title}</div>
+    <div style="font-size:13px;color:var(--white);line-height:1.7;margin-bottom:20px;border-left:2px solid ${t.color};padding-left:16px;">${t.lead}</div>
+    <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:${t.color};margin-bottom:10px;">やること</div>
+    <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
+      ${t.points.map(p=>`<li style="font-size:12px;color:var(--dim);padding-left:16px;position:relative;line-height:1.6;"><span style="position:absolute;left:0;color:${t.color}">—</span>${p}</li>`).join('')}
+    </ul>
+    <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-bottom:8px;">解説</div>
+    <div style="font-size:12px;color:var(--dim);line-height:1.7;">${t.body}</div>
+    <div style="margin-top:24px;">
+      <button onclick="closeTipSheet()" style="background:${t.color};color:#000;border:none;width:100%;padding:13px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:4px;cursor:pointer;">理解した — 実践する</button>
+    </div>`;
+  document.getElementById('tip-overlay').classList.add('open');
+}
+function closeTipSheet(e){
+  if(!e||e.target===document.getElementById('tip-overlay'))
+    document.getElementById('tip-overlay').classList.remove('open');
+}
+
+// ── COMMUNITY ──
+function renderCommStats(){
+  const stats=[
+    {label:'Active Members',val:'39',color:'var(--green)'},
+    {label:'Posts This Week',val:'127',color:'var(--lime)'},
+    {label:'Avg Growth',val:'+38%',color:'var(--cyan)'},
+    {label:'Next Session',val:'3/15',color:'var(--gold)'},
+  ];
+  document.getElementById('comm-stats').innerHTML=stats.map(s=>`
+    <div class="cs-card">
+      <div class="cs-label">${s.label}</div>
+      <div class="cs-val" style="color:${s.color}">${s.val}</div>
+    </div>`).join('');
+}
+function renderFeed(){
+  document.getElementById('feed').innerHTML=appState.posts.map((p,i)=>`
+    <div class="post-card" style="animation:pageIn .35s ${i*50}ms ease both">
+      <div class="post-head">
+        <div class="post-av" style="background:${p.color}">${p.av}</div>
+        <div>
+          <div class="post-nm">${p.name}</div>
+          <div class="post-tm">${p.time}</div>
+        </div>
+        <span class="post-bdg" style="background:${p.badgeColor}18;color:${p.badgeColor};border:1px solid ${p.badgeColor}28;">${p.badge}</span>
+      </div>
+      <div class="post-txt">${p.text}</div>
+      ${p.ach?`<div class="post-ach"><span class="ach-ico">${p.ach.icon}</span><div><div class="ach-lbl">${p.ach.label}</div><div class="ach-val">${p.ach.val}</div></div></div>`:''}
+      <div class="post-foot">
+        <button class="react-btn ${p.liked?'liked':''}" onclick="toggleLike(${p.id})">${p.liked?'♥':'♡'} ${p.likes}</button>
+        <button class="react-btn" onclick="showToast('返信機能は近日公開予定')">↩ 返信</button>
+      </div>
+    </div>`).join('');
+}
+function toggleLike(id){
+  const p=appState.posts.find(x=>x.id===id);
+  if(!p) return;
+  p.liked=!p.liked; p.likes+=p.liked?1:-1;
+  renderFeed();
+}
+function submitPost(){
+  const text=document.getElementById('composer-ta').value.trim();
+  if(!text){showToast('テキストを入力してください');return;}
+  appState.posts.unshift({id:Date.now(),name:'田中 雄介',av:'田',color:'#c8ff00',time:'たった今',badge:'MEMBER',badgeColor:'rgba(242,240,255,0.3)',text,ach:null,likes:0,liked:false});
+  document.getElementById('composer-ta').value='';
+  renderFeed();
+  showToast('投稿しました ✓');
+}
+
+// ── SESSIONS ──
+function renderSessionList(){
+  document.getElementById('session-list').innerHTML=SESSIONS_DATA.map(s=>`
+    <div class="session-row ${appState.session===s.id?'sel':''}" onclick="selectSession('${s.id}')">
+      <div class="sr-check">SELECTED ✓</div>
+      <div class="sr-top">
+        <span class="sr-icon">${s.icon}</span>
+        <span class="sr-type">${s.type}</span>
+      </div>
+      <div class="sr-name">${s.name}</div>
+      <div class="sr-desc">${s.desc}</div>
+      <div class="sr-bottom">
+        <div class="sr-price" style="color:${s.color}">${s.price}</div>
+        <div class="sr-dur">${s.dur}</div>
+      </div>
+    </div>`).join('');
+}
+function selectSession(id){
+  appState.session=id;
+  renderSessionList();
+  showToast(SESSIONS_DATA.find(s=>s.id===id).name+' を選択');
+}
+
+// ── CALENDAR ──
+const MONTH_N=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+const DAY_N=['SUN','MON','TUE','WED','THU','FRI','SAT'];
+
+function renderCalendar(){
+  document.getElementById('cal-month').textContent=`${appState.calYear}年 ${MONTH_N[appState.calMonth]}`;
+  const first=new Date(appState.calYear,appState.calMonth,1).getDay();
+  const dim=new Date(appState.calYear,appState.calMonth+1,0).getDate();
+  const today=new Date();
+  let html=DAY_N.map(d=>`<div class="cal-dh">${d}</div>`).join('');
+  for(let i=0;i<first;i++) html+=`<div class="cal-c empty"></div>`;
+  for(let d=1;d<=dim;d++){
+    const cd=new Date(appState.calYear,appState.calMonth,d);
+    const past=cd<new Date(today.getFullYear(),today.getMonth(),today.getDate());
+    const isToday=cd.toDateString()===today.toDateString();
+    const hasSlot=!!SLOT_DATA[d];
+    const hasOpen=hasSlot&&SLOT_DATA[d].some(s=>s.a);
+    const isSel=appState.calDay===d;
+    let cls='cal-c';
+    if(past) cls+=' past';
+    else if(isSel) cls+=' sel';
+    else if(hasOpen) cls+=' slot';
+    else if(SLOT_DATA[d]&&!hasOpen) cls+=' avail';
+    else cls+=' avail';
+    if(isToday) cls+=' today';
+    html+=`<div class="${cls}" onclick="selectDay(${d})">${d}</div>`;
+  }
+  document.getElementById('cal-grid').innerHTML=html;
+}
+function selectDay(d){
+  appState.calDay=d; appState.calTime=null;
+  renderCalendar(); renderTimeSlots(d);
+}
+function renderTimeSlots(d){
+  const dayN=['日','月','火','水','木','金','土'];
+  document.getElementById('tw-date').textContent =
+    d ? `${appState.calMonth+1}月${d}日（${dayN[new Date(appState.calYear,appState.calMonth,d).getDay()]}）` : '日付を選択';
+  const slots=d?SLOT_DATA[d]:null;
+  document.getElementById('time-slots').innerHTML=!slots
+    ? `<div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dim2)">← 日付を選択してください</div>`
+    : slots.map(s=>`<div class="ts ${!s.a?'full':''} ${appState.calTime===s.t&&s.a?'sel':''}" onclick="${s.a?`selectTime('${s.t}')`:''}">${s.t}</div>`).join('');
+}
+function selectTime(t){ appState.calTime=t; renderTimeSlots(appState.calDay); showToast(t+' を選択'); }
+function prevMonth(){ if(appState.calMonth===0){appState.calMonth=11;appState.calYear--;}else appState.calMonth--; appState.calDay=null;appState.calTime=null; renderCalendar(); renderTimeSlots(null); }
+function nextMonth(){ if(appState.calMonth===11){appState.calMonth=0;appState.calYear++;}else appState.calMonth++; appState.calDay=null;appState.calTime=null; renderCalendar(); renderTimeSlots(null); }
+
+function submitBooking(){
+  if(!appState.session){showToast('セッションを選択してください');return;}
+  if(!appState.calDay){showToast('日程を選択してください');return;}
+  if(!appState.calTime){showToast('時間を選択してください');return;}
+  const s=SESSIONS_DATA.find(x=>x.id===appState.session);
+  const dayN=['日','月','火','水','木','金','土'];
+  const dateStr=`${appState.calMonth+1}月${appState.calDay}日（${dayN[new Date(appState.calYear,appState.calMonth,appState.calDay).getDay()]}）`;
+  document.getElementById('ss-detail').innerHTML=[
+    {l:'セッション',v:s.name},{l:'日時',v:`${dateStr} ${appState.calTime}〜`},
+    {l:'時間',v:s.dur},{l:'料金',v:s.price}
+  ].map(r=>`<div class="ssd-row"><span class="ssd-l">${r.l}</span><span class="ssd-v">${r.v}</span></div>`).join('');
+  document.getElementById('success-overlay').classList.add('open');
+}
+function closeSuccess(){
+  document.getElementById('success-overlay').classList.remove('open');
+  appState.session=null; appState.calDay=null; appState.calTime=null;
+  renderSessionList(); renderCalendar(); renderTimeSlots(null);
+  goPage('home');
+}
+
+// ── SHARE SHEET ──
+function openShareSheet(){
+  const norm=getRadarData();
+  const score=getScore(norm);
+  const grade=getGrade(score);
+  const now=new Date();
+  document.getElementById('sc-name').textContent=MEMBER.name;
+  document.getElementById('sc-period').textContent=`${now.getFullYear()}年${now.getMonth()+1}月`;
+  document.getElementById('sc-score').textContent=score;
+  document.getElementById('sc-score').style.color=grade.c;
+  document.getElementById('sc-rank-tag').textContent=`RANK #${MEMBER.rank} — GRADE ${grade.g}`;
+  document.getElementById('sc-grid').innerHTML=[
+    {l:'YouTube',v:fmtNum(SNS.yt.sub)},{l:'TikTok',v:fmtNum(SNS.tt.sub)},
+    {l:'総再生数',v:fmtNum(SNS.yt.views+SNS.tt.views)},{l:'月間投稿',v:(SNS.yt.posts+SNS.tt.posts+SNS.ig.posts+SNS.x.posts)+'本'},
+  ].map(s=>`<div><div class="sc-stat-l">${s.l}</div><div class="sc-stat-v">${s.v}</div></div>`).join('');
+  if(shareRadarChart) shareRadarChart.destroy();
+  const ctx=document.getElementById('share-radar').getContext('2d');
+  shareRadarChart=new Chart(ctx,{
+    type:'radar',
+    data:{ labels:AXES.map(a=>a.label), datasets:[{
+      data:norm, backgroundColor:'rgba(200,255,0,0.08)', borderColor:'#c8ff00',
+      borderWidth:1.5, pointBackgroundColor:AXES.map(a=>a.color),
+      pointBorderColor:'transparent', pointRadius:3,
+    }]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{enabled:false}},
+      scales:{ r:{ min:0,max:100, grid:{color:'rgba(255,255,255,0.05)'}, angleLines:{color:'rgba(255,255,255,0.05)'},
+        pointLabels:{color:'rgba(242,240,255,.35)',font:{family:'Space Mono',size:7}}, ticks:{display:false} }}}
+  });
+  document.getElementById('share-overlay').classList.add('open');
+}
+function closeShareSheet(e){
+  if(!e||e.target===document.getElementById('share-overlay')){
+    document.getElementById('share-overlay').classList.remove('open');
+    if(shareRadarChart){shareRadarChart.destroy();shareRadarChart=null;}
+  }
+}
+
+// ── PAGE NAV ──
+function goPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.getElementById('nav-'+name).classList.add('active');
+  document.querySelector('.app-content').scrollTo(0,0);
+}
+
+// ── UTILS ──
+function fmtNum(n){
+  if(!n||n===0) return '0';
+  if(n>=10000) return (n/10000).toFixed(1)+'万';
+  return n.toLocaleString();
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// PWA install hint (iOS)
+window.addEventListener('load',()=>{
+  const isIos=()=>/iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+  const isStandalone=()=>window.navigator.standalone===true;
+  if(isIos()&&!isStandalone()){
+    setTimeout(()=>showToast('ホーム画面に追加するとアプリとして使えます'),3000);
+  }
+});
+</script>
