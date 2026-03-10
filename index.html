@@ -20,8 +20,8 @@
   --border: rgba(255,255,255,0.06);
   --border2:rgba(255,255,255,0.13);
   --white:  #f2f0ff;
-  --dim:    rgba(242,240,255,0.38);
-  --dim2:   rgba(242,240,255,0.13);
+  --dim:    rgba(242,240,255,0.65);
+  --dim2:   rgba(242,240,255,0.28);
   --lime:   #c8ff00;
   --cyan:   #00f0ff;
   --pink:   #ff3d80;
@@ -32,8 +32,8 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;}
-body{background:var(--bg);color:var(--white);font-family:'Syne',sans-serif;
-  overscroll-behavior:none;user-select:none;}
+body{background:var(--bg);color:var(--white);font-family:'Syne',sans-serif;font-size:14px;
+  overscroll-behavior:none;user-select:none;-webkit-font-smoothing:antialiased;}
 
 /* ══ PROFILE SETUP SCREEN ══ */
 #screen-setup{position:fixed;inset:0;z-index:7000;background:var(--bg);
@@ -43,12 +43,12 @@ body{background:var(--bg);color:var(--white);font-family:'Syne',sans-serif;
 .setup-header{padding:40px 0 28px;text-align:center;}
 .setup-logo{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:8px;
   display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:6px;}
-.setup-eyebrow{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:4px;
+.setup-eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;
   text-transform:uppercase;color:var(--lime);margin-bottom:10px;}
 .setup-title{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:3px;
   line-height:.95;margin-bottom:8px;}
 .setup-title em{color:var(--lime);font-style:normal;}
-.setup-sub{font-size:12px;color:var(--dim);line-height:1.7;}
+.setup-sub{font-size:13px;color:rgba(242,240,255,0.65);line-height:1.75;}
 /* SETUP PROGRESS */
 .setup-progress{display:flex;align-items:center;gap:0;margin:24px 0 32px;}
 .sp-step{flex:1;text-align:center;position:relative;}
@@ -57,27 +57,27 @@ body{background:var(--bg);color:var(--white);font-family:'Syne',sans-serif;
 .sp-step:last-child::after{display:none;}
 .sp-num{width:26px;height:26px;border-radius:50%;border:1px solid var(--border2);
   display:flex;align-items:center;justify-content:center;margin:0 auto 5px;
-  font-family:'Space Mono',monospace;font-size:9px;position:relative;z-index:1;
+  font-family:'Space Mono',monospace;font-size:12px;position:relative;z-index:1;
   background:var(--bg);transition:all .3s;}
 .sp-step.done .sp-num{background:var(--lime);border-color:var(--lime);color:#000;}
 .sp-step.active .sp-num{border-color:var(--lime);color:var(--lime);
   box-shadow:0 0 10px rgba(200,255,0,0.25);}
-.sp-label{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:2px;
+.sp-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;
   text-transform:uppercase;color:var(--dim);transition:color .3s;}
 .sp-step.active .sp-label,.sp-step.done .sp-label{color:var(--lime);}
 /* SETUP PANELS */
 .setup-panel{display:none;animation:fadeUp .3s ease;}
 .setup-panel.active{display:block;}
-.sp-section-label{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:4px;
+.sp-section-label{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:4px;
   text-transform:uppercase;color:var(--lime);margin-bottom:6px;}
 .sp-section-title{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:3px;
   line-height:1;margin-bottom:18px;}
 /* SETUP FIELDS */
 .sf{margin-bottom:14px;}
-.sf label{display:block;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;
+.sf label{display:block;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
   text-transform:uppercase;color:var(--dim);margin-bottom:5px;}
 .sf label .req{color:var(--lime);margin-left:2px;}
-.sf label .opt{color:var(--dim2);font-size:7px;margin-left:4px;}
+.sf label .opt{color:var(--dim2);font-size:9px;margin-left:4px;}
 .sf input,.sf select,.sf textarea{width:100%;background:var(--s1);
   border:1px solid var(--border);border-radius:2px;padding:12px 14px;
   color:var(--white);font-family:'Syne',sans-serif;font-size:13px;outline:none;
@@ -90,17 +90,17 @@ body{background:var(--bg);color:var(--white);font-family:'Syne',sans-serif;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(242,240,255,.3)'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 12px center;}
 .sf-hint{font-size:10px;color:var(--dim);margin-top:4px;letter-spacing:.3px;}
-.sf-err{font-family:'Space Mono',monospace;font-size:9px;color:#ff4444;
+.sf-err{font-family:'Space Mono',monospace;font-size:12px;color:#ff4444;
   margin-top:4px;letter-spacing:1px;display:none;}
 .sf-err.show{display:block;}
-.sf-ok{font-family:'Space Mono',monospace;font-size:9px;color:var(--green);
+.sf-ok{font-family:'Space Mono',monospace;font-size:12px;color:var(--green);
   margin-top:4px;letter-spacing:1px;display:none;}
 .sf-ok.show{display:block;}
 .sf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 /* GENRE PILLS */
 .genre-pills{display:flex;flex-wrap:wrap;gap:6px;}
 .gpill{background:var(--s1);border:1px solid var(--border);border-radius:20px;
-  padding:5px 12px;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;
+  padding:5px 12px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
   text-transform:uppercase;color:var(--dim);cursor:pointer;transition:all .2s;}
 .gpill.sel{background:rgba(200,255,0,0.08);border-color:var(--lime);color:var(--lime);}
 /* SNS BLOCKS */
@@ -111,7 +111,7 @@ body{background:var(--bg);color:var(--white);font-family:'Syne',sans-serif;
 .ssb-icon{width:28px;height:28px;border-radius:5px;display:flex;align-items:center;
   justify-content:center;font-size:14px;flex-shrink:0;}
 .ssb-name{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;}
-.ssb-badge{margin-left:auto;font-family:'Space Mono',monospace;font-size:7px;
+.ssb-badge{margin-left:auto;font-family:'Space Mono',monospace;font-size:10px;
   letter-spacing:1px;padding:2px 6px;border-radius:2px;
   background:var(--s2);color:var(--dim);}
 .ssb-badge.ok{background:rgba(200,255,0,0.08);color:var(--lime);
@@ -128,7 +128,7 @@ body{background:var(--bg);color:var(--white);font-family:'Syne',sans-serif;
 .btn-setup-next:disabled{opacity:.3;pointer-events:none;}
 .btn-setup-back{width:100%;background:transparent;color:var(--dim);
   border:1px solid var(--border);border-radius:2px;padding:11px;
-  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;
+  font-family:'Space Mono',monospace;font-size:12px;letter-spacing:3px;
   text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:6px;}
 .btn-setup-back:hover{border-color:var(--border2);color:var(--white);}
 /* CONFIRM ROWS */
@@ -137,10 +137,10 @@ body{background:var(--bg);color:var(--white);font-family:'Syne',sans-serif;
 .conf-row{display:flex;justify-content:space-between;align-items:flex-start;
   padding:10px 0;border-bottom:1px solid var(--border);}
 .conf-row:last-child{border-bottom:none;}
-.conf-l{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;
+.conf-l{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
   text-transform:uppercase;color:var(--dim);min-width:80px;flex-shrink:0;}
 .conf-v{font-size:12px;font-weight:600;text-align:right;word-break:break-all;margin-left:12px;}
-.conf-url{font-family:'Space Mono',monospace;font-size:9px;color:var(--lime);
+.conf-url{font-family:'Space Mono',monospace;font-size:12px;color:var(--lime);
   text-align:right;word-break:break-all;margin-left:12px;}
 
 /* ── NOISE ── */
@@ -237,7 +237,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   100%{opacity:1;letter-spacing:16px;filter:blur(0);}
 }
 .login-logo-sub{
-  font-family:'Space Mono',monospace;font-size:8px;letter-spacing:6px;
+  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:6px;
   color:var(--lime);text-transform:uppercase;margin-top:8px;
   opacity:0;
   animation:subReveal 1.6s ease 1.6s forwards;
@@ -263,7 +263,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 }
 
 .login-eyebrow{
-  font-family:'Space Mono',monospace;font-size:8px;letter-spacing:4px;
+  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:4px;
   color:var(--dim);text-transform:uppercase;margin-bottom:32px;
   display:flex;align-items:center;gap:12px;
 }
@@ -326,7 +326,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 
 .login-footer{
   text-align:center;margin-top:24px;
-  font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;
+  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
   color:rgba(242,240,255,0.15);
   opacity:0;
   animation:subReveal 1s ease 2s forwards;
@@ -359,8 +359,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   box-shadow:0 0 6px var(--lime);animation:pulse 2s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);}}
 .topbar-right{display:flex;align-items:center;gap:10px;}
-.topbar-member{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--dim);}
-.topbar-badge{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;
+.topbar-member{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:1px;color:var(--dim);}
+.topbar-badge{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
   background:rgba(200,255,0,0.08);border:1px solid rgba(200,255,0,0.2);
   color:var(--lime);padding:3px 8px;border-radius:2px;}
 
@@ -386,32 +386,50 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .nav-item.active::before{opacity:1;}
 .nav-icon{font-size:19px;transition:transform .2s;}
 .nav-item.active .nav-icon{transform:scale(1.1);}
-.nav-label{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:2px;
+.nav-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;
   text-transform:uppercase;color:var(--dim);transition:color .2s;}
 .nav-item.active .nav-label{color:var(--lime);}
 
 /* ── PAGE SYSTEM ── */
-.page{display:none;min-height:100%;animation:pageIn .7s cubic-bezier(.4,0,.2,1);}
+.page{display:none;min-height:100%;animation:pageIn .6s cubic-bezier(.4,0,.2,1);}
 .page.active{display:block;}
-@keyframes pageIn{0%{opacity:0;transform:translateY(14px);filter:blur(3px);}100%{opacity:1;transform:translateY(0);filter:blur(0);}}
+@keyframes pageIn{0%{opacity:0;transform:translateY(10px);filter:blur(2px);}100%{opacity:1;transform:translateY(0);filter:blur(0);}}
+
+/* ── SCAN LINE（ページ切り替えSE） ── */
+.scan-line-overlay{
+  position:fixed;top:0;left:0;right:0;height:3px;z-index:9000;
+  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.55) 40%,rgba(200,255,0,0.4) 60%,transparent 100%);
+  pointer-events:none;
+  transform:translateY(-4px);
+  opacity:0;
+}
+.scan-line-overlay.scanning{
+  animation:scanPageLine .55s cubic-bezier(.4,0,.2,1) forwards;
+}
+@keyframes scanPageLine{
+  0%  {top:0%;   opacity:0;transform:translateY(0);}
+  8%  {opacity:1;}
+  85% {opacity:.35;}
+  100%{top:100vh;opacity:0;}
+}
 
 /* ══════════════════════════════
    SHARED COMPONENTS
 ══════════════════════════════ */
 .section-pad{padding:28px 20px;}
-.eyebrow{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:4px;
+.eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;
   text-transform:uppercase;color:var(--lime);margin-bottom:10px;
   display:flex;align-items:center;gap:8px;}
 .eyebrow::before{content:'';width:16px;height:1px;background:var(--lime);}
 .big-title{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:3px;
   line-height:.92;margin-bottom:12px;}
 .big-title em{color:var(--lime);font-style:normal;}
-.section-sub{font-size:12px;color:var(--dim);line-height:1.65;letter-spacing:.3px;}
+.section-sub{font-size:13px;color:rgba(242,240,255,0.6);line-height:1.7;letter-spacing:.3px;}
 
 .card{background:var(--s1);border:1px solid var(--border);transition:border-color .2s;}
 .card:hover{border-color:var(--border2);}
 
-.tag{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;
+.tag{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
   padding:3px 8px;border-radius:2px;display:inline-block;}
 .tag-lime{background:rgba(200,255,0,0.08);border:1px solid rgba(200,255,0,0.2);color:var(--lime);}
 .tag-cyan{background:rgba(0,240,255,0.08);border:1px solid rgba(0,240,255,0.2);color:var(--cyan);}
@@ -425,11 +443,11 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .home-hero-bg{position:absolute;inset:0;
   background:radial-gradient(ellipse 100% 100% at 80% 0%, rgba(200,255,0,0.05) 0%,transparent 60%);
   pointer-events:none;}
-.home-greeting{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;
+.home-greeting{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:3px;
   color:var(--dim);text-transform:uppercase;margin-bottom:8px;}
 .home-name{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:3px;line-height:1;}
 .home-name em{color:var(--lime);font-style:normal;}
-.home-since{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;
+.home-since{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
   color:var(--dim);margin-top:6px;}
 
 /* STREAK */
@@ -437,22 +455,24 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   padding:16px 20px;display:flex;align-items:center;gap:16px;}
 .streak-num{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:1px;
   color:var(--lime);line-height:1;flex-shrink:0;}
-.streak-label{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;
-  text-transform:uppercase;color:var(--dim);margin-bottom:6px;}
+.streak-label{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
+  text-transform:uppercase;color:rgba(242,240,255,0.6);margin-bottom:6px;}
 .streak-dots{display:flex;gap:4px;flex-wrap:wrap;}
 .sd{width:8px;height:8px;border-radius:50%;background:var(--s3);}
 .sd.on{background:var(--lime);box-shadow:0 0 4px var(--lime);}
 
 /* KPI GRID */
 .kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:2px 20px;}
-.kpi-card{background:var(--s1);border:1px solid var(--border);padding:18px 16px;}
-.kpi-card-label{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:2px;
-  text-transform:uppercase;color:var(--dim);margin-bottom:8px;
+.kpi-card{background:var(--s1);border:1px solid var(--border);padding:16px 16px 14px;}
+.kpi-card-label{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1.5px;
+  text-transform:uppercase;color:rgba(242,240,255,0.6);margin-bottom:6px;
   display:flex;align-items:center;gap:6px;}
-.kpi-plat{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
-.kpi-card-val{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;line-height:1;}
-.kpi-card-delta{font-family:'Space Mono',monospace;font-size:8px;margin-top:4px;letter-spacing:1px;}
-.kpi-card-delta.up{color:var(--green);}
+.kpi-plat{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.kpi-card-sub{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;
+  color:rgba(242,240,255,0.3);margin-bottom:4px;}
+.kpi-card-val{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:1px;line-height:1;color:var(--white);}
+.kpi-card-delta{font-family:'Space Mono',monospace;font-size:12px;margin-top:5px;letter-spacing:1px;font-weight:700;}
+.kpi-card-delta.up{color:#00ffaa;}
 .kpi-card-delta.dn{color:var(--pink);}
 
 /* ACTION LIST */
@@ -462,9 +482,9 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   cursor:pointer;transition:all .2s;}
 .action-row:hover,.action-row:active{background:var(--s2);border-color:var(--border2);}
 .ar-left{}
-.ar-label{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;
-  text-transform:uppercase;color:var(--dim);margin-bottom:4px;}
-.ar-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;}
+.ar-label{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
+  text-transform:uppercase;color:rgba(242,240,255,0.55);margin-bottom:4px;}
+.ar-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:var(--white);}
 .ar-arrow{font-size:18px;color:var(--dim);transition:all .2s;}
 .action-row:hover .ar-arrow{color:var(--lime);transform:translateX(3px);}
 
@@ -476,25 +496,25 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 /* RADAR */
 .radar-card{margin:0 20px 2px;background:var(--s1);border:1px solid var(--border);padding:20px;}
 .rc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.rc-title{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:3px;
+.rc-title{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;
   text-transform:uppercase;color:var(--dim);}
 .rc-score{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:1px;
   line-height:1;color:var(--lime);}
-.rc-grade{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--dim);margin-top:2px;}
+.rc-grade{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:1px;color:rgba(242,240,255,0.65);margin-top:2px;font-weight:700;}
 .radar-wrap{height:240px;display:flex;align-items:center;justify-content:center;}
 
 /* CHART PERIOD TABS */
 .period-tabs{display:flex;gap:2px;margin:0 20px 2px;}
 .pt{flex:1;background:var(--s1);border:1px solid var(--border);
   padding:9px 4px;text-align:center;cursor:pointer;transition:all .2s;
-  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--dim);}
+  font-family:'Space Mono',monospace;font-size:12px;letter-spacing:2px;color:var(--dim);}
 .pt.active{background:var(--lime);border-color:var(--lime);color:#000;}
 
 /* LINE CHART */
 .line-card{margin:0 20px 2px;background:var(--s1);border:1px solid var(--border);padding:20px;}
 .lc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
 .lc-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;}
-.lc-sub{font-size:10px;color:var(--dim);}
+.lc-sub{font-size:12px;color:rgba(242,240,255,0.6);}
 .lc-wrap{height:160px;}
 
 /* KPI METRIC SCROLL */
@@ -503,9 +523,9 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .metric-chip{background:var(--s1);border:1px solid var(--border);
   padding:12px 16px;flex-shrink:0;cursor:pointer;transition:all .2s;min-width:110px;}
 .metric-chip.active{border-color:var(--lime);background:rgba(200,255,0,0.05);}
-.mc-label{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:2px;
+.mc-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;
   text-transform:uppercase;color:var(--dim);margin-bottom:6px;}
-.mc-val{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;line-height:1;}
+.mc-val{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;line-height:1;}
 
 /* INPUT FORM */
 .input-form{margin:2px 20px 20px;}
@@ -521,9 +541,9 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .pb-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
 .pb-icon{width:30px;height:30px;border-radius:6px;
   display:flex;align-items:center;justify-content:center;font-size:14px;}
-.pb-name{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;}
+.pb-name{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;}
 .pb-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.pf label{display:block;font-family:'Space Mono',monospace;font-size:7px;
+.pf label{display:block;font-family:'Space Mono',monospace;font-size:10px;
   letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:4px;}
 .pf input{width:100%;background:var(--bg);border:1px solid var(--border);
   padding:9px 10px;color:var(--white);font-family:'Space Mono',monospace;font-size:12px;
@@ -547,7 +567,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .filter-row::-webkit-scrollbar{display:none;}
 .fb{background:transparent;border:1px solid var(--border);
   padding:6px 12px;white-space:nowrap;
-  font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;
+  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;
   color:var(--dim);cursor:pointer;transition:all .2s;border-radius:2px;}
 .fb:hover{color:var(--white);border-color:var(--border2);}
 .fb.active{background:var(--lime);border-color:var(--lime);color:#000;}
@@ -559,11 +579,11 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .tip-accent{width:3px;flex-shrink:0;}
 .tip-body-wrap{padding:16px 16px 14px;flex:1;}
 .tip-meta-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-.tip-cat-tag{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:1px;
+.tip-cat-tag{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;
   padding:2px 6px;border-radius:2px;}
-.tip-week-tag{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:1px;color:var(--dim);}
+.tip-week-tag{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--dim);}
 .tip-new{background:var(--lime);color:#000;font-family:'Space Mono',monospace;
-  font-size:7px;letter-spacing:1px;padding:2px 5px;border-radius:2px;}
+  font-size:10px;letter-spacing:1px;padding:2px 5px;border-radius:2px;}
 .tip-title-text{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;
   line-height:1.1;margin-bottom:6px;}
 .tip-preview{font-size:11px;color:var(--dim);line-height:1.5;letter-spacing:.2px;}
@@ -577,14 +597,14 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 
 .comm-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:0 20px 16px;}
 .cs-card{background:var(--s1);border:1px solid var(--border);padding:14px 16px;}
-.cs-label{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:2px;
+.cs-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;
   text-transform:uppercase;color:var(--dim);margin-bottom:6px;}
 .cs-val{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;line-height:1;}
 
 .pinned-bar{margin:0 20px 8px;background:rgba(200,255,0,0.05);
   border:1px solid rgba(200,255,0,0.15);border-left:3px solid var(--lime);
   padding:12px 16px;}
-.pinned-tag{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:2px;
+.pinned-tag{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;
   color:var(--lime);text-transform:uppercase;margin-bottom:4px;}
 .pinned-text{font-size:12px;color:var(--white);line-height:1.5;font-weight:500;}
 
@@ -596,30 +616,30 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .composer-ta::placeholder{color:var(--dim2);}
 .composer-foot{display:flex;align-items:center;justify-content:flex-end;margin-top:8px;}
 .btn-post{background:var(--lime);color:#000;border:none;
-  padding:8px 18px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;
+  padding:8px 18px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:2px;
   text-transform:uppercase;cursor:pointer;transition:opacity .2s;}
 .btn-post:hover{opacity:.85;}
 
 .feed{padding:0 20px 20px;display:flex;flex-direction:column;gap:6px;}
-.post-card{background:var(--s1);border:1px solid var(--border);padding:16px;}
+.post-card{background:var(--s1);border:1px solid var(--border);padding:18px;}
 .post-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
 .post-av{width:34px;height:34px;border-radius:50%;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
   font-family:'Bebas Neue',sans-serif;font-size:14px;color:#000;}
 .post-nm{font-size:12px;font-weight:700;letter-spacing:.3px;}
-.post-tm{font-family:'Space Mono',monospace;font-size:8px;color:var(--dim);margin-top:2px;}
-.post-bdg{margin-left:auto;font-family:'Space Mono',monospace;font-size:7px;
+.post-tm{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-top:2px;}
+.post-bdg{margin-left:auto;font-family:'Space Mono',monospace;font-size:10px;
   letter-spacing:1px;padding:2px 6px;border-radius:2px;}
 .post-txt{font-size:12px;color:var(--dim);line-height:1.6;margin-bottom:10px;}
 .post-txt strong{color:var(--white);}
 .post-ach{background:var(--s2);border:1px solid var(--border);
   padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:10px;}
 .ach-ico{font-size:20px;}
-.ach-lbl{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:1px;color:var(--dim);}
+.ach-lbl{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--dim);}
 .ach-val{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;line-height:1.1;}
 .post-foot{display:flex;gap:8px;}
 .react-btn{background:transparent;border:1px solid var(--border);
-  padding:5px 10px;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1px;
+  padding:5px 10px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px;
   color:var(--dim);cursor:pointer;transition:all .2s;border-radius:2px;display:flex;align-items:center;gap:4px;}
 .react-btn:hover,.react-btn:active{border-color:var(--border2);color:var(--white);}
 .react-btn.liked{background:rgba(200,255,0,0.08);border-color:rgba(200,255,0,0.2);color:var(--lime);}
@@ -638,15 +658,15 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .session-row.sel::before{opacity:1;background:var(--lime);}
 .sr-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
 .sr-icon{font-size:20px;}
-.sr-type{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:2px;
+.sr-type{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;
   text-transform:uppercase;color:var(--dim);}
 .sr-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;line-height:1;}
 .sr-desc{font-size:11px;color:var(--dim);line-height:1.55;margin-bottom:10px;}
 .sr-bottom{display:flex;align-items:center;justify-content:space-between;}
 .sr-price{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--lime);}
-.sr-dur{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--dim);}
+.sr-dur{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--dim);}
 .sr-check{position:absolute;top:14px;right:16px;
-  font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1px;
+  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px;
   color:var(--lime);opacity:0;transition:opacity .2s;}
 .session-row.sel .sr-check{opacity:1;}
 
@@ -658,7 +678,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .cal-nav-btn:hover{border-color:var(--border2);color:var(--white);}
 .cal-month{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
-.cal-dh{text-align:center;font-family:'Space Mono',monospace;font-size:7px;letter-spacing:1px;
+.cal-dh{text-align:center;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;
   color:var(--dim);padding:4px 0;}
 .cal-c{aspect-ratio:1;display:flex;align-items:center;justify-content:center;
   font-family:'Space Mono',monospace;font-size:10px;cursor:pointer;
@@ -672,7 +692,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .cal-c.today{box-shadow:0 0 0 1px rgba(200,255,0,0.35);}
 
 .time-wrap{margin:0 20px 2px;background:var(--s1);border:1px solid var(--border);padding:16px 20px;}
-.tw-title{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:3px;
+.tw-title{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;
   text-transform:uppercase;color:var(--dim);margin-bottom:10px;}
 .tw-date{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;margin-bottom:12px;}
 .time-slots{display:flex;gap:6px;flex-wrap:wrap;}
@@ -686,7 +706,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .book-form{margin:0 20px 20px;background:var(--s1);border:1px solid var(--border);padding:20px;}
 .bf-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;margin-bottom:16px;}
 .bf-field{margin-bottom:12px;}
-.bf-field label{display:block;font-family:'Space Mono',monospace;font-size:7px;
+.bf-field label{display:block;font-family:'Space Mono',monospace;font-size:10px;
   letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:5px;}
 .bf-field input,.bf-field textarea,.bf-field select{
   width:100%;background:var(--bg);border:1px solid var(--border);
@@ -725,7 +745,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .ssd-row{display:flex;justify-content:space-between;padding:5px 0;
   border-bottom:1px solid var(--border);}
 .ssd-row:last-child{border-bottom:none;}
-.ssd-l{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--dim);}
+.ssd-l{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--dim);}
 .ssd-v{font-size:11px;font-weight:600;}
 .btn-ok{width:100%;background:var(--lime);color:#000;border:none;
   padding:14px;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px;
@@ -741,20 +761,20 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   background:radial-gradient(circle,rgba(200,255,0,0.1),transparent 65%);pointer-events:none;}
 .sc-logo{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:5px;
   color:var(--lime);margin-bottom:4px;}
-.sc-sub{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:2px;color:var(--dim);margin-bottom:16px;}
+.sc-sub{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--dim);margin-bottom:16px;}
 .sc-name{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;line-height:1;margin-bottom:4px;}
-.sc-period{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--dim);margin-bottom:16px;}
+.sc-period{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--dim);margin-bottom:16px;}
 .sc-radar{height:160px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
 .sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
-.sc-stat-l{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:1px;color:var(--dim);margin-bottom:2px;}
+.sc-stat-l{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--dim);margin-bottom:2px;}
 .sc-stat-v{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;line-height:1;}
 .sc-score-row{border-top:1px solid var(--border);padding-top:12px;
   display:flex;align-items:center;justify-content:space-between;}
-.sc-score-l{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:2px;color:var(--dim);}
+.sc-score-l{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--dim);}
 .sc-score-v{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;color:var(--lime);}
 .sc-footer-row{display:flex;justify-content:space-between;margin-top:10px;}
-.sc-tag{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:1px;color:var(--dim);}
-.sc-url{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:1px;color:var(--lime);}
+.sc-tag{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--dim);}
+.sc-url{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--lime);}
 .btn-share-dl{width:100%;background:var(--lime);color:#000;border:none;
   padding:13px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:4px;
   cursor:pointer;}
@@ -764,13 +784,13 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   transform:translateX(-50%) translateY(8px);
   background:var(--s2);border:1px solid var(--border2);
   padding:11px 20px;
-  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--lime);
+  font-family:'Space Mono',monospace;font-size:12px;letter-spacing:2px;color:var(--lime);
   opacity:0;transition:all .3s;z-index:9500;white-space:nowrap;border-radius:2px;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 /* エラーバナー（コピペ可・常時表示） */
 .err-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:9600;
   background:rgba(20,5,5,0.97);border-top:1px solid rgba(255,68,68,0.4);
-  padding:10px 16px;font-family:'Space Mono',monospace;font-size:9px;
+  padding:10px 16px;font-family:'Space Mono',monospace;font-size:12px;
   letter-spacing:1px;color:#ff6666;line-height:1.6;
   cursor:text;user-select:text;-webkit-user-select:text;word-break:break-all;}
 .err-banner.show{display:block;}
@@ -809,7 +829,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   background:var(--s2);
 }
 .home-avatar-inner img{width:100%;height:100%;object-fit:cover;}
-.home-avatar-label{font-family:'Space Mono',monospace;font-size:6px;
+.home-avatar-label{font-family:'Space Mono',monospace;font-size:9px;
   letter-spacing:2px;color:var(--dim);text-transform:uppercase;}
 
 /* ── GOAL CARD ── */
@@ -830,14 +850,14 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   background:linear-gradient(90deg,var(--lime),rgba(200,255,0,0.1));
 }
 .goal-eyebrow{
-  font-family:'Space Mono',monospace;font-size:7px;letter-spacing:4px;
+  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:4px;
   color:var(--lime);text-transform:uppercase;margin-bottom:10px;opacity:.8;
   display:flex;align-items:center;gap:8px;
 }
 .goal-eyebrow::before{content:'';width:12px;height:1px;background:var(--lime);}
 .goal-text{
   font-family:'Bebas Neue',sans-serif;
-  font-size:28px;letter-spacing:1.5px;
+  font-size:32px;letter-spacing:1.5px;
   color:var(--white);line-height:1.15;
 }
 
@@ -855,7 +875,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 #page-settings{padding-bottom:120px;}
 .settings-section{padding:24px 20px;}
 .settings-title{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:3px;margin-bottom:4px;}
-.settings-sub{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--dim);}
+.settings-sub{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--dim);}
 .avatar-editor{display:flex;flex-direction:column;align-items:center;gap:16px;
   padding:24px 20px;}
 .avatar-preview{
@@ -872,7 +892,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   position:absolute;inset:0;background:rgba(0,0,0,0.5);
   display:flex;align-items:center;justify-content:center;
   opacity:0;transition:opacity .2s;
-  font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;color:#fff;
+  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;color:#fff;
 }
 .avatar-preview:hover .avatar-preview-overlay{opacity:1;}
 .avatar-crop-wrap{
@@ -889,7 +909,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 #crop-canvas{display:block;width:100%;height:100%;}
 .crop-controls{display:flex;gap:8px;}
 .crop-btn{flex:1;background:var(--s2);border:1px solid var(--border);color:var(--white);
-  padding:10px;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;
+  padding:10px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
   cursor:pointer;transition:background .2s;}
 .crop-btn:hover{background:var(--s3);}
 .crop-btn-save{background:var(--lime);color:#000;border-color:var(--lime);}
@@ -912,10 +932,45 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 }
 .goal-save-btn:hover{background:var(--lime);color:#000;}
 
+
+/* ── SETTINGS SNS 数値入力 ── */
+.settings-label{
+  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;
+  color:rgba(242,240,255,0.5);text-transform:uppercase;
+  padding:0 20px;
+}
+.settings-sns-wrap{margin-top:8px;}
+.sns-platform-block{
+  margin:0 20px 12px;
+  background:var(--s1);border:1px solid var(--border);
+  padding:14px 16px;
+}
+.sns-plat-header{
+  font-family:'Space Mono',monospace;font-size:12px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--white);
+  display:flex;align-items:center;gap:8px;margin-bottom:12px;
+}
+.sns-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.sns-input-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.sns-input-group label{
+  display:block;font-family:'Space Mono',monospace;font-size:10px;
+  letter-spacing:1px;color:rgba(242,240,255,0.4);
+  text-transform:uppercase;margin-bottom:5px;
+}
+.sns-input-group input{
+  width:100%;background:var(--bg);border:1px solid var(--border);
+  border-bottom:1px solid rgba(255,255,255,0.15);
+  padding:9px 10px;color:var(--white);
+  font-family:'Bebas Neue',sans-serif;font-size:18px;
+  outline:none;transition:border-color .3s;
+}
+.sns-input-group input:focus{border-bottom-color:var(--lime);}
+
 </style>
 </head>
 <body>
 <div class="ambient"></div>
+<div class="scan-line-overlay" id="scan-line-overlay"></div>
 
 <!-- ══════════════════════════════
      LOGIN
@@ -1014,7 +1069,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
     <div class="setup-panel" id="sp-2">
       <div class="sp-section-label">Step 02</div>
       <div class="sp-section-title">SNS情報</div>
-      <p style="font-size:11px;color:var(--dim);line-height:1.7;margin-bottom:18px;">
+      <p style="font-size:13px;color:rgba(242,240,255,0.7);line-height:1.75;margin-bottom:18px;">
         使用しているSNSのプロフィールURLを入力してください。<br>
         <strong style="color:var(--white)">URLが正確でないと数値の自動取得ができません。</strong>
       </p>
@@ -1100,7 +1155,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
     <div class="setup-panel" id="sp-3">
       <div class="sp-section-label">Step 03</div>
       <div class="sp-section-title">内容確認</div>
-      <p style="font-size:11px;color:var(--dim);line-height:1.7;margin-bottom:16px;">
+      <p style="font-size:13px;color:rgba(242,240,255,0.7);line-height:1.75;margin-bottom:16px;">
         以下の内容で登録します。間違いがあれば戻って修正してください。
       </p>
       <div class="conf-block" id="sp-confirm-block"></div>
@@ -1287,7 +1342,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
       <div class="ycbm-wrap">
         <iframe
           id="ycbm-iframe"
-          src="https://xector1.youcanbook.me"
+          src="https://skygarden0821.youcanbook.me/"
           style="width:100%;border:none;background:transparent;"
           frameborder="0"
           scrolling="yes"
@@ -1314,7 +1369,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
         </div>
         <input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="onAvatarFileSelected(event)">
         <div class="avatar-crop-wrap" id="avatar-crop-wrap">
-          <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--dim);margin-bottom:10px;">画像をドラッグして位置調整</div>
+          <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;color:rgba(242,240,255,0.6);margin-bottom:10px;">画像をドラッグして位置調整</div>
           <div class="crop-canvas-wrap" id="crop-canvas-wrap">
             <canvas id="crop-canvas"></canvas>
           </div>
@@ -1327,9 +1382,54 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 
       <!-- 目標編集 -->
       <div class="goal-edit-wrap">
-        <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:3px;color:var(--dim);text-transform:uppercase;margin-bottom:10px;">My Goal</div>
+        <div class="settings-label">My Goal</div>
         <textarea class="goal-input" id="settings-goal" placeholder="例：2025年末までにYouTube10万人達成する"></textarea>
         <button class="goal-save-btn" onclick="saveGoal()">SAVE GOAL →</button>
+      </div>
+
+      <!-- SNS数値手動更新 -->
+      <div class="settings-sns-wrap">
+        <div class="settings-label" style="margin:24px 20px 12px;">SNS 数値を更新</div>
+
+        <div class="sns-platform-block">
+          <div class="sns-plat-header"><span class="sns-dot" style="background:#ff4040"></span>YouTube</div>
+          <div class="sns-input-row">
+            <div class="sns-input-group"><label>チャンネル登録者</label><input type="number" id="s-yt-sub" placeholder="0" min="0"></div>
+            <div class="sns-input-group"><label>総再生回数</label><input type="number" id="s-yt-views" placeholder="0" min="0"></div>
+            <div class="sns-input-group"><label>投稿数</label><input type="number" id="s-yt-posts" placeholder="0" min="0"></div>
+          </div>
+        </div>
+
+        <div class="sns-platform-block">
+          <div class="sns-plat-header"><span class="sns-dot" style="background:#69d9d0"></span>TikTok</div>
+          <div class="sns-input-row">
+            <div class="sns-input-group"><label>フォロワー</label><input type="number" id="s-tt-sub" placeholder="0" min="0"></div>
+            <div class="sns-input-group"><label>総再生回数</label><input type="number" id="s-tt-views" placeholder="0" min="0"></div>
+            <div class="sns-input-group"><label>投稿数</label><input type="number" id="s-tt-posts" placeholder="0" min="0"></div>
+          </div>
+        </div>
+
+        <div class="sns-platform-block">
+          <div class="sns-plat-header"><span class="sns-dot" style="background:#e040fb"></span>Instagram</div>
+          <div class="sns-input-row">
+            <div class="sns-input-group"><label>フォロワー</label><input type="number" id="s-ig-sub" placeholder="0" min="0"></div>
+            <div class="sns-input-group"><label>リーチ数</label><input type="number" id="s-ig-reach" placeholder="0" min="0"></div>
+            <div class="sns-input-group"><label>投稿数</label><input type="number" id="s-ig-posts" placeholder="0" min="0"></div>
+          </div>
+        </div>
+
+        <div class="sns-platform-block">
+          <div class="sns-plat-header"><span class="sns-dot" style="background:#c8c8c8"></span>X (Twitter)</div>
+          <div class="sns-input-row">
+            <div class="sns-input-group"><label>フォロワー</label><input type="number" id="s-x-sub" placeholder="0" min="0"></div>
+            <div class="sns-input-group"><label>インプレッション</label><input type="number" id="s-x-imp" placeholder="0" min="0"></div>
+            <div class="sns-input-group"><label>投稿数</label><input type="number" id="s-x-posts" placeholder="0" min="0"></div>
+          </div>
+        </div>
+
+        <div style="padding:0 20px 8px;">
+          <button class="goal-save-btn" onclick="saveStatsFromSettings()">SAVE & UPDATE →</button>
+        </div>
       </div>
 
       <div style="height:40px;"></div>
@@ -1515,19 +1615,79 @@ const FILTER_CATS = [
   { key:'collab', label:'コラボ' },
 ];
 
+// ── ダミーメンバーデータ（実在感を出すためバリエーション豊富に）──
+const DUMMY_MEMBERS = [
+  { name:'渡辺 拓海', av:'渡', color:'#ff3d80', badge:'RANK #1', badgeColor:'#c8ff00' },
+  { name:'佐藤 美優', av:'佐', color:'#00f0ff', badge:'GROWING', badgeColor:'#00f0ff' },
+  { name:'伊藤 さくら', av:'伊', color:'#9f6fff', badge:'MEMBER', badgeColor:'rgba(242,240,255,0.3)' },
+  { name:'中村 蓮', av:'中', color:'#ffb700', badge:'TOP MEMBER', badgeColor:'#c8ff00' },
+  { name:'高橋 ひな', av:'高', color:'#00ffaa', badge:'GROWING', badgeColor:'#00f0ff' },
+  { name:'小林 悠斗', av:'小', color:'#ff7043', badge:'MEMBER', badgeColor:'rgba(242,240,255,0.3)' },
+  { name:'山田 彩花', av:'山', color:'#ab47bc', badge:'MEMBER', badgeColor:'rgba(242,240,255,0.3)' },
+  { name:'加藤 颯', av:'加', color:'#26c6da', badge:'GROWING', badgeColor:'#00f0ff' },
+];
+
+const DUMMY_POSTS_POOL = [
+  { text:'TikTokで久しぶりにバズりました🔥 投稿3時間で<strong>8万再生</strong>超え。サムネのテキスト位置を変えただけでこんなに違うとは…。', ach:{ icon:'🔥', label:'Viral', val:'8万再生突破' }, likes:41 },
+  { text:'今月からYouTubeの投稿頻度を週1→週2に上げてみました。まだ2週間ですがすでにインプレッションが<strong>+28%</strong>。しんどいけど続けます。', ach:null, likes:19 },
+  { text:'Instagramリールの最初の2秒を完全に作り直したら平均視聴時間が<strong>1.4倍</strong>に。Tips通りに実行してみてよかったです！', ach:null, likes:27 },
+  { text:'コラボ打診のDM、丁寧に書き直したら今月<strong>3件中2件</strong>から返信きました。ポイントは相手のメリットを先に書くことでした。', ach:null, likes:14 },
+  { text:'X（旧Twitter）のフォロワーが<strong>1万人</strong>を超えました！毎朝のルーティン投稿を3ヶ月続けた結果です。地道な積み重ねしかない。', ach:{ icon:'🎊', label:'Milestone', val:'X 1万フォロワー' }, likes:36 },
+  { text:'サムネのABテストを初めてちゃんとやりました。クリック率が<strong>3.1%→5.8%</strong>に。数字で見ると面白いですね。', ach:null, likes:22 },
+  { text:'今日の面談で投稿のペルソナ設定を見直すよう言われて、やってみたら方向性がすごく明確になりました。全部ここから変わる気がする。', ach:null, likes:33 },
+  { text:'TikTokのフォロワーが<strong>5万人</strong>突破！正直まだ実感ないんですが、数字を見るとやる気が出ます。次は10万狙います。', ach:{ icon:'🏅', label:'Goal Cleared', val:'TikTok 5万人' }, likes:51 },
+  { text:'インサイト見てたら特定の時間帯に投稿するとリーチが全然違うことに気づきました。同じコンテンツでも<strong>2倍以上</strong>変わる。', ach:null, likes:18 },
+  { text:'YouTubeのショート動画が急に伸び始めました。チャンネル全体のインプレも+15%。ショートの影響力を舐めてました。', ach:null, likes:29 },
+  { text:'先月に比べてInstagramの保存数が<strong>3倍</strong>になりました。「保存したくなる情報」を意識して作り始めてから明らかに変わった。', ach:null, likes:44 },
+  { text:'コンテンツを量産するより、1本の質を上げることに集中したら再生数が安定してきた。週2本から週1本に下げてよかったかも。', ach:null, likes:16 },
+];
+
+function injectRandomPost(){
+  // ページを開くたびに1件ランダムで先頭に追加（自分の投稿は除外）
+  const pool = DUMMY_POSTS_POOL;
+  const members = DUMMY_MEMBERS;
+  const p = pool[Math.floor(Math.random()*pool.length)];
+  const m = members[Math.floor(Math.random()*members.length)];
+  const times = ['たった今','1分前','3分前','5分前','8分前','12分前','20分前','30分前'];
+  const t = times[Math.floor(Math.random()*times.length)];
+  const newPost = {
+    id: Date.now(),
+    name: m.name, av: m.av, color: m.color,
+    badge: m.badge, badgeColor: m.badgeColor,
+    time: t,
+    text: p.text,
+    ach: p.ach ? {...p.ach} : null,
+    likes: p.likes + Math.floor(Math.random()*8),
+    liked: false,
+    isDummy: true,
+  };
+  // 重複防止：直前の投稿と同じ人なら差し替え
+  if(appState.posts[0]?.name === m.name){
+    const alt = members.find(x=>x.name!==m.name);
+    if(alt){ newPost.name=alt.name; newPost.av=alt.av; newPost.color=alt.color; newPost.badge=alt.badge; newPost.badgeColor=alt.badgeColor; }
+  }
+  // ユーザー自身の投稿は先頭に保持、ダミーはその直後に挿入
+  const myPosts = appState.posts.filter(x=>!x.isDummy);
+  const dummies = appState.posts.filter(x=>x.isDummy);
+  dummies.unshift(newPost);
+  // ダミーは最大15件
+  if(dummies.length > 15) dummies.pop();
+  appState.posts = [...myPosts, ...dummies];
+  // ユーザー投稿が先頭に来るようにソート（自分の投稿優先）
+  appState.posts.sort((a,b)=> (a.isDummy?1:0)-(b.isDummy?1:0));
+  renderFeed();
+}
+
 const COMM_POSTS = [
   { id:1, name:'渡辺 拓海', av:'渡', color:'#ff3d80', time:'2時間前', badge:'RANK #1', badgeColor:'#c8ff00',
     text:'今週で<strong>YouTubeチャンネル登録者40万人</strong>を突破しました！参加してから8ヶ月、本当に継続してよかったです。',
-    ach:{ icon:'🏆', label:'Achievement', val:'40万人 突破' }, likes:24, liked:false },
+    ach:{ icon:'🏆', label:'Achievement', val:'40万人 突破' }, likes:24, liked:false, isDummy:true },
   { id:2, name:'佐藤 美優', av:'佐', color:'#00f0ff', time:'5時間前', badge:'GROWING', badgeColor:'#00f0ff',
     text:'TikTokのエンゲージメント率が先月比で<strong>+4.2%</strong>上がりました。投稿後30分の集中対応を始めてから明らかに初速が変わった感じがします。',
-    ach:null, likes:18, liked:false },
-  { id:3, name:'田中 雄介', av:'田', color:'#c8ff00', time:'昨日', badge:'TOP MEMBER', badgeColor:'#c8ff00',
-    text:'コラボ企画を打診するときのDMって皆さんどんな文章で送ってますか？今週3件送ったんですが全部スルーされて…。',
-    ach:null, likes:9, liked:false },
-  { id:4, name:'伊藤 さくら', av:'伊', color:'#9f6fff', time:'2日前', badge:'MEMBER', badgeColor:'rgba(242,240,255,0.3)',
+    ach:null, likes:18, liked:false, isDummy:true },
+  { id:3, name:'伊藤 さくら', av:'伊', color:'#9f6fff', time:'2日前', badge:'MEMBER', badgeColor:'rgba(242,240,255,0.3)',
     text:'初めて<strong>Instagramリール</strong>が1万再生を超えました！「共感型」で作った動画でした。ここのTipsがめちゃくちゃ役に立ってます。',
-    ach:{ icon:'🎉', label:'First Milestone', val:'1万再生 達成' }, likes:31, liked:false },
+    ach:{ icon:'🎉', label:'First Milestone', val:'1万再生 達成' }, likes:31, liked:false, isDummy:true },
 ];
 
 const SESSIONS_DATA = [
@@ -2003,6 +2163,62 @@ function loadAvatarFromStorage(){
   } catch(e){}
 }
 
+
+// ── SETTINGS から SNS 数値保存 ──
+async function saveStatsFromSettings(){
+  const g = id => { const v=parseInt(document.getElementById(id)?.value||'0'); return isNaN(v)?0:v; };
+  SNS.yt.sub   = g('s-yt-sub')   || SNS.yt.sub;
+  SNS.yt.views = g('s-yt-views') || SNS.yt.views;
+  SNS.yt.posts = g('s-yt-posts') || SNS.yt.posts;
+  SNS.tt.sub   = g('s-tt-sub')   || SNS.tt.sub;
+  SNS.tt.views = g('s-tt-views') || SNS.tt.views;
+  SNS.tt.posts = g('s-tt-posts') || SNS.tt.posts;
+  SNS.ig.sub   = g('s-ig-sub')   || SNS.ig.sub;
+  SNS.ig.reach = g('s-ig-reach') || SNS.ig.reach;
+  SNS.ig.posts = g('s-ig-posts') || SNS.ig.posts;
+  SNS.x.sub    = g('s-x-sub')    || SNS.x.sub;
+  SNS.x.imp    = g('s-x-imp')    || SNS.x.imp;
+  SNS.x.posts  = g('s-x-posts')  || SNS.x.posts;
+
+  // ホームのKPIグリッドを再描画
+  renderKPIGrid();
+  initRadar();
+  renderMetricScroll();
+  initLineChart();
+
+  // DBに保存
+  if(currentUser){
+    const payload = {
+      user_id: currentUser.id,
+      recorded_at: new Date().toISOString().split('T')[0],
+      yt_subscribers: SNS.yt.sub, yt_views: SNS.yt.views, yt_posts: SNS.yt.posts,
+      tt_followers: SNS.tt.sub,   tt_views: SNS.tt.views, tt_posts: SNS.tt.posts,
+      ig_followers: SNS.ig.sub,   ig_reach: SNS.ig.reach, ig_posts: SNS.ig.posts,
+      x_followers: SNS.x.sub,     x_impressions: SNS.x.imp, x_posts: SNS.x.posts,
+    };
+    const { error } = await supa.from('sns_stats').insert(payload);
+    if(error){ showToast('DB保存エラー: '+error.message); return; }
+  }
+  showToast('数値を更新しました ✓');
+}
+
+// ── 設定ページを開いたとき現在値をフィールドにセット ──
+function prefillSettingsSNS(){
+  const set = (id, val) => { const el=document.getElementById(id); if(el&&val) el.value=val||''; };
+  set('s-yt-sub',   SNS.yt.sub);
+  set('s-yt-views', SNS.yt.views);
+  set('s-yt-posts', SNS.yt.posts);
+  set('s-tt-sub',   SNS.tt.sub);
+  set('s-tt-views', SNS.tt.views);
+  set('s-tt-posts', SNS.tt.posts);
+  set('s-ig-sub',   SNS.ig.sub);
+  set('s-ig-reach', SNS.ig.reach);
+  set('s-ig-posts', SNS.ig.posts);
+  set('s-x-sub',    SNS.x.sub);
+  set('s-x-imp',    SNS.x.imp);
+  set('s-x-posts',  SNS.x.posts);
+}
+
 // ── GOAL SAVE ──
 async function saveGoal(){
   const text = document.getElementById('settings-goal').value.trim();
@@ -2090,18 +2306,19 @@ function renderStreakDots(){
 // ── HOME KPI ──
 function renderKPIGrid(){
   const kpis=[
-    { label:'YouTube', plat:'#ff4040', val:fmtNum(SNS.yt.sub), delta:'+1,200', up:true },
-    { label:'TikTok',  plat:'#69d9d0', val:fmtNum(SNS.tt.sub), delta:'+340',   up:true },
-    { label:'Instagram', plat:'#e040fb', val:fmtNum(SNS.ig.sub), delta:'+180', up:true },
-    { label:'X',       plat:'#c8c8c8', val:fmtNum(SNS.x.sub),  delta:'+90',    up:true },
+    { label:'YouTube', sub:'フォロワー数', plat:'#ff4040', val:fmtNum(SNS.yt.sub), delta:'+1,200', up:true },
+    { label:'TikTok',  sub:'フォロワー数', plat:'#69d9d0', val:fmtNum(SNS.tt.sub), delta:'+340',   up:true },
+    { label:'Instagram', sub:'フォロワー数', plat:'#e040fb', val:fmtNum(SNS.ig.sub), delta:'+180', up:true },
+    { label:'X',       sub:'フォロワー数', plat:'#c8c8c8', val:fmtNum(SNS.x.sub),  delta:'+90',    up:true },
   ];
   document.getElementById('kpi-grid').innerHTML=kpis.map(k=>`
     <div class="kpi-card">
       <div class="kpi-card-label">
         <span class="kpi-plat" style="background:${k.plat}"></span>${k.label}
       </div>
+      <div class="kpi-card-sub">${k.sub}</div>
       <div class="kpi-card-val">${k.val}</div>
-      <div class="kpi-card-delta ${k.up?'up':'dn'}">${k.delta}</div>
+      <div class="kpi-card-delta ${k.up?'up':'dn'}">${k.delta} 先月比</div>
     </div>`).join('');
 }
 
@@ -2295,16 +2512,16 @@ function openTipSheet(id){
   document.getElementById('tip-sheet-content').innerHTML=`
     <div class="tip-meta-row" style="margin-bottom:12px;">
       <span class="tip-cat-tag" style="background:${t.bg};color:${t.color};border:1px solid ${t.color}22;padding:3px 8px;border-radius:2px;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;">${t.catLabel}</span>
-      <span style="font-family:'Space Mono',monospace;font-size:8px;color:var(--dim);letter-spacing:1px;margin-left:8px;">${t.week}</span>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;color:rgba(242,240,255,0.55);letter-spacing:0px;margin-left:8px;">${t.week}</span>
     </div>
     <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;line-height:1.05;margin-bottom:16px;">${t.title}</div>
-    <div style="font-size:13px;color:var(--white);line-height:1.7;margin-bottom:20px;border-left:2px solid ${t.color};padding-left:16px;">${t.lead}</div>
-    <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:${t.color};margin-bottom:10px;">やること</div>
+    <div style="font-size:14px;color:var(--white);line-height:1.75;margin-bottom:20px;border-left:2px solid ${t.color};padding-left:16px;">${t.lead}</div>
+    <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:${t.color};margin-bottom:10px;font-weight:700;">やること</div>
     <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
-      ${t.points.map(p=>`<li style="font-size:12px;color:var(--dim);padding-left:16px;position:relative;line-height:1.6;"><span style="position:absolute;left:0;color:${t.color}">—</span>${p}</li>`).join('')}
+      ${t.points.map(p=>`<li style="font-size:13px;color:rgba(242,240,255,0.7);padding-left:16px;position:relative;line-height:1.7;"><span style="position:absolute;left:0;color:${t.color}">—</span>${p}</li>`).join('')}
     </ul>
-    <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-bottom:8px;">解説</div>
-    <div style="font-size:12px;color:var(--dim);line-height:1.7;">${t.body}</div>
+    <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(242,240,255,0.55);margin-bottom:8px;font-weight:700;">解説</div>
+    <div style="font-size:13px;color:rgba(242,240,255,0.65);line-height:1.75;">${t.body}</div>
     <div style="margin-top:24px;">
       <button onclick="closeTipSheet()" style="background:${t.color};color:#000;border:none;width:100%;padding:13px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:4px;cursor:pointer;">理解した — 実践する</button>
     </div>`;
@@ -2492,6 +2709,10 @@ function closeShareSheet(e){
 
 // ── PAGE NAV ──
 function goPage(name){
+  // 光ラインSE
+  const sl = document.getElementById('scan-line-overlay');
+  if(sl){ sl.classList.remove('scanning'); void sl.offsetWidth; sl.classList.add('scanning'); }
+
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   const page = document.getElementById('page-'+name);
@@ -2499,11 +2720,14 @@ function goPage(name){
   if(page) page.classList.add('active');
   if(nav)  nav.classList.add('active');
   document.querySelector('.app-content').scrollTo(0,0);
-  // settingsページを開いたとき目標をプリフィル
+  // settingsページを開いたとき目標・SNS数値をプリフィル
   if(name==='settings'){
     const gi = document.getElementById('settings-goal');
     if(gi) gi.value = MEMBER.goal || '';
+    prefillSettingsSNS();
   }
+  // コミュニティページを開くたびにランダム投稿を先頭に追加
+  if(name==='community') injectRandomPost();
 }
 
 // ── UTILS ──
