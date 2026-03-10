@@ -225,17 +225,20 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 }
 
 /* ロゴ — 極ゆっくり呼吸から浮かびあがる */
-.login-logo{text-align:center;margin-bottom:52px;}
+.login-logo{text-align:center;margin-bottom:52px;width:100%;padding:0 24px;box-sizing:border-box;}
 .login-logo-mark{
-  font-family:'Bebas Neue',sans-serif;font-size:88px;letter-spacing:16px;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:min(11vw, 56px);
+  letter-spacing:6px;
   color:var(--white);display:block;line-height:1;
+  white-space:nowrap;
   opacity:0;
   animation:logoMaterialize 2.4s cubic-bezier(.16,1,.3,1) .6s forwards;
 }
 @keyframes logoMaterialize{
-  0%  {opacity:0;letter-spacing:40px;filter:blur(12px);}
-  40% {filter:blur(2px);}
-  100%{opacity:1;letter-spacing:16px;filter:blur(0);}
+  0%  {opacity:0;letter-spacing:14px;filter:blur(12px);}
+  40% {opacity:.6;filter:blur(2px);letter-spacing:10px;}
+  100%{opacity:1;letter-spacing:6px;filter:blur(0);}
 }
 .login-logo-sub{
   font-family:'Space Mono',monospace;font-size:11px;letter-spacing:6px;
@@ -387,8 +390,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .nav-item.active::before{opacity:1;}
 .nav-icon{font-size:19px;transition:transform .2s;display:inline-block;}
 .nav-item.active .nav-icon{transform:scale(1.1);}
-.nav-icon.spin{animation:navSpin .45s cubic-bezier(.4,0,.2,1);}
-@keyframes navSpin{0%{transform:rotate(0deg) scale(1);}50%{transform:rotate(180deg) scale(1.25);}100%{transform:rotate(360deg) scale(1.1);}}
+.nav-icon.spin{animation:navSnap .28s cubic-bezier(.34,1.56,.64,1);}
 .nav-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;
   text-transform:uppercase;color:var(--dim);transition:color .2s;}
 .nav-item.active .nav-label{color:var(--lime);}
@@ -582,14 +584,14 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .tip-accent{width:3px;flex-shrink:0;}
 .tip-body-wrap{padding:16px 16px 14px;flex:1;}
 .tip-meta-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-.tip-cat-tag{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;
+.tip-cat-tag{font-family:'Space Mono',monospace;font-size:10px !important;letter-spacing:1px;
   padding:2px 6px;border-radius:2px;}
 .tip-week-tag{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--dim);}
 .tip-new{background:var(--lime);color:#000;font-family:'Space Mono',monospace;
   font-size:10px;letter-spacing:1px;padding:2px 5px;border-radius:2px;}
-.tip-title-text{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;
+.tip-title-text{font-family:'Bebas Neue',sans-serif;font-size:20px !important;letter-spacing:2px;
   line-height:1.1;margin-bottom:6px;}
-.tip-preview{font-size:11px;color:var(--dim);line-height:1.5;letter-spacing:.2px;}
+.tip-preview{font-size:13px !important;color:rgba(242,240,255,0.65);line-height:1.55;letter-spacing:.2px;}
 .tip-row-icon{width:56px;display:flex;align-items:center;justify-content:center;
   font-size:24px;flex-shrink:0;border-left:1px solid var(--border);}
 
@@ -1083,7 +1085,7 @@ html, body {
 
 /* ══ PROGRAM TABS ══ */
 .program-tabs{
-  display:grid;grid-template-columns:1fr 1fr;gap:2px;
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;
   margin:0 20px 0;
 }
 .prog-tab{
@@ -1219,14 +1221,15 @@ html, body {
 .post-like.liked{color:#ff3d80;}
 .post-like:hover{color:var(--white);}
 
-/* ══ NAV アイコン回転 ══ */
-@keyframes navSpin{
-  0%{transform:rotate(0deg) scale(1);}
-  50%{transform:rotate(180deg) scale(1.2);}
-  100%{transform:rotate(360deg) scale(1);}
+/* ══ NAV アイコン スナップ ══ */
+@keyframes navSnap{
+  0%  {transform:scale(1);  opacity:1;}
+  25% {transform:scale(.65);opacity:.4;}
+  65% {transform:scale(1.28);opacity:1;}
+  100%{transform:scale(1);  opacity:1;}
 }
 .nav-icon.spinning{
-  animation:navSpin .45s cubic-bezier(.4,0,.2,1) forwards;
+  animation:navSnap .28s cubic-bezier(.34,1.56,.64,1) forwards;
 }
 
 /* ══ 光ライン スロー版 ══ */
@@ -1653,7 +1656,7 @@ p, li, .section-sub, .post-text, .composer-ta,
     </div>
     <div class="topbar-right">
       <span class="topbar-member" id="topbar-member">田中 雄介</span>
-      <div class="topbar-avatar" id="topbar-avatar" onclick="goPage('settings',true)" title="プロフィール設定">
+      <div class="topbar-avatar" id="topbar-avatar" onclick="goPage('settings')" title="プロフィール設定">
         <div class="topbar-avatar-inner" id="topbar-avatar-inner">?</div>
       </div>
     </div>
@@ -1672,7 +1675,7 @@ p, li, .section-sub, .post-text, .composer-ta,
             <div class="home-name">こんにちは、<br><em id="home-name">田中</em></div>
             <div class="home-since" id="home-since">Member since Nov 2024 — Day 129</div>
           </div>
-          <div class="home-avatar-wrap" onclick="goPage('settings',true)">
+          <div class="home-avatar-wrap" onclick="goPage('settings')">
             <div class="home-avatar" id="home-avatar">
               <div class="home-avatar-inner" id="home-avatar-inner">?</div>
             </div>
@@ -1681,12 +1684,12 @@ p, li, .section-sub, .post-text, .composer-ta,
         </div>
       </div>
 
-      <div class="goal-card" id="goal-card" onclick="goPage('settings',true)">
+      <div class="goal-card" id="goal-card" onclick="goPage('settings')">
         <div class="goal-eyebrow">MY GOAL</div>
         <div class="goal-text" id="goal-text">目標を設定してください</div>
       </div>
 
-      <div class="goal-progress-wrap" id="goal-progress-wrap" onclick="goPage('settings',true)" style="display:none">
+      <div class="goal-progress-wrap" id="goal-progress-wrap" onclick="goPage('settings')" style="display:none">
         <div class="goal-progress-top">
           <div class="goal-progress-title">Progress</div>
           <div class="goal-progress-pct" id="goal-progress-pct">0%</div>
@@ -1709,28 +1712,28 @@ p, li, .section-sub, .post-text, .composer-ta,
       <div class="kpi-grid" id="kpi-grid"></div>
 
       <div class="action-list">
-        <div class="action-row" onclick="goPage('stats',true)">
+        <div class="action-row" onclick="goPage('stats')">
           <div class="ar-left">
             <div class="ar-label">Weekly Update</div>
             <div class="ar-title">SNS数値を更新する</div>
           </div>
           <div class="ar-arrow">→</div>
         </div>
-        <div class="action-row" onclick="goPage('book',true)">
+        <div class="action-row" onclick="goPage('book')">
           <div class="ar-left">
             <div class="ar-label">Next Session</div>
             <div class="ar-title">面談を予約する</div>
           </div>
           <div class="ar-arrow">→</div>
         </div>
-        <div class="action-row" onclick="goPage('tips',true)">
+        <div class="action-row" onclick="goPage('tips')">
           <div class="ar-left">
             <div class="ar-label">This Week</div>
             <div class="ar-title">最新Tipsを見る</div>
           </div>
           <div class="ar-arrow">→</div>
         </div>
-        <div class="action-row" onclick="goPage('community',true)">
+        <div class="action-row" onclick="goPage('community')">
           <div class="ar-left">
             <div class="ar-label">Community</div>
             <div class="ar-title">メンバーの投稿を見る</div>
@@ -1789,7 +1792,7 @@ p, li, .section-sub, .post-text, .composer-ta,
         <div class="stats-pending-icon">◈</div>
         <div class="stats-pending-title">データ準備中</div>
         <div class="stats-pending-sub">SNSの数値はスタッフが定期的に更新します。<br>設定から自分で入力することもできます。</div>
-        <button class="stats-pending-btn" onclick="goPage('settings',true)">設定で入力する →</button>
+        <button class="stats-pending-btn" onclick="goPage('settings')">設定で入力する →</button>
       </div>
     </div>
 
@@ -1834,16 +1837,20 @@ p, li, .section-sub, .post-text, .composer-ta,
       <!-- タブ切り替え -->
       <div class="program-tabs">
         <button class="prog-tab active" id="prog-tab-1" onclick="switchProgram(1)">
-          <span class="prog-tab-label">Voice Session 01</span>
-          <span class="prog-tab-desc">通常セッション</span>
+          <span class="prog-tab-label">プロデュース</span>
+          <span class="prog-tab-desc">SNS戦略セッション</span>
         </button>
         <button class="prog-tab" id="prog-tab-2" onclick="switchProgram(2)">
-          <span class="prog-tab-label">Voice Session 02</span>
-          <span class="prog-tab-desc">集中セッション</span>
+          <span class="prog-tab-label">ボイトレ 1</span>
+          <span class="prog-tab-desc">ボイストレーニング</span>
+        </button>
+        <button class="prog-tab" id="prog-tab-3" onclick="switchProgram(3)">
+          <span class="prog-tab-label">ボイトレ 2</span>
+          <span class="prog-tab-desc">ボイストレーニング</span>
         </button>
       </div>
 
-      <!-- Voice01 -->
+      <!-- プロデュース -->
       <div class="ycbm-panel" id="ycbm-panel-1">
         <div class="ycbm-wrap">
           <iframe
@@ -1854,11 +1861,22 @@ p, li, .section-sub, .post-text, .composer-ta,
         </div>
       </div>
 
-      <!-- Voice02 -->
+      <!-- ボイストレーニング1 -->
       <div class="ycbm-panel" id="ycbm-panel-2" style="display:none;">
         <div class="ycbm-wrap">
           <iframe
-            src="https://skygarden0821.youcanbook.me/"
+            src="https://xector1voice01.youcanbook.me/"
+            style="width:100%;border:none;background:transparent;min-height:650px;"
+            frameborder="0" scrolling="yes" allowtransparency="true"
+          ></iframe>
+        </div>
+      </div>
+
+      <!-- ボイストレーニング2 -->
+      <div class="ycbm-panel" id="ycbm-panel-3" style="display:none;">
+        <div class="ycbm-wrap">
+          <iframe
+            src="https://xector1voice02.youcanbook.me/"
             style="width:100%;border:none;background:transparent;min-height:650px;"
             frameborder="0" scrolling="yes" allowtransparency="true"
           ></iframe>
@@ -1954,27 +1972,27 @@ p, li, .section-sub, .post-text, .composer-ta,
 
   <!-- BOTTOM NAV -->
   <nav class="app-nav">
-    <button class="nav-item active" id="nav-home" onclick="goPage('home',true)">
+    <button class="nav-item active" id="nav-home" onclick="goPage('home')">
       <span class="nav-icon">⬡</span>
       <span class="nav-label">Home</span>
     </button>
-    <button class="nav-item" id="nav-stats" onclick="goPage('stats',true)">
+    <button class="nav-item" id="nav-stats" onclick="goPage('stats')">
       <span class="nav-icon">◈</span>
       <span class="nav-label">Stats</span>
     </button>
-    <button class="nav-item" id="nav-tips" onclick="goPage('tips',true)">
+    <button class="nav-item" id="nav-tips" onclick="goPage('tips')">
       <span class="nav-icon">💡</span>
       <span class="nav-label">Tips</span>
     </button>
-    <button class="nav-item" id="nav-community" onclick="goPage('community',true)">
+    <button class="nav-item" id="nav-community" onclick="goPage('community')">
       <span class="nav-icon">⬡</span>
       <span class="nav-label">Community</span>
     </button>
-    <button class="nav-item" id="nav-book" onclick="goPage('book',true)">
+    <button class="nav-item" id="nav-book" onclick="goPage('book')">
       <span class="nav-icon">◎</span>
       <span class="nav-label">Program</span>
     </button>
-    <button class="nav-item" id="nav-settings" onclick="goPage('settings',true)">
+    <button class="nav-item" id="nav-settings" onclick="goPage('settings')">
       <span class="nav-icon" style="font-size:16px;">⚙</span>
       <span class="nav-label">設定</span>
     </button>
@@ -2301,13 +2319,19 @@ let currentUser = null;
 
 // セッション復元（ページ再読み込み時に自動ログイン）
 async function restoreSession(){
-  const { data:{ session } } = await supa.auth.getSession();
-  if(session){
-    currentUser = session.user;
-    showApp();
-  } else {
+  try {
+    const { data:{ session } } = await supa.auth.getSession();
+    if(session){
+      currentUser = session.user;
+      showApp();
+    } else {
+      const el = document.getElementById('screen-login');
+      if(el) el.style.display='flex';
+    }
+  } catch(e) {
+    console.error('restoreSession:', e);
     const el = document.getElementById('screen-login');
-    el.style.display='flex';
+    if(el) el.style.display='flex';
   }
 }
 
@@ -2326,6 +2350,8 @@ function showApp(){
 //  LOGIN
 // ══════════════════════════════
 async function doLogin(){
+
+  try {
   const email = document.getElementById('l-email').value.trim();
   const pass  = document.getElementById('l-pass').value.trim();
   if(!email||!pass){ showToast('メールとパスワードを入力してください'); return; }
@@ -2353,6 +2379,12 @@ async function doLogin(){
 
   document.getElementById('screen-login').classList.add('out');
   setTimeout(()=>showApp(), 600);
+  } catch(e) {
+    console.error('doLogin:', e);
+    const btn = document.querySelector('.btn-login');
+    if(btn){ btn.textContent='ENTER'; btn.disabled=false; }
+    showToast('ネットワークエラーが発生しました');
+  }
 }
 
 // ══════════════════════════════
@@ -2479,6 +2511,8 @@ function spBuildConfirm(){
 }
 
 async function spSubmit(){
+
+  try {
   const btn=document.getElementById('sp-submit-btn');
   btn.textContent='保存中...'; btn.disabled=true;
 
@@ -2510,6 +2544,10 @@ async function spSubmit(){
   MEMBER.short = (payload.stage_name || payload.name || "").split(" ")[0] || MEMBER.name;
   document.getElementById('screen-setup').classList.remove('visible');
   loadUserAndInit();
+  } catch(e) {
+    console.error('spSubmit:', e);
+    showToast('保存エラー: ' + e.message);
+  }
 }
 
 // ══════════════════════════════
@@ -2517,7 +2555,7 @@ async function spSubmit(){
 // ══════════════════════════════
 async function loadUserAndInit(){
   if(!currentUser){ initApp(); return; }
-
+  try {
   // プロフィール取得
   let { data:prof } = await supa.from('profiles').select('*').eq('id',currentUser.id).single();
 
@@ -2556,14 +2594,20 @@ async function loadUserAndInit(){
   initApp();
   // 週次サマリー・マイルストーン確認
   checkWeeklyAndMilestones(stats);
-  // 目標プログレスバー更新
-  updateGoalProgress();
+  try{ updateGoalProgress(); }catch(e){ console.warn(e); }
+  } catch(e) {
+    console.error('loadUserAndInit:', e);
+    showToast('データ読み込みエラー。再ログインしてください。');
+    initApp();
+  }
 }
 
 // ══════════════════════════════
 //  SAVE STATS TO DB
 // ══════════════════════════════
 async function saveStatsToDB(){
+
+  try {
   if(!currentUser){ showToast('ログインが必要です'); return; }
 
   const payload = {
@@ -2589,6 +2633,10 @@ async function saveStatsToDB(){
   updateGoalProgress();
   checkWeeklyAndMilestones(null);
   setTimeout(()=>goPage('home'),800);
+  } catch(e) {
+    console.error('saveStatsToDB:', e);
+    showToast('保存エラー: ' + e.message);
+  }
 }
 
 
@@ -2743,6 +2791,8 @@ function loadAvatarFromStorage(){
 
 // ── SETTINGS から SNS 数値保存 ──
 async function saveStatsFromSettings(){
+
+  try {
   const g = id => { const v=parseInt(document.getElementById(id)?.value||'0'); return isNaN(v)?0:v; };
   SNS.yt.sub   = g('s-yt-sub')   || SNS.yt.sub;
   SNS.yt.views = g('s-yt-views') || SNS.yt.views;
@@ -2778,6 +2828,10 @@ async function saveStatsFromSettings(){
   }
   showToast('数値を更新しました ✓');
   updateGoalProgress();
+  } catch(e) {
+    console.error('saveStatsFromSettings:', e);
+    showToast('保存エラー: ' + e.message);
+  }
 }
 
 // ── 設定ページを開いたとき現在値をフィールドにセット ──
@@ -2800,9 +2854,11 @@ function prefillSettingsSNS(){
 
 // ── Program タブ切り替え ──
 function switchProgram(n){
-  [1,2].forEach(i=>{
-    document.getElementById('prog-tab-'+i).classList.toggle('active', i===n);
-    document.getElementById('ycbm-panel-'+i).style.display = i===n ? 'block' : 'none';
+  [1,2,3].forEach(i=>{
+    const tab = document.getElementById('prog-tab-'+i);
+    const panel = document.getElementById('ycbm-panel-'+i);
+    if(tab)   tab.classList.toggle('active', i===n);
+    if(panel) panel.style.display = i===n ? 'block' : 'none';
   });
 }
 
@@ -2923,6 +2979,7 @@ function fmtMilestone(n){
 // 前週データとの比較・マイルストーン検出
 async function checkWeeklyAndMilestones(currentStats){
   if(!currentUser) return;
+  try {
 
   // 1週間前のデータを取得
   const weekAgo = new Date();
@@ -3013,6 +3070,7 @@ async function checkWeeklyAndMilestones(currentStats){
   // 少し遅らせて表示（ログイン演出が終わってから）
   setTimeout(()=>{ wm.classList.add('show'); }, 1400);
   localStorage.setItem('xector1_weekly_shown_' + currentUser.id, today);
+  } catch(e){ console.warn('weekly check error:', e); }
 }
 
 function getWeekStart(){
@@ -3062,7 +3120,7 @@ function launchConfetti(){
 // ══════════════════════════════
 //  目標プログレスバー
 // ══════════════════════════════
-function updateGoalProgress(){
+function updateGoalProgress(){ try {
   const wrap = document.getElementById('goal-progress-wrap');
   const barFill = document.getElementById('goal-progress-bar');
   const pctEl = document.getElementById('goal-progress-pct');
@@ -3076,7 +3134,7 @@ function updateGoalProgress(){
   if(!goal){ wrap.style.display='none'; return; }
 
   // 例：「YouTube10万人達成」「TikTok5万フォロワー」などをパース
-  const numMatch = goal.match(/([0-9０-９]+(?:[\.．][0-9０-９]+)?)\s*(?:万|千)?/);
+  const numMatch = goal.match(/([0-9０-９]+(?:[.．][0-9０-９]+)?)[\s　]*(?:万|千)?/);
   if(!numMatch){ wrap.style.display='none'; return; }
 
   let targetNum = parseFloat(numMatch[1].replace(/[０-９]/g, c=>String.fromCharCode(c.charCodeAt(0)-65248)));
@@ -3125,6 +3183,7 @@ function updateGoalProgress(){
     barFill.style.boxShadow = `0 0 8px ${platColor}80`;
     barFill.style.width = pct + '%';
   }, 300);
+  } catch(e){ console.warn('updateGoalProgress error:', e); }
 }
 
 // ══════════════════════════════
@@ -3172,6 +3231,8 @@ function scheduleAutoComment(postId){
 
 // ── GOAL SAVE ──
 async function saveGoal(){
+
+  try {
   const text = document.getElementById('settings-goal').value.trim();
   if(!text){ showToast('目標を入力してください'); return; }
   if(!currentUser){ showToast('ログインが必要です'); return; }
@@ -3184,6 +3245,10 @@ async function saveGoal(){
   if(error){ showToast('保存エラー: '+error.message); return; }
   showToast('目標を保存しました ✓');
   updateGoalProgress();
+  } catch(e) {
+    console.error('saveGoal:', e);
+    showToast('保存エラー: ' + e.message);
+  }
 }
 
 // ── youcanbookme iframe リサイズ ──
@@ -3217,7 +3282,7 @@ function initApp(){
   const gt = document.getElementById('goal-text');
   if(gt) gt.textContent = MEMBER.goal || '目標を設定してください →';
   // プログレスバー
-  updateGoalProgress();
+  try{ updateGoalProgress(); }catch(e){ console.warn(e); }
   // settingsのinitial文字
   const tb2 = document.getElementById('topbar-avatar-inner');
   if(tb2 && !MEMBER.avatar) tb2.textContent = MEMBER.short[0]||'?';
