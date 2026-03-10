@@ -1477,7 +1477,8 @@ async function spSubmit(){
   };
   const {error} = await supa.from('profiles').upsert(payload);
   if(error){ showError('保存エラー: '+error.message); btn.textContent='登録してポータルへ →'; btn.disabled=false; return; }
-  MEMBER.name = payload.stage_name || payload.name;
+  MEMBER.name  = payload.stage_name || payload.name;
+  MEMBER.short = (payload.stage_name || payload.name || "").split(" ")[0] || MEMBER.name;
   document.getElementById('screen-setup').classList.remove('visible');
   loadUserAndInit();
 }
@@ -1497,7 +1498,10 @@ async function loadUserAndInit(){
     return;
   }
 
-  MEMBER.name = prof.stage_name || prof.name;
+  MEMBER.name  = prof.stage_name || prof.name || currentUser.email.split("@")[0];
+  MEMBER.short = (prof.stage_name || prof.name || "").split(" ")[0] || MEMBER.name;
+  if(prof.registered_at) MEMBER.since = prof.registered_at.split("T")[0];
+  document.getElementById("topbar-member").textContent = MEMBER.name;
 
   // 最新のSNS数値を取得
   const { data:stats } = await supa.from('sns_stats')
@@ -1556,6 +1560,11 @@ async function saveStatsToDB(){
 //  INIT
 // ══════════════════════════════
 function initApp(){
+  // DB取得後の名前をUIに反映
+  const bfName = document.getElementById("bf-name");
+  if(bfName) bfName.value = MEMBER.name;
+  const topbar = document.getElementById("topbar-member");
+  if(topbar) topbar.textContent = MEMBER.name;
   setGreeting();
   renderStreakDots();
   renderKPIGrid();
@@ -1863,7 +1872,7 @@ function toggleLike(id){
 function submitPost(){
   const text=document.getElementById('composer-ta').value.trim();
   if(!text){showToast('テキストを入力してください');return;}
-  appState.posts.unshift({id:Date.now(),name:'田中 雄介',av:'田',color:'#c8ff00',time:'たった今',badge:'MEMBER',badgeColor:'rgba(242,240,255,0.3)',text,ach:null,likes:0,liked:false});
+  appState.posts.unshift({id:Date.now(),name:MEMBER.name,av:MEMBER.short[0]||'?',color:'#c8ff00',time:'たった今',badge:'MEMBER',badgeColor:'rgba(242,240,255,0.3)',text,ach:null,likes:0,liked:false});
   document.getElementById('composer-ta').value='';
   renderFeed();
   showToast('投稿しました ✓');
