@@ -9,6 +9,7 @@
 <meta name="theme-color" content="#050507">
 <title>XECTOR1 — Member Portal</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -980,17 +981,132 @@ let appState = {
 let radarChart=null, lineChart=null, shareRadarChart=null;
 
 // ══════════════════════════════
+//  SUPABASE
+// ══════════════════════════════
+const SUPA_URL = 'https://vpjlxxxsxxyfddqncuaj.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZwamx4eHhzeHh5ZmRkcW5jdWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNTA4NjgsImV4cCI6MjA4ODYyNjg2OH0.zsCWK4-R_eo2yR9NEXEW9FQMmqbNgxNXotRzpbAs1jA';
+const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+let currentUser = null;
+
+// セッション復元（ページ再読み込み時に自動ログイン）
+async function restoreSession(){
+  const { data:{ session } } = await supa.auth.getSession();
+  if(session){
+    currentUser = session.user;
+    showApp();
+  } else {
+    document.getElementById('screen-login').style.display='flex';
+  }
+}
+
+function showApp(){
+  document.getElementById('screen-login').style.display='none';
+  document.getElementById('app').classList.add('visible');
+  loadUserAndInit();
+}
+
+// ══════════════════════════════
 //  LOGIN
 // ══════════════════════════════
-function doLogin(){
-  const e=document.getElementById('l-email').value;
-  if(!e){ showToast('メールアドレスを入力してください'); return; }
+async function doLogin(){
+  const email = document.getElementById('l-email').value.trim();
+  const pass  = document.getElementById('l-pass').value.trim();
+  if(!email||!pass){ showToast('メールとパスワードを入力してください'); return; }
+
+  const btn = document.querySelector('.btn-login');
+  btn.textContent = '認証中...';
+  btn.disabled = true;
+
+  const { data, error } = await supa.auth.signInWithPassword({ email, password:pass });
+
+  if(error){
+    // 未登録ならサインアップ
+    if(error.message.includes('Invalid login')){
+      const { data:su, error:se } = await supa.auth.signUp({ email, password:pass });
+      if(se){ showToast('エラー: '+se.message); btn.textContent='ENTER'; btn.disabled=false; return; }
+      // プロフィール作成
+      const name = email.split('@')[0];
+      await supa.from('profiles').upsert({ id:su.user.id, name });
+      currentUser = su.user;
+    } else {
+      showToast('ログインエラー: '+error.message);
+      btn.textContent='ENTER'; btn.disabled=false; return;
+    }
+  } else {
+    currentUser = data.user;
+  }
+
   document.getElementById('screen-login').classList.add('out');
-  setTimeout(()=>{
-    document.getElementById('screen-login').style.display='none';
-    document.getElementById('app').classList.add('visible');
-    initApp();
-  }, 600);
+  setTimeout(()=>showApp(), 600);
+}
+
+// ══════════════════════════════
+//  USER DATA LOAD
+// ══════════════════════════════
+async function loadUserAndInit(){
+  if(!currentUser){ initApp(); return; }
+
+  // プロフィール取得（なければ作成）
+  let { data:prof } = await supa.from('profiles').select('*').eq('id',currentUser.id).single();
+  if(!prof){
+    const name = currentUser.email.split('@')[0];
+    await supa.from('profiles').upsert({ id:currentUser.id, name });
+    prof = { id:currentUser.id, name };
+  }
+  MEMBER.name = prof.name;
+
+  // 最新のSNS数値を取得
+  const { data:stats } = await supa.from('sns_stats')
+    .select('*').eq('user_id',currentUser.id)
+    .order('recorded_at',{ascending:false}).limit(1);
+
+  if(stats && stats.length > 0){
+    const s = stats[0];
+    SNS.yt.sub    = s.yt_subscribers  || 0;
+    SNS.yt.views  = s.yt_views        || 0;
+    SNS.yt.posts  = s.yt_posts        || 0;
+    SNS.tt.sub    = s.tt_followers    || 0;
+    SNS.tt.views  = s.tt_views        || 0;
+    SNS.tt.posts  = s.tt_posts        || 0;
+    SNS.ig.sub    = s.ig_followers    || 0;
+    SNS.ig.reach  = s.ig_reach        || 0;
+    SNS.ig.posts  = s.ig_posts        || 0;
+    SNS.x.sub     = s.x_followers     || 0;
+    SNS.x.imp     = s.x_impressions   || 0;
+    SNS.x.posts   = s.x_posts         || 0;
+  }
+
+  initApp();
+}
+
+// ══════════════════════════════
+//  SAVE STATS TO DB
+// ══════════════════════════════
+async function saveStatsToDB(){
+  if(!currentUser){ showToast('ログインが必要です'); return; }
+
+  const payload = {
+    user_id:        currentUser.id,
+    recorded_at:    new Date().toISOString().split('T')[0],
+    yt_subscribers: SNS.yt.sub,
+    yt_views:       SNS.yt.views,
+    yt_posts:       SNS.yt.posts,
+    tt_followers:   SNS.tt.sub,
+    tt_views:       SNS.tt.views,
+    tt_posts:       SNS.tt.posts,
+    ig_followers:   SNS.ig.sub,
+    ig_reach:       SNS.ig.reach,
+    ig_posts:       SNS.ig.posts,
+    x_followers:    SNS.x.sub,
+    x_impressions:  SNS.x.imp,
+    x_posts:        SNS.x.posts,
+  };
+
+  const { error } = await supa.from('sns_stats').insert(payload);
+  if(error){ showToast('保存エラー: '+error.message); return; }
+  showToast('数値をDBに保存しました ✓');
+  setTimeout(()=>goPage('home'),800);
 }
 
 // ══════════════════════════════
@@ -1192,16 +1308,20 @@ function renderInputForm(){
 
 function saveStats(){
   const g=(id)=>parseFloat(document.getElementById(id)?.value)||0;
-  SNS.yt.sub=g('yt-sub')||SNS.yt.sub;
-  SNS.yt.views=g('yt-views')||SNS.yt.views;
-  SNS.tt.sub=g('tt-sub')||SNS.tt.sub;
-  SNS.tt.views=g('tt-views')||SNS.tt.views;
-  SNS.ig.sub=g('ig-sub')||SNS.ig.sub;
-  SNS.ig.reach=g('ig-reach')||SNS.ig.reach;
-  SNS.x.sub=g('x-sub')||SNS.x.sub;
+  SNS.yt.sub   =g("yt-sub")   ||SNS.yt.sub;
+  SNS.yt.views =g("yt-views") ||SNS.yt.views;
+  SNS.yt.posts =g("yt-posts") ||SNS.yt.posts;
+  SNS.tt.sub   =g("tt-sub")   ||SNS.tt.sub;
+  SNS.tt.views =g("tt-views") ||SNS.tt.views;
+  SNS.tt.posts =g("tt-posts") ||SNS.tt.posts;
+  SNS.ig.sub   =g("ig-sub")   ||SNS.ig.sub;
+  SNS.ig.reach =g("ig-reach") ||SNS.ig.reach;
+  SNS.ig.posts =g("ig-posts") ||SNS.ig.posts;
+  SNS.x.sub    =g("x-sub")    ||SNS.x.sub;
+  SNS.x.imp    =g("x-imp")    ||SNS.x.imp;
+  SNS.x.posts  =g("x-posts")  ||SNS.x.posts;
   initRadar(); renderKPIGrid(); renderMetricScroll();
-  showToast('DATA SAVED — グラフを更新しました ✓');
-  setTimeout(()=>goPage('home'),800);
+  saveStatsToDB();
 }
 
 // ── TIPS ──
@@ -1454,12 +1574,14 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('show'),2800);
 }
 
-// PWA install hint (iOS)
-window.addEventListener('load',()=>{
+// 起動時の処理
+window.addEventListener("load", async ()=>{
   const isIos=()=>/iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
   const isStandalone=()=>window.navigator.standalone===true;
   if(isIos()&&!isStandalone()){
-    setTimeout(()=>showToast('ホーム画面に追加するとアプリとして使えます'),3000);
+    setTimeout(()=>showToast("ホーム画面に追加するとアプリとして使えます"),3000);
   }
+  // Supabaseセッション復元
+  await restoreSession();
 });
 </script>
