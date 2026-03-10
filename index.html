@@ -641,6 +641,15 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--lime);
   opacity:0;transition:all .3s;z-index:9500;white-space:nowrap;border-radius:2px;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+/* エラーバナー（コピペ可・常時表示） */
+.err-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:9600;
+  background:rgba(20,5,5,0.97);border-top:1px solid rgba(255,68,68,0.4);
+  padding:10px 16px;font-family:'Space Mono',monospace;font-size:9px;
+  letter-spacing:1px;color:#ff6666;line-height:1.6;
+  cursor:text;user-select:text;-webkit-user-select:text;word-break:break-all;}
+.err-banner.show{display:block;}
+.err-banner-close{position:absolute;top:8px;right:12px;font-size:16px;
+  cursor:pointer;color:rgba(255,100,100,0.6);line-height:1;}
 </style>
 </head>
 <body>
@@ -683,7 +692,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
       <div class="setup-logo"><div class="logo-dot"></div>XECTOR1</div>
       <div class="setup-eyebrow">First Time Setup</div>
       <div class="setup-title">PROFILE<br><em>SETUP</em></div>
-      <div class="setup-sub">ポータルを使うために、あなたの情報を登録してください。<br>SNS URLは正確に入力してください。</div>
+      <div class="setup-sub">ポータルを使い始める前に、あなたの情報を登録してください。<br>SNS URLは正確に入力してください。</div>
     </div>
 
     <!-- PROGRESS -->
@@ -711,7 +720,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
       </div>
       <div class="sf">
         <label>活動名 / 芸名<span class="req">*</span></label>
-        <input type="text" id="sp-stage" placeholder="例：Kairi.@歌い手" oninput="spValidate('sp-stage','req')">
+        <input type="text" id="sp-stage" placeholder="例：Yoshi / 火日師" oninput="spValidate('sp-stage','req')">
         <div class="sf-hint">配信・SNSで使用している名前</div>
         <div class="sf-err" id="sperr-sp-stage">活動名を入力してください</div>
       </div>
@@ -733,7 +742,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
         <div class="sf-err" id="sperr-sp-status">選択してください</div>
       </div>
       <div class="sf">
-        <label>1年後わたしはこんな状態になっている<span class="opt">任意</span></label>
+        <label>1年後の目標<span class="opt">任意</span></label>
         <textarea id="sp-goal" placeholder="例：YouTube登録者1万人達成、オリジナル曲リリース..."></textarea>
       </div>
       <button class="btn-setup-next" onclick="spNext(1)">次へ — SNS情報 →</button>
@@ -1113,6 +1122,10 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 </div>
 
 <div class="toast" id="toast"></div>
+<div class="err-banner" id="err-banner">
+  <span class="err-banner-close" onclick="document.getElementById('err-banner').classList.remove('show')">×</span>
+  <span id="err-banner-text"></span>
+</div>
 </body>
 </html>
 <script>
@@ -1296,12 +1309,10 @@ async function doLogin(){
 
   if(error){
     // 未登録ならサインアップ
-    if(error.message.includes('Invalid login')){
+    if(error.message.includes('Invalid login') || error.message.includes('invalid')){
       const { data:su, error:se } = await supa.auth.signUp({ email, password:pass });
       if(se){ showToast('エラー: '+se.message); btn.textContent='ENTER'; btn.disabled=false; return; }
-      // プロフィール作成
-      const name = email.split('@')[0];
-      await supa.from('profiles').upsert({ id:su.user.id, name });
+      // ※ profiles作成はプロフィール設定画面(spSubmit)で行うためここでは作らない
       currentUser = su.user;
     } else {
       showToast('ログインエラー: '+error.message);
@@ -1441,6 +1452,14 @@ function spBuildConfirm(){
 async function spSubmit(){
   const btn=document.getElementById('sp-submit-btn');
   btn.textContent='保存中...'; btn.disabled=true;
+
+  // Supabase auth.usersへの反映を確実に待つ
+  await new Promise(r => setTimeout(r, 1000));
+
+  // セッションを最新に更新
+  const { data:{ session } } = await supa.auth.getSession();
+  if(session) currentUser = session.user;
+
   const payload={
     id:         currentUser.id,
     name:       document.getElementById('sp-name').value.trim(),
@@ -1457,7 +1476,7 @@ async function spSubmit(){
     approved:   false,
   };
   const {error} = await supa.from('profiles').upsert(payload);
-  if(error){ showToast('保存エラー: '+error.message); btn.textContent='登録してポータルへ →'; btn.disabled=false; return; }
+  if(error){ showError('保存エラー: '+error.message); btn.textContent='登録してポータルへ →'; btn.disabled=false; return; }
   MEMBER.name = payload.stage_name || payload.name;
   document.getElementById('screen-setup').classList.remove('visible');
   loadUserAndInit();
@@ -1996,6 +2015,12 @@ function showToast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2800);
+}
+function showError(msg){
+  // エラーは常時表示・コピペ可能なバナーで表示
+  const b=document.getElementById('err-banner');
+  document.getElementById('err-banner-text').textContent=msg;
+  b.classList.add('show');
 }
 
 // 起動時の処理
