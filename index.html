@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="XECTOR1">
@@ -31,7 +31,8 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;}
+html{height:100%;overflow:hidden;overscroll-behavior:none;}
+body{height:100%;overflow:hidden;overscroll-behavior:none;}
 body{background:var(--bg);color:var(--white);font-family:'Syne',sans-serif;font-size:14px;
   overscroll-behavior:none;user-select:none;-webkit-font-smoothing:antialiased;}
 
@@ -80,7 +81,7 @@ body{background:var(--bg);color:var(--white);font-family:'Syne',sans-serif;font-
 .sf label .opt{color:var(--dim2);font-size:9px;margin-left:4px;}
 .sf input,.sf select,.sf textarea{width:100%;background:var(--s1);
   border:1px solid var(--border);border-radius:2px;padding:12px 14px;
-  color:var(--white);font-family:'Syne',sans-serif;font-size:13px;outline:none;
+  color:var(--white);font-family:'Syne',sans-serif;font-size:16px;outline:none;
   transition:border-color .2s;}
 .sf input:focus,.sf select:focus,.sf textarea:focus{border-color:var(--border2);}
 .sf input.valid{border-color:rgba(0,255,170,0.35);}
@@ -286,7 +287,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   border:1px solid rgba(255,255,255,0.08);
   border-bottom:1px solid rgba(255,255,255,0.18);
   padding:14px 16px;color:var(--white);
-  font-family:'Syne',sans-serif;font-size:15px;
+  font-family:'Syne',sans-serif;font-size:16px;
   outline:none;
   transition:border-color .4s ease, background .4s ease;
   border-radius:0;
@@ -365,7 +366,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   color:var(--lime);padding:3px 8px;border-radius:2px;}
 
 /* CONTENT AREA */
-.app-content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative;}
+.app-content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative;overscroll-behavior:none;}
 .app-content::-webkit-scrollbar{display:none;}
 
 /* BOTTOM NAV */
@@ -710,7 +711,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:5px;}
 .bf-field input,.bf-field textarea,.bf-field select{
   width:100%;background:var(--bg);border:1px solid var(--border);
-  padding:10px 12px;color:var(--white);font-family:'Syne',sans-serif;font-size:13px;
+  padding:12px 12px;color:var(--white);font-family:'Syne',sans-serif;font-size:16px;
   outline:none;transition:border-color .2s;border-radius:1px;}
 .bf-field textarea{resize:none;min-height:64px;}
 .bf-field input:focus,.bf-field textarea:focus{border-color:var(--border2);}
@@ -919,7 +920,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   width:100%;background:var(--bg);border:1px solid var(--border);
   border-bottom:1px solid rgba(200,255,0,0.25);
   padding:14px 16px;color:var(--white);
-  font-family:'Syne',sans-serif;font-size:15px;
+  font-family:'Syne',sans-serif;font-size:16px;
   outline:none;resize:none;min-height:80px;
   transition:border-color .3s;
 }
@@ -961,10 +962,29 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   width:100%;background:var(--bg);border:1px solid var(--border);
   border-bottom:1px solid rgba(255,255,255,0.15);
   padding:9px 10px;color:var(--white);
-  font-family:'Bebas Neue',sans-serif;font-size:18px;
+  font-family:'Bebas Neue',sans-serif;font-size:20px;
   outline:none;transition:border-color .3s;
 }
 .sns-input-group input:focus{border-bottom-color:var(--lime);}
+
+
+/* ══ iOS ズーム防止 ══ */
+input, textarea, select {
+  font-size: 16px !important;
+  -webkit-text-size-adjust: 100%;
+}
+input:focus, textarea:focus, select:focus {
+  font-size: 16px !important;
+}
+/* スクロール設定（pull-to-refreshを防ぐ） */
+html, body {
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: auto;
+  touch-action: pan-x pan-y;
+}
+#app, .app-content {
+  overscroll-behavior: none;
+}
 
 </style>
 </head>
