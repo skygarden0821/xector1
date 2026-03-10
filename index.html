@@ -350,27 +350,30 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 
 /* TOP BAR */
 .app-topbar{
-  height:56px;flex-shrink:0;
+  height:64px;flex-shrink:0;
   background:rgba(5,5,7,0.95);backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
   display:flex;align-items:center;justify-content:space-between;
   padding:0 20px;
   padding-top:env(safe-area-inset-top,0);
 }
-.topbar-logo{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:5px;
-  display:flex;align-items:center;gap:8px;}
-.topbar-dot{width:5px;height:5px;border-radius:50%;background:var(--lime);
-  box-shadow:0 0 6px var(--lime);animation:pulse 2s ease-in-out infinite;}
+.topbar-logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:6px;
+  display:flex;align-items:center;gap:10px;}
+.topbar-dot{width:7px;height:7px;border-radius:50%;background:var(--lime);
+  box-shadow:0 0 8px var(--lime);animation:pulse 2s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);}}
-.topbar-right{display:flex;align-items:center;gap:10px;}
-.topbar-member{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:1px;color:var(--dim);}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.topbar-member{font-family:'Space Mono',monospace;font-size:13px;letter-spacing:1px;color:var(--dim);}
 .topbar-badge{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
   background:rgba(200,255,0,0.08);border:1px solid rgba(200,255,0,0.2);
   color:var(--lime);padding:3px 8px;border-radius:2px;}
 
 /* CONTENT AREA */
 .app-content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative;overscroll-behavior:none;}
-.app-content::-webkit-scrollbar{display:none;}
+.app-content::-webkit-scrollbar{width:3px;}
+.app-content::-webkit-scrollbar-track{background:transparent;}
+.app-content::-webkit-scrollbar-thumb{background:rgba(200,255,0,0.3);border-radius:2px;}
+.app-content::-webkit-scrollbar-thumb:active{background:rgba(200,255,0,0.6);}
 
 /* BOTTOM NAV */
 .app-nav{
@@ -804,7 +807,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 
 /* ── TOPBAR AVATAR ── */
 .topbar-avatar{
-  width:32px;height:32px;border-radius:50%;overflow:hidden;
+  width:48px;height:48px;border-radius:50%;overflow:hidden;
   border:1.5px solid rgba(200,255,0,0.35);cursor:pointer;
   flex-shrink:0;transition:border-color .3s;
   background:var(--s2);
@@ -812,7 +815,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .topbar-avatar:hover{border-color:var(--lime);}
 .topbar-avatar-inner{
   width:100%;height:100%;display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--lime);
+  font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--lime);
   background:var(--s2);
 }
 .topbar-avatar-inner img{width:100%;height:100%;object-fit:cover;}
@@ -822,7 +825,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .home-avatar-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;
   flex-shrink:0;cursor:pointer;padding-top:4px;}
 .home-avatar{
-  width:72px;height:72px;border-radius:50%;overflow:hidden;
+  width:80px;height:80px;border-radius:50%;overflow:hidden;
   border:2px solid rgba(200,255,0,0.3);
   background:var(--s2);transition:border-color .3s;
   position:relative;
@@ -830,7 +833,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .home-avatar:hover{border-color:var(--lime);}
 .home-avatar-inner{
   width:100%;height:100%;display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--lime);
+  font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--lime);
   background:var(--s2);
 }
 .home-avatar-inner img{width:100%;height:100%;object-fit:cover;}
@@ -920,6 +923,64 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .crop-btn-save{background:var(--lime);color:#000;border-color:var(--lime);}
 .crop-btn-save:hover{filter:brightness(1.1);}
 .goal-edit-wrap{padding:0 20px;}
+/* ── 設定 名前変更フィールド ── */
+.name-edit-wrap{padding:0 20px 0;margin-top:4px;}
+.name-edit-label{
+  display:flex;align-items:center;gap:6px;
+  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;
+  color:rgba(242,240,255,0.5);text-transform:uppercase;margin-bottom:8px;
+}
+.name-edit-label::after{
+  content:'EDITABLE';font-size:9px;letter-spacing:2px;
+  background:rgba(200,255,0,0.1);border:1px solid rgba(200,255,0,0.3);
+  color:var(--lime);padding:1px 5px;border-radius:2px;
+}
+.settings-editable-field{
+  width:100%;background:var(--bg);
+  border:none;border-bottom:2px solid rgba(200,255,0,0.35);
+  padding:12px 12px 12px 36px;color:var(--white);
+  font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;
+  outline:none;transition:border-color .3s;
+  position:relative;
+}
+.settings-editable-field:focus{border-bottom-color:var(--lime);}
+.editable-field-wrap{
+  position:relative;display:flex;align-items:center;
+  background:var(--s1);border:1px solid rgba(200,255,0,0.2);
+  border-bottom:2px solid rgba(200,255,0,0.4);
+  transition:border-color .3s;min-height:54px;
+}
+.editable-field-wrap:focus-within{border-bottom-color:var(--lime);border-color:rgba(200,255,0,0.2);}
+.editable-field-icon{
+  position:absolute;left:12px;font-size:14px;opacity:0.5;pointer-events:none;
+}
+.editable-field-wrap input,.editable-field-wrap textarea{
+  background:transparent;border:none;
+  padding:12px 12px 12px 36px;color:var(--white);width:100%;
+  outline:none;resize:none;
+}
+#settings-name{
+  font-family:'Bebas Neue',sans-serif !important;
+  font-size:26px !important;
+  letter-spacing:2px;
+  color:var(--white) !important;
+  padding:12px 12px 12px 38px !important;
+}
+/* 編集可能ラベル共通 */
+.edit-section-label{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:8px;
+}
+.edit-section-label span{
+  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;
+  color:rgba(242,240,255,0.5);text-transform:uppercase;
+}
+.edit-badge{
+  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;
+  background:rgba(200,255,0,0.08);border:1px solid rgba(200,255,0,0.25);
+  color:var(--lime);padding:2px 6px;border-radius:2px;
+}
+
 .goal-input{
   width:100%;background:var(--bg);border:1px solid var(--border);
   border-bottom:1px solid rgba(200,255,0,0.25);
@@ -1814,7 +1875,7 @@ p, li, .section-sub, .post-text, .composer-ta,
       <!-- X風シンプルヘッダー -->
       <div class="comm-topbar">
         <span class="comm-topbar-title">Community</span>
-        <span class="comm-online" id="comm-online">● 39 members</span>
+        
       </div>
       <!-- 投稿composer（X風） -->
       <div class="composer-wrap">
@@ -1894,7 +1955,7 @@ p, li, .section-sub, .post-text, .composer-ta,
       <div class="settings-section">
         <div class="eyebrow">Account</div>
         <div class="settings-title">SETTINGS</div>
-        <div class="settings-sub">プロフィール画像・目標を設定します</div>
+        <div class="settings-sub">表示名・目標・SNS数値を編集できます</div>
       </div>
 
       <!-- アバター編集 -->
@@ -1916,16 +1977,40 @@ p, li, .section-sub, .post-text, .composer-ta,
         </div>
       </div>
 
+      <!-- 名前変更 -->
+      <div class="name-edit-wrap">
+        <div class="edit-section-label">
+          <span>Display Name</span>
+          <span class="edit-badge">✏ EDITABLE</span>
+        </div>
+        <div class="editable-field-wrap">
+          <span class="editable-field-icon">👤</span>
+          <input type="text" id="settings-name" placeholder="表示名（例：田中雄介）"
+            style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;padding:12px 12px 12px 38px;">
+        </div>
+        <button class="goal-save-btn" onclick="saveName()" style="margin-top:10px;">SAVE NAME →</button>
+      </div>
+
+      <div style="height:20px;"></div>
+
       <!-- 目標編集 -->
       <div class="goal-edit-wrap">
-        <div class="settings-label">My Goal</div>
-        <textarea class="goal-input" id="settings-goal" placeholder="例：2025年末までにYouTube10万人達成する"></textarea>
+        <div class="edit-section-label">
+          <span>My Goal</span>
+          <span class="edit-badge">✏ EDITABLE</span>
+        </div>
+        <div class="editable-field-wrap" style="align-items:flex-start;">
+          <span class="editable-field-icon" style="top:14px;position:absolute;left:12px;">🎯</span>
+          <textarea id="settings-goal" placeholder="例：2025年末までにYouTube10万人達成する"
+            style="background:transparent;border:none;outline:none;resize:none;width:100%;padding:14px 12px 14px 38px;color:var(--white);font-family:'Noto Sans JP',sans-serif;font-size:16px;min-height:80px;line-height:1.7;"></textarea>
+        </div>
         <button class="goal-save-btn" onclick="saveGoal()">SAVE GOAL →</button>
       </div>
 
       <!-- SNS数値手動更新 -->
       <div class="settings-sns-wrap">
-        <div class="settings-label" style="margin:24px 20px 12px;">SNS 数値を更新</div>
+        <div class="settings-label" style="margin:24px 20px 4px;">SNS 数値を更新</div>
+        <div style="padding:0 20px 12px;"><span class="edit-badge">✏ EDITABLE — 数値を直接入力してください</span></div>
 
         <div class="sns-platform-block">
           <div class="sns-plat-header"><span class="sns-dot" style="background:#ff4040"></span>YouTube</div>
@@ -2571,6 +2656,7 @@ async function loadUserAndInit(){
   MEMBER.name  = prof.stage_name || prof.name || currentUser.email.split("@")[0];
   MEMBER.short = (prof.stage_name || prof.name || "").split(" ")[0] || MEMBER.name;
   if(prof.registered_at) MEMBER.since = prof.registered_at.split("T")[0];
+  if(prof.goal) MEMBER.goal = prof.goal;
   document.getElementById("topbar-member").textContent = MEMBER.name;
 
   // 最新のSNS数値を取得
@@ -2839,7 +2925,12 @@ async function saveStatsFromSettings(){
 
 // ── 設定ページを開いたとき現在値をフィールドにセット ──
 function prefillSettingsSNS(){
-  const set = (id, val) => { const el=document.getElementById(id); if(el&&val) el.value=val||''; };
+  const set = (id, val) => { const el=document.getElementById(id); if(el&&val!==undefined&&val!==null) el.value=val; };
+  // 名前と目標をプリフィル
+  const nameEl = document.getElementById('settings-name');
+  if(nameEl && MEMBER.name) nameEl.value = MEMBER.name;
+  const goalEl = document.getElementById('settings-goal');
+  if(goalEl && MEMBER.goal) goalEl.value = MEMBER.goal;
   set('s-yt-sub',   SNS.yt.sub);
   set('s-yt-views', SNS.yt.views);
   set('s-yt-posts', SNS.yt.posts);
@@ -3254,6 +3345,28 @@ async function saveGoal(){
   }
 }
 
+
+// ── SETTINGS: 名前変更 ──
+async function saveName(){
+  try {
+  const input = document.getElementById('settings-name');
+  const text = input ? input.value.trim() : '';
+  if(!text){ showToast('名前を入力してください'); return; }
+  if(!currentUser){ showToast('ログインが必要です'); return; }
+  MEMBER.name  = text;
+  MEMBER.short = text.split(' ')[0] || text;
+  // UIに即時反映
+  const topbar = document.getElementById('topbar-member');
+  if(topbar) topbar.textContent = MEMBER.name;
+  // DBに保存
+  const { error } = await supa.from('profiles').update({ stage_name: text }).eq('id', currentUser.id);
+  if(error){ showToast('保存エラー: '+error.message); return; }
+  showToast('名前を保存しました ✓');
+  } catch(e) {
+    console.error('saveName:', e);
+    showToast('保存エラー: ' + e.message);
+  }
+}
 // ── youcanbookme iframe リサイズ ──
 function resizeYcbm(iframe){
   try{
