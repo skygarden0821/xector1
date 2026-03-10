@@ -821,19 +821,19 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .topbar-avatar-inner img{width:100%;height:100%;object-fit:cover;}
 
 /* ── HOME HERO レイアウト ── */
-.home-hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.home-hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .home-avatar-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;
   flex-shrink:0;cursor:pointer;padding-top:4px;}
 .home-avatar{
-  width:80px;height:80px;border-radius:50%;overflow:hidden;
-  border:2px solid rgba(200,255,0,0.3);
+  width:90px;height:90px;border-radius:50%;overflow:hidden;
+  border:2px solid rgba(200,255,0,0.5);
   background:var(--s2);transition:border-color .3s;
   position:relative;
 }
 .home-avatar:hover{border-color:var(--lime);}
 .home-avatar-inner{
   width:100%;height:100%;display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--lime);
+  font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--lime);
   background:var(--s2);
 }
 .home-avatar-inner img{width:100%;height:100%;object-fit:cover;}
@@ -2271,18 +2271,26 @@ const DUMMY_MEMBERS = [
 ];
 
 const DUMMY_POSTS_POOL = [
-  { text:'TikTokで久しぶりにバズりました🔥 投稿3時間で<strong>8万再生</strong>超え。サムネのテキスト位置を変えただけでこんなに違うとは…。', ach:{ icon:'🔥', label:'Viral', val:'8万再生突破' }, likes:41 },
-  { text:'今月からYouTubeの投稿頻度を週1→週2に上げてみました。まだ2週間ですがすでにインプレッションが<strong>+28%</strong>。しんどいけど続けます。', ach:null, likes:19 },
-  { text:'Instagramリールの最初の2秒を完全に作り直したら平均視聴時間が<strong>1.4倍</strong>に。Tips通りに実行してみてよかったです！', ach:null, likes:27 },
-  { text:'コラボ打診のDM、丁寧に書き直したら今月<strong>3件中2件</strong>から返信きました。ポイントは相手のメリットを先に書くことでした。', ach:null, likes:14 },
-  { text:'X（旧Twitter）のフォロワーが<strong>1万人</strong>を超えました！毎朝のルーティン投稿を3ヶ月続けた結果です。地道な積み重ねしかない。', ach:{ icon:'🎊', label:'Milestone', val:'X 1万フォロワー' }, likes:36 },
-  { text:'サムネのABテストを初めてちゃんとやりました。クリック率が<strong>3.1%→5.8%</strong>に。数字で見ると面白いですね。', ach:null, likes:22 },
-  { text:'今日の面談で投稿のペルソナ設定を見直すよう言われて、やってみたら方向性がすごく明確になりました。全部ここから変わる気がする。', ach:null, likes:33 },
-  { text:'TikTokのフォロワーが<strong>5万人</strong>突破！正直まだ実感ないんですが、数字を見るとやる気が出ます。次は10万狙います。', ach:{ icon:'🏅', label:'Goal Cleared', val:'TikTok 5万人' }, likes:51 },
-  { text:'インサイト見てたら特定の時間帯に投稿するとリーチが全然違うことに気づきました。同じコンテンツでも<strong>2倍以上</strong>変わる。', ach:null, likes:18 },
-  { text:'YouTubeのショート動画が急に伸び始めました。チャンネル全体のインプレも+15%。ショートの影響力を舐めてました。', ach:null, likes:29 },
-  { text:'先月に比べてInstagramの保存数が<strong>3倍</strong>になりました。「保存したくなる情報」を意識して作り始めてから明らかに変わった。', ach:null, likes:44 },
-  { text:'コンテンツを量産するより、1本の質を上げることに集中したら再生数が安定してきた。週2本から週1本に下げてよかったかも。', ach:null, likes:16 },
+  // 朝系（活動開始・気合い）
+  { text:'おはようございます！今日はいつもより1時間早く起きて編集してました。朝の集中力えぐい。このペース続けたい', ach:null, likes:14, timeSlot:'morning' },
+  { text:'今朝投稿した動画、もう<strong>3,200再生</strong>いってる🙌 朝イチで投稿するの正解だったかも。フォロワーさんの反応早い', ach:null, likes:22, timeSlot:'morning' },
+  { text:'今日から編集ワーク週5にしてみる実験スタート。まずは1週間試してみます。応援してください笑', ach:null, likes:11, timeSlot:'morning' },
+  { text:'昨日の動画の続きを朝から収録。台本作るより先に話し始めた方が自然になるって気づいてからだいぶ楽になった', ach:null, likes:17, timeSlot:'morning' },
+  // 昼系（作業中・報告）
+  { text:'今日はいつもより<strong>+2本</strong>出せてる〜！！テンポよく編集できてる日って気持ちいい。このまま夜まで走ります', ach:null, likes:26, timeSlot:'noon' },
+  { text:'昼休みに撮影して帰宅後に編集、これが今のスタイルになってきた。やっとルーティン固まってきた感', ach:null, likes:13, timeSlot:'noon' },
+  { text:'ショートが伸びてる。ここ3日で<strong>+890フォロワー</strong>。なんか急にアルゴリズムに乗れた感じがある', ach:{ icon:'📈', label:'Growing', val:'+890フォロワー' }, likes:38, timeSlot:'noon' },
+  // 夕方系（振り返り・進捗）
+  { text:'みんな頑張ってるの見てると刺激になる！！負けてらんない。今から編集頑張る🔥', ach:null, likes:31, timeSlot:'evening' },
+  { text:'今日3本投稿できた。疲れたけど満足感がすごい。週に1回これやるだけで月の本数全然変わってくるよね', ach:null, likes:19, timeSlot:'evening' },
+  { text:'TikTokでずっと伸び悩んでたけど、サムネ変えたら突然<strong>1.2万再生</strong>きた。見た目って本当に大事', ach:{ icon:'🎯', label:'Breakthrough', val:'1.2万再生' }, likes:44, timeSlot:'evening' },
+  { text:'面談でフィードバックもらった内容を即実行してみた。「最初の3秒」だけ変えたら視聴維持が全然違う。やっぱり試すのが一番', ach:null, likes:27, timeSlot:'evening' },
+  // 夜系（締め・翌日準備）
+  { text:'今日の投稿が夜になってじわじわ伸びてる。<strong>5,600再生</strong>。寝る前にこれ見るの好きすぎる笑', ach:null, likes:35, timeSlot:'night' },
+  { text:'明日の台本書き終えた。明後日撮影。ちゃんとストック作れてる。この流れを崩さないようにしたい', ach:null, likes:12, timeSlot:'night' },
+  { text:'今月の目標本数まであと2本。明日中に終わらせる予定。ぎりぎりだけど間に合わせます', ach:null, likes:9, timeSlot:'night' },
+  // 深夜系（1本のみ・控えめ）
+  { text:'また深夜作業してしまった…でも今日の編集すごく良い仕上がりになった気がする。明日の反応楽しみ', ach:null, likes:8, timeSlot:'latenight' },
 ];
 
 let _dummyTimer = null;
@@ -3031,25 +3039,64 @@ function animateCharts(){
 
 // ── コミュニティ定期投稿（1〜2分おき） ──
 function startCommunityTimer(){
+  // 時間帯別の投稿スロット定義
+  // 朝(6-10): 2本, 昼(11-14): 1本, 夕(15-19): 2本, 夜(20-22): 1本, 深夜(23): 1本, 0-5時: なし
+  function getTimeSlot(h){
+    if(h>=6  && h<11) return 'morning';
+    if(h>=11 && h<15) return 'noon';
+    if(h>=15 && h<20) return 'evening';
+    if(h>=20 && h<23) return 'night';
+    if(h>=23)         return 'latenight';
+    return null; // 0-5時は投稿なし
+  }
+  function getSlotPool(slot){
+    if(!slot) return [];
+    const matching = DUMMY_POSTS_POOL.filter(p=>p.timeSlot===slot);
+    // 該当スロットがなければ全部から選ぶ（フォールバック）
+    return matching.length > 0 ? matching : DUMMY_POSTS_POOL;
+  }
+  function getDelayMs(h){
+    // 時間帯ごとの投稿間隔（現実感のある間隔）
+    if(h>=6  && h<11) return (25 + Math.random()*20) * 60000;  // 25〜45分
+    if(h>=11 && h<15) return (40 + Math.random()*30) * 60000;  // 40〜70分
+    if(h>=15 && h<20) return (20 + Math.random()*20) * 60000;  // 20〜40分
+    if(h>=20 && h<23) return (35 + Math.random()*25) * 60000;  // 35〜60分
+    if(h>=23)         return (50 + Math.random()*40) * 60000;  // 50〜90分
+    // 0-5時: 次の朝6時まで待つ
+    const now = new Date();
+    const next6 = new Date(now); next6.setHours(6,0,0,0);
+    if(next6<=now) next6.setDate(next6.getDate()+1);
+    return next6-now + Math.random()*1800000; // 6時 + ランダム0〜30分
+  }
   function scheduleNext(){
-    const delay = (60 + Math.random()*60) * 1000; // 60〜120秒
+    const h = new Date().getHours();
+    const delay = getDelayMs(h);
     setTimeout(()=>{
-      // コミュニティページが開いているときだけfeedに追加
-      const commPage = document.getElementById('page-community');
-      if(commPage && commPage.classList.contains('active')){
-        injectRandomPost();
-      } else {
-        // バックグラウンドでもpoolには追加（次に開いたとき表示）
-        const pool = DUMMY_POSTS_POOL;
+      const slot = getTimeSlot(new Date().getHours());
+      if(slot){ // 深夜0-5時はスキップ
+        const pool = getSlotPool(slot);
         const members = DUMMY_MEMBERS;
+        const lastName = appState.posts.find(x=>x.isDummy)?.name;
+        const eligible = members.filter(m=>m.name!==lastName);
+        const m = eligible[Math.floor(Math.random()*eligible.length)];
         const p = pool[Math.floor(Math.random()*pool.length)];
-        const m = members[Math.floor(Math.random()*members.length)];
-        appState.posts.push({
+        const newPost = {
           id:Date.now(), name:m.name, av:m.av, color:m.color,
-          badge:m.badge, badgeColor:m.badgeColor, time:'数分前',
+          badge:m.badge, badgeColor:m.badgeColor, time:'たった今',
           text:p.text, ach:p.ach?{...p.ach}:null,
-          likes:p.likes+Math.floor(Math.random()*5), liked:false, isDummy:true
-        });
+          likes:p.likes+Math.floor(Math.random()*6), liked:false, isDummy:true, isMe:false, ts:Date.now()
+        };
+        const commPage = document.getElementById('page-community');
+        if(commPage && commPage.classList.contains('active')){
+          const myPosts = appState.posts.filter(x=>x.isMe);
+          const dummies = appState.posts.filter(x=>!x.isMe);
+          dummies.unshift(newPost);
+          if(dummies.length>18) dummies.pop();
+          appState.posts = [...myPosts,...dummies];
+          updatePostTimes(); renderFeed();
+        } else {
+          appState.posts.push(newPost);
+        }
       }
       scheduleNext();
     }, delay);
@@ -3354,10 +3401,12 @@ async function saveName(){
   if(!text){ showToast('名前を入力してください'); return; }
   if(!currentUser){ showToast('ログインが必要です'); return; }
   MEMBER.name  = text;
-  MEMBER.short = text.split(' ')[0] || text;
-  // UIに即時反映
+  MEMBER.short = text.split(/[\s　]/)[0] || text;
+  // UIに即時反映（全箇所）
   const topbar = document.getElementById('topbar-member');
   if(topbar) topbar.textContent = MEMBER.name;
+  const hn = document.getElementById('home-name');
+  if(hn) hn.textContent = MEMBER.short;
   // DBに保存
   const { error } = await supa.from('profiles').update({ stage_name: text }).eq('id', currentUser.id);
   if(error){ showToast('保存エラー: '+error.message); return; }
@@ -3418,11 +3467,11 @@ function initApp(){
   renderInputForm();
   renderFilterRow();
   renderTipsList();
-  renderCommStats();
+  try{ renderCommStats(); }catch(e){ console.warn('renderCommStats:',e); }
   renderFeed();
-  renderSessionList();
-  renderCalendar();
-  renderTimeSlots(null);
+  try{ renderSessionList(); }catch(e){ console.warn('renderSessionList:',e); }
+  try{ renderCalendar(); }catch(e){ console.warn('renderCalendar:',e); }
+  try{ renderTimeSlots(null); }catch(e){ console.warn('renderTimeSlots:',e); }
 }
 
 // ── GREETING ──
@@ -3713,13 +3762,15 @@ function closeTipSheet(e){
 
 // ── COMMUNITY ──
 function renderCommStats(){
+  const el = document.getElementById('comm-stats');
+  if(!el) return;
   const stats=[
     {label:'Active Members',val:'39',color:'var(--green)'},
     {label:'Posts This Week',val:'127',color:'var(--lime)'},
     {label:'Avg Growth',val:'+38%',color:'var(--cyan)'},
     {label:'Next Session',val:'3/15',color:'var(--gold)'},
   ];
-  document.getElementById('comm-stats').innerHTML=stats.map(s=>`
+  el.innerHTML=stats.map(s=>`
     <div class="cs-card">
       <div class="cs-label">${s.label}</div>
       <div class="cs-val" style="color:${s.color}">${s.val}</div>
@@ -3819,7 +3870,10 @@ const MONTH_N=['1月','2月','3月','4月','5月','6月','7月','8月','9月','1
 const DAY_N=['SUN','MON','TUE','WED','THU','FRI','SAT'];
 
 function renderCalendar(){
-  document.getElementById('cal-month').textContent=`${appState.calYear}年 ${MONTH_N[appState.calMonth]}`;
+  const calMonth = document.getElementById('cal-month');
+  const calGrid  = document.getElementById('cal-grid');
+  if(!calMonth || !calGrid) return;
+  calMonth.textContent=`${appState.calYear}年 ${MONTH_N[appState.calMonth]}`;
   const first=new Date(appState.calYear,appState.calMonth,1).getDay();
   const dim=new Date(appState.calYear,appState.calMonth+1,0).getDate();
   const today=new Date();
@@ -3841,18 +3895,21 @@ function renderCalendar(){
     if(isToday) cls+=' today';
     html+=`<div class="${cls}" onclick="selectDay(${d})">${d}</div>`;
   }
-  document.getElementById('cal-grid').innerHTML=html;
+  calGrid.innerHTML=html;
 }
 function selectDay(d){
   appState.calDay=d; appState.calTime=null;
   renderCalendar(); renderTimeSlots(d);
 }
 function renderTimeSlots(d){
+  const twDate   = document.getElementById('tw-date');
+  const timeSlot = document.getElementById('time-slots');
+  if(!twDate || !timeSlot) return;
   const dayN=['日','月','火','水','木','金','土'];
-  document.getElementById('tw-date').textContent =
+  twDate.textContent =
     d ? `${appState.calMonth+1}月${d}日（${dayN[new Date(appState.calYear,appState.calMonth,d).getDay()]}）` : '日付を選択';
   const slots=d?SLOT_DATA[d]:null;
-  document.getElementById('time-slots').innerHTML=!slots
+  timeSlot.innerHTML=!slots
     ? `<div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dim2)">← 日付を選択してください</div>`
     : slots.map(s=>`<div class="ts ${!s.a?'full':''} ${appState.calTime===s.t&&s.a?'sel':''}" onclick="${s.a?`selectTime('${s.t}')`:''}">${s.t}</div>`).join('');
 }
