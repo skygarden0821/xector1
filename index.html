@@ -35,6 +35,114 @@ html,body{height:100%;overflow:hidden;}
 body{background:var(--bg);color:var(--white);font-family:'Syne',sans-serif;
   overscroll-behavior:none;user-select:none;}
 
+/* ══ PROFILE SETUP SCREEN ══ */
+#screen-setup{position:fixed;inset:0;z-index:7000;background:var(--bg);
+  overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;}
+#screen-setup.visible{display:block;}
+.setup-wrap{max-width:480px;margin:0 auto;padding:0 20px 80px;}
+.setup-header{padding:40px 0 28px;text-align:center;}
+.setup-logo{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:8px;
+  display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:6px;}
+.setup-eyebrow{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:4px;
+  text-transform:uppercase;color:var(--lime);margin-bottom:10px;}
+.setup-title{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:3px;
+  line-height:.95;margin-bottom:8px;}
+.setup-title em{color:var(--lime);font-style:normal;}
+.setup-sub{font-size:12px;color:var(--dim);line-height:1.7;}
+/* SETUP PROGRESS */
+.setup-progress{display:flex;align-items:center;gap:0;margin:24px 0 32px;}
+.sp-step{flex:1;text-align:center;position:relative;}
+.sp-step::after{content:'';position:absolute;top:13px;left:50%;right:-50%;
+  height:1px;background:var(--border2);}
+.sp-step:last-child::after{display:none;}
+.sp-num{width:26px;height:26px;border-radius:50%;border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 5px;
+  font-family:'Space Mono',monospace;font-size:9px;position:relative;z-index:1;
+  background:var(--bg);transition:all .3s;}
+.sp-step.done .sp-num{background:var(--lime);border-color:var(--lime);color:#000;}
+.sp-step.active .sp-num{border-color:var(--lime);color:var(--lime);
+  box-shadow:0 0 10px rgba(200,255,0,0.25);}
+.sp-label{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--dim);transition:color .3s;}
+.sp-step.active .sp-label,.sp-step.done .sp-label{color:var(--lime);}
+/* SETUP PANELS */
+.setup-panel{display:none;animation:fadeUp .3s ease;}
+.setup-panel.active{display:block;}
+.sp-section-label{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:4px;
+  text-transform:uppercase;color:var(--lime);margin-bottom:6px;}
+.sp-section-title{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:3px;
+  line-height:1;margin-bottom:18px;}
+/* SETUP FIELDS */
+.sf{margin-bottom:14px;}
+.sf label{display:block;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--dim);margin-bottom:5px;}
+.sf label .req{color:var(--lime);margin-left:2px;}
+.sf label .opt{color:var(--dim2);font-size:7px;margin-left:4px;}
+.sf input,.sf select,.sf textarea{width:100%;background:var(--s1);
+  border:1px solid var(--border);border-radius:2px;padding:12px 14px;
+  color:var(--white);font-family:'Syne',sans-serif;font-size:13px;outline:none;
+  transition:border-color .2s;}
+.sf input:focus,.sf select:focus,.sf textarea:focus{border-color:var(--border2);}
+.sf input.valid{border-color:rgba(0,255,170,0.35);}
+.sf input.invalid{border-color:rgba(255,68,68,0.35);}
+.sf textarea{resize:none;min-height:72px;line-height:1.6;}
+.sf select{cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(242,240,255,.3)'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;}
+.sf-hint{font-size:10px;color:var(--dim);margin-top:4px;letter-spacing:.3px;}
+.sf-err{font-family:'Space Mono',monospace;font-size:9px;color:#ff4444;
+  margin-top:4px;letter-spacing:1px;display:none;}
+.sf-err.show{display:block;}
+.sf-ok{font-family:'Space Mono',monospace;font-size:9px;color:var(--green);
+  margin-top:4px;letter-spacing:1px;display:none;}
+.sf-ok.show{display:block;}
+.sf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+/* GENRE PILLS */
+.genre-pills{display:flex;flex-wrap:wrap;gap:6px;}
+.gpill{background:var(--s1);border:1px solid var(--border);border-radius:20px;
+  padding:5px 12px;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--dim);cursor:pointer;transition:all .2s;}
+.gpill.sel{background:rgba(200,255,0,0.08);border-color:var(--lime);color:var(--lime);}
+/* SNS BLOCKS */
+.sns-setup-block{background:var(--s1);border:1px solid var(--border);
+  border-radius:2px;padding:16px 18px;margin-bottom:8px;transition:border-color .2s;}
+.sns-setup-block.has-url{border-color:rgba(200,255,0,0.2);}
+.ssb-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.ssb-icon{width:28px;height:28px;border-radius:5px;display:flex;align-items:center;
+  justify-content:center;font-size:14px;flex-shrink:0;}
+.ssb-name{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;}
+.ssb-badge{margin-left:auto;font-family:'Space Mono',monospace;font-size:7px;
+  letter-spacing:1px;padding:2px 6px;border-radius:2px;
+  background:var(--s2);color:var(--dim);}
+.ssb-badge.ok{background:rgba(200,255,0,0.08);color:var(--lime);
+  border:1px solid rgba(200,255,0,0.2);}
+.url-wrap{position:relative;}
+.url-wrap input{padding-right:32px;}
+.url-chk{position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  font-size:13px;pointer-events:none;}
+/* SETUP BUTTONS */
+.btn-setup-next{width:100%;background:var(--lime);color:#000;border:none;
+  border-radius:2px;padding:14px;font-family:'Bebas Neue',sans-serif;
+  font-size:22px;letter-spacing:4px;cursor:pointer;transition:all .2s;margin-top:6px;}
+.btn-setup-next:hover{filter:brightness(1.08);}
+.btn-setup-next:disabled{opacity:.3;pointer-events:none;}
+.btn-setup-back{width:100%;background:transparent;color:var(--dim);
+  border:1px solid var(--border);border-radius:2px;padding:11px;
+  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;
+  text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:6px;}
+.btn-setup-back:hover{border-color:var(--border2);color:var(--white);}
+/* CONFIRM ROWS */
+.conf-block{background:var(--s1);border:1px solid var(--border);
+  border-radius:2px;padding:4px 18px;margin-bottom:14px;}
+.conf-row{display:flex;justify-content:space-between;align-items:flex-start;
+  padding:10px 0;border-bottom:1px solid var(--border);}
+.conf-row:last-child{border-bottom:none;}
+.conf-l{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--dim);min-width:80px;flex-shrink:0;}
+.conf-v{font-size:12px;font-weight:600;text-align:right;word-break:break-all;margin-left:12px;}
+.conf-url{font-family:'Space Mono',monospace;font-size:9px;color:var(--lime);
+  text-align:right;word-break:break-all;margin-left:12px;}
+
 /* ── NOISE ── */
 body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");opacity:.5;}
@@ -567,6 +675,172 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 </div>
 
 <!-- ══════════════════════════════
+     PROFILE SETUP SCREEN
+══════════════════════════════ -->
+<div id="screen-setup">
+  <div class="setup-wrap">
+    <div class="setup-header">
+      <div class="setup-logo"><div class="logo-dot"></div>XECTOR1</div>
+      <div class="setup-eyebrow">First Time Setup</div>
+      <div class="setup-title">PROFILE<br><em>SETUP</em></div>
+      <div class="setup-sub">ポータルを使い始める前に、あなたの情報を登録してください。<br>SNS URLは正確に入力してください。</div>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="setup-progress" id="setup-progress">
+      <div class="sp-step active" id="spp-1"><div class="sp-num">1</div><div class="sp-label">基本情報</div></div>
+      <div class="sp-step" id="spp-2"><div class="sp-num">2</div><div class="sp-label">SNS</div></div>
+      <div class="sp-step" id="spp-3"><div class="sp-num">3</div><div class="sp-label">確認</div></div>
+    </div>
+
+    <!-- STEP 1: 基本情報 -->
+    <div class="setup-panel active" id="sp-1">
+      <div class="sp-section-label">Step 01</div>
+      <div class="sp-section-title">基本情報</div>
+      <div class="sf-row">
+        <div class="sf">
+          <label>本名（漢字）<span class="req">*</span></label>
+          <input type="text" id="sp-name" placeholder="山田 太郎" oninput="spValidate('sp-name','name')">
+          <div class="sf-err" id="sperr-sp-name">名前を入力してください</div>
+        </div>
+        <div class="sf">
+          <label>よみがな<span class="req">*</span></label>
+          <input type="text" id="sp-yomi" placeholder="やまだ たろう" oninput="spValidate('sp-yomi','yomi')">
+          <div class="sf-err" id="sperr-sp-yomi">ひらがなで入力してください</div>
+        </div>
+      </div>
+      <div class="sf">
+        <label>活動名 / 芸名<span class="req">*</span></label>
+        <input type="text" id="sp-stage" placeholder="例：Yoshi / 火日師" oninput="spValidate('sp-stage','req')">
+        <div class="sf-hint">配信・SNSで使用している名前</div>
+        <div class="sf-err" id="sperr-sp-stage">活動名を入力してください</div>
+      </div>
+      <div class="sf">
+        <label>活動ジャンル<span class="req">*</span></label>
+        <div class="genre-pills" id="sp-genre-pills"></div>
+        <div class="sf-hint" style="margin-top:8px;">複数選択可</div>
+      </div>
+      <div class="sf">
+        <label>現在の活動状況<span class="req">*</span></label>
+        <select id="sp-status">
+          <option value="">選択してください</option>
+          <option value="just_started">これから始める</option>
+          <option value="under_1k">活動中（1,000フォロワー未満）</option>
+          <option value="1k_10k">活動中（1,000〜10,000フォロワー）</option>
+          <option value="10k_100k">活動中（1万〜10万フォロワー）</option>
+          <option value="over_100k">活動中（10万フォロワー以上）</option>
+        </select>
+        <div class="sf-err" id="sperr-sp-status">選択してください</div>
+      </div>
+      <div class="sf">
+        <label>1年後の目標<span class="opt">任意</span></label>
+        <textarea id="sp-goal" placeholder="例：YouTube登録者1万人達成、オリジナル曲リリース..."></textarea>
+      </div>
+      <button class="btn-setup-next" onclick="spNext(1)">次へ — SNS情報 →</button>
+    </div>
+
+    <!-- STEP 2: SNS -->
+    <div class="setup-panel" id="sp-2">
+      <div class="sp-section-label">Step 02</div>
+      <div class="sp-section-title">SNS情報</div>
+      <p style="font-size:11px;color:var(--dim);line-height:1.7;margin-bottom:18px;">
+        使用しているSNSのプロフィールURLを入力してください。<br>
+        <strong style="color:var(--white)">URLが正確でないと数値の自動取得ができません。</strong>
+      </p>
+
+      <div class="sns-setup-block" id="ssb-yt">
+        <div class="ssb-head">
+          <div class="ssb-icon" style="background:rgba(255,64,64,0.12)">🎬</div>
+          <div class="ssb-name" style="color:#ff4040">YouTube</div>
+          <span class="ssb-badge" id="ssb-badge-yt">未入力</span>
+        </div>
+        <div class="sf">
+          <label>チャンネルURL<span class="opt">任意</span></label>
+          <div class="url-wrap">
+            <input type="url" id="sp-yt-url" placeholder="https://www.youtube.com/@channel"
+              oninput="spValidateUrl('yt','youtube.com')">
+            <span class="url-chk" id="urlchk-yt"></span>
+          </div>
+          <div class="sf-err" id="sperr-yt">youtube.com のURLを入力してください</div>
+        </div>
+      </div>
+
+      <div class="sns-setup-block" id="ssb-tt">
+        <div class="ssb-head">
+          <div class="ssb-icon" style="background:rgba(105,217,208,0.12)">♪</div>
+          <div class="ssb-name" style="color:#69d9d0">TikTok</div>
+          <span class="ssb-badge" id="ssb-badge-tt">未入力</span>
+        </div>
+        <div class="sf">
+          <label>プロフィールURL<span class="opt">任意</span></label>
+          <div class="url-wrap">
+            <input type="url" id="sp-tt-url" placeholder="https://www.tiktok.com/@account"
+              oninput="spValidateUrl('tt','tiktok.com')">
+            <span class="url-chk" id="urlchk-tt"></span>
+          </div>
+          <div class="sf-err" id="sperr-tt">tiktok.com のURLを入力してください</div>
+        </div>
+      </div>
+
+      <div class="sns-setup-block" id="ssb-ig">
+        <div class="ssb-head">
+          <div class="ssb-icon" style="background:rgba(224,64,251,0.10)">◈</div>
+          <div class="ssb-name" style="color:#e040fb">Instagram</div>
+          <span class="ssb-badge" id="ssb-badge-ig">未入力</span>
+        </div>
+        <div class="sf">
+          <label>プロフィールURL<span class="opt">任意</span></label>
+          <div class="url-wrap">
+            <input type="url" id="sp-ig-url" placeholder="https://www.instagram.com/account"
+              oninput="spValidateUrl('ig','instagram.com')">
+            <span class="url-chk" id="urlchk-ig"></span>
+          </div>
+          <div class="sf-err" id="sperr-ig">instagram.com のURLを入力してください</div>
+        </div>
+      </div>
+
+      <div class="sns-setup-block" id="ssb-x">
+        <div class="ssb-head">
+          <div class="ssb-icon" style="background:rgba(180,180,180,0.08)">✕</div>
+          <div class="ssb-name" style="color:#aaa">X / Twitter</div>
+          <span class="ssb-badge" id="ssb-badge-x">未入力</span>
+        </div>
+        <div class="sf">
+          <label>プロフィールURL<span class="opt">任意</span></label>
+          <div class="url-wrap">
+            <input type="url" id="sp-x-url" placeholder="https://x.com/account"
+              oninput="spValidateUrl('x','x.com')">
+            <span class="url-chk" id="urlchk-x"></span>
+          </div>
+          <div class="sf-hint">twitter.com のURLでも可</div>
+          <div class="sf-err" id="sperr-x">x.com または twitter.com のURLを入力してください</div>
+        </div>
+      </div>
+
+      <div style="background:var(--s1);border:1px solid var(--border);border-radius:2px;
+        padding:12px 14px;margin:12px 0;font-size:11px;color:var(--dim);line-height:1.6;">
+        💡 URLはプロフィール画面を開いてアドレスバーからコピーしてください
+      </div>
+      <button class="btn-setup-next" onclick="spNext(2)">次へ — 確認 →</button>
+      <button class="btn-setup-back" onclick="spPrev(2)">← 戻る</button>
+    </div>
+
+    <!-- STEP 3: 確認 -->
+    <div class="setup-panel" id="sp-3">
+      <div class="sp-section-label">Step 03</div>
+      <div class="sp-section-title">内容確認</div>
+      <p style="font-size:11px;color:var(--dim);line-height:1.7;margin-bottom:16px;">
+        以下の内容で登録します。間違いがあれば戻って修正してください。
+      </p>
+      <div class="conf-block" id="sp-confirm-block"></div>
+      <button class="btn-setup-next" onclick="spSubmit()" id="sp-submit-btn">登録してポータルへ →</button>
+      <button class="btn-setup-back" onclick="spPrev(3)">← 戻る</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════
      APP
 ══════════════════════════════ -->
 <div id="app">
@@ -1042,19 +1316,169 @@ async function doLogin(){
 }
 
 // ══════════════════════════════
+//  PROFILE SETUP
+// ══════════════════════════════
+const SP_GENRES = ['歌い手','ゲーム実況','Vtuber','ダンス','音楽制作','ラジオ/トーク','イラスト/アート','その他'];
+let spGenres = [];
+let spStep = 1;
+
+function initSetup(){
+  document.getElementById('screen-setup').classList.add('visible');
+  spRenderGenres();
+}
+
+function spRenderGenres(){
+  document.getElementById('sp-genre-pills').innerHTML = SP_GENRES.map(g=>`
+    <div class="gpill ${spGenres.includes(g)?'sel':''}" onclick="spToggleGenre('${g}')">${g}</div>
+  `).join('');
+}
+function spToggleGenre(g){
+  spGenres = spGenres.includes(g) ? spGenres.filter(x=>x!==g) : [...spGenres,g];
+  spRenderGenres();
+}
+
+function spValidate(id, type){
+  const el  = document.getElementById(id);
+  const val = el.value.trim();
+  const err = document.getElementById('sperr-'+id);
+  let ok = false;
+  if(type==='name') ok = val.length >= 2;
+  if(type==='yomi') ok = /^[ぁ-んー\s]+$/.test(val);
+  if(type==='req')  ok = val.length >= 1;
+  el.className = val ? (ok?'valid':'invalid') : '';
+  if(err) err.className = 'sf-err'+(val&&!ok?' show':'');
+  return ok;
+}
+
+function spValidateUrl(platform, domain){
+  const id  = 'sp-'+platform+'-url';
+  const val = document.getElementById(id).value.trim();
+  const err = document.getElementById('sperr-'+platform);
+  const chk = document.getElementById('urlchk-'+platform);
+  const badge = document.getElementById('ssb-badge-'+platform);
+  const block = document.getElementById('ssb-'+platform);
+  if(!val){
+    document.getElementById(id).className='';
+    err.className='sf-err'; chk.textContent='';
+    badge.textContent='未入力'; badge.className='ssb-badge';
+    block.classList.remove('has-url');
+    return true;
+  }
+  const domains = platform==='x' ? ['x.com','twitter.com'] : [domain];
+  const valid = domains.some(d=>val.includes(d)) && val.startsWith('http');
+  document.getElementById(id).className = valid?'valid':'invalid';
+  err.className  = 'sf-err'+(!valid?' show':'');
+  chk.textContent = valid?'✓':'✕';
+  chk.style.color = valid?'var(--green)':'#ff4444';
+  badge.textContent = valid?'✓ 入力済み':'要確認';
+  badge.className = 'ssb-badge'+(valid?' ok':'');
+  block.classList.toggle('has-url', valid);
+  return valid;
+}
+
+function spNext(from){
+  if(from===1){
+    const v1=spValidate('sp-name','name');
+    const v2=spValidate('sp-yomi','yomi');
+    const v3=spValidate('sp-stage','req');
+    const v4=spGenres.length>0;
+    const v5=document.getElementById('sp-status').value!=='';
+    if(!v4){showToast('ジャンルを1つ以上選んでください');return;}
+    if(!v5){document.getElementById('sperr-sp-status').className='sf-err show';return;}
+    if(!v1||!v2||!v3) return;
+  }
+  if(from===2){
+    const ps=['yt','tt','ig','x'], dm={yt:'youtube.com',tt:'tiktok.com',ig:'instagram.com',x:'x.com'};
+    let anyFilled=false, allOk=true;
+    ps.forEach(p=>{ const v=document.getElementById('sp-'+p+'-url').value.trim();
+      if(v){anyFilled=true; if(!spValidateUrl(p,dm[p]))allOk=false;} });
+    if(!anyFilled){showToast('SNSを最低1つ入力してください');return;}
+    if(!allOk){showToast('URLの形式を確認してください');return;}
+    spBuildConfirm();
+  }
+  spSetStep(from+1);
+}
+function spPrev(from){ spSetStep(from-1); }
+
+function spSetStep(n){
+  spStep=n;
+  document.querySelectorAll('.setup-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('sp-'+n).classList.add('active');
+  document.querySelectorAll('.sp-step').forEach((s,i)=>{
+    s.classList.remove('active','done');
+    if(i+1<n)  s.classList.add('done');
+    if(i+1===n) s.classList.add('active');
+  });
+  document.getElementById('screen-setup').scrollTo({top:0,behavior:'smooth'});
+}
+
+const SP_STATUS_LABELS={
+  just_started:'これから始める',
+  under_1k:'1,000フォロワー未満',
+  '1k_10k':'1,000〜10,000フォロワー',
+  '10k_100k':'1万〜10万フォロワー',
+  over_100k:'10万フォロワー以上',
+};
+function spBuildConfirm(){
+  const rows=[
+    {l:'本名',    v:document.getElementById('sp-name').value.trim()},
+    {l:'よみがな',v:document.getElementById('sp-yomi').value.trim()},
+    {l:'活動名',  v:document.getElementById('sp-stage').value.trim()},
+    {l:'ジャンル',v:spGenres.join(' / ')},
+    {l:'状況',    v:SP_STATUS_LABELS[document.getElementById('sp-status').value]||''},
+    {l:'YouTube', v:document.getElementById('sp-yt-url').value.trim(), url:true},
+    {l:'TikTok',  v:document.getElementById('sp-tt-url').value.trim(), url:true},
+    {l:'Instagram',v:document.getElementById('sp-ig-url').value.trim(), url:true},
+    {l:'X',       v:document.getElementById('sp-x-url').value.trim(), url:true},
+  ].filter(r=>r.v);
+  document.getElementById('sp-confirm-block').innerHTML=rows.map(r=>`
+    <div class="conf-row">
+      <span class="conf-l">${r.l}</span>
+      <span class="${r.url?'conf-url':'conf-v'}">${r.v}</span>
+    </div>`).join('');
+}
+
+async function spSubmit(){
+  const btn=document.getElementById('sp-submit-btn');
+  btn.textContent='保存中...'; btn.disabled=true;
+  const payload={
+    id:         currentUser.id,
+    name:       document.getElementById('sp-name').value.trim(),
+    yomi:       document.getElementById('sp-yomi').value.trim(),
+    stage_name: document.getElementById('sp-stage').value.trim(),
+    genres:     spGenres.join(','),
+    status:     document.getElementById('sp-status').value,
+    goal:       document.getElementById('sp-goal').value.trim(),
+    yt_url:     document.getElementById('sp-yt-url').value.trim()||null,
+    tt_url:     document.getElementById('sp-tt-url').value.trim()||null,
+    ig_url:     document.getElementById('sp-ig-url').value.trim()||null,
+    x_url:      document.getElementById('sp-x-url').value.trim()||null,
+    registered_at: new Date().toISOString(),
+    approved:   false,
+  };
+  const {error} = await supa.from('profiles').upsert(payload);
+  if(error){ showToast('保存エラー: '+error.message); btn.textContent='登録してポータルへ →'; btn.disabled=false; return; }
+  MEMBER.name = payload.stage_name || payload.name;
+  document.getElementById('screen-setup').classList.remove('visible');
+  loadUserAndInit();
+}
+
+// ══════════════════════════════
 //  USER DATA LOAD
 // ══════════════════════════════
 async function loadUserAndInit(){
   if(!currentUser){ initApp(); return; }
 
-  // プロフィール取得（なければ作成）
+  // プロフィール取得
   let { data:prof } = await supa.from('profiles').select('*').eq('id',currentUser.id).single();
-  if(!prof){
-    const name = currentUser.email.split('@')[0];
-    await supa.from('profiles').upsert({ id:currentUser.id, name });
-    prof = { id:currentUser.id, name };
+
+  // 初回ログイン or プロフィール未設定 → セットアップ画面へ
+  if(!prof || !prof.stage_name){
+    initSetup();
+    return;
   }
-  MEMBER.name = prof.name;
+
+  MEMBER.name = prof.stage_name || prof.name;
 
   // 最新のSNS数値を取得
   const { data:stats } = await supa.from('sns_stats')
