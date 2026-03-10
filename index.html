@@ -10,7 +10,7 @@
 <title>XECTOR1 — Member Portal</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;500;700&family=Syne:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg:     #050507;
@@ -33,7 +33,7 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html{height:100%;overflow:hidden;overscroll-behavior:none;}
 body{height:100%;overflow:hidden;overscroll-behavior:none;}
-body{background:var(--bg);color:var(--white);font-family:'Syne',sans-serif;font-size:14px;
+body{background:var(--bg);color:var(--white);font-family:'Syne','Noto Sans JP',sans-serif;font-size:15px;
   overscroll-behavior:none;user-select:none;-webkit-font-smoothing:antialiased;}
 
 /* ══ PROFILE SETUP SCREEN ══ */
@@ -81,7 +81,7 @@ body{background:var(--bg);color:var(--white);font-family:'Syne',sans-serif;font-
 .sf label .opt{color:var(--dim2);font-size:9px;margin-left:4px;}
 .sf input,.sf select,.sf textarea{width:100%;background:var(--s1);
   border:1px solid var(--border);border-radius:2px;padding:12px 14px;
-  color:var(--white);font-family:'Syne',sans-serif;font-size:16px;outline:none;
+  color:var(--white);font-family:'Noto Sans JP',sans-serif;font-size:16px;outline:none;
   transition:border-color .2s;}
 .sf input:focus,.sf select:focus,.sf textarea:focus{border-color:var(--border2);}
 .sf input.valid{border-color:rgba(0,255,170,0.35);}
@@ -385,16 +385,18 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .nav-item::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;
   background:var(--lime);border-radius:0 0 2px 2px;opacity:0;transition:opacity .2s;}
 .nav-item.active::before{opacity:1;}
-.nav-icon{font-size:19px;transition:transform .2s;}
+.nav-icon{font-size:19px;transition:transform .2s;display:inline-block;}
 .nav-item.active .nav-icon{transform:scale(1.1);}
+.nav-icon.spin{animation:navSpin .45s cubic-bezier(.4,0,.2,1);}
+@keyframes navSpin{0%{transform:rotate(0deg) scale(1);}50%{transform:rotate(180deg) scale(1.25);}100%{transform:rotate(360deg) scale(1.1);}}
 .nav-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;
   text-transform:uppercase;color:var(--dim);transition:color .2s;}
 .nav-item.active .nav-label{color:var(--lime);}
 
 /* ── PAGE SYSTEM ── */
-.page{display:none;min-height:100%;animation:pageIn .6s cubic-bezier(.4,0,.2,1);}
+.page{display:none;min-height:100%;animation:pageIn 1.0s cubic-bezier(.2,0,.4,1);}
 .page.active{display:block;}
-@keyframes pageIn{0%{opacity:0;transform:translateY(10px);filter:blur(2px);}100%{opacity:1;transform:translateY(0);filter:blur(0);}}
+@keyframes pageIn{0%{opacity:0;transform:translateY(16px);filter:blur(4px);}40%{opacity:.3;}100%{opacity:1;transform:translateY(0);filter:blur(0);}}
 
 /* ── SCAN LINE（ページ切り替えSE） ── */
 .scan-line-overlay{
@@ -405,12 +407,12 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   opacity:0;
 }
 .scan-line-overlay.scanning{
-  animation:scanPageLine .55s cubic-bezier(.4,0,.2,1) forwards;
+  animation:scanPageLine 1.1s cubic-bezier(.2,0,.6,1) forwards;
 }
 @keyframes scanPageLine{
-  0%  {top:0%;   opacity:0;transform:translateY(0);}
-  8%  {opacity:1;}
-  85% {opacity:.35;}
+  0%  {top:0%;   opacity:0;}
+  6%  {opacity:1;}
+  80% {opacity:.4;}
   100%{top:100vh;opacity:0;}
 }
 
@@ -425,7 +427,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .big-title{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:3px;
   line-height:.92;margin-bottom:12px;}
 .big-title em{color:var(--lime);font-style:normal;}
-.section-sub{font-size:13px;color:rgba(242,240,255,0.6);line-height:1.7;letter-spacing:.3px;}
+.section-sub{font-size:14px;color:rgba(242,240,255,0.7);line-height:1.75;letter-spacing:0;font-weight:400;}
 
 .card{background:var(--s1);border:1px solid var(--border);transition:border-color .2s;}
 .card:hover{border-color:var(--border2);}
@@ -446,7 +448,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   pointer-events:none;}
 .home-greeting{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:3px;
   color:var(--dim);text-transform:uppercase;margin-bottom:8px;}
-.home-name{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:3px;line-height:1;}
+.home-name{font-family:'Noto Sans JP','Bebas Neue',sans-serif;font-size:38px;font-weight:900;letter-spacing:1px;line-height:1.1;}
 .home-name em{color:var(--lime);font-style:normal;}
 .home-since{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
   color:var(--dim);margin-top:6px;}
@@ -485,7 +487,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .ar-left{}
 .ar-label{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
   text-transform:uppercase;color:rgba(242,240,255,0.55);margin-bottom:4px;}
-.ar-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:var(--white);}
+.ar-title{font-family:'Noto Sans JP',sans-serif;font-size:17px;font-weight:700;color:var(--white);letter-spacing:0;}
 .ar-arrow{font-size:18px;color:var(--dim);transition:all .2s;}
 .action-row:hover .ar-arrow{color:var(--lime);transform:translateX(3px);}
 
@@ -646,7 +648,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 .react-btn.liked{background:rgba(200,255,0,0.08);border-color:rgba(200,255,0,0.2);color:var(--lime);}
 
 /* ══════════════════════════════
-   BOOK PAGE (GrowUp)
+   BOOK PAGE (Program)
 ══════════════════════════════ */
 .book-header{padding:28px 20px 16px;}
 
@@ -711,7 +713,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:5px;}
 .bf-field input,.bf-field textarea,.bf-field select{
   width:100%;background:var(--bg);border:1px solid var(--border);
-  padding:12px 12px;color:var(--white);font-family:'Syne',sans-serif;font-size:16px;
+  padding:12px 12px;color:var(--white);font-family:'Noto Sans JP',sans-serif;font-size:16px;
   outline:none;transition:border-color .2s;border-radius:1px;}
 .bf-field textarea{resize:none;min-height:64px;}
 .bf-field input:focus,.bf-field textarea:focus{border-color:var(--border2);}
@@ -857,8 +859,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
 }
 .goal-eyebrow::before{content:'';width:12px;height:1px;background:var(--lime);}
 .goal-text{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:32px;letter-spacing:1.5px;
+  font-family:'Noto Sans JP','Bebas Neue',sans-serif;
+  font-size:22px;font-weight:700;letter-spacing:0;
   color:var(--white);line-height:1.15;
 }
 
@@ -920,7 +922,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   width:100%;background:var(--bg);border:1px solid var(--border);
   border-bottom:1px solid rgba(200,255,0,0.25);
   padding:14px 16px;color:var(--white);
-  font-family:'Syne',sans-serif;font-size:16px;
+  font-family:'Noto Sans JP',sans-serif;font-size:16px;
   outline:none;resize:none;min-height:80px;
   transition:border-color .3s;
 }
@@ -984,6 +986,458 @@ html, body {
 }
 #app, .app-content {
   overscroll-behavior: none;
+}
+
+/* COMMUNITY */
+.comm-topbar{
+  padding:16px 20px 12px;
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:10;
+  background:rgba(5,5,7,0.92);backdrop-filter:blur(16px);
+}
+.comm-topbar-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;}
+.comm-topbar-sub{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:rgba(242,240,255,0.5);margin-top:2px;}
+
+/* X-like composer */
+.x-composer{
+  display:flex;gap:12px;padding:14px 16px 12px;
+  border-bottom:1px solid var(--border);
+}
+.x-composer-av{
+  width:40px;height:40px;border-radius:50%;flex-shrink:0;
+  background:var(--s2);border:1.5px solid rgba(200,255,0,0.3);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--lime);
+  overflow:hidden;
+}
+.x-composer-av img{width:100%;height:100%;object-fit:cover;}
+.x-composer-right{flex:1;display:flex;flex-direction:column;gap:8px;}
+.x-composer-ta{
+  width:100%;background:transparent;border:none;outline:none;
+  color:var(--white);font-family:'Noto Sans JP',sans-serif;font-size:16px;
+  line-height:1.6;resize:none;min-height:56px;
+  placeholder-color:rgba(242,240,255,0.3);
+}
+.x-composer-ta::placeholder{color:rgba(242,240,255,0.35);}
+.x-composer-foot{display:flex;justify-content:flex-end;
+  border-top:1px solid var(--border);padding-top:8px;}
+.x-post-btn{
+  background:var(--lime);color:#000;border:none;
+  padding:8px 20px;font-family:'Bebas Neue',sans-serif;
+  font-size:16px;letter-spacing:3px;cursor:pointer;
+  border-radius:20px;transition:filter .2s;
+}
+.x-post-btn:hover{filter:brightness(1.08);}
+.x-divider{height:1px;background:var(--border);}
+
+/* X-like post card */
+.feed{padding-bottom:80px;}
+.post-card{
+  display:flex;gap:12px;
+  padding:14px 16px;
+  border-bottom:1px solid var(--border);
+  animation:postSlideIn .5s cubic-bezier(.2,0,.4,1) both;
+}
+@keyframes postSlideIn{
+  0%{opacity:0;transform:translateY(-8px);}
+  100%{opacity:1;transform:translateY(0);}
+}
+.post-av-col{flex-shrink:0;}
+.post-av{
+  width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:16px;color:#000;font-weight:700;
+  overflow:hidden;
+}
+.post-body{flex:1;min-width:0;}
+.post-head{display:flex;align-items:baseline;gap:6px;margin-bottom:4px;flex-wrap:wrap;}
+.post-nm{font-size:15px;font-weight:700;color:var(--white);}
+.post-bdg{
+  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0;
+  padding:2px 7px;border-radius:10px;
+}
+.post-tm{font-family:'Space Mono',monospace;font-size:10px;color:rgba(242,240,255,0.45);margin-left:auto;}
+.post-txt{
+  font-size:15px;line-height:1.72;color:rgba(242,240,255,0.92);
+  margin-bottom:10px;word-break:break-word;font-family:'Noto Sans JP',sans-serif;
+}
+.post-txt strong{color:var(--lime);}
+.post-ach{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(200,255,0,0.05);border:1px solid rgba(200,255,0,0.15);
+  padding:8px 12px;margin-bottom:10px;
+}
+.ach-ico{font-size:20px;}
+.ach-lbl{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;color:rgba(242,240,255,0.5);}
+.ach-val{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--lime);}
+.post-foot{display:flex;gap:16px;}
+.react-btn{
+  background:none;border:none;
+  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px;
+  color:rgba(242,240,255,0.45);cursor:pointer;padding:4px 0;
+  transition:color .2s;display:flex;align-items:center;gap:4px;
+}
+.react-btn:hover,.react-btn.liked{color:var(--pink);}
+
+
+
+/* ══ PROGRAM TABS ══ */
+.program-tabs{
+  display:grid;grid-template-columns:1fr 1fr;gap:2px;
+  margin:0 20px 0;
+}
+.prog-tab{
+  background:var(--s1);border:1px solid var(--border);
+  padding:14px 12px;text-align:left;cursor:pointer;
+  transition:all .25s;display:flex;flex-direction:column;gap:4px;
+}
+.prog-tab.active{
+  background:rgba(200,255,0,0.06);
+  border-color:rgba(200,255,0,0.35);
+  border-bottom:2px solid var(--lime);
+}
+.prog-tab-label{
+  font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;
+  color:var(--white);
+}
+.prog-tab.active .prog-tab-label{color:var(--lime);}
+.prog-tab-desc{
+  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;
+  color:rgba(242,240,255,0.45);
+}
+
+/* ══ STATS PENDING ══ */
+.stats-pending{
+  margin:32px 20px;
+  border:1px solid rgba(255,255,255,0.07);
+  padding:40px 24px;text-align:center;
+}
+.stats-pending-icon{
+  font-size:40px;color:rgba(242,240,255,0.15);margin-bottom:16px;
+}
+.stats-pending-title{
+  font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;
+  color:rgba(242,240,255,0.5);margin-bottom:8px;
+}
+.stats-pending-sub{
+  font-size:13px;color:rgba(242,240,255,0.4);line-height:1.7;margin-bottom:20px;
+}
+.stats-pending-btn{
+  background:transparent;border:1px solid rgba(200,255,0,0.3);
+  color:var(--lime);padding:12px 20px;
+  font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;
+  cursor:pointer;transition:all .3s;
+}
+.stats-pending-btn:hover{background:var(--lime);color:#000;}
+
+/* ══ COMMUNITY X風UI ══ */
+.comm-topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px 12px;
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;background:rgba(5,5,7,0.95);
+  backdrop-filter:blur(16px);z-index:10;
+}
+.comm-topbar-title{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;
+}
+.comm-online{
+  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;
+  color:var(--green);
+}
+.composer-wrap{
+  display:flex;gap:12px;
+  padding:16px 20px;
+  border-bottom:1px solid var(--border);
+}
+.composer-avatar{
+  width:40px;height:40px;border-radius:50%;flex-shrink:0;
+  background:var(--s2);border:1.5px solid rgba(200,255,0,0.3);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--lime);
+  overflow:hidden;
+}
+.composer-avatar img{width:100%;height:100%;object-fit:cover;}
+.composer-right{flex:1;display:flex;flex-direction:column;gap:10px;}
+.composer-ta{
+  width:100%;background:transparent;border:none;
+  color:var(--white);font-family:'Noto Sans JP',sans-serif;font-size:16px;
+  line-height:1.6;resize:none;min-height:70px;outline:none;
+  padding:4px 0;border-bottom:1px solid var(--border);
+}
+.composer-ta::placeholder{color:rgba(242,240,255,0.3);}
+.composer-ta:focus{border-bottom-color:rgba(200,255,0,0.3);}
+.composer-foot{display:flex;justify-content:flex-end;}
+.btn-post{
+  background:var(--lime);color:#000;border:none;
+  padding:9px 22px;
+  font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;
+  border-radius:20px;cursor:pointer;transition:all .2s;
+}
+.btn-post:hover{filter:brightness(1.1);}
+.feed-divider{height:1px;background:var(--border);}
+
+/* ══ X風 post-card ══ */
+.post-card{
+  display:flex;gap:12px;
+  padding:16px 20px;
+  border-bottom:1px solid var(--border);
+  transition:background .15s;
+}
+.post-card:active{background:rgba(255,255,255,0.02);}
+.post-avatar{
+  width:40px;height:40px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:17px;
+  overflow:hidden;
+}
+.post-avatar img{width:100%;height:100%;object-fit:cover;}
+.post-body{flex:1;min-width:0;}
+.post-header{display:flex;align-items:baseline;gap:8px;margin-bottom:4px;flex-wrap:wrap;}
+.post-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--white);}
+.post-badge{
+  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0px;
+  padding:2px 7px;border-radius:10px;
+}
+.post-time{font-family:'Space Mono',monospace;font-size:10px;color:rgba(242,240,255,0.4);margin-left:auto;}
+.post-text{font-size:15px;color:rgba(242,240,255,0.92);line-height:1.65;margin-bottom:10px;word-break:break-word;}
+.post-ach{
+  background:rgba(200,255,0,0.06);border:1px solid rgba(200,255,0,0.15);
+  border-radius:8px;padding:8px 12px;margin-bottom:10px;
+  display:flex;align-items:center;gap:10px;
+}
+.ach-icon{font-size:20px;}
+.ach-info{}
+.ach-label{font-family:'Space Mono',monospace;font-size:9px;color:var(--lime);margin-bottom:2px;}
+.ach-val{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;}
+.post-actions{display:flex;gap:20px;}
+.post-like{
+  font-family:'Space Mono',monospace;font-size:11px;color:rgba(242,240,255,0.4);
+  background:none;border:none;cursor:pointer;transition:color .2s;padding:4px 0;
+  display:flex;align-items:center;gap:5px;
+}
+.post-like.liked{color:#ff3d80;}
+.post-like:hover{color:var(--white);}
+
+/* ══ NAV アイコン回転 ══ */
+@keyframes navSpin{
+  0%{transform:rotate(0deg) scale(1);}
+  50%{transform:rotate(180deg) scale(1.2);}
+  100%{transform:rotate(360deg) scale(1);}
+}
+.nav-icon.spinning{
+  animation:navSpin .45s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+/* ══ 光ライン スロー版 ══ */
+@keyframes scanPageLine{
+  0%  {top:0%;   opacity:0;}
+  6%  {opacity:.9;}
+  88% {opacity:.25;}
+  100%{top:100vh;opacity:0;}
+}
+.scan-line-overlay.scanning{
+  animation:scanPageLine 2.2s cubic-bezier(.2,0,.4,1) forwards;
+}
+
+/* ══ グラフアニメーション ══ */
+@keyframes chartBarIn{
+  from{clip-path:inset(0 0 100% 0);}
+  to  {clip-path:inset(0 0 0% 0);}
+}
+.chart-animate{animation:chartBarIn 1.4s cubic-bezier(.4,0,.2,1) forwards;}
+
+/* ══ 日本語テキスト全体視認性 ══ */
+p, li, .section-sub, .post-text, .composer-ta,
+.stats-pending-sub, .pinned-text, .section-sub {
+  font-size: 15px;
+  line-height: 1.75;
+  color: rgba(242,240,255,0.85);
+  letter-spacing: 0.02em;
+}
+
+
+.program-section-label{
+  font-family:'Space Mono',monospace;font-size:12px;letter-spacing:2px;
+  color:rgba(242,240,255,0.7);
+  padding:20px 20px 10px;
+  border-top:1px solid var(--border);
+  margin-top:8px;
+  font-weight:700;
+}
+
+
+/* ══ 日本語テキスト読みやすさ最優先 ══ */
+:lang(ja), .post-text, .pinned-text, .stats-pending-sub,
+.section-sub, .goal-text, .ar-title, .action-row * {
+  font-family: 'Noto Sans JP', 'Syne', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.post-text {
+  font-size: 15px !important;
+  line-height: 1.75 !important;
+  color: rgba(242,240,255,0.92) !important;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+.post-name { font-weight: 700 !important; font-size: 15px !important; }
+.ar-title {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+}
+.ar-label { font-size: 11px !important; }
+.home-name { font-size: 42px !important; }
+.goal-text { font-size: 22px !important; font-family: 'Noto Sans JP','Syne',sans-serif !important; font-weight: 700 !important; }
+.kpi-card-val { font-size: 34px !important; }
+.kpi-card-label { font-size: 11px !important; font-weight: 700 !important; }
+.kpi-card-sub { font-size: 10px !important; }
+.kpi-card-delta { font-size: 11px !important; font-weight: 700 !important; }
+.streak-label { font-size: 12px !important; }
+.home-greeting { font-size: 12px !important; }
+.home-since { font-size: 11px !important; }
+
+
+/* ══ 週次サマリーモーダル ══ */
+#weekly-modal{
+  position:fixed;inset:0;z-index:9800;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(5,5,7,0.85);backdrop-filter:blur(12px);
+  opacity:0;pointer-events:none;
+  transition:opacity .5s ease;
+}
+#weekly-modal.show{opacity:1;pointer-events:all;}
+.wm-box{
+  width:min(400px,90vw);
+  background:var(--s1);
+  border:1px solid rgba(200,255,0,0.2);
+  padding:32px 28px 28px;
+  position:relative;
+  transform:translateY(24px);
+  transition:transform .5s cubic-bezier(.16,1,.3,1);
+}
+#weekly-modal.show .wm-box{transform:translateY(0);}
+.wm-eyebrow{
+  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;
+  color:var(--lime);text-transform:uppercase;margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.wm-eyebrow::before{content:'';width:16px;height:1px;background:var(--lime);}
+.wm-title{
+  font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:2px;
+  line-height:1;margin-bottom:6px;
+}
+.wm-title em{color:var(--lime);font-style:normal;}
+.wm-sub{font-size:13px;color:var(--dim);margin-bottom:24px;line-height:1.6;}
+.wm-items{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+.wm-item{
+  background:var(--s2);border:1px solid var(--border);
+  padding:14px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.wm-item-left{display:flex;align-items:center;gap:10px;}
+.wm-item-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.wm-item-plat{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--dim);}
+.wm-item-val{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;line-height:1;}
+.wm-item-delta{
+  font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;
+  color:var(--green);line-height:1;
+}
+.wm-item-delta.dn{color:var(--pink);}
+.wm-close-btn{
+  width:100%;background:var(--lime);color:#000;border:none;
+  padding:15px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:5px;
+  cursor:pointer;transition:filter .2s;
+}
+.wm-close-btn:hover{filter:brightness(1.1);}
+.wm-no-data{
+  font-size:13px;color:var(--dim);text-align:center;padding:20px 0 24px;line-height:1.6;
+}
+
+/* ══ マイルストーン演出 ══ */
+#milestone-overlay{
+  position:fixed;inset:0;z-index:9900;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;opacity:0;
+}
+#milestone-overlay.show{opacity:1;}
+.milestone-box{
+  text-align:center;padding:40px 32px;
+  background:rgba(5,5,7,0.95);border:1px solid rgba(200,255,0,0.4);
+  width:min(360px,88vw);
+  transform:scale(.8);
+  transition:transform .4s cubic-bezier(.16,1,.3,1), opacity .4s ease;
+  opacity:0;position:relative;overflow:hidden;
+}
+#milestone-overlay.show .milestone-box{transform:scale(1);opacity:1;}
+.milestone-icon{font-size:56px;margin-bottom:12px;display:block;}
+.milestone-label{
+  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:4px;
+  color:var(--lime);text-transform:uppercase;margin-bottom:8px;
+}
+.milestone-val{
+  font-family:'Bebas Neue',sans-serif;font-size:56px;letter-spacing:2px;
+  line-height:1;color:var(--lime);margin-bottom:6px;
+}
+.milestone-plat{font-size:14px;color:var(--dim);}
+
+/* ══ コンフェッティ ══ */
+.confetti-piece{
+  position:fixed;width:8px;height:8px;
+  opacity:0;pointer-events:none;z-index:9950;
+  border-radius:1px;
+}
+
+/* ══ 目標プログレスバー ══ */
+.goal-progress-wrap{
+  margin:0 20px 2px;
+  background:var(--s1);border:1px solid rgba(200,255,0,0.12);
+  border-left:3px solid var(--lime);
+  padding:16px 18px;
+  cursor:pointer;
+}
+.goal-progress-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.goal-progress-title{
+  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;
+  color:var(--lime);text-transform:uppercase;
+}
+.goal-progress-pct{
+  font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;
+  color:var(--lime);line-height:1;
+}
+.goal-progress-text{
+  font-size:13px;color:rgba(242,240,255,0.7);margin-bottom:12px;
+  line-height:1.4;
+}
+.goal-progress-bar-bg{
+  height:4px;background:rgba(255,255,255,0.08);
+  position:relative;overflow:hidden;
+}
+.goal-progress-bar-fill{
+  height:100%;background:var(--lime);
+  width:0%;
+  transition:width 1.2s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 0 8px rgba(200,255,0,0.5);
+}
+.goal-progress-detail{
+  display:flex;justify-content:space-between;margin-top:8px;
+}
+.gpd-item{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--dim);}
+.gpd-val{color:var(--white);font-weight:700;}
+
+/* ══ 投稿コメント ══ */
+.post-comments{margin-top:10px;border-top:1px solid var(--border);padding-top:10px;display:flex;flex-direction:column;gap:6px;}
+.post-comment{display:flex;gap:8px;align-items:flex-start;}
+.pc-av{width:22px;height:22px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-family:'Bebas Neue',sans-serif;}
+.pc-body{flex:1;}
+.pc-name{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;font-weight:700;margin-bottom:2px;}
+.pc-text{font-size:12px;color:rgba(242,240,255,0.75);line-height:1.5;}
+
+
+@keyframes confettiFall{
+  0%  {transform:translateY(0) rotate(0deg);opacity:1;}
+  80% {opacity:1;}
+  100%{transform:translateY(100vh) rotate(720deg);opacity:0;}
 }
 
 </style>
@@ -1199,7 +1653,7 @@ html, body {
     </div>
     <div class="topbar-right">
       <span class="topbar-member" id="topbar-member">田中 雄介</span>
-      <div class="topbar-avatar" id="topbar-avatar" onclick="goPage('settings')" title="プロフィール設定">
+      <div class="topbar-avatar" id="topbar-avatar" onclick="goPage('settings',true)" title="プロフィール設定">
         <div class="topbar-avatar-inner" id="topbar-avatar-inner">?</div>
       </div>
     </div>
@@ -1218,7 +1672,7 @@ html, body {
             <div class="home-name">こんにちは、<br><em id="home-name">田中</em></div>
             <div class="home-since" id="home-since">Member since Nov 2024 — Day 129</div>
           </div>
-          <div class="home-avatar-wrap" onclick="goPage('settings')">
+          <div class="home-avatar-wrap" onclick="goPage('settings',true)">
             <div class="home-avatar" id="home-avatar">
               <div class="home-avatar-inner" id="home-avatar-inner">?</div>
             </div>
@@ -1227,9 +1681,21 @@ html, body {
         </div>
       </div>
 
-      <div class="goal-card" id="goal-card" onclick="goPage('settings')">
+      <div class="goal-card" id="goal-card" onclick="goPage('settings',true)">
         <div class="goal-eyebrow">MY GOAL</div>
         <div class="goal-text" id="goal-text">目標を設定してください</div>
+      </div>
+
+      <div class="goal-progress-wrap" id="goal-progress-wrap" onclick="goPage('settings',true)" style="display:none">
+        <div class="goal-progress-top">
+          <div class="goal-progress-title">Progress</div>
+          <div class="goal-progress-pct" id="goal-progress-pct">0%</div>
+        </div>
+        <div class="goal-progress-text" id="goal-progress-text">目標を設定してください</div>
+        <div class="goal-progress-bar-bg">
+          <div class="goal-progress-bar-fill" id="goal-progress-bar"></div>
+        </div>
+        <div class="goal-progress-detail" id="goal-progress-detail"></div>
       </div>
 
       <div class="streak-block">
@@ -1243,28 +1709,28 @@ html, body {
       <div class="kpi-grid" id="kpi-grid"></div>
 
       <div class="action-list">
-        <div class="action-row" onclick="goPage('stats')">
+        <div class="action-row" onclick="goPage('stats',true)">
           <div class="ar-left">
             <div class="ar-label">Weekly Update</div>
             <div class="ar-title">SNS数値を更新する</div>
           </div>
           <div class="ar-arrow">→</div>
         </div>
-        <div class="action-row" onclick="goPage('book')">
+        <div class="action-row" onclick="goPage('book',true)">
           <div class="ar-left">
             <div class="ar-label">Next Session</div>
             <div class="ar-title">面談を予約する</div>
           </div>
           <div class="ar-arrow">→</div>
         </div>
-        <div class="action-row" onclick="goPage('tips')">
+        <div class="action-row" onclick="goPage('tips',true)">
           <div class="ar-left">
             <div class="ar-label">This Week</div>
             <div class="ar-title">最新Tipsを見る</div>
           </div>
           <div class="ar-arrow">→</div>
         </div>
-        <div class="action-row" onclick="goPage('community')">
+        <div class="action-row" onclick="goPage('community',true)">
           <div class="ar-left">
             <div class="ar-label">Community</div>
             <div class="ar-title">メンバーの投稿を見る</div>
@@ -1279,6 +1745,13 @@ html, body {
       <div class="stats-header">
         <div class="eyebrow">Growth Analytics</div>
         <div class="big-title">MY<br><em>STATS</em></div>
+      </div>
+
+      <div id="stats-empty" style="display:none;padding:60px 20px;text-align:center;">
+        <div style="font-size:40px;margin-bottom:16px;">📊</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;margin-bottom:8px;">準備中</div>
+        <div style="font-size:14px;color:rgba(242,240,255,0.5);line-height:1.7;">スタッフがデータを登録するまでお待ちください。<br>設定ページから自分で入力することもできます。</div>
+        <button onclick="goPage('settings')" style="margin-top:24px;background:transparent;border:1px solid rgba(200,255,0,0.4);color:var(--lime);padding:12px 28px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;cursor:pointer;">設定で入力する →</button>
       </div>
 
       <div class="radar-card">
@@ -1311,14 +1784,12 @@ html, body {
         <div class="lc-wrap"><canvas id="line-chart"></canvas></div>
       </div>
 
-      <!-- INPUT -->
-      <div style="padding:16px 20px 8px;">
-        <div class="eyebrow">Update</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;">数値を入力</div>
-      </div>
-      <div class="input-form" id="input-form"></div>
-      <div style="padding:0 20px 24px;">
-        <button class="btn-save" onclick="saveStats()">SAVE & UPDATE →</button>
+      <!-- 準備中バナー（SNS未入力時） -->
+      <div class="stats-pending" id="stats-pending">
+        <div class="stats-pending-icon">◈</div>
+        <div class="stats-pending-title">データ準備中</div>
+        <div class="stats-pending-sub">SNSの数値はスタッフが定期的に更新します。<br>設定から自分で入力することもできます。</div>
+        <button class="stats-pending-btn" onclick="goPage('settings',true)">設定で入力する →</button>
       </div>
     </div>
 
@@ -1334,42 +1805,66 @@ html, body {
 
     <!-- ── COMMUNITY ── -->
     <div id="page-community" class="page">
-      <div class="community-header">
-        <div class="eyebrow">Members Only</div>
-        <div class="big-title">COMMUNITY</div>
+      <!-- X風シンプルヘッダー -->
+      <div class="comm-topbar">
+        <span class="comm-topbar-title">Community</span>
+        <span class="comm-online" id="comm-online">● 39 members</span>
       </div>
-      <div class="comm-stats" id="comm-stats"></div>
-      <div class="pinned-bar">
-        <div class="pinned-tag">📌 お知らせ</div>
-        <div class="pinned-text">3月15日(土)19:00〜 プロデュースミーティング開催。参加者は前日までに数値更新をお願いします。</div>
-      </div>
+      <!-- 投稿composer（X風） -->
       <div class="composer-wrap">
-        <textarea class="composer-ta" id="composer-ta" placeholder="今週の気づき、達成報告、質問など..."></textarea>
-        <div class="composer-foot">
-          <button class="btn-post" onclick="submitPost()">POST →</button>
+        <div class="composer-avatar" id="composer-avatar-img">?</div>
+        <div class="composer-right">
+          <textarea class="composer-ta" id="composer-ta" placeholder="今週の気づき、達成報告、質問など..."></textarea>
+          <div class="composer-foot">
+            <button class="btn-post" onclick="submitPost()">投稿する</button>
+          </div>
         </div>
       </div>
+      <div class="feed-divider"></div>
       <div class="feed" id="feed"></div>
     </div>
 
-    <!-- ── BOOK ── -->
+    <!-- ── BOOK (Program) ── -->
     <div id="page-book" class="page">
       <div class="book-header">
-        <div class="eyebrow">1on1 Session</div>
-        <div class="big-title">BOOK<br><em>SESSION</em></div>
-        <div class="section-sub" style="margin-top:4px;">空いている日時を選んで予約してください。</div>
+        <div class="eyebrow">Program</div>
+        <div class="big-title">PROGRAM<br><em>SESSIONS</em></div>
       </div>
-      <div class="ycbm-wrap">
-        <iframe
-          id="ycbm-iframe"
-          src="https://skygarden0821.youcanbook.me/"
-          style="width:100%;border:none;background:transparent;"
-          frameborder="0"
-          scrolling="yes"
-          allowtransparency="true"
-          onload="resizeYcbm(this)"
-        ></iframe>
+
+      <!-- タブ切り替え -->
+      <div class="program-tabs">
+        <button class="prog-tab active" id="prog-tab-1" onclick="switchProgram(1)">
+          <span class="prog-tab-label">Voice Session 01</span>
+          <span class="prog-tab-desc">通常セッション</span>
+        </button>
+        <button class="prog-tab" id="prog-tab-2" onclick="switchProgram(2)">
+          <span class="prog-tab-label">Voice Session 02</span>
+          <span class="prog-tab-desc">集中セッション</span>
+        </button>
       </div>
+
+      <!-- Voice01 -->
+      <div class="ycbm-panel" id="ycbm-panel-1">
+        <div class="ycbm-wrap">
+          <iframe
+            src="https://skygarden0821.youcanbook.me/"
+            style="width:100%;border:none;background:transparent;min-height:650px;"
+            frameborder="0" scrolling="yes" allowtransparency="true"
+          ></iframe>
+        </div>
+      </div>
+
+      <!-- Voice02 -->
+      <div class="ycbm-panel" id="ycbm-panel-2" style="display:none;">
+        <div class="ycbm-wrap">
+          <iframe
+            src="https://skygarden0821.youcanbook.me/"
+            style="width:100%;border:none;background:transparent;min-height:650px;"
+            frameborder="0" scrolling="yes" allowtransparency="true"
+          ></iframe>
+        </div>
+      </div>
+
       <div style="height:20px;"></div>
     </div>
 
@@ -1459,27 +1954,27 @@ html, body {
 
   <!-- BOTTOM NAV -->
   <nav class="app-nav">
-    <button class="nav-item active" id="nav-home" onclick="goPage('home')">
+    <button class="nav-item active" id="nav-home" onclick="goPage('home',true)">
       <span class="nav-icon">⬡</span>
       <span class="nav-label">Home</span>
     </button>
-    <button class="nav-item" id="nav-stats" onclick="goPage('stats')">
+    <button class="nav-item" id="nav-stats" onclick="goPage('stats',true)">
       <span class="nav-icon">◈</span>
       <span class="nav-label">Stats</span>
     </button>
-    <button class="nav-item" id="nav-tips" onclick="goPage('tips')">
+    <button class="nav-item" id="nav-tips" onclick="goPage('tips',true)">
       <span class="nav-icon">💡</span>
       <span class="nav-label">Tips</span>
     </button>
-    <button class="nav-item" id="nav-community" onclick="goPage('community')">
+    <button class="nav-item" id="nav-community" onclick="goPage('community',true)">
       <span class="nav-icon">⬡</span>
       <span class="nav-label">Community</span>
     </button>
-    <button class="nav-item" id="nav-book" onclick="goPage('book')">
+    <button class="nav-item" id="nav-book" onclick="goPage('book',true)">
       <span class="nav-icon">◎</span>
-      <span class="nav-label">GrowUp</span>
+      <span class="nav-label">Program</span>
     </button>
-    <button class="nav-item" id="nav-settings" onclick="goPage('settings')">
+    <button class="nav-item" id="nav-settings" onclick="goPage('settings',true)">
       <span class="nav-icon" style="font-size:16px;">⚙</span>
       <span class="nav-label">設定</span>
     </button>
@@ -1536,6 +2031,28 @@ html, body {
       </div>
       <button class="btn-share-dl" onclick="showToast('スクショして拡散してください 📸')">📸 スクショ用カード</button>
     </div>
+  </div>
+</div>
+
+
+<!-- ══ 週次サマリーモーダル ══ -->
+<div id="weekly-modal">
+  <div class="wm-box">
+    <div class="wm-eyebrow">Weekly Report</div>
+    <div class="wm-title" id="wm-title">先週より<br><em id="wm-headline">成長中</em></div>
+    <div class="wm-sub" id="wm-sub">先週と比べた変化です。</div>
+    <div class="wm-items" id="wm-items"></div>
+    <button class="wm-close-btn" onclick="closeWeeklyModal()">よし、やるか →</button>
+  </div>
+</div>
+
+<!-- ══ マイルストーン演出 ══ -->
+<div id="milestone-overlay">
+  <div class="milestone-box">
+    <span class="milestone-icon" id="ms-icon">🏆</span>
+    <div class="milestone-label">Milestone Reached</div>
+    <div class="milestone-val" id="ms-val">10万</div>
+    <div class="milestone-plat" id="ms-plat">YouTubeチャンネル登録者</div>
   </div>
 </div>
 
@@ -1662,40 +2179,68 @@ const DUMMY_POSTS_POOL = [
   { text:'コンテンツを量産するより、1本の質を上げることに集中したら再生数が安定してきた。週2本から週1本に下げてよかったかも。', ach:null, likes:16 },
 ];
 
-function injectRandomPost(){
-  // ページを開くたびに1件ランダムで先頭に追加（自分の投稿は除外）
+let _dummyTimer = null;
+
+function injectRandomPost(silent){
   const pool = DUMMY_POSTS_POOL;
   const members = DUMMY_MEMBERS;
+  // 直前と違うメンバーを選ぶ
+  const lastName = appState.posts.find(x=>x.isDummy)?.name;
+  const eligible = members.filter(m=>m.name!==lastName);
+  const m = eligible[Math.floor(Math.random()*eligible.length)];
   const p = pool[Math.floor(Math.random()*pool.length)];
-  const m = members[Math.floor(Math.random()*members.length)];
-  const times = ['たった今','1分前','3分前','5分前','8分前','12分前','20分前','30分前'];
-  const t = times[Math.floor(Math.random()*times.length)];
   const newPost = {
     id: Date.now(),
     name: m.name, av: m.av, color: m.color,
     badge: m.badge, badgeColor: m.badgeColor,
-    time: t,
+    time: 'たった今',
     text: p.text,
     ach: p.ach ? {...p.ach} : null,
-    likes: p.likes + Math.floor(Math.random()*8),
+    likes: p.likes + Math.floor(Math.random()*6),
     liked: false,
     isDummy: true,
+    isMe: false,
+    ts: Date.now(),
   };
-  // 重複防止：直前の投稿と同じ人なら差し替え
-  if(appState.posts[0]?.name === m.name){
-    const alt = members.find(x=>x.name!==m.name);
-    if(alt){ newPost.name=alt.name; newPost.av=alt.av; newPost.color=alt.color; newPost.badge=alt.badge; newPost.badgeColor=alt.badgeColor; }
-  }
-  // ユーザー自身の投稿は先頭に保持、ダミーはその直後に挿入
-  const myPosts = appState.posts.filter(x=>!x.isDummy);
-  const dummies = appState.posts.filter(x=>x.isDummy);
+  // 自分の投稿（isMe）は保持、ダミーはその前に追加
+  const myPosts = appState.posts.filter(x=>x.isMe);
+  const dummies = appState.posts.filter(x=>!x.isMe);
   dummies.unshift(newPost);
-  // ダミーは最大15件
-  if(dummies.length > 15) dummies.pop();
+  if(dummies.length > 18) dummies.pop();
   appState.posts = [...myPosts, ...dummies];
-  // ユーザー投稿が先頭に来るようにソート（自分の投稿優先）
-  appState.posts.sort((a,b)=> (a.isDummy?1:0)-(b.isDummy?1:0));
-  renderFeed();
+  // 時刻を経過に応じて更新
+  updatePostTimes();
+  if(!silent) renderFeed();
+  else renderFeed();
+}
+
+function updatePostTimes(){
+  const now = Date.now();
+  appState.posts.forEach(p=>{
+    if(!p.ts) return;
+    const min = Math.floor((now - p.ts) / 60000);
+    if(min < 1)       p.time = 'たった今';
+    else if(min < 60) p.time = `${min}分前`;
+    else if(min < 120) p.time = '1時間前';
+    else               p.time = `${Math.floor(min/60)}時間前`;
+  });
+}
+
+function startDummyTimer(){
+  if(_dummyTimer) clearInterval(_dummyTimer);
+  // 最初に1件挿入
+  injectRandomPost(false);
+  // 2〜4分ごとにランダムで新着投稿
+  function scheduleNext(){
+    const ms = (120 + Math.floor(Math.random()*120)) * 1000; // 2〜4分
+    _dummyTimer = setTimeout(()=>{
+      injectRandomPost(false);
+      scheduleNext();
+    }, ms);
+  }
+  scheduleNext();
+  // 1分ごとに時刻表示を更新
+  setInterval(()=>{ updatePostTimes(); renderFeed(); }, 60000);
 }
 
 const COMM_POSTS = [
@@ -2009,6 +2554,10 @@ async function loadUserAndInit(){
   }
 
   initApp();
+  // 週次サマリー・マイルストーン確認
+  checkWeeklyAndMilestones(stats);
+  // 目標プログレスバー更新
+  updateGoalProgress();
 }
 
 // ══════════════════════════════
@@ -2037,6 +2586,8 @@ async function saveStatsToDB(){
   const { error } = await supa.from('sns_stats').insert(payload);
   if(error){ showToast('保存エラー: '+error.message); return; }
   showToast('数値をDBに保存しました ✓');
+  updateGoalProgress();
+  checkWeeklyAndMilestones(null);
   setTimeout(()=>goPage('home'),800);
 }
 
@@ -2049,12 +2600,18 @@ function applyAvatar(dataUrl){
   // topbar
   const tb = document.getElementById('topbar-avatar-inner');
   if(tb) tb.innerHTML = dataUrl ? `<img src="${dataUrl}">` : MEMBER.short[0]||'?';
+  // x-composer
+  const xav = document.getElementById('x-composer-av');
+  if(xav) xav.innerHTML = dataUrl ? `<img src="${dataUrl}">` : (MEMBER.short[0]||'?');
   // home
   const ha = document.getElementById('home-avatar-inner');
   if(ha) ha.innerHTML = dataUrl ? `<img src="${dataUrl}">` : MEMBER.short[0]||'?';
   // settings preview
   const sp = document.getElementById('avatar-preview-inner');
   if(sp) sp.innerHTML = dataUrl ? `<img src="${dataUrl}">` : MEMBER.short[0]||'?';
+  // composer
+  const ca = document.getElementById('composer-avatar-img');
+  if(ca){ ca.innerHTML = dataUrl ? `<img src="${dataUrl}">` : MEMBER.short[0]||'?'; }
 }
 
 // ── CROP 機能 ──
@@ -2220,6 +2777,7 @@ async function saveStatsFromSettings(){
     if(error){ showToast('DB保存エラー: '+error.message); return; }
   }
   showToast('数値を更新しました ✓');
+  updateGoalProgress();
 }
 
 // ── 設定ページを開いたとき現在値をフィールドにセット ──
@@ -2239,6 +2797,379 @@ function prefillSettingsSNS(){
   set('s-x-posts',  SNS.x.posts);
 }
 
+
+// ── Program タブ切り替え ──
+function switchProgram(n){
+  [1,2].forEach(i=>{
+    document.getElementById('prog-tab-'+i).classList.toggle('active', i===n);
+    document.getElementById('ycbm-panel-'+i).style.display = i===n ? 'block' : 'none';
+  });
+}
+
+
+// ── STATS: 準備中判定 ──
+function checkStatsPending(){
+  const hasData = SNS.yt.sub>0 || SNS.tt.sub>0 || SNS.ig.sub>0 || SNS.x.sub>0;
+  const pending = document.getElementById('stats-pending');
+  const radar   = document.querySelector('.radar-card');
+  const periodTabs = document.querySelector('.period-tabs');
+  const metricScroll = document.getElementById('metric-scroll');
+  const lineCard = document.querySelector('.line-card');
+  if(pending){
+    pending.style.display = hasData ? 'none' : 'block';
+    if(radar) radar.style.display = hasData ? 'block' : 'none';
+    if(periodTabs) periodTabs.style.display = hasData ? 'flex' : 'none';
+    if(metricScroll) metricScroll.style.display = hasData ? 'flex' : 'none';
+    if(lineCard) lineCard.style.display = hasData ? 'block' : 'none';
+  }
+  if(hasData) animateCharts();
+}
+
+// ── グラフカウントアップアニメーション ──
+function animateCharts(){
+  // レーダーチャート：データを0から増やして描画
+  const norm = getRadarData();
+  const score = getScore(norm);
+  const grade = getGrade(score);
+  document.getElementById('radar-score').textContent = '—';
+  document.getElementById('radar-grade').textContent = '集計中...';
+
+  if(radarChart) radarChart.destroy();
+  const ctx = document.getElementById('radar-chart').getContext('2d');
+  const zeroed = norm.map(()=>0);
+  radarChart = new Chart(ctx,{
+    type:'radar',
+    data:{ labels:AXES.map(a=>a.label), datasets:[{
+      data:[...zeroed], backgroundColor:'rgba(200,255,0,0.07)', borderColor:'#c8ff00',
+      borderWidth:2, pointBackgroundColor:AXES.map(a=>a.color),
+      pointBorderColor:'transparent', pointRadius:4,
+    }]},
+    options:{ responsive:true, maintainAspectRatio:false, animation:{duration:0},
+      plugins:{ legend:{display:false} },
+      scales:{ r:{ min:0, max:100, backgroundColor:'transparent',
+        grid:{color:'rgba(255,255,255,0.04)'}, angleLines:{color:'rgba(255,255,255,0.06)'},
+        pointLabels:{color:'rgba(242,240,255,.5)',font:{family:'Space Mono',size:9}},
+        ticks:{display:false} }}}
+  });
+
+  // 0→実値へ段階的にアニメーション（1.2秒）
+  let step = 0; const steps = 40;
+  const timer = setInterval(()=>{
+    step++;
+    const t = step/steps;
+    const ease = 1 - Math.pow(1-t, 3); // ease-out cubic
+    radarChart.data.datasets[0].data = norm.map(v => v*ease);
+    radarChart.update('none');
+    if(step >= steps){
+      clearInterval(timer);
+      // スコア表示
+      const sc = document.getElementById('radar-score');
+      const gr = document.getElementById('radar-grade');
+      let cur=0; const target=score;
+      const sc_timer = setInterval(()=>{
+        cur = Math.min(cur+3, target);
+        sc.textContent = cur;
+        if(cur>=target){ clearInterval(sc_timer); sc.style.color=grade.c; gr.textContent='GRADE '+grade.g; }
+      },20);
+    }
+  }, 30);
+
+  // ラインチャートはフェードイン
+  setTimeout(()=>{ initLineChart(); }, 600);
+}
+
+
+// ── コミュニティ定期投稿（1〜2分おき） ──
+function startCommunityTimer(){
+  function scheduleNext(){
+    const delay = (60 + Math.random()*60) * 1000; // 60〜120秒
+    setTimeout(()=>{
+      // コミュニティページが開いているときだけfeedに追加
+      const commPage = document.getElementById('page-community');
+      if(commPage && commPage.classList.contains('active')){
+        injectRandomPost();
+      } else {
+        // バックグラウンドでもpoolには追加（次に開いたとき表示）
+        const pool = DUMMY_POSTS_POOL;
+        const members = DUMMY_MEMBERS;
+        const p = pool[Math.floor(Math.random()*pool.length)];
+        const m = members[Math.floor(Math.random()*members.length)];
+        appState.posts.push({
+          id:Date.now(), name:m.name, av:m.av, color:m.color,
+          badge:m.badge, badgeColor:m.badgeColor, time:'数分前',
+          text:p.text, ach:p.ach?{...p.ach}:null,
+          likes:p.likes+Math.floor(Math.random()*5), liked:false, isDummy:true
+        });
+      }
+      scheduleNext();
+    }, delay);
+  }
+  scheduleNext();
+}
+
+
+// ══════════════════════════════
+//  週次サマリー & マイルストーン
+// ══════════════════════════════
+const MILESTONE_THRESHOLDS = [1000, 5000, 10000, 50000, 100000, 500000, 1000000];
+
+function fmtMilestone(n){
+  if(n >= 1000000) return (n/10000).toFixed(0)+'万';
+  if(n >= 10000)   return (n/10000).toFixed(0)+'万';
+  if(n >= 1000)    return (n/1000).toFixed(0)+'千';
+  return String(n);
+}
+
+// 前週データとの比較・マイルストーン検出
+async function checkWeeklyAndMilestones(currentStats){
+  if(!currentUser) return;
+
+  // 1週間前のデータを取得
+  const weekAgo = new Date();
+  weekAgo.setDate(weekAgo.getDate() - 7);
+  const weekAgoStr = weekAgo.toISOString().split('T')[0];
+
+  const { data:prevData } = await supa.from('sns_stats')
+    .select('*').eq('user_id', currentUser.id)
+    .lte('recorded_at', weekAgoStr)
+    .order('recorded_at', {ascending:false}).limit(1);
+
+  const prev = prevData?.[0] || null;
+
+  // 比較データ構築
+  const platforms = [
+    { key:'yt', label:'YouTube', sub:'登録者', plat:'#ff4040', curr:SNS.yt.sub, prevVal: prev?.yt_subscribers||0 },
+    { key:'tt', label:'TikTok',  sub:'フォロワー', plat:'#69d9d0', curr:SNS.tt.sub, prevVal: prev?.tt_followers||0 },
+    { key:'ig', label:'Instagram', sub:'フォロワー', plat:'#e040fb', curr:SNS.ig.sub, prevVal: prev?.ig_followers||0 },
+    { key:'x',  label:'X',      sub:'フォロワー', plat:'#c8c8c8', curr:SNS.x.sub, prevVal: prev?.x_followers||0 },
+  ];
+
+  const hasAnyData = platforms.some(p => p.curr > 0);
+  if(!hasAnyData) return;
+
+  // ── マイルストーン検出 ──
+  // 前回データがある場合のみ（新規登録直後のフォロワー数は除外）
+  if(prev){
+    for(const p of platforms){
+      for(const thr of MILESTONE_THRESHOLDS){
+        if(p.prevVal < thr && p.curr >= thr){
+          // マイルストーン達成！
+          setTimeout(()=> showMilestone(p.label, p.sub, thr), 800);
+          return; // 一度に1つだけ表示
+        }
+      }
+    }
+  }
+
+  // ── 週次サマリーモーダル ──
+  // 今週初回ログイン時のみ表示（localStorageで管理）
+  const today = new Date().toISOString().split('T')[0];
+  const lastShown = localStorage.getItem('xector1_weekly_shown_' + currentUser.id);
+  const weekStart = getWeekStart();
+  if(lastShown && lastShown >= weekStart) return; // 今週すでに表示済み
+
+  // 変化があるものだけ表示
+  const items = platforms.filter(p => p.curr > 0);
+  if(!items.length) return;
+
+  // モーダル構築
+  const wm = document.getElementById('weekly-modal');
+  const wmItems = document.getElementById('wm-items');
+  const wmHeadline = document.getElementById('wm-headline');
+  const wmSub = document.getElementById('wm-sub');
+
+  if(prev){
+    const gains = items.map(p => ({ ...p, delta: p.curr - p.prevVal }));
+    const totalDelta = gains.reduce((s,p) => s + p.delta, 0);
+    wmHeadline.textContent = totalDelta >= 0 ? '成長中！' : '踏ん張り時';
+    wmSub.textContent = `先週との比較です。数値を確認してみましょう。`;
+    wmItems.innerHTML = gains.map(p => `
+      <div class="wm-item">
+        <div class="wm-item-left">
+          <span class="wm-item-dot" style="background:${p.plat}"></span>
+          <div>
+            <div class="wm-item-plat">${p.label} ${p.sub}</div>
+            <div class="wm-item-val">${fmtNum(p.curr)}</div>
+          </div>
+        </div>
+        <div class="wm-item-delta ${p.delta<0?'dn':''}">${p.delta>=0?'+':''}${fmtNum(Math.abs(p.delta))}</div>
+      </div>`).join('');
+  } else {
+    wmHeadline.textContent = '現在の数値';
+    wmSub.textContent = '来週から週次比較が表示されます。';
+    wmItems.innerHTML = items.map(p => `
+      <div class="wm-item">
+        <div class="wm-item-left">
+          <span class="wm-item-dot" style="background:${p.plat}"></span>
+          <div>
+            <div class="wm-item-plat">${p.label} ${p.sub}</div>
+            <div class="wm-item-val">${fmtNum(p.curr)}</div>
+          </div>
+        </div>
+        <div class="wm-item-delta">—</div>
+      </div>`).join('');
+  }
+
+  // 少し遅らせて表示（ログイン演出が終わってから）
+  setTimeout(()=>{ wm.classList.add('show'); }, 1400);
+  localStorage.setItem('xector1_weekly_shown_' + currentUser.id, today);
+}
+
+function getWeekStart(){
+  const d = new Date();
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day===0?-6:1);
+  const mon = new Date(d.setDate(diff));
+  return mon.toISOString().split('T')[0];
+}
+
+function closeWeeklyModal(){
+  document.getElementById('weekly-modal').classList.remove('show');
+}
+
+// ── マイルストーン演出 ──
+function showMilestone(platLabel, subLabel, val){
+  const overlay = document.getElementById('milestone-overlay');
+  document.getElementById('ms-val').textContent = fmtMilestone(val);
+  document.getElementById('ms-plat').textContent = platLabel + ' ' + subLabel;
+  const icons = {1000:'⭐',5000:'🌟',10000:'🎉',50000:'🚀',100000:'🏆',500000:'👑',1000000:'💎'};
+  document.getElementById('ms-icon').textContent = icons[val] || '🏆';
+
+  overlay.classList.add('show');
+  launchConfetti();
+  setTimeout(()=>{ overlay.classList.remove('show'); }, 4000);
+}
+
+function launchConfetti(){
+  const colors = ['#c8ff00','#00f0ff','#ff3d80','#ffb700','#ffffff','#00ffaa'];
+  for(let i=0;i<60;i++){
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.cssText = `
+      left:${Math.random()*100}vw;
+      top:-10px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      width:${4+Math.random()*8}px;
+      height:${4+Math.random()*8}px;
+      transform:rotate(${Math.random()*360}deg);
+      animation:confettiFall ${1.5+Math.random()*2}s ${Math.random()*0.8}s ease-in forwards;
+    `;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 4000);
+  }
+}
+
+// ══════════════════════════════
+//  目標プログレスバー
+// ══════════════════════════════
+function updateGoalProgress(){
+  const wrap = document.getElementById('goal-progress-wrap');
+  const barFill = document.getElementById('goal-progress-bar');
+  const pctEl = document.getElementById('goal-progress-pct');
+  const textEl = document.getElementById('goal-progress-text');
+  const detailEl = document.getElementById('goal-progress-detail');
+
+  if(!wrap) return;
+
+  // 目標テキストから数値・プラットフォームをパース
+  const goal = MEMBER.goal || '';
+  if(!goal){ wrap.style.display='none'; return; }
+
+  // 例：「YouTube10万人達成」「TikTok5万フォロワー」などをパース
+  const numMatch = goal.match(/([0-9０-９]+(?:[\.．][0-9０-９]+)?)\s*(?:万|千)?/);
+  if(!numMatch){ wrap.style.display='none'; return; }
+
+  let targetNum = parseFloat(numMatch[1].replace(/[０-９]/g, c=>String.fromCharCode(c.charCodeAt(0)-65248)));
+  if(goal.includes('万')) targetNum *= 10000;
+  else if(goal.includes('千')) targetNum *= 1000;
+
+  if(!targetNum || targetNum <= 0){ wrap.style.display='none'; return; }
+
+  // どのSNSの目標かを検出
+  let currVal = 0;
+  let platLabel = '';
+  let platColor = 'var(--lime)';
+
+  if(/youtube|yt|ユーチューブ/i.test(goal)){
+    currVal = SNS.yt.sub; platLabel='YouTube 登録者'; platColor='#ff4040';
+  } else if(/tiktok|tt|ティックトック/i.test(goal)){
+    currVal = SNS.tt.sub; platLabel='TikTok フォロワー'; platColor='#69d9d0';
+  } else if(/instagram|ig|インスタ/i.test(goal)){
+    currVal = SNS.ig.sub; platLabel='Instagram フォロワー'; platColor='#e040fb';
+  } else if(/twitter|x(?![a-z])|ツイッター/i.test(goal)){
+    currVal = SNS.x.sub; platLabel='X フォロワー'; platColor='#c8c8c8';
+  } else {
+    // プラットフォーム不明な場合は最大値を使う
+    const all = [SNS.yt.sub, SNS.tt.sub, SNS.ig.sub, SNS.x.sub];
+    currVal = Math.max(...all);
+    platLabel = 'フォロワー';
+  }
+
+  const pct = Math.min(100, Math.round(currVal / targetNum * 100));
+  const remaining = Math.max(0, targetNum - currVal);
+
+  wrap.style.display = 'block';
+  wrap.style.borderLeftColor = platColor;
+  pctEl.style.color = platColor;
+  pctEl.textContent = pct + '%';
+  textEl.textContent = goal.length > 30 ? goal.substring(0,28)+'…' : goal;
+  detailEl.innerHTML = `
+    <span class="gpd-item">現在 <span class="gpd-val" style="color:${platColor}">${fmtNum(currVal)}</span></span>
+    <span class="gpd-item">目標 <span class="gpd-val">${fmtNum(targetNum)}</span></span>
+    <span class="gpd-item">残り <span class="gpd-val">${fmtNum(remaining)}</span></span>
+  `;
+
+  // バーアニメーション（少し遅らせて）
+  setTimeout(()=>{
+    barFill.style.background = platColor;
+    barFill.style.boxShadow = `0 0 8px ${platColor}80`;
+    barFill.style.width = pct + '%';
+  }, 300);
+}
+
+// ══════════════════════════════
+//  自動コメント（投稿から30秒〜2分後）
+// ══════════════════════════════
+const AUTO_COMMENTS = [
+  { text:'めちゃくちゃ参考になります！私もやってみます🔥' },
+  { text:'すごい！数字に表れてますね。継続の力を感じます。' },
+  { text:'自分も同じ悩みがあったので、とても共感できます。' },
+  { text:'このやり方、詳しく聞いてみたいです！' },
+  { text:'お疲れ様です！着実に成長してますね👏' },
+  { text:'このTips、私も試してみます。ありがとうございます！' },
+  { text:'そのやり方知らなかったです。早速真似させてもらいます。' },
+  { text:'継続が大事って、本当にそうですよね。自分も頑張ります。' },
+  { text:'数字より内容を重視してたら自然とフォロワー増えた感じがします。' },
+  { text:'最近投稿頻度落ちてたので刺激受けました！ありがとう😊' },
+];
+
+function scheduleAutoComment(postId){
+  const delay = 30000 + Math.random() * 90000; // 30秒〜2分
+  setTimeout(()=>{
+    const post = appState.posts.find(p => p.id === postId);
+    if(!post) return; // 投稿が消えていたらスキップ
+    const members = DUMMY_MEMBERS;
+    const m = members[Math.floor(Math.random() * members.length)];
+    const c = AUTO_COMMENTS[Math.floor(Math.random() * AUTO_COMMENTS.length)];
+    if(!post.comments) post.comments = [];
+    post.comments.push({ name:m.name, av:m.av, color:m.color, text:c.text });
+    renderFeed();
+    showToast(m.name + 'さんがコメントしました 💬');
+    // 2回目のコメント（50%の確率で3〜8分後）
+    if(Math.random() > 0.5){
+      setTimeout(()=>{
+        const p2 = appState.posts.find(p => p.id === postId);
+        if(!p2) return;
+        const m2 = members.filter(x=>x.name!==m.name)[Math.floor(Math.random()*( members.length-1))];
+        const c2 = AUTO_COMMENTS[Math.floor(Math.random()*AUTO_COMMENTS.length)];
+        if(!p2.comments) p2.comments=[];
+        p2.comments.push({ name:m2.name, av:m2.av, color:m2.color, text:c2.text });
+        renderFeed();
+      }, 180000 + Math.random()*300000);
+    }
+  }, delay);
+}
+
 // ── GOAL SAVE ──
 async function saveGoal(){
   const text = document.getElementById('settings-goal').value.trim();
@@ -2252,6 +3183,7 @@ async function saveGoal(){
   const { error } = await supa.from('profiles').update({ goal: text }).eq('id', currentUser.id);
   if(error){ showToast('保存エラー: '+error.message); return; }
   showToast('目標を保存しました ✓');
+  updateGoalProgress();
 }
 
 // ── youcanbookme iframe リサイズ ──
@@ -2268,6 +3200,7 @@ function resizeYcbm(iframe){
 //  INIT
 // ══════════════════════════════
 function initApp(){
+  checkStatsPending();
   // DB取得後の名前をUIに反映
   const bfName = document.getElementById("bf-name");
   if(bfName) bfName.value = MEMBER.name;
@@ -2276,9 +3209,15 @@ function initApp(){
   // アバター
   loadAvatarFromStorage();
   applyAvatar(MEMBER.avatar);
+  startCommunityTimer();
+  // composerのアバター反映
+  const ca = document.getElementById('composer-avatar-img');
+  if(ca){ if(MEMBER.avatar) ca.innerHTML=`<img src="${MEMBER.avatar}">`; else ca.textContent=MEMBER.short[0]||'?'; }
   // 目標カード
   const gt = document.getElementById('goal-text');
   if(gt) gt.textContent = MEMBER.goal || '目標を設定してください →';
+  // プログレスバー
+  updateGoalProgress();
   // settingsのinitial文字
   const tb2 = document.getElementById('topbar-avatar-inner');
   if(tb2 && !MEMBER.avatar) tb2.textContent = MEMBER.short[0]||'?';
@@ -2286,6 +3225,9 @@ function initApp(){
   if(ha2 && !MEMBER.avatar) ha2.textContent = MEMBER.short[0]||'?';
   const sp2 = document.getElementById('avatar-preview-inner');
   if(sp2 && !MEMBER.avatar) sp2.textContent = MEMBER.short[0]||'?';
+  // X-composer アバター
+  const xav = document.getElementById('x-composer-av');
+  if(xav){ if(MEMBER.avatar) xav.innerHTML=`<img src="${MEMBER.avatar}">`; else xav.textContent=MEMBER.short[0]||'?'; }
   setGreeting();
   renderStreakDots();
   renderKPIGrid();
@@ -2326,20 +3268,35 @@ function renderStreakDots(){
 // ── HOME KPI ──
 function renderKPIGrid(){
   const kpis=[
-    { label:'YouTube', sub:'フォロワー数', plat:'#ff4040', val:fmtNum(SNS.yt.sub), delta:'+1,200', up:true },
-    { label:'TikTok',  sub:'フォロワー数', plat:'#69d9d0', val:fmtNum(SNS.tt.sub), delta:'+340',   up:true },
-    { label:'Instagram', sub:'フォロワー数', plat:'#e040fb', val:fmtNum(SNS.ig.sub), delta:'+180', up:true },
-    { label:'X',       sub:'フォロワー数', plat:'#c8c8c8', val:fmtNum(SNS.x.sub),  delta:'+90',    up:true },
+    { label:'YouTube',   sub:'フォロワー数', plat:'#ff4040', val:fmtNum(SNS.yt.sub), rawVal:SNS.yt.sub, delta:'+1,200', up:true },
+    { label:'TikTok',    sub:'フォロワー数', plat:'#69d9d0', val:fmtNum(SNS.tt.sub), rawVal:SNS.tt.sub, delta:'+340',   up:true },
+    { label:'Instagram', sub:'フォロワー数', plat:'#e040fb', val:fmtNum(SNS.ig.sub), rawVal:SNS.ig.sub, delta:'+180',   up:true },
+    { label:'X',         sub:'フォロワー数', plat:'#c8c8c8', val:fmtNum(SNS.x.sub),  rawVal:SNS.x.sub,  delta:'+90',    up:true },
   ];
-  document.getElementById('kpi-grid').innerHTML=kpis.map(k=>`
-    <div class="kpi-card">
+  document.getElementById('kpi-grid').innerHTML=kpis.map((k,i)=>`
+    <div class="kpi-card" style="animation:pageIn .8s ${i*120}ms cubic-bezier(.2,0,.4,1) both">
       <div class="kpi-card-label">
         <span class="kpi-plat" style="background:${k.plat}"></span>${k.label}
       </div>
       <div class="kpi-card-sub">${k.sub}</div>
-      <div class="kpi-card-val">${k.val}</div>
+      <div class="kpi-card-val" data-final="${k.rawVal}">0</div>
       <div class="kpi-card-delta ${k.up?'up':'dn'}">${k.delta} 先月比</div>
     </div>`).join('');
+  // カウントアップ
+  setTimeout(()=>{
+    document.querySelectorAll('.kpi-card-val[data-final]').forEach(el=>{
+      const final = parseInt(el.dataset.final)||0;
+      const dur = 900, step = 16;
+      const steps = dur/step;
+      let cur = 0;
+      const t = setInterval(()=>{
+        cur++;
+        const v = Math.round(final*(cur/steps));
+        el.textContent = fmtNum(v);
+        if(cur>=steps){ el.textContent=fmtNum(final); clearInterval(t); }
+      },step);
+    });
+  },100);
 }
 
 // ── RADAR ──
@@ -2356,6 +3313,27 @@ function getRadarData(){
 }
 function getScore(norm){ return Math.round(norm.reduce((s,v)=>s+v,0)/norm.length); }
 function getGrade(s){ return s>=80?{g:'S',c:'#c8ff00'}:s>=65?{g:'A',c:'#00f0ff'}:s>=50?{g:'B',c:'#9f6fff'}:s>=35?{g:'C',c:'#ffb700'}:{g:'D',c:'#ff3d80'}; }
+
+function showStatsEmpty(){
+  // データが全部0のとき「準備中」表示
+  const total = SNS.yt.sub+SNS.tt.sub+SNS.ig.sub+SNS.x.sub;
+  const radarCard = document.querySelector('.radar-card');
+  const lineCard  = document.querySelector('.line-card');
+  const empty = document.getElementById('stats-empty');
+  if(total === 0){
+    if(radarCard) radarCard.style.display='none';
+    if(lineCard)  lineCard.style.display='none';
+    document.querySelector('.period-tabs').style.display='none';
+    document.querySelector('.metric-scroll')?.style && (document.querySelector('.metric-scroll').style.display='none');
+    if(empty) empty.style.display='block';
+    return true;
+  }
+  if(radarCard) radarCard.style.display='';
+  if(lineCard)  lineCard.style.display='';
+  document.querySelector('.period-tabs').style.display='';
+  if(empty) empty.style.display='none';
+  return false;
+}
 
 function initRadar(){
   const norm=getRadarData();
@@ -2567,23 +3545,48 @@ function renderCommStats(){
     </div>`).join('');
 }
 function renderFeed(){
-  document.getElementById('feed').innerHTML=appState.posts.map((p,i)=>`
-    <div class="post-card" style="animation:pageIn .35s ${i*50}ms ease both">
-      <div class="post-head">
-        <div class="post-av" style="background:${p.color}">${p.av}</div>
-        <div>
-          <div class="post-nm">${p.name}</div>
-          <div class="post-tm">${p.time}</div>
+  const el = document.getElementById('feed');
+  if(!el) return;
+  el.innerHTML = appState.posts.map((p,i)=>{
+    const avHtml = (!p.isDummy && MEMBER.avatar)
+      ? `<img src="${MEMBER.avatar}">`
+      : p.av;
+    const achHtml = p.ach ? `
+      <div class="post-ach">
+        <span class="ach-icon">${p.ach.icon}</span>
+        <div class="ach-info">
+          <div class="ach-label">${p.ach.label}</div>
+          <div class="ach-val">${p.ach.val}</div>
         </div>
-        <span class="post-bdg" style="background:${p.badgeColor}18;color:${p.badgeColor};border:1px solid ${p.badgeColor}28;">${p.badge}</span>
+      </div>` : '';
+    return `
+    <div class="post-card" style="animation:pageIn .4s ${i*35}ms ease both">
+      <div class="post-avatar" style="background:${p.color}22;color:${p.color}">${avHtml}</div>
+      <div class="post-body">
+        <div class="post-header">
+          <span class="post-name">${p.name}</span>
+          <span class="post-badge" style="background:${p.badgeColor}22;color:${p.badgeColor};border:1px solid ${p.badgeColor}44;">${p.badge}</span>
+          <span class="post-time">${p.time}</span>
+        </div>
+        <div class="post-text">${p.text}</div>
+        ${achHtml}
+        <div class="post-actions">
+          <button class="post-like ${p.liked?'liked':''}" onclick="toggleLike(${p.id})">${p.liked?'♥':'♡'} ${p.likes}</button>
+        </div>
+        ${p.comments && p.comments.length ? `
+        <div class="post-comments">
+          ${p.comments.map(c=>`
+            <div class="post-comment">
+              <div class="pc-av" style="background:${c.color}22;color:${c.color}">${c.av}</div>
+              <div class="pc-body">
+                <div class="pc-name">${c.name}</div>
+                <div class="pc-text">${c.text}</div>
+              </div>
+            </div>`).join('')}
+        </div>` : ''}
       </div>
-      <div class="post-txt">${p.text}</div>
-      ${p.ach?`<div class="post-ach"><span class="ach-ico">${p.ach.icon}</span><div><div class="ach-lbl">${p.ach.label}</div><div class="ach-val">${p.ach.val}</div></div></div>`:''}
-      <div class="post-foot">
-        <button class="react-btn ${p.liked?'liked':''}" onclick="toggleLike(${p.id})">${p.liked?'♥':'♡'} ${p.likes}</button>
-        <button class="react-btn" onclick="showToast('返信機能は近日公開予定')">↩ 返信</button>
-      </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 function toggleLike(id){
   const p=appState.posts.find(x=>x.id===id);
@@ -2592,17 +3595,24 @@ function toggleLike(id){
   renderFeed();
 }
 function submitPost(){
-  const text=document.getElementById('composer-ta').value.trim();
-  if(!text){showToast('テキストを入力してください');return;}
-  appState.posts.unshift({id:Date.now(),name:MEMBER.name,av:MEMBER.short[0]||'?',color:'#c8ff00',time:'たった今',badge:'MEMBER',badgeColor:'rgba(242,240,255,0.3)',text,ach:null,likes:0,liked:false});
+  const raw=document.getElementById('composer-ta').value.trim();
+  if(!raw){showToast('テキストを入力してください');return;}
+  // XSSサニタイズ
+  const text = raw.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const newPost = {id:Date.now(),name:MEMBER.name,av:MEMBER.short[0]||'?',color:'#c8ff00',time:'たった今',badge:'MEMBER',badgeColor:'rgba(242,240,255,0.3)',text,ach:null,likes:0,liked:false,isMe:true,isDummy:false,comments:[]};
+  appState.posts.unshift(newPost);
   document.getElementById('composer-ta').value='';
   renderFeed();
   showToast('投稿しました ✓');
+  // 自動コメントをスケジュール
+  scheduleAutoComment(newPost.id);
 }
 
 // ── SESSIONS ──
 function renderSessionList(){
-  document.getElementById('session-list').innerHTML=SESSIONS_DATA.map(s=>`
+  const slEl=document.getElementById('session-list');
+  if(!slEl) return;
+  slEl.innerHTML=SESSIONS_DATA.map(s=>`
     <div class="session-row ${appState.session===s.id?'sel':''}" onclick="selectSession('${s.id}')">
       <div class="sr-check">SELECTED ✓</div>
       <div class="sr-top">
@@ -2732,6 +3742,13 @@ function goPage(name){
   // 光ラインSE
   const sl = document.getElementById('scan-line-overlay');
   if(sl){ sl.classList.remove('scanning'); void sl.offsetWidth; sl.classList.add('scanning'); }
+  // nav アイコン1回転
+  const navEl = document.getElementById('nav-'+name);
+  if(navEl){
+    const ico = navEl.querySelector('.nav-icon');
+    if(ico){ ico.classList.remove('spin'); void ico.offsetWidth; ico.classList.add('spin');
+      ico.addEventListener('animationend',()=>ico.classList.remove('spin'),{once:true}); }
+  }
 
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -2747,7 +3764,7 @@ function goPage(name){
     prefillSettingsSNS();
   }
   // コミュニティページを開くたびにランダム投稿を先頭に追加
-  if(name==='community') injectRandomPost();
+  if(name==='community' && !_dummyTimer) startDummyTimer();
 }
 
 // ── UTILS ──
