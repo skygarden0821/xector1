@@ -10,1501 +10,8 @@
 <title>XECTOR1 — Member Portal</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;500;700&family=Syne:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg:     #050507;
-  --s1:     #0c0c10;
-  --s2:     #131318;
-  --s3:     #1a1a22;
-  --border: rgba(255,255,255,0.06);
-  --border2:rgba(255,255,255,0.13);
-  --white:  #f2f0ff;
-  --dim:    rgba(242,240,255,0.65);
-  --dim2:   rgba(242,240,255,0.28);
-  --lime:   #c8ff00;
-  --cyan:   #00f0ff;
-  --pink:   #ff3d80;
-  --gold:   #ffb700;
-  --green:  #00ffaa;
-  --purple: #9f6fff;
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html{height:100%;overflow:hidden;overscroll-behavior:none;}
-body{height:100%;overflow:hidden;overscroll-behavior:none;}
-body{background:var(--bg);color:var(--white);font-family:'Syne','Noto Sans JP',sans-serif;font-size:15px;
-  overscroll-behavior:none;user-select:none;-webkit-font-smoothing:antialiased;}
-
-/* ══ PROFILE SETUP SCREEN ══ */
-#screen-setup{position:fixed;inset:0;z-index:7000;background:var(--bg);
-  overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;}
-#screen-setup.visible{display:block;}
-.setup-wrap{max-width:480px;margin:0 auto;padding:0 20px 80px;}
-.setup-header{padding:40px 0 28px;text-align:center;}
-.setup-logo{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:8px;
-  display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:6px;}
-.setup-eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;
-  text-transform:uppercase;color:var(--lime);margin-bottom:10px;}
-.setup-title{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:3px;
-  line-height:.95;margin-bottom:8px;}
-.setup-title em{color:var(--lime);font-style:normal;}
-.setup-sub{font-size:13px;color:rgba(242,240,255,0.65);line-height:1.75;}
-/* SETUP PROGRESS */
-.setup-progress{display:flex;align-items:center;gap:0;margin:24px 0 32px;}
-.sp-step{flex:1;text-align:center;position:relative;}
-.sp-step::after{content:'';position:absolute;top:13px;left:50%;right:-50%;
-  height:1px;background:var(--border2);}
-.sp-step:last-child::after{display:none;}
-.sp-num{width:26px;height:26px;border-radius:50%;border:1px solid var(--border2);
-  display:flex;align-items:center;justify-content:center;margin:0 auto 5px;
-  font-family:'Space Mono',monospace;font-size:12px;position:relative;z-index:1;
-  background:var(--bg);transition:all .3s;}
-.sp-step.done .sp-num{background:var(--lime);border-color:var(--lime);color:#000;}
-.sp-step.active .sp-num{border-color:var(--lime);color:var(--lime);
-  box-shadow:0 0 10px rgba(200,255,0,0.25);}
-.sp-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;
-  text-transform:uppercase;color:var(--dim);transition:color .3s;}
-.sp-step.active .sp-label,.sp-step.done .sp-label{color:var(--lime);}
-/* SETUP PANELS */
-.setup-panel{display:none;animation:fadeUp .3s ease;}
-.setup-panel.active{display:block;}
-.sp-section-label{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:4px;
-  text-transform:uppercase;color:var(--lime);margin-bottom:6px;}
-.sp-section-title{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:3px;
-  line-height:1;margin-bottom:18px;}
-/* SETUP FIELDS */
-.sf{margin-bottom:14px;}
-.sf label{display:block;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
-  text-transform:uppercase;color:var(--dim);margin-bottom:5px;}
-.sf label .req{color:var(--lime);margin-left:2px;}
-.sf label .opt{color:var(--dim2);font-size:9px;margin-left:4px;}
-.sf input,.sf select,.sf textarea{width:100%;background:var(--s1);
-  border:1px solid var(--border);border-radius:2px;padding:12px 14px;
-  color:var(--white);font-family:'Noto Sans JP',sans-serif;font-size:16px;outline:none;
-  transition:border-color .2s;}
-.sf input:focus,.sf select:focus,.sf textarea:focus{border-color:var(--border2);}
-.sf input.valid{border-color:rgba(0,255,170,0.35);}
-.sf input.invalid{border-color:rgba(255,68,68,0.35);}
-.sf textarea{resize:none;min-height:72px;line-height:1.6;}
-.sf select{cursor:pointer;appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(242,240,255,.3)'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 12px center;}
-.sf-hint{font-size:10px;color:var(--dim);margin-top:4px;letter-spacing:.3px;}
-.sf-err{font-family:'Space Mono',monospace;font-size:12px;color:#ff4444;
-  margin-top:4px;letter-spacing:1px;display:none;}
-.sf-err.show{display:block;}
-.sf-ok{font-family:'Space Mono',monospace;font-size:12px;color:var(--green);
-  margin-top:4px;letter-spacing:1px;display:none;}
-.sf-ok.show{display:block;}
-.sf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-/* GENRE PILLS */
-.genre-pills{display:flex;flex-wrap:wrap;gap:6px;}
-.gpill{background:var(--s1);border:1px solid var(--border);border-radius:20px;
-  padding:5px 12px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
-  text-transform:uppercase;color:var(--dim);cursor:pointer;transition:all .2s;}
-.gpill.sel{background:rgba(200,255,0,0.08);border-color:var(--lime);color:var(--lime);}
-/* SNS BLOCKS */
-.sns-setup-block{background:var(--s1);border:1px solid var(--border);
-  border-radius:2px;padding:16px 18px;margin-bottom:8px;transition:border-color .2s;}
-.sns-setup-block.has-url{border-color:rgba(200,255,0,0.2);}
-.ssb-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
-.ssb-icon{width:28px;height:28px;border-radius:5px;display:flex;align-items:center;
-  justify-content:center;font-size:14px;flex-shrink:0;}
-.ssb-name{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;}
-.ssb-badge{margin-left:auto;font-family:'Space Mono',monospace;font-size:10px;
-  letter-spacing:1px;padding:2px 6px;border-radius:2px;
-  background:var(--s2);color:var(--dim);}
-.ssb-badge.ok{background:rgba(200,255,0,0.08);color:var(--lime);
-  border:1px solid rgba(200,255,0,0.2);}
-.url-wrap{position:relative;}
-.url-wrap input{padding-right:32px;}
-.url-chk{position:absolute;right:12px;top:50%;transform:translateY(-50%);
-  font-size:13px;pointer-events:none;}
-/* SETUP BUTTONS */
-.btn-setup-next{width:100%;background:var(--lime);color:#000;border:none;
-  border-radius:2px;padding:14px;font-family:'Bebas Neue',sans-serif;
-  font-size:22px;letter-spacing:4px;cursor:pointer;transition:all .2s;margin-top:6px;}
-.btn-setup-next:hover{filter:brightness(1.08);}
-.btn-setup-next:disabled{opacity:.3;pointer-events:none;}
-.btn-setup-back{width:100%;background:transparent;color:var(--dim);
-  border:1px solid var(--border);border-radius:2px;padding:11px;
-  font-family:'Space Mono',monospace;font-size:12px;letter-spacing:3px;
-  text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:6px;}
-.btn-setup-back:hover{border-color:var(--border2);color:var(--white);}
-/* CONFIRM ROWS */
-.conf-block{background:var(--s1);border:1px solid var(--border);
-  border-radius:2px;padding:4px 18px;margin-bottom:14px;}
-.conf-row{display:flex;justify-content:space-between;align-items:flex-start;
-  padding:10px 0;border-bottom:1px solid var(--border);}
-.conf-row:last-child{border-bottom:none;}
-.conf-l{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
-  text-transform:uppercase;color:var(--dim);min-width:80px;flex-shrink:0;}
-.conf-v{font-size:12px;font-weight:600;text-align:right;word-break:break-all;margin-left:12px;}
-.conf-url{font-family:'Space Mono',monospace;font-size:12px;color:var(--lime);
-  text-align:right;word-break:break-all;margin-left:12px;}
-
-/* ── NOISE ── */
-body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");opacity:.5;}
-
-/* ── AMBIENT ── */
-.ambient{position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:
-    radial-gradient(ellipse 70% 50% at 10% 0%,  rgba(200,255,0,0.05) 0%,transparent 65%),
-    radial-gradient(ellipse 50% 60% at 90% 90%, rgba(0,240,255,0.03) 0%,transparent 65%),
-    radial-gradient(ellipse 40% 40% at 55% 45%, rgba(159,111,255,0.02) 0%,transparent 60%);}
-
-/* ══════════════════════════════
-   LOGIN SCREEN
-══════════════════════════════ */
-/* ══ LOGIN SCREEN ══ */
-#screen-login{
-  position:fixed;inset:0;z-index:8000;
-  display:flex;align-items:center;justify-content:center;
-  background:#020203;
-  opacity:0;
-  animation:loginFadeIn 1.8s cubic-bezier(.4,0,.2,1) .1s forwards;
-  transition:opacity 1.4s cubic-bezier(.4,0,.2,1), filter 1.4s ease;
-}
-@keyframes loginFadeIn{
-  0%  {opacity:0;}
-  100%{opacity:1;}
-}
-#screen-login.out{
-  opacity:0;
-  filter:brightness(2);
-  transition:opacity 1.2s cubic-bezier(.4,0,.2,1), filter 1.2s ease;
-  pointer-events:none;
-}
-
-/* 背景の極細グリッド */
-#screen-login::before{
-  content:'';position:absolute;inset:0;z-index:0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
-  background-size:60px 60px;
-  animation:gridFade 2.4s ease forwards;
-}
-@keyframes gridFade{from{opacity:0;}to{opacity:1;}}
-
-/* ライムのエアグロー — 極めて繊細 */
-.login-glow{
-  position:absolute;top:50%;left:50%;
-  transform:translate(-50%,-62%);
-  width:900px;height:600px;
-  background:radial-gradient(ellipse at 50% 40%,
-    rgba(200,255,0,0.055) 0%,
-    rgba(200,255,0,0.02) 30%,
-    transparent 70%);
-  pointer-events:none;
-  animation:glowPulse 6s ease-in-out infinite alternate;
-}
-@keyframes glowPulse{
-  from{opacity:.7;transform:translate(-50%,-62%) scale(1);}
-  to  {opacity:1; transform:translate(-50%,-62%) scale(1.06);}
-}
-
-/* 水平ラインのスキャン演出 */
-#screen-login::after{
-  content:'';position:absolute;top:0;left:0;right:0;height:1px;z-index:2;
-  background:linear-gradient(90deg,transparent,rgba(200,255,0,0.25),transparent);
-  animation:scanLine 3.5s cubic-bezier(.4,0,.2,1) 0.5s both;
-}
-@keyframes scanLine{
-  0%  {top:0%;   opacity:0;}
-  10% {opacity:1;}
-  90% {opacity:.4;}
-  100%{top:100%; opacity:0;}
-}
-
-.login-wrap{
-  width:100%;max-width:390px;padding:0 28px;
-  position:relative;z-index:1;
-}
-
-/* ロゴ — 極ゆっくり呼吸から浮かびあがる */
-.login-logo{text-align:center;margin-bottom:52px;width:100%;padding:0 24px;box-sizing:border-box;}
-.login-logo-mark{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:min(11vw, 56px);
-  letter-spacing:6px;
-  color:var(--white);display:block;line-height:1;
-  white-space:nowrap;
-  opacity:0;
-  animation:logoMaterialize 2.4s cubic-bezier(.16,1,.3,1) .6s forwards;
-}
-@keyframes logoMaterialize{
-  0%  {opacity:0;letter-spacing:14px;filter:blur(12px);}
-  40% {opacity:.6;filter:blur(2px);letter-spacing:10px;}
-  100%{opacity:1;letter-spacing:6px;filter:blur(0);}
-}
-.login-logo-sub{
-  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:6px;
-  color:var(--lime);text-transform:uppercase;margin-top:8px;
-  opacity:0;
-  animation:subReveal 1.6s ease 1.6s forwards;
-}
-@keyframes subReveal{
-  0%  {opacity:0;letter-spacing:14px;}
-  100%{opacity:1;letter-spacing:6px;}
-}
-
-/* カード — ゆっくり浮かぶ */
-.login-card{
-  background:rgba(12,12,16,0.8);
-  border:1px solid rgba(255,255,255,0.07);
-  padding:40px 36px;
-  backdrop-filter:blur(20px);
-  opacity:0;
-  transform:translateY(20px);
-  animation:cardRise 1.4s cubic-bezier(.16,1,.3,1) 1.2s forwards;
-}
-@keyframes cardRise{
-  0%  {opacity:0;transform:translateY(20px);}
-  100%{opacity:1;transform:translateY(0);}
-}
-
-.login-eyebrow{
-  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:4px;
-  color:var(--dim);text-transform:uppercase;margin-bottom:32px;
-  display:flex;align-items:center;gap:12px;
-}
-.login-eyebrow::before{
-  content:'';flex:1;height:1px;
-  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.1));
-}
-.login-eyebrow::after{
-  content:'';flex:1;height:1px;
-  background:linear-gradient(270deg, transparent, rgba(255,255,255,0.1));
-}
-
-.lf{margin-bottom:18px;}
-.lf label{
-  display:block;font-family:'Space Mono',monospace;font-size:7.5px;
-  letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-bottom:8px;
-}
-.lf input{
-  width:100%;background:rgba(5,5,7,0.9);
-  border:1px solid rgba(255,255,255,0.08);
-  border-bottom:1px solid rgba(255,255,255,0.18);
-  padding:14px 16px;color:var(--white);
-  font-family:'Syne',sans-serif;font-size:16px;
-  outline:none;
-  transition:border-color .4s ease, background .4s ease;
-  border-radius:0;
-}
-.lf input:focus{
-  border-color:rgba(255,255,255,0.15);
-  border-bottom-color:rgba(200,255,0,0.5);
-  background:rgba(8,8,12,0.95);
-}
-.lf input::placeholder{color:rgba(242,240,255,0.15);}
-
-.btn-login{
-  width:100%;
-  background:transparent;
-  border:1px solid rgba(200,255,0,0.4);
-  color:var(--lime);
-  padding:17px;margin-top:32px;
-  font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:7px;
-  cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:16px;
-  position:relative;overflow:hidden;
-  transition:border-color .5s ease, color .3s ease, letter-spacing .3s ease;
-}
-.btn-login::before{
-  content:'';position:absolute;inset:0;
-  background:var(--lime);
-  transform:translateX(-101%);
-  transition:transform .5s cubic-bezier(.4,0,.2,1);
-}
-.btn-login:hover{
-  border-color:var(--lime);
-  color:#000;letter-spacing:9px;
-}
-.btn-login:hover::before{transform:translateX(0);}
-.btn-login span{position:relative;z-index:1;transition:transform .3s ease;}
-.btn-login:hover span{transform:translateX(4px);}
-
-.login-footer{
-  text-align:center;margin-top:24px;
-  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
-  color:rgba(242,240,255,0.15);
-  opacity:0;
-  animation:subReveal 1s ease 2s forwards;
-}
-
-/* ══════════════════════════════
-   APP SHELL
-══════════════════════════════ */
-#app{
-  position:fixed;inset:0;z-index:100;
-  display:none;flex-direction:column;
-}
-#app.visible{display:flex;}
-#app{opacity:0;transition:opacity 1.0s cubic-bezier(.4,0,.2,1);}
-#app.visible{display:flex;animation:appReveal 1.0s cubic-bezier(.4,0,.2,1) forwards;}
-@keyframes appReveal{from{opacity:0;}to{opacity:1;}}
-
-/* TOP BAR */
-.app-topbar{
-  height:64px;flex-shrink:0;
-  background:rgba(5,5,7,0.95);backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 20px;
-  padding-top:env(safe-area-inset-top,0);
-}
-.topbar-logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:6px;
-  display:flex;align-items:center;gap:10px;}
-.topbar-dot{width:7px;height:7px;border-radius:50%;background:var(--lime);
-  box-shadow:0 0 8px var(--lime);animation:pulse 2s ease-in-out infinite;}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);}}
-.topbar-right{display:flex;align-items:center;gap:12px;}
-.topbar-member{font-family:'Space Mono',monospace;font-size:13px;letter-spacing:1px;color:var(--dim);}
-.topbar-badge{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
-  background:rgba(200,255,0,0.08);border:1px solid rgba(200,255,0,0.2);
-  color:var(--lime);padding:3px 8px;border-radius:2px;}
-
-/* CONTENT AREA */
-.app-content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative;overscroll-behavior:none;}
-.app-content::-webkit-scrollbar{width:3px;}
-.app-content::-webkit-scrollbar-track{background:transparent;}
-.app-content::-webkit-scrollbar-thumb{background:rgba(200,255,0,0.3);border-radius:2px;}
-.app-content::-webkit-scrollbar-thumb:active{background:rgba(200,255,0,0.6);}
-
-/* BOTTOM NAV */
-.app-nav{
-  flex-shrink:0;
-  background:rgba(8,8,10,0.97);backdrop-filter:blur(24px);
-  border-top:1px solid var(--border);
-  display:flex;align-items:stretch;
-  padding-bottom:calc(var(--safe-bottom) + 4px);
-  padding-top:2px;
-}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;gap:4px;padding:8px 4px 6px;
-  cursor:pointer;transition:all .2s;border:none;background:transparent;
-  position:relative;}
-.nav-item::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;
-  background:var(--lime);border-radius:0 0 2px 2px;opacity:0;transition:opacity .2s;}
-.nav-item.active::before{opacity:1;}
-.nav-icon{font-size:19px;transition:transform .2s;display:inline-block;}
-.nav-item.active .nav-icon{transform:scale(1.1);}
-.nav-icon.spin{animation:navSnap .28s cubic-bezier(.34,1.56,.64,1);}
-.nav-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;
-  text-transform:uppercase;color:var(--dim);transition:color .2s;}
-.nav-item.active .nav-label{color:var(--lime);}
-
-/* ── PAGE SYSTEM ── */
-.page{display:none;min-height:100%;animation:pageIn 1.0s cubic-bezier(.2,0,.4,1);}
-.page.active{display:block;}
-@keyframes pageIn{0%{opacity:0;transform:translateY(16px);filter:blur(4px);}40%{opacity:.3;}100%{opacity:1;transform:translateY(0);filter:blur(0);}}
-
-/* ── SCAN LINE（ページ切り替えSE） ── */
-.scan-line-overlay{
-  position:fixed;top:0;left:0;right:0;height:3px;z-index:9000;
-  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.55) 40%,rgba(200,255,0,0.4) 60%,transparent 100%);
-  pointer-events:none;
-  transform:translateY(-4px);
-  opacity:0;
-}
-.scan-line-overlay.scanning{
-  animation:scanPageLine 1.1s cubic-bezier(.2,0,.6,1) forwards;
-}
-@keyframes scanPageLine{
-  0%  {top:0%;   opacity:0;}
-  6%  {opacity:1;}
-  80% {opacity:.4;}
-  100%{top:100vh;opacity:0;}
-}
-
-/* ══════════════════════════════
-   SHARED COMPONENTS
-══════════════════════════════ */
-.section-pad{padding:28px 20px;}
-.eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;
-  text-transform:uppercase;color:var(--lime);margin-bottom:10px;
-  display:flex;align-items:center;gap:8px;}
-.eyebrow::before{content:'';width:16px;height:1px;background:var(--lime);}
-.big-title{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:3px;
-  line-height:.92;margin-bottom:12px;}
-.big-title em{color:var(--lime);font-style:normal;}
-.section-sub{font-size:14px;color:rgba(242,240,255,0.7);line-height:1.75;letter-spacing:0;font-weight:400;}
-
-.card{background:var(--s1);border:1px solid var(--border);transition:border-color .2s;}
-.card:hover{border-color:var(--border2);}
-
-.tag{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
-  padding:3px 8px;border-radius:2px;display:inline-block;}
-.tag-lime{background:rgba(200,255,0,0.08);border:1px solid rgba(200,255,0,0.2);color:var(--lime);}
-.tag-cyan{background:rgba(0,240,255,0.08);border:1px solid rgba(0,240,255,0.2);color:var(--cyan);}
-.tag-pink{background:rgba(255,61,128,0.08);border:1px solid rgba(255,61,128,0.2);color:var(--pink);}
-.tag-dim{background:var(--s2);border:1px solid var(--border);color:var(--dim);}
-
-/* ══════════════════════════════
-   HOME PAGE
-══════════════════════════════ */
-.home-hero{padding:28px 20px 20px;position:relative;overflow:hidden;}
-.home-hero-bg{position:absolute;inset:0;
-  background:radial-gradient(ellipse 100% 100% at 80% 0%, rgba(200,255,0,0.05) 0%,transparent 60%);
-  pointer-events:none;}
-.home-greeting{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:3px;
-  color:var(--dim);text-transform:uppercase;margin-bottom:8px;}
-.home-name{font-family:'Noto Sans JP','Bebas Neue',sans-serif;font-size:38px;font-weight:900;letter-spacing:1px;line-height:1.1;}
-.home-name em{color:var(--lime);font-style:normal;}
-.home-since{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
-  color:var(--dim);margin-top:6px;}
-
-/* STREAK */
-.streak-block{margin:0 20px 2px;background:var(--s1);border:1px solid var(--border);
-  padding:16px 20px;display:flex;align-items:center;gap:16px;}
-.streak-num{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:1px;
-  color:var(--lime);line-height:1;flex-shrink:0;}
-.streak-label{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
-  text-transform:uppercase;color:rgba(242,240,255,0.6);margin-bottom:6px;}
-.streak-dots{display:flex;gap:4px;flex-wrap:wrap;}
-.sd{width:8px;height:8px;border-radius:50%;background:var(--s3);}
-.sd.on{background:var(--lime);box-shadow:0 0 4px var(--lime);}
-
-/* KPI GRID */
-.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:2px 20px;}
-.kpi-card{background:var(--s1);border:1px solid var(--border);padding:16px 16px 14px;}
-.kpi-card-label{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1.5px;
-  text-transform:uppercase;color:rgba(242,240,255,0.6);margin-bottom:6px;
-  display:flex;align-items:center;gap:6px;}
-.kpi-plat{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-.kpi-card-sub{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;
-  color:rgba(242,240,255,0.3);margin-bottom:4px;}
-.kpi-card-val{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:1px;line-height:1;color:var(--white);}
-.kpi-card-delta{font-family:'Space Mono',monospace;font-size:12px;margin-top:5px;letter-spacing:1px;font-weight:700;}
-.kpi-card-delta.up{color:#00ffaa;}
-.kpi-card-delta.dn{color:var(--pink);}
-
-/* ACTION LIST */
-.action-list{margin:2px 20px 20px;display:flex;flex-direction:column;gap:2px;}
-.action-row{background:var(--s1);border:1px solid var(--border);
-  padding:16px 20px;display:flex;align-items:center;justify-content:space-between;
-  cursor:pointer;transition:all .2s;}
-.action-row:hover,.action-row:active{background:var(--s2);border-color:var(--border2);}
-.ar-left{}
-.ar-label{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
-  text-transform:uppercase;color:rgba(242,240,255,0.55);margin-bottom:4px;}
-.ar-title{font-family:'Noto Sans JP',sans-serif;font-size:17px;font-weight:700;color:var(--white);letter-spacing:0;}
-.ar-arrow{font-size:18px;color:var(--dim);transition:all .2s;}
-.action-row:hover .ar-arrow{color:var(--lime);transform:translateX(3px);}
-
-/* ══════════════════════════════
-   STATS PAGE
-══════════════════════════════ */
-.stats-header{padding:28px 20px 16px;}
-
-/* RADAR */
-.radar-card{margin:0 20px 2px;background:var(--s1);border:1px solid var(--border);padding:20px;}
-.rc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.rc-title{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;
-  text-transform:uppercase;color:var(--dim);}
-.rc-score{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:1px;
-  line-height:1;color:var(--lime);}
-.rc-grade{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:1px;color:rgba(242,240,255,0.65);margin-top:2px;font-weight:700;}
-.radar-wrap{height:240px;display:flex;align-items:center;justify-content:center;}
-
-/* CHART PERIOD TABS */
-.period-tabs{display:flex;gap:2px;margin:0 20px 2px;}
-.pt{flex:1;background:var(--s1);border:1px solid var(--border);
-  padding:9px 4px;text-align:center;cursor:pointer;transition:all .2s;
-  font-family:'Space Mono',monospace;font-size:12px;letter-spacing:2px;color:var(--dim);}
-.pt.active{background:var(--lime);border-color:var(--lime);color:#000;}
-
-/* LINE CHART */
-.line-card{margin:0 20px 2px;background:var(--s1);border:1px solid var(--border);padding:20px;}
-.lc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
-.lc-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;}
-.lc-sub{font-size:12px;color:rgba(242,240,255,0.6);}
-.lc-wrap{height:160px;}
-
-/* KPI METRIC SCROLL */
-.metric-scroll{display:flex;gap:2px;margin:0 20px 2px;overflow-x:auto;padding-bottom:2px;}
-.metric-scroll::-webkit-scrollbar{display:none;}
-.metric-chip{background:var(--s1);border:1px solid var(--border);
-  padding:12px 16px;flex-shrink:0;cursor:pointer;transition:all .2s;min-width:110px;}
-.metric-chip.active{border-color:var(--lime);background:rgba(200,255,0,0.05);}
-.mc-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;
-  text-transform:uppercase;color:var(--dim);margin-bottom:6px;}
-.mc-val{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;line-height:1;}
-
-/* INPUT FORM */
-.input-form{margin:2px 20px 20px;}
-.platform-block{background:var(--s1);border:1px solid var(--border);
-  padding:20px;margin-bottom:2px;position:relative;}
-.platform-block::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  opacity:0;transition:opacity .3s;}
-.platform-block:focus-within::before{opacity:1;}
-.pb-yt::before{background:var(--pink);}
-.pb-tt::before{background:var(--cyan);}
-.pb-ig::before{background:var(--purple);}
-.pb-x::before{background:var(--dim);}
-.pb-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
-.pb-icon{width:30px;height:30px;border-radius:6px;
-  display:flex;align-items:center;justify-content:center;font-size:14px;}
-.pb-name{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;}
-.pb-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.pf label{display:block;font-family:'Space Mono',monospace;font-size:10px;
-  letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:4px;}
-.pf input{width:100%;background:var(--bg);border:1px solid var(--border);
-  padding:9px 10px;color:var(--white);font-family:'Space Mono',monospace;font-size:12px;
-  outline:none;transition:border-color .2s;border-radius:1px;
-  -moz-appearance:textfield;}
-.pf input::-webkit-outer-spin-button,.pf input::-webkit-inner-spin-button{-webkit-appearance:none;}
-.pf input:focus{border-color:var(--border2);}
-.pf input::placeholder{color:var(--dim2);}
-
-.btn-save{width:100%;background:var(--lime);color:#000;border:none;
-  padding:15px;margin-top:4px;
-  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:5px;
-  cursor:pointer;transition:all .2s;}
-.btn-save:active{transform:scale(.98);}
-
-/* ══════════════════════════════
-   TIPS PAGE
-══════════════════════════════ */
-.tips-header{padding:28px 20px 16px;}
-.filter-row{display:flex;gap:6px;padding:0 20px 16px;overflow-x:auto;}
-.filter-row::-webkit-scrollbar{display:none;}
-.fb{background:transparent;border:1px solid var(--border);
-  padding:6px 12px;white-space:nowrap;
-  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;
-  color:var(--dim);cursor:pointer;transition:all .2s;border-radius:2px;}
-.fb:hover{color:var(--white);border-color:var(--border2);}
-.fb.active{background:var(--lime);border-color:var(--lime);color:#000;}
-
-.tips-list{padding:0 20px 20px;display:flex;flex-direction:column;gap:8px;}
-.tip-row{background:var(--s1);border:1px solid var(--border);
-  display:flex;gap:0;cursor:pointer;transition:all .2s;overflow:hidden;}
-.tip-row:hover,.tip-row:active{background:var(--s2);border-color:var(--border2);}
-.tip-accent{width:3px;flex-shrink:0;}
-.tip-body-wrap{padding:16px 16px 14px;flex:1;}
-.tip-meta-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-.tip-cat-tag{font-family:'Space Mono',monospace;font-size:10px !important;letter-spacing:1px;
-  padding:2px 6px;border-radius:2px;}
-.tip-week-tag{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--dim);}
-.tip-new{background:var(--lime);color:#000;font-family:'Space Mono',monospace;
-  font-size:10px;letter-spacing:1px;padding:2px 5px;border-radius:2px;}
-.tip-title-text{font-family:'Bebas Neue',sans-serif;font-size:20px !important;letter-spacing:2px;
-  line-height:1.1;margin-bottom:6px;}
-.tip-preview{font-size:13px !important;color:rgba(242,240,255,0.65);line-height:1.55;letter-spacing:.2px;}
-.tip-row-icon{width:56px;display:flex;align-items:center;justify-content:center;
-  font-size:24px;flex-shrink:0;border-left:1px solid var(--border);}
-
-/* ══════════════════════════════
-   COMMUNITY PAGE
-══════════════════════════════ */
-.community-header{padding:28px 20px 16px;}
-
-.comm-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:0 20px 16px;}
-.cs-card{background:var(--s1);border:1px solid var(--border);padding:14px 16px;}
-.cs-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;
-  text-transform:uppercase;color:var(--dim);margin-bottom:6px;}
-.cs-val{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;line-height:1;}
-
-.pinned-bar{margin:0 20px 8px;background:rgba(200,255,0,0.05);
-  border:1px solid rgba(200,255,0,0.15);border-left:3px solid var(--lime);
-  padding:12px 16px;}
-.pinned-tag{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;
-  color:var(--lime);text-transform:uppercase;margin-bottom:4px;}
-.pinned-text{font-size:12px;color:var(--white);line-height:1.5;font-weight:500;}
-
-.composer-wrap{margin:0 20px 8px;background:var(--s1);border:1px solid var(--border);padding:16px;}
-.composer-ta{width:100%;background:var(--bg);border:1px solid var(--border);
-  padding:10px 12px;color:var(--white);font-family:'Syne',sans-serif;font-size:12px;
-  resize:none;outline:none;transition:border-color .2s;min-height:64px;border-radius:1px;}
-.composer-ta:focus{border-color:var(--border2);}
-.composer-ta::placeholder{color:var(--dim2);}
-.composer-foot{display:flex;align-items:center;justify-content:flex-end;margin-top:8px;}
-.btn-post{background:var(--lime);color:#000;border:none;
-  padding:8px 18px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:2px;
-  text-transform:uppercase;cursor:pointer;transition:opacity .2s;}
-.btn-post:hover{opacity:.85;}
-
-.feed{padding:0 20px 20px;display:flex;flex-direction:column;gap:6px;}
-.post-card{background:var(--s1);border:1px solid var(--border);padding:18px;}
-.post-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.post-av{width:34px;height:34px;border-radius:50%;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',sans-serif;font-size:14px;color:#000;}
-.post-nm{font-size:12px;font-weight:700;letter-spacing:.3px;}
-.post-tm{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-top:2px;}
-.post-bdg{margin-left:auto;font-family:'Space Mono',monospace;font-size:10px;
-  letter-spacing:1px;padding:2px 6px;border-radius:2px;}
-.post-txt{font-size:12px;color:var(--dim);line-height:1.6;margin-bottom:10px;}
-.post-txt strong{color:var(--white);}
-.post-ach{background:var(--s2);border:1px solid var(--border);
-  padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.ach-ico{font-size:20px;}
-.ach-lbl{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--dim);}
-.ach-val{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;line-height:1.1;}
-.post-foot{display:flex;gap:8px;}
-.react-btn{background:transparent;border:1px solid var(--border);
-  padding:5px 10px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px;
-  color:var(--dim);cursor:pointer;transition:all .2s;border-radius:2px;display:flex;align-items:center;gap:4px;}
-.react-btn:hover,.react-btn:active{border-color:var(--border2);color:var(--white);}
-.react-btn.liked{background:rgba(200,255,0,0.08);border-color:rgba(200,255,0,0.2);color:var(--lime);}
-
-/* ══════════════════════════════
-   BOOK PAGE (Program)
-══════════════════════════════ */
-.book-header{padding:28px 20px 16px;}
-
-.session-list{padding:0 20px;display:flex;flex-direction:column;gap:2px;margin-bottom:16px;}
-.session-row{background:var(--s1);border:1px solid var(--border);
-  padding:18px 20px;cursor:pointer;transition:all .2s;position:relative;}
-.session-row.sel{border-color:var(--lime);background:rgba(200,255,0,0.04);}
-.session-row::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  opacity:0;transition:opacity .2s;}
-.session-row.sel::before{opacity:1;background:var(--lime);}
-.sr-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-.sr-icon{font-size:20px;}
-.sr-type{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;
-  text-transform:uppercase;color:var(--dim);}
-.sr-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;line-height:1;}
-.sr-desc{font-size:11px;color:var(--dim);line-height:1.55;margin-bottom:10px;}
-.sr-bottom{display:flex;align-items:center;justify-content:space-between;}
-.sr-price{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--lime);}
-.sr-dur{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--dim);}
-.sr-check{position:absolute;top:14px;right:16px;
-  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px;
-  color:var(--lime);opacity:0;transition:opacity .2s;}
-.session-row.sel .sr-check{opacity:1;}
-
-/* CALENDAR */
-.cal-wrap{margin:0 20px 2px;background:var(--s1);border:1px solid var(--border);padding:20px;}
-.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
-.cal-nav-btn{background:transparent;border:1px solid var(--border);
-  width:32px;height:32px;color:var(--dim);cursor:pointer;transition:all .2s;font-size:14px;}
-.cal-nav-btn:hover{border-color:var(--border2);color:var(--white);}
-.cal-month{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
-.cal-dh{text-align:center;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;
-  color:var(--dim);padding:4px 0;}
-.cal-c{aspect-ratio:1;display:flex;align-items:center;justify-content:center;
-  font-family:'Space Mono',monospace;font-size:10px;cursor:pointer;
-  transition:all .2s;border-radius:2px;border:1px solid transparent;}
-.cal-c.empty,.cal-c.past{color:var(--dim2);pointer-events:none;}
-.cal-c.avail{color:var(--white);border-color:var(--border);}
-.cal-c.avail:hover{background:var(--s2);}
-.cal-c.slot{color:var(--lime);border-color:rgba(200,255,0,0.2);}
-.cal-c.slot:hover{background:rgba(200,255,0,0.06);}
-.cal-c.sel{background:var(--lime);color:#000;border-color:var(--lime);}
-.cal-c.today{box-shadow:0 0 0 1px rgba(200,255,0,0.35);}
-
-.time-wrap{margin:0 20px 2px;background:var(--s1);border:1px solid var(--border);padding:16px 20px;}
-.tw-title{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;
-  text-transform:uppercase;color:var(--dim);margin-bottom:10px;}
-.tw-date{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;margin-bottom:12px;}
-.time-slots{display:flex;gap:6px;flex-wrap:wrap;}
-.ts{background:var(--bg);border:1px solid var(--border);
-  padding:8px 14px;cursor:pointer;transition:all .2s;
-  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;border-radius:2px;}
-.ts:hover{border-color:var(--border2);}
-.ts.sel{background:rgba(200,255,0,0.1);border-color:rgba(200,255,0,0.3);color:var(--lime);}
-.ts.full{opacity:.3;pointer-events:none;text-decoration:line-through;}
-
-.book-form{margin:0 20px 20px;background:var(--s1);border:1px solid var(--border);padding:20px;}
-.bf-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;margin-bottom:16px;}
-.bf-field{margin-bottom:12px;}
-.bf-field label{display:block;font-family:'Space Mono',monospace;font-size:10px;
-  letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:5px;}
-.bf-field input,.bf-field textarea,.bf-field select{
-  width:100%;background:var(--bg);border:1px solid var(--border);
-  padding:12px 12px;color:var(--white);font-family:'Noto Sans JP',sans-serif;font-size:16px;
-  outline:none;transition:border-color .2s;border-radius:1px;}
-.bf-field textarea{resize:none;min-height:64px;}
-.bf-field input:focus,.bf-field textarea:focus{border-color:var(--border2);}
-
-/* ══════════════════════════════
-   MODALS
-══════════════════════════════ */
-.overlay{position:fixed;inset:0;z-index:7000;background:rgba(0,0,0,0.85);
-  backdrop-filter:blur(12px);display:none;align-items:flex-end;justify-content:center;}
-.overlay.open{display:flex;}
-.sheet{background:var(--s1);border:1px solid var(--border2);
-  border-radius:12px 12px 0 0;width:100%;max-width:600px;
-  max-height:88vh;overflow-y:auto;
-  animation:sheetUp .4s cubic-bezier(.16,1,.3,1);}
-@keyframes sheetUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
-.sheet-handle{width:36px;height:3px;background:var(--border2);
-  border-radius:2px;margin:12px auto 0;}
-.sheet-body{padding:20px 24px 40px;}
-.sheet-close{display:flex;justify-content:flex-end;margin-bottom:12px;}
-.sheet-close button{background:transparent;border:1px solid var(--border);
-  width:32px;height:32px;color:var(--dim);cursor:pointer;font-size:16px;
-  display:flex;align-items:center;justify-content:center;border-radius:2px;}
-
-/* SUCCESS SHEET */
-.success-sheet{padding:40px 24px 60px;text-align:center;}
-.ss-icon{font-size:48px;margin-bottom:16px;}
-.ss-title{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:4px;
-  color:var(--lime);margin-bottom:8px;}
-.ss-sub{font-size:12px;color:var(--dim);line-height:1.6;margin-bottom:24px;}
-.ss-detail{background:var(--s2);border:1px solid var(--border);padding:14px 16px;
-  margin-bottom:24px;text-align:left;}
-.ssd-row{display:flex;justify-content:space-between;padding:5px 0;
-  border-bottom:1px solid var(--border);}
-.ssd-row:last-child{border-bottom:none;}
-.ssd-l{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--dim);}
-.ssd-v{font-size:11px;font-weight:600;}
-.btn-ok{width:100%;background:var(--lime);color:#000;border:none;
-  padding:14px;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px;
-  cursor:pointer;}
-
-/* SHARE CARD SHEET */
-.share-sheet{padding:24px 24px 48px;}
-.share-card-inner{background:linear-gradient(145deg,#0d0d12,#121218);
-  border:1px solid rgba(200,255,0,0.2);border-radius:8px;padding:24px;
-  position:relative;overflow:hidden;margin-bottom:16px;}
-.share-card-inner::before{content:'';position:absolute;top:-60px;right:-60px;
-  width:180px;height:180px;
-  background:radial-gradient(circle,rgba(200,255,0,0.1),transparent 65%);pointer-events:none;}
-.sc-logo{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:5px;
-  color:var(--lime);margin-bottom:4px;}
-.sc-sub{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--dim);margin-bottom:16px;}
-.sc-name{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;line-height:1;margin-bottom:4px;}
-.sc-period{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--dim);margin-bottom:16px;}
-.sc-radar{height:160px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
-.sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
-.sc-stat-l{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--dim);margin-bottom:2px;}
-.sc-stat-v{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;line-height:1;}
-.sc-score-row{border-top:1px solid var(--border);padding-top:12px;
-  display:flex;align-items:center;justify-content:space-between;}
-.sc-score-l{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--dim);}
-.sc-score-v{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;color:var(--lime);}
-.sc-footer-row{display:flex;justify-content:space-between;margin-top:10px;}
-.sc-tag{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--dim);}
-.sc-url{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--lime);}
-.btn-share-dl{width:100%;background:var(--lime);color:#000;border:none;
-  padding:13px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:4px;
-  cursor:pointer;}
-
-/* TOAST */
-.toast{position:fixed;bottom:calc(72px + var(--safe-bottom));left:50%;
-  transform:translateX(-50%) translateY(8px);
-  background:var(--s2);border:1px solid var(--border2);
-  padding:11px 20px;
-  font-family:'Space Mono',monospace;font-size:12px;letter-spacing:2px;color:var(--lime);
-  opacity:0;transition:all .3s;z-index:9500;white-space:nowrap;border-radius:2px;}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-/* エラーバナー（コピペ可・常時表示） */
-.err-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:9600;
-  background:rgba(20,5,5,0.97);border-top:1px solid rgba(255,68,68,0.4);
-  padding:10px 16px;font-family:'Space Mono',monospace;font-size:12px;
-  letter-spacing:1px;color:#ff6666;line-height:1.6;
-  cursor:text;user-select:text;-webkit-user-select:text;word-break:break-all;}
-.err-banner.show{display:block;}
-.err-banner-close{position:absolute;top:8px;right:12px;font-size:16px;
-  cursor:pointer;color:rgba(255,100,100,0.6);line-height:1;}
-
-/* ── TOPBAR AVATAR ── */
-.topbar-avatar{
-  width:48px;height:48px;border-radius:50%;overflow:hidden;
-  border:1.5px solid rgba(200,255,0,0.35);cursor:pointer;
-  flex-shrink:0;transition:border-color .3s;
-  background:var(--s2);
-}
-.topbar-avatar:hover{border-color:var(--lime);}
-.topbar-avatar-inner{
-  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--lime);
-  background:var(--s2);
-}
-.topbar-avatar-inner img{width:100%;height:100%;object-fit:cover;}
-
-/* ── HOME HERO レイアウト ── */
-.home-hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.home-avatar-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;
-  flex-shrink:0;cursor:pointer;padding-top:4px;}
-.home-avatar{
-  width:90px;height:90px;border-radius:50%;overflow:hidden;
-  border:2px solid rgba(200,255,0,0.5);
-  background:var(--s2);transition:border-color .3s;
-  position:relative;
-}
-.home-avatar:hover{border-color:var(--lime);}
-.home-avatar-inner{
-  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--lime);
-  background:var(--s2);
-}
-.home-avatar-inner img{width:100%;height:100%;object-fit:cover;}
-.home-avatar-label{font-family:'Space Mono',monospace;font-size:9px;
-  letter-spacing:2px;color:var(--dim);text-transform:uppercase;}
-
-/* ── GOAL CARD ── */
-.goal-card{
-  margin:20px 20px 0;
-  padding:20px 24px 22px;
-  background:rgba(200,255,0,0.03);
-  border:1px solid rgba(200,255,0,0.12);
-  position:relative;overflow:hidden;
-}
-.goal-card::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(200,255,0,0.04) 0%,transparent 60%);
-  pointer-events:none;
-}
-.goal-card::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,var(--lime),rgba(200,255,0,0.1));
-}
-.goal-eyebrow{
-  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:4px;
-  color:var(--lime);text-transform:uppercase;margin-bottom:10px;opacity:.8;
-  display:flex;align-items:center;gap:8px;
-}
-.goal-eyebrow::before{content:'';width:12px;height:1px;background:var(--lime);}
-.goal-text{
-  font-family:'Noto Sans JP','Bebas Neue',sans-serif;
-  font-size:22px;font-weight:700;letter-spacing:0;
-  color:var(--white);line-height:1.15;
-}
-
-/* ── YOUCANBOOKME ── */
-.book-header{padding:28px 20px 20px;}
-.ycbm-wrap{
-  padding:0 16px;
-}
-#ycbm-iframe{
-  min-height:600px;
-  border-radius:2px;
-}
-
-/* ── SETTINGS PAGE ── */
-#page-settings{padding-bottom:120px;}
-.settings-section{padding:24px 20px;}
-.settings-title{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:3px;margin-bottom:4px;}
-.settings-sub{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--dim);}
-.avatar-editor{display:flex;flex-direction:column;align-items:center;gap:16px;
-  padding:24px 20px;}
-.avatar-preview{
-  width:110px;height:110px;border-radius:50%;overflow:hidden;
-  border:2px solid rgba(200,255,0,0.3);background:var(--s2);
-  position:relative;cursor:pointer;
-}
-.avatar-preview-inner{
-  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--lime);
-}
-.avatar-preview-inner img{width:100%;height:100%;object-fit:cover;}
-.avatar-preview-overlay{
-  position:absolute;inset:0;background:rgba(0,0,0,0.5);
-  display:flex;align-items:center;justify-content:center;
-  opacity:0;transition:opacity .2s;
-  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;color:#fff;
-}
-.avatar-preview:hover .avatar-preview-overlay{opacity:1;}
-.avatar-crop-wrap{
-  width:100%;max-width:340px;
-  background:var(--s1);border:1px solid var(--border);
-  padding:16px;display:none;
-}
-.avatar-crop-wrap.visible{display:block;}
-.crop-canvas-wrap{
-  width:100%;aspect-ratio:1;overflow:hidden;position:relative;
-  background:#000;cursor:crosshair;margin-bottom:12px;
-  touch-action:none;
-}
-#crop-canvas{display:block;width:100%;height:100%;}
-.crop-controls{display:flex;gap:8px;}
-.crop-btn{flex:1;background:var(--s2);border:1px solid var(--border);color:var(--white);
-  padding:10px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
-  cursor:pointer;transition:background .2s;}
-.crop-btn:hover{background:var(--s3);}
-.crop-btn-save{background:var(--lime);color:#000;border-color:var(--lime);}
-.crop-btn-save:hover{filter:brightness(1.1);}
-.goal-edit-wrap{padding:0 20px;}
-/* ── 設定 名前変更フィールド ── */
-.name-edit-wrap{padding:0 20px 0;margin-top:4px;}
-.name-edit-label{
-  display:flex;align-items:center;gap:6px;
-  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;
-  color:rgba(242,240,255,0.5);text-transform:uppercase;margin-bottom:8px;
-}
-.name-edit-label::after{
-  content:'EDITABLE';font-size:9px;letter-spacing:2px;
-  background:rgba(200,255,0,0.1);border:1px solid rgba(200,255,0,0.3);
-  color:var(--lime);padding:1px 5px;border-radius:2px;
-}
-.settings-editable-field{
-  width:100%;background:var(--bg);
-  border:none;border-bottom:2px solid rgba(200,255,0,0.35);
-  padding:12px 12px 12px 36px;color:var(--white);
-  font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;
-  outline:none;transition:border-color .3s;
-  position:relative;
-}
-.settings-editable-field:focus{border-bottom-color:var(--lime);}
-.editable-field-wrap{
-  position:relative;display:flex;align-items:center;
-  background:var(--s1);border:1px solid rgba(200,255,0,0.2);
-  border-bottom:2px solid rgba(200,255,0,0.4);
-  transition:border-color .3s;min-height:54px;
-}
-.editable-field-wrap:focus-within{border-bottom-color:var(--lime);border-color:rgba(200,255,0,0.2);}
-.editable-field-icon{
-  position:absolute;left:12px;font-size:14px;opacity:0.5;pointer-events:none;
-}
-.editable-field-wrap input,.editable-field-wrap textarea{
-  background:transparent;border:none;
-  padding:12px 12px 12px 36px;color:var(--white);width:100%;
-  outline:none;resize:none;
-}
-#settings-name{
-  font-family:'Bebas Neue',sans-serif !important;
-  font-size:26px !important;
-  letter-spacing:2px;
-  color:var(--white) !important;
-  padding:12px 12px 12px 38px !important;
-}
-/* 編集可能ラベル共通 */
-.edit-section-label{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:8px;
-}
-.edit-section-label span{
-  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;
-  color:rgba(242,240,255,0.5);text-transform:uppercase;
-}
-.edit-badge{
-  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;
-  background:rgba(200,255,0,0.08);border:1px solid rgba(200,255,0,0.25);
-  color:var(--lime);padding:2px 6px;border-radius:2px;
-}
-
-.goal-input{
-  width:100%;background:var(--bg);border:1px solid var(--border);
-  border-bottom:1px solid rgba(200,255,0,0.25);
-  padding:14px 16px;color:var(--white);
-  font-family:'Noto Sans JP',sans-serif;font-size:16px;
-  outline:none;resize:none;min-height:80px;
-  transition:border-color .3s;
-}
-.goal-input:focus{border-bottom-color:var(--lime);}
-.goal-save-btn{
-  width:100%;background:transparent;border:1px solid rgba(200,255,0,0.35);
-  color:var(--lime);padding:14px;margin-top:12px;
-  font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:5px;
-  cursor:pointer;transition:all .3s;
-}
-.goal-save-btn:hover{background:var(--lime);color:#000;}
-
-
-/* ── SETTINGS SNS 数値入力 ── */
-.settings-label{
-  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;
-  color:rgba(242,240,255,0.5);text-transform:uppercase;
-  padding:0 20px;
-}
-.settings-sns-wrap{margin-top:8px;}
-.sns-platform-block{
-  margin:0 20px 12px;
-  background:var(--s1);border:1px solid var(--border);
-  padding:14px 16px;
-}
-.sns-plat-header{
-  font-family:'Space Mono',monospace;font-size:12px;letter-spacing:2px;
-  text-transform:uppercase;color:var(--white);
-  display:flex;align-items:center;gap:8px;margin-bottom:12px;
-}
-.sns-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.sns-input-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
-.sns-input-group label{
-  display:block;font-family:'Space Mono',monospace;font-size:10px;
-  letter-spacing:1px;color:rgba(242,240,255,0.4);
-  text-transform:uppercase;margin-bottom:5px;
-}
-.sns-input-group input{
-  width:100%;background:var(--bg);border:1px solid var(--border);
-  border-bottom:1px solid rgba(255,255,255,0.15);
-  padding:9px 10px;color:var(--white);
-  font-family:'Bebas Neue',sans-serif;font-size:20px;
-  outline:none;transition:border-color .3s;
-}
-.sns-input-group input:focus{border-bottom-color:var(--lime);}
-
-
-/* ══ iOS ズーム防止 ══ */
-input, textarea, select {
-  font-size: 16px !important;
-  -webkit-text-size-adjust: 100%;
-}
-input:focus, textarea:focus, select:focus {
-  font-size: 16px !important;
-}
-/* スクロール設定（pull-to-refreshを防ぐ） */
-html, body {
-  overscroll-behavior: none;
-  -webkit-overflow-scrolling: auto;
-  touch-action: pan-x pan-y;
-}
-#app, .app-content {
-  overscroll-behavior: none;
-}
-
-/* COMMUNITY */
-.comm-topbar{
-  padding:16px 20px 12px;
-  border-bottom:1px solid var(--border);
-  position:sticky;top:0;z-index:10;
-  background:rgba(5,5,7,0.92);backdrop-filter:blur(16px);
-}
-.comm-topbar-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;}
-.comm-topbar-sub{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:rgba(242,240,255,0.5);margin-top:2px;}
-
-/* X-like composer */
-.x-composer{
-  display:flex;gap:12px;padding:14px 16px 12px;
-  border-bottom:1px solid var(--border);
-}
-.x-composer-av{
-  width:40px;height:40px;border-radius:50%;flex-shrink:0;
-  background:var(--s2);border:1.5px solid rgba(200,255,0,0.3);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--lime);
-  overflow:hidden;
-}
-.x-composer-av img{width:100%;height:100%;object-fit:cover;}
-.x-composer-right{flex:1;display:flex;flex-direction:column;gap:8px;}
-.x-composer-ta{
-  width:100%;background:transparent;border:none;outline:none;
-  color:var(--white);font-family:'Noto Sans JP',sans-serif;font-size:16px;
-  line-height:1.6;resize:none;min-height:56px;
-  placeholder-color:rgba(242,240,255,0.3);
-}
-.x-composer-ta::placeholder{color:rgba(242,240,255,0.35);}
-.x-composer-foot{display:flex;justify-content:flex-end;
-  border-top:1px solid var(--border);padding-top:8px;}
-.x-post-btn{
-  background:var(--lime);color:#000;border:none;
-  padding:8px 20px;font-family:'Bebas Neue',sans-serif;
-  font-size:16px;letter-spacing:3px;cursor:pointer;
-  border-radius:20px;transition:filter .2s;
-}
-.x-post-btn:hover{filter:brightness(1.08);}
-.x-divider{height:1px;background:var(--border);}
-
-/* X-like post card */
-.feed{padding-bottom:80px;}
-.post-card{
-  display:flex;gap:12px;
-  padding:14px 16px;
-  border-bottom:1px solid var(--border);
-  animation:postSlideIn .5s cubic-bezier(.2,0,.4,1) both;
-}
-@keyframes postSlideIn{
-  0%{opacity:0;transform:translateY(-8px);}
-  100%{opacity:1;transform:translateY(0);}
-}
-.post-av-col{flex-shrink:0;}
-.post-av{
-  width:40px;height:40px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',sans-serif;font-size:16px;color:#000;font-weight:700;
-  overflow:hidden;
-}
-.post-body{flex:1;min-width:0;}
-.post-head{display:flex;align-items:baseline;gap:6px;margin-bottom:4px;flex-wrap:wrap;}
-.post-nm{font-size:15px;font-weight:700;color:var(--white);}
-.post-bdg{
-  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0;
-  padding:2px 7px;border-radius:10px;
-}
-.post-tm{font-family:'Space Mono',monospace;font-size:10px;color:rgba(242,240,255,0.45);margin-left:auto;}
-.post-txt{
-  font-size:15px;line-height:1.72;color:rgba(242,240,255,0.92);
-  margin-bottom:10px;word-break:break-word;font-family:'Noto Sans JP',sans-serif;
-}
-.post-txt strong{color:var(--lime);}
-.post-ach{
-  display:flex;align-items:center;gap:10px;
-  background:rgba(200,255,0,0.05);border:1px solid rgba(200,255,0,0.15);
-  padding:8px 12px;margin-bottom:10px;
-}
-.ach-ico{font-size:20px;}
-.ach-lbl{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;color:rgba(242,240,255,0.5);}
-.ach-val{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--lime);}
-.post-foot{display:flex;gap:16px;}
-.react-btn{
-  background:none;border:none;
-  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px;
-  color:rgba(242,240,255,0.45);cursor:pointer;padding:4px 0;
-  transition:color .2s;display:flex;align-items:center;gap:4px;
-}
-.react-btn:hover,.react-btn.liked{color:var(--pink);}
-
-
-
-/* ══ PROGRAM TABS ══ */
-.program-tabs{
-  display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;
-  margin:0 20px 0;
-}
-.prog-tab{
-  background:var(--s1);border:1px solid var(--border);
-  padding:14px 12px;text-align:left;cursor:pointer;
-  transition:all .25s;display:flex;flex-direction:column;gap:4px;
-}
-.prog-tab.active{
-  background:rgba(200,255,0,0.06);
-  border-color:rgba(200,255,0,0.35);
-  border-bottom:2px solid var(--lime);
-}
-.prog-tab-label{
-  font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;
-  color:var(--white);
-}
-.prog-tab.active .prog-tab-label{color:var(--lime);}
-.prog-tab-desc{
-  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;
-  color:rgba(242,240,255,0.45);
-}
-
-/* ══ STATS PENDING ══ */
-.stats-pending{
-  margin:32px 20px;
-  border:1px solid rgba(255,255,255,0.07);
-  padding:40px 24px;text-align:center;
-}
-.stats-pending-icon{
-  font-size:40px;color:rgba(242,240,255,0.15);margin-bottom:16px;
-}
-.stats-pending-title{
-  font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;
-  color:rgba(242,240,255,0.5);margin-bottom:8px;
-}
-.stats-pending-sub{
-  font-size:13px;color:rgba(242,240,255,0.4);line-height:1.7;margin-bottom:20px;
-}
-.stats-pending-btn{
-  background:transparent;border:1px solid rgba(200,255,0,0.3);
-  color:var(--lime);padding:12px 20px;
-  font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;
-  cursor:pointer;transition:all .3s;
-}
-.stats-pending-btn:hover{background:var(--lime);color:#000;}
-
-/* ══ COMMUNITY X風UI ══ */
-.comm-topbar{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 20px 12px;
-  border-bottom:1px solid var(--border);
-  position:sticky;top:0;background:rgba(5,5,7,0.95);
-  backdrop-filter:blur(16px);z-index:10;
-}
-.comm-topbar-title{
-  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;
-}
-.comm-online{
-  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;
-  color:var(--green);
-}
-.composer-wrap{
-  display:flex;gap:12px;
-  padding:16px 20px;
-  border-bottom:1px solid var(--border);
-}
-.composer-avatar{
-  width:40px;height:40px;border-radius:50%;flex-shrink:0;
-  background:var(--s2);border:1.5px solid rgba(200,255,0,0.3);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--lime);
-  overflow:hidden;
-}
-.composer-avatar img{width:100%;height:100%;object-fit:cover;}
-.composer-right{flex:1;display:flex;flex-direction:column;gap:10px;}
-.composer-ta{
-  width:100%;background:transparent;border:none;
-  color:var(--white);font-family:'Noto Sans JP',sans-serif;font-size:16px;
-  line-height:1.6;resize:none;min-height:70px;outline:none;
-  padding:4px 0;border-bottom:1px solid var(--border);
-}
-.composer-ta::placeholder{color:rgba(242,240,255,0.3);}
-.composer-ta:focus{border-bottom-color:rgba(200,255,0,0.3);}
-.composer-foot{display:flex;justify-content:flex-end;}
-.btn-post{
-  background:var(--lime);color:#000;border:none;
-  padding:9px 22px;
-  font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;
-  border-radius:20px;cursor:pointer;transition:all .2s;
-}
-.btn-post:hover{filter:brightness(1.1);}
-.feed-divider{height:1px;background:var(--border);}
-
-/* ══ X風 post-card ══ */
-.post-card{
-  display:flex;gap:12px;
-  padding:16px 20px;
-  border-bottom:1px solid var(--border);
-  transition:background .15s;
-}
-.post-card:active{background:rgba(255,255,255,0.02);}
-.post-avatar{
-  width:40px;height:40px;border-radius:50%;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',sans-serif;font-size:17px;
-  overflow:hidden;
-}
-.post-avatar img{width:100%;height:100%;object-fit:cover;}
-.post-body{flex:1;min-width:0;}
-.post-header{display:flex;align-items:baseline;gap:8px;margin-bottom:4px;flex-wrap:wrap;}
-.post-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--white);}
-.post-badge{
-  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0px;
-  padding:2px 7px;border-radius:10px;
-}
-.post-time{font-family:'Space Mono',monospace;font-size:10px;color:rgba(242,240,255,0.4);margin-left:auto;}
-.post-text{font-size:15px;color:rgba(242,240,255,0.92);line-height:1.65;margin-bottom:10px;word-break:break-word;}
-.post-ach{
-  background:rgba(200,255,0,0.06);border:1px solid rgba(200,255,0,0.15);
-  border-radius:8px;padding:8px 12px;margin-bottom:10px;
-  display:flex;align-items:center;gap:10px;
-}
-.ach-icon{font-size:20px;}
-.ach-info{}
-.ach-label{font-family:'Space Mono',monospace;font-size:9px;color:var(--lime);margin-bottom:2px;}
-.ach-val{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;}
-.post-actions{display:flex;gap:20px;}
-.post-like{
-  font-family:'Space Mono',monospace;font-size:11px;color:rgba(242,240,255,0.4);
-  background:none;border:none;cursor:pointer;transition:color .2s;padding:4px 0;
-  display:flex;align-items:center;gap:5px;
-}
-.post-like.liked{color:#ff3d80;}
-.post-like:hover{color:var(--white);}
-
-/* ══ NAV アイコン スナップ ══ */
-@keyframes navSnap{
-  0%  {transform:scale(1);  opacity:1;}
-  25% {transform:scale(.65);opacity:.4;}
-  65% {transform:scale(1.28);opacity:1;}
-  100%{transform:scale(1);  opacity:1;}
-}
-.nav-icon.spinning{
-  animation:navSnap .28s cubic-bezier(.34,1.56,.64,1) forwards;
-}
-
-/* ══ 光ライン スロー版 ══ */
-@keyframes scanPageLine{
-  0%  {top:0%;   opacity:0;}
-  6%  {opacity:.9;}
-  88% {opacity:.25;}
-  100%{top:100vh;opacity:0;}
-}
-.scan-line-overlay.scanning{
-  animation:scanPageLine 2.2s cubic-bezier(.2,0,.4,1) forwards;
-}
-
-/* ══ グラフアニメーション ══ */
-@keyframes chartBarIn{
-  from{clip-path:inset(0 0 100% 0);}
-  to  {clip-path:inset(0 0 0% 0);}
-}
-.chart-animate{animation:chartBarIn 1.4s cubic-bezier(.4,0,.2,1) forwards;}
-
-/* ══ 日本語テキスト全体視認性 ══ */
-p, li, .section-sub, .post-text, .composer-ta,
-.stats-pending-sub, .pinned-text, .section-sub {
-  font-size: 15px;
-  line-height: 1.75;
-  color: rgba(242,240,255,0.85);
-  letter-spacing: 0.02em;
-}
-
-
-.program-section-label{
-  font-family:'Space Mono',monospace;font-size:12px;letter-spacing:2px;
-  color:rgba(242,240,255,0.7);
-  padding:20px 20px 10px;
-  border-top:1px solid var(--border);
-  margin-top:8px;
-  font-weight:700;
-}
-
-
-/* ══ 日本語テキスト読みやすさ最優先 ══ */
-:lang(ja), .post-text, .pinned-text, .stats-pending-sub,
-.section-sub, .goal-text, .ar-title, .action-row * {
-  font-family: 'Noto Sans JP', 'Syne', sans-serif;
-  -webkit-font-smoothing: antialiased;
-}
-.post-text {
-  font-size: 15px !important;
-  line-height: 1.75 !important;
-  color: rgba(242,240,255,0.92) !important;
-  font-weight: 400;
-  letter-spacing: 0.01em;
-}
-.post-name { font-weight: 700 !important; font-size: 15px !important; }
-.ar-title {
-  font-size: 20px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.5px !important;
-}
-.ar-label { font-size: 11px !important; }
-.home-name { font-size: 42px !important; }
-.goal-text { font-size: 22px !important; font-family: 'Noto Sans JP','Syne',sans-serif !important; font-weight: 700 !important; }
-.kpi-card-val { font-size: 34px !important; }
-.kpi-card-label { font-size: 11px !important; font-weight: 700 !important; }
-.kpi-card-sub { font-size: 10px !important; }
-.kpi-card-delta { font-size: 11px !important; font-weight: 700 !important; }
-.streak-label { font-size: 12px !important; }
-.home-greeting { font-size: 12px !important; }
-.home-since { font-size: 11px !important; }
-
-
-/* ══ 週次サマリーモーダル ══ */
-#weekly-modal{
-  position:fixed;inset:0;z-index:9800;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(5,5,7,0.85);backdrop-filter:blur(12px);
-  opacity:0;pointer-events:none;
-  transition:opacity .5s ease;
-}
-#weekly-modal.show{opacity:1;pointer-events:all;}
-.wm-box{
-  width:min(400px,90vw);
-  background:var(--s1);
-  border:1px solid rgba(200,255,0,0.2);
-  padding:32px 28px 28px;
-  position:relative;
-  transform:translateY(24px);
-  transition:transform .5s cubic-bezier(.16,1,.3,1);
-}
-#weekly-modal.show .wm-box{transform:translateY(0);}
-.wm-eyebrow{
-  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;
-  color:var(--lime);text-transform:uppercase;margin-bottom:12px;
-  display:flex;align-items:center;gap:8px;
-}
-.wm-eyebrow::before{content:'';width:16px;height:1px;background:var(--lime);}
-.wm-title{
-  font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:2px;
-  line-height:1;margin-bottom:6px;
-}
-.wm-title em{color:var(--lime);font-style:normal;}
-.wm-sub{font-size:13px;color:var(--dim);margin-bottom:24px;line-height:1.6;}
-.wm-items{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
-.wm-item{
-  background:var(--s2);border:1px solid var(--border);
-  padding:14px 16px;
-  display:flex;align-items:center;justify-content:space-between;
-}
-.wm-item-left{display:flex;align-items:center;gap:10px;}
-.wm-item-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.wm-item-plat{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--dim);}
-.wm-item-val{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;line-height:1;}
-.wm-item-delta{
-  font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;
-  color:var(--green);line-height:1;
-}
-.wm-item-delta.dn{color:var(--pink);}
-.wm-close-btn{
-  width:100%;background:var(--lime);color:#000;border:none;
-  padding:15px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:5px;
-  cursor:pointer;transition:filter .2s;
-}
-.wm-close-btn:hover{filter:brightness(1.1);}
-.wm-no-data{
-  font-size:13px;color:var(--dim);text-align:center;padding:20px 0 24px;line-height:1.6;
-}
-
-/* ══ マイルストーン演出 ══ */
-#milestone-overlay{
-  position:fixed;inset:0;z-index:9900;
-  display:flex;align-items:center;justify-content:center;
-  pointer-events:none;opacity:0;
-}
-#milestone-overlay.show{opacity:1;}
-.milestone-box{
-  text-align:center;padding:40px 32px;
-  background:rgba(5,5,7,0.95);border:1px solid rgba(200,255,0,0.4);
-  width:min(360px,88vw);
-  transform:scale(.8);
-  transition:transform .4s cubic-bezier(.16,1,.3,1), opacity .4s ease;
-  opacity:0;position:relative;overflow:hidden;
-}
-#milestone-overlay.show .milestone-box{transform:scale(1);opacity:1;}
-.milestone-icon{font-size:56px;margin-bottom:12px;display:block;}
-.milestone-label{
-  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:4px;
-  color:var(--lime);text-transform:uppercase;margin-bottom:8px;
-}
-.milestone-val{
-  font-family:'Bebas Neue',sans-serif;font-size:56px;letter-spacing:2px;
-  line-height:1;color:var(--lime);margin-bottom:6px;
-}
-.milestone-plat{font-size:14px;color:var(--dim);}
-
-/* ══ コンフェッティ ══ */
-.confetti-piece{
-  position:fixed;width:8px;height:8px;
-  opacity:0;pointer-events:none;z-index:9950;
-  border-radius:1px;
-}
-
-/* ══ 目標プログレスバー ══ */
-.goal-progress-wrap{
-  margin:0 20px 2px;
-  background:var(--s1);border:1px solid rgba(200,255,0,0.12);
-  border-left:3px solid var(--lime);
-  padding:16px 18px;
-  cursor:pointer;
-}
-.goal-progress-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
-.goal-progress-title{
-  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;
-  color:var(--lime);text-transform:uppercase;
-}
-.goal-progress-pct{
-  font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;
-  color:var(--lime);line-height:1;
-}
-.goal-progress-text{
-  font-size:13px;color:rgba(242,240,255,0.7);margin-bottom:12px;
-  line-height:1.4;
-}
-.goal-progress-bar-bg{
-  height:4px;background:rgba(255,255,255,0.08);
-  position:relative;overflow:hidden;
-}
-.goal-progress-bar-fill{
-  height:100%;background:var(--lime);
-  width:0%;
-  transition:width 1.2s cubic-bezier(.4,0,.2,1);
-  box-shadow:0 0 8px rgba(200,255,0,0.5);
-}
-.goal-progress-detail{
-  display:flex;justify-content:space-between;margin-top:8px;
-}
-.gpd-item{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--dim);}
-.gpd-val{color:var(--white);font-weight:700;}
-
-/* ══ 投稿コメント ══ */
-.post-comments{margin-top:10px;border-top:1px solid var(--border);padding-top:10px;display:flex;flex-direction:column;gap:6px;}
-.post-comment{display:flex;gap:8px;align-items:flex-start;}
-.pc-av{width:22px;height:22px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-family:'Bebas Neue',sans-serif;}
-.pc-body{flex:1;}
-.pc-name{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;font-weight:700;margin-bottom:2px;}
-.pc-text{font-size:12px;color:rgba(242,240,255,0.75);line-height:1.5;}
-
-
-@keyframes confettiFall{
-  0%  {transform:translateY(0) rotate(0deg);opacity:1;}
-  80% {opacity:1;}
-  100%{transform:translateY(100vh) rotate(720deg);opacity:0;}
-}
-
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="ambient"></div>
@@ -1518,20 +25,21 @@ p, li, .section-sub, .post-text, .composer-ta,
   <div class="login-wrap">
     <div class="login-logo">
       <span class="login-logo-mark">XECTOR1</span>
-      <span class="login-logo-sub">Member Portal</span>
+      <div class="login-logo-sub">Member Portal</div>
     </div>
     <div class="login-card">
       <div class="login-eyebrow">Limited Access</div>
       <div class="lf">
         <label>Email</label>
-        <input type="email" id="l-email" placeholder="your@email.com">
+        <input type="email" id="l-email" placeholder="your@email.com" autocomplete="email">
       </div>
       <div class="lf">
         <label>Password</label>
-        <input type="password" id="l-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+        <input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
       </div>
       <button class="btn-login" onclick="doLogin()">
-        ENTER PORTAL <span>→</span>
+        <span>ENTER</span>
+        <span style="position:relative;z-index:1">→</span>
       </button>
     </div>
     <div class="login-footer">XECTOR1 — 招待メンバー限定</div>
@@ -1539,7 +47,7 @@ p, li, .section-sub, .post-text, .composer-ta,
 </div>
 
 <!-- ══════════════════════════════
-     PROFILE SETUP SCREEN
+     PROFILE SETUP
 ══════════════════════════════ -->
 <div id="screen-setup">
   <div class="setup-wrap">
@@ -1550,79 +58,75 @@ p, li, .section-sub, .post-text, .composer-ta,
       <div class="setup-sub">ポータルを使い始める前に、あなたの情報を登録してください。<br>SNS URLは正確に入力してください。</div>
     </div>
 
-    <!-- PROGRESS -->
     <div class="setup-progress" id="setup-progress">
       <div class="sp-step active" id="spp-1"><div class="sp-num">1</div><div class="sp-label">基本情報</div></div>
       <div class="sp-step" id="spp-2"><div class="sp-num">2</div><div class="sp-label">SNS</div></div>
       <div class="sp-step" id="spp-3"><div class="sp-num">3</div><div class="sp-label">確認</div></div>
     </div>
 
-    <!-- STEP 1: 基本情報 -->
+    <!-- Step 1: 基本情報 -->
     <div class="setup-panel active" id="sp-1">
       <div class="sp-section-label">Step 01</div>
       <div class="sp-section-title">基本情報</div>
       <div class="sf-row">
         <div class="sf">
-          <label>本名（漢字）<span class="req">*</span></label>
-          <input type="text" id="sp-name" placeholder="山田 太郎" oninput="spValidate('sp-name','name')">
+          <label>本名 <span class="req">*</span></label>
+          <input type="text" id="sp-name" placeholder="田中 雄介" oninput="spValidate('sp-name','name')">
           <div class="sf-err" id="sperr-sp-name">名前を入力してください</div>
         </div>
         <div class="sf">
-          <label>よみがな<span class="req">*</span></label>
-          <input type="text" id="sp-yomi" placeholder="やまだ たろう" oninput="spValidate('sp-yomi','yomi')">
+          <label>よみがな <span class="req">*</span></label>
+          <input type="text" id="sp-yomi" placeholder="たなか ゆうすけ" oninput="spValidate('sp-yomi','yomi')">
           <div class="sf-err" id="sperr-sp-yomi">ひらがなで入力してください</div>
         </div>
       </div>
       <div class="sf">
-        <label>活動名 / 芸名<span class="req">*</span></label>
-        <input type="text" id="sp-stage" placeholder="例：Yoshi / 火日師" oninput="spValidate('sp-stage','req')">
+        <label>活動名（表示名） <span class="req">*</span></label>
+        <input type="text" id="sp-stage" placeholder="Yuu / ゆうくん etc." oninput="spValidate('sp-stage','req')">
         <div class="sf-hint">配信・SNSで使用している名前</div>
         <div class="sf-err" id="sperr-sp-stage">活動名を入力してください</div>
       </div>
       <div class="sf">
-        <label>活動ジャンル<span class="req">*</span></label>
+        <label>ジャンル <span class="req">*</span></label>
         <div class="genre-pills" id="sp-genre-pills"></div>
         <div class="sf-hint" style="margin-top:8px;">複数選択可</div>
       </div>
       <div class="sf">
-        <label>現在の活動状況<span class="req">*</span></label>
-        <select id="sp-status">
-          <option value="">選択してください</option>
+        <label>現在の状況 <span class="req">*</span></label>
+        <select id="sp-status" onchange="spValidate('sp-status','req')">
+          <option value="">--- 選択してください ---</option>
           <option value="just_started">これから始める</option>
-          <option value="under_1k">活動中（1,000フォロワー未満）</option>
-          <option value="1k_10k">活動中（1,000〜10,000フォロワー）</option>
-          <option value="10k_100k">活動中（1万〜10万フォロワー）</option>
-          <option value="over_100k">活動中（10万フォロワー以上）</option>
+          <option value="under_1k">1,000フォロワー未満</option>
+          <option value="1k_10k">1,000〜10,000フォロワー</option>
+          <option value="10k_100k">1万〜10万フォロワー</option>
+          <option value="over_100k">10万フォロワー以上</option>
         </select>
         <div class="sf-err" id="sperr-sp-status">選択してください</div>
       </div>
       <div class="sf">
-        <label>1年後の目標<span class="opt">任意</span></label>
-        <textarea id="sp-goal" placeholder="例：YouTube登録者1万人達成、オリジナル曲リリース..."></textarea>
+        <label>目標 <span class="opt">任意</span></label>
+        <textarea id="sp-goal" placeholder="例：2025年末までにYouTube10万人達成する" style="min-height:60px;"></textarea>
       </div>
-      <button class="btn-setup-next" onclick="spNext(1)">次へ — SNS情報 →</button>
+      <button class="btn-setup-next" onclick="spNext(1)">次へ →</button>
     </div>
 
-    <!-- STEP 2: SNS -->
+    <!-- Step 2: SNS情報 -->
     <div class="setup-panel" id="sp-2">
       <div class="sp-section-label">Step 02</div>
       <div class="sp-section-title">SNS情報</div>
-      <p style="font-size:13px;color:rgba(242,240,255,0.7);line-height:1.75;margin-bottom:18px;">
-        使用しているSNSのプロフィールURLを入力してください。<br>
-        <strong style="color:var(--white)">URLが正確でないと数値の自動取得ができません。</strong>
-      </p>
+      <div style="font-size:13px;color:rgba(242,240,255,0.5);margin-bottom:16px;line-height:1.7;">
+        使っているSNSのURLを入力してください。<br>最低1つ必須です。
+      </div>
 
       <div class="sns-setup-block" id="ssb-yt">
         <div class="ssb-head">
           <div class="ssb-icon" style="background:rgba(255,64,64,0.12)">🎬</div>
           <div class="ssb-name" style="color:#ff4040">YouTube</div>
-          <span class="ssb-badge" id="ssb-badge-yt">未入力</span>
+          <div class="ssb-badge" id="ssb-badge-yt">未入力</div>
         </div>
         <div class="sf">
-          <label>チャンネルURL<span class="opt">任意</span></label>
           <div class="url-wrap">
-            <input type="url" id="sp-yt-url" placeholder="https://www.youtube.com/@channel"
-              oninput="spValidateUrl('yt','youtube.com')">
+            <input type="url" id="sp-yt-url" placeholder="https://youtube.com/@yourchannel" oninput="spValidateUrl('yt','youtube.com')">
             <span class="url-chk" id="urlchk-yt"></span>
           </div>
           <div class="sf-err" id="sperr-yt">youtube.com のURLを入力してください</div>
@@ -1633,13 +137,11 @@ p, li, .section-sub, .post-text, .composer-ta,
         <div class="ssb-head">
           <div class="ssb-icon" style="background:rgba(105,217,208,0.12)">♪</div>
           <div class="ssb-name" style="color:#69d9d0">TikTok</div>
-          <span class="ssb-badge" id="ssb-badge-tt">未入力</span>
+          <div class="ssb-badge" id="ssb-badge-tt">未入力</div>
         </div>
         <div class="sf">
-          <label>プロフィールURL<span class="opt">任意</span></label>
           <div class="url-wrap">
-            <input type="url" id="sp-tt-url" placeholder="https://www.tiktok.com/@account"
-              oninput="spValidateUrl('tt','tiktok.com')">
+            <input type="url" id="sp-tt-url" placeholder="https://tiktok.com/@yourhandle" oninput="spValidateUrl('tt','tiktok.com')">
             <span class="url-chk" id="urlchk-tt"></span>
           </div>
           <div class="sf-err" id="sperr-tt">tiktok.com のURLを入力してください</div>
@@ -1650,13 +152,11 @@ p, li, .section-sub, .post-text, .composer-ta,
         <div class="ssb-head">
           <div class="ssb-icon" style="background:rgba(224,64,251,0.10)">◈</div>
           <div class="ssb-name" style="color:#e040fb">Instagram</div>
-          <span class="ssb-badge" id="ssb-badge-ig">未入力</span>
+          <div class="ssb-badge" id="ssb-badge-ig">未入力</div>
         </div>
         <div class="sf">
-          <label>プロフィールURL<span class="opt">任意</span></label>
           <div class="url-wrap">
-            <input type="url" id="sp-ig-url" placeholder="https://www.instagram.com/account"
-              oninput="spValidateUrl('ig','instagram.com')">
+            <input type="url" id="sp-ig-url" placeholder="https://instagram.com/yourhandle" oninput="spValidateUrl('ig','instagram.com')">
             <span class="url-chk" id="urlchk-ig"></span>
           </div>
           <div class="sf-err" id="sperr-ig">instagram.com のURLを入力してください</div>
@@ -1667,13 +167,11 @@ p, li, .section-sub, .post-text, .composer-ta,
         <div class="ssb-head">
           <div class="ssb-icon" style="background:rgba(180,180,180,0.08)">✕</div>
           <div class="ssb-name" style="color:#aaa">X / Twitter</div>
-          <span class="ssb-badge" id="ssb-badge-x">未入力</span>
+          <div class="ssb-badge" id="ssb-badge-x">未入力</div>
         </div>
         <div class="sf">
-          <label>プロフィールURL<span class="opt">任意</span></label>
           <div class="url-wrap">
-            <input type="url" id="sp-x-url" placeholder="https://x.com/account"
-              oninput="spValidateUrl('x','x.com')">
+            <input type="url" id="sp-x-url" placeholder="https://x.com/yourhandle" oninput="spValidateUrl('x','x.com')">
             <span class="url-chk" id="urlchk-x"></span>
           </div>
           <div class="sf-hint">twitter.com のURLでも可</div>
@@ -1682,25 +180,24 @@ p, li, .section-sub, .post-text, .composer-ta,
       </div>
 
       <div style="background:var(--s1);border:1px solid var(--border);border-radius:2px;
-        padding:12px 14px;margin:12px 0;font-size:11px;color:var(--dim);line-height:1.6;">
-        💡 URLはプロフィール画面を開いてアドレスバーからコピーしてください
+        padding:12px 16px;margin-bottom:16px;font-size:12px;color:rgba(242,240,255,0.5);line-height:1.7;">
+        ℹ SNS URLはYoshi（管理者）のみが確認します。第三者には公開されません。
       </div>
-      <button class="btn-setup-next" onclick="spNext(2)">次へ — 確認 →</button>
+      <button class="btn-setup-next" onclick="spNext(2)">確認へ →</button>
       <button class="btn-setup-back" onclick="spPrev(2)">← 戻る</button>
     </div>
 
-    <!-- STEP 3: 確認 -->
+    <!-- Step 3: 確認 -->
     <div class="setup-panel" id="sp-3">
       <div class="sp-section-label">Step 03</div>
       <div class="sp-section-title">内容確認</div>
-      <p style="font-size:13px;color:rgba(242,240,255,0.7);line-height:1.75;margin-bottom:16px;">
-        以下の内容で登録します。間違いがあれば戻って修正してください。
-      </p>
+      <div style="font-size:13px;color:rgba(242,240,255,0.5);margin-bottom:20px;line-height:1.7;">
+        入力内容を確認して、問題なければ登録してください。
+      </div>
       <div class="conf-block" id="sp-confirm-block"></div>
-      <button class="btn-setup-next" onclick="spSubmit()" id="sp-submit-btn">登録してポータルへ →</button>
+      <button class="btn-setup-next" id="sp-submit-btn" onclick="spSubmit()">登録してポータルへ →</button>
       <button class="btn-setup-back" onclick="spPrev(3)">← 戻る</button>
     </div>
-
   </div>
 </div>
 
@@ -1710,24 +207,25 @@ p, li, .section-sub, .post-text, .composer-ta,
 <div id="app">
 
   <!-- TOP BAR -->
-  <div class="app-topbar">
+  <header class="app-topbar">
     <div class="topbar-logo">
       <div class="topbar-dot"></div>
       XECTOR1
     </div>
     <div class="topbar-right">
-      <span class="topbar-member" id="topbar-member">田中 雄介</span>
-      <div class="topbar-avatar" id="topbar-avatar" onclick="goPage('settings')" title="プロフィール設定">
+      <span class="topbar-member" id="topbar-member"></span>
+      <div class="topbar-avatar" onclick="goPage('settings')">
         <div class="topbar-avatar-inner" id="topbar-avatar-inner">?</div>
       </div>
     </div>
-  </div>
+  </header>
 
   <!-- CONTENT -->
-  <div class="app-content">
+  <main class="app-content">
 
     <!-- ── HOME ── -->
     <div id="page-home" class="page active">
+      <!-- HERO -->
       <div class="home-hero">
         <div class="home-hero-bg"></div>
         <div class="home-hero-top">
@@ -1745,14 +243,10 @@ p, li, .section-sub, .post-text, .composer-ta,
         </div>
       </div>
 
-      <div class="goal-card" id="goal-card" onclick="goPage('settings')">
-        <div class="goal-eyebrow">MY GOAL</div>
-        <div class="goal-text" id="goal-text">目標を設定してください</div>
-      </div>
-
+      <!-- 目標プログレス（目標設定済み時） -->
       <div class="goal-progress-wrap" id="goal-progress-wrap" onclick="goPage('settings')" style="display:none">
         <div class="goal-progress-top">
-          <div class="goal-progress-title">Progress</div>
+          <div class="goal-progress-title">MY GOAL</div>
           <div class="goal-progress-pct" id="goal-progress-pct">0%</div>
         </div>
         <div class="goal-progress-text" id="goal-progress-text">目標を設定してください</div>
@@ -1762,7 +256,14 @@ p, li, .section-sub, .post-text, .composer-ta,
         <div class="goal-progress-detail" id="goal-progress-detail"></div>
       </div>
 
-      <div class="streak-block">
+      <!-- 目標未設定時 -->
+      <div class="goal-card" id="goal-card" onclick="goPage('settings')">
+        <div class="goal-eyebrow">MY GOAL</div>
+        <div class="goal-text" id="goal-text">目標を設定してください →</div>
+      </div>
+
+      <!-- ストリーク -->
+      <div class="streak-block" style="margin-top:16px;">
         <div class="streak-num" id="streak-num">23</div>
         <div>
           <div class="streak-label">日連続アクティブ</div>
@@ -1770,36 +271,34 @@ p, li, .section-sub, .post-text, .composer-ta,
         </div>
       </div>
 
-      <div class="kpi-grid" id="kpi-grid"></div>
+      <!-- SNS 数値チップ（横スクロール） -->
+      <div class="kpi-strip" id="kpi-strip"></div>
 
-      <div class="action-list">
-        <div class="action-row" onclick="goPage('stats')">
-          <div class="ar-left">
-            <div class="ar-label">Weekly Update</div>
-            <div class="ar-title">SNS数値を更新する</div>
-          </div>
-          <div class="ar-arrow">→</div>
+      <!-- 2×2 アクショングリッド -->
+      <div class="action-grid">
+        <div class="action-card" onclick="goPage('stats')">
+          <div class="ac-icon">📊</div>
+          <div class="ac-label">Weekly Update</div>
+          <div class="ac-title">SNS数値を更新</div>
+          <div class="ac-arrow">→</div>
         </div>
-        <div class="action-row" onclick="goPage('book')">
-          <div class="ar-left">
-            <div class="ar-label">Next Session</div>
-            <div class="ar-title">面談を予約する</div>
-          </div>
-          <div class="ar-arrow">→</div>
+        <div class="action-card" onclick="goPage('book')">
+          <div class="ac-icon">📅</div>
+          <div class="ac-label">Next Session</div>
+          <div class="ac-title">面談を予約</div>
+          <div class="ac-arrow">→</div>
         </div>
-        <div class="action-row" onclick="goPage('tips')">
-          <div class="ar-left">
-            <div class="ar-label">This Week</div>
-            <div class="ar-title">最新Tipsを見る</div>
-          </div>
-          <div class="ar-arrow">→</div>
+        <div class="action-card" onclick="goPage('tips')">
+          <div class="ac-icon">💡</div>
+          <div class="ac-label">This Week</div>
+          <div class="ac-title">最新Tipsを見る</div>
+          <div class="ac-arrow">→</div>
         </div>
-        <div class="action-row" onclick="goPage('community')">
-          <div class="ar-left">
-            <div class="ar-label">Community</div>
-            <div class="ar-title">メンバーの投稿を見る</div>
-          </div>
-          <div class="ar-arrow">→</div>
+        <div class="action-card" onclick="goPage('community')">
+          <div class="ac-icon">👥</div>
+          <div class="ac-label">Community</div>
+          <div class="ac-title">仲間の投稿を見る</div>
+          <div class="ac-arrow">→</div>
         </div>
       </div>
     </div>
@@ -1815,7 +314,7 @@ p, li, .section-sub, .post-text, .composer-ta,
         <div style="font-size:40px;margin-bottom:16px;">📊</div>
         <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;margin-bottom:8px;">準備中</div>
         <div style="font-size:14px;color:rgba(242,240,255,0.5);line-height:1.7;">スタッフがデータを登録するまでお待ちください。<br>設定ページから自分で入力することもできます。</div>
-        <button onclick="goPage('settings')" style="margin-top:24px;background:transparent;border:1px solid rgba(200,255,0,0.4);color:var(--lime);padding:12px 28px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;cursor:pointer;">設定で入力する →</button>
+        <button onclick="goPage('settings')" style="margin-top:24px;background:transparent;border:1px solid rgba(200,255,0,0.4);color:var(--lime);padding:12px 28px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;cursor:pointer;border-radius:4px;">設定で入力する →</button>
       </div>
 
       <div class="radar-card">
@@ -1848,7 +347,6 @@ p, li, .section-sub, .post-text, .composer-ta,
         <div class="lc-wrap"><canvas id="line-chart"></canvas></div>
       </div>
 
-      <!-- 準備中バナー（SNS未入力時） -->
       <div class="stats-pending" id="stats-pending">
         <div class="stats-pending-icon">◈</div>
         <div class="stats-pending-title">データ準備中</div>
@@ -1856,7 +354,6 @@ p, li, .section-sub, .post-text, .composer-ta,
         <button class="stats-pending-btn" onclick="goPage('settings')">設定で入力する →</button>
       </div>
 
-      <!-- SNS数値入力フォーム -->
       <div class="input-form" id="input-form"></div>
     </div>
 
@@ -1872,12 +369,10 @@ p, li, .section-sub, .post-text, .composer-ta,
 
     <!-- ── COMMUNITY ── -->
     <div id="page-community" class="page">
-      <!-- X風シンプルヘッダー -->
       <div class="comm-topbar">
         <span class="comm-topbar-title">Community</span>
-        
+        <span class="comm-online">● 39 オンライン</span>
       </div>
-      <!-- 投稿composer（X風） -->
       <div class="composer-wrap">
         <div class="composer-avatar" id="composer-avatar-img">?</div>
         <div class="composer-right">
@@ -1898,7 +393,6 @@ p, li, .section-sub, .post-text, .composer-ta,
         <div class="big-title">PROGRAM<br><em>SESSIONS</em></div>
       </div>
 
-      <!-- タブ切り替え -->
       <div class="program-tabs">
         <button class="prog-tab active" id="prog-tab-1" onclick="switchProgram(1)">
           <span class="prog-tab-label">プロデュース</span>
@@ -1914,39 +408,21 @@ p, li, .section-sub, .post-text, .composer-ta,
         </button>
       </div>
 
-      <!-- プロデュース -->
       <div class="ycbm-panel" id="ycbm-panel-1">
         <div class="ycbm-wrap">
-          <iframe
-            src="https://skygarden0821.youcanbook.me/"
-            style="width:100%;border:none;background:transparent;min-height:650px;"
-            frameborder="0" scrolling="yes" allowtransparency="true"
-          ></iframe>
+          <iframe src="https://skygarden0821.youcanbook.me/" style="width:100%;border:none;background:transparent;min-height:650px;" frameborder="0" scrolling="yes" allowtransparency="true"></iframe>
         </div>
       </div>
-
-      <!-- ボイストレーニング1 -->
       <div class="ycbm-panel" id="ycbm-panel-2" style="display:none;">
         <div class="ycbm-wrap">
-          <iframe
-            src="https://xector1voice01.youcanbook.me/"
-            style="width:100%;border:none;background:transparent;min-height:650px;"
-            frameborder="0" scrolling="yes" allowtransparency="true"
-          ></iframe>
+          <iframe src="https://xector1voice01.youcanbook.me/" style="width:100%;border:none;background:transparent;min-height:650px;" frameborder="0" scrolling="yes" allowtransparency="true"></iframe>
         </div>
       </div>
-
-      <!-- ボイストレーニング2 -->
       <div class="ycbm-panel" id="ycbm-panel-3" style="display:none;">
         <div class="ycbm-wrap">
-          <iframe
-            src="https://xector1voice02.youcanbook.me/"
-            style="width:100%;border:none;background:transparent;min-height:650px;"
-            frameborder="0" scrolling="yes" allowtransparency="true"
-          ></iframe>
+          <iframe src="https://xector1voice02.youcanbook.me/" style="width:100%;border:none;background:transparent;min-height:650px;" frameborder="0" scrolling="yes" allowtransparency="true"></iframe>
         </div>
       </div>
-
       <div style="height:20px;"></div>
     </div>
 
@@ -1985,8 +461,7 @@ p, li, .section-sub, .post-text, .composer-ta,
         </div>
         <div class="editable-field-wrap">
           <span class="editable-field-icon">👤</span>
-          <input type="text" id="settings-name" placeholder="表示名（例：田中雄介）"
-            style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;padding:12px 12px 12px 38px;">
+          <input type="text" id="settings-name" placeholder="表示名（例：田中雄介）">
         </div>
         <button class="goal-save-btn" onclick="saveName()" style="margin-top:10px;">SAVE NAME →</button>
       </div>
@@ -2054,19 +529,19 @@ p, li, .section-sub, .post-text, .composer-ta,
       </div>
 
       <div style="height:40px;"></div>
-    </div>
+    </div><!-- /page-settings -->
 
-  </div><!-- /app-content -->
+  </main><!-- /app-content -->
 
   <!-- BOTTOM NAV -->
   <nav class="app-nav">
     <button class="nav-item active" id="nav-home" onclick="goPage('home')">
       <span class="nav-icon">⬡</span>
-      <span class="nav-label">Home</span>
+      <span class="nav-label">ホーム</span>
     </button>
     <button class="nav-item" id="nav-stats" onclick="goPage('stats')">
       <span class="nav-icon">◈</span>
-      <span class="nav-label">Stats</span>
+      <span class="nav-label">実績</span>
     </button>
     <button class="nav-item" id="nav-tips" onclick="goPage('tips')">
       <span class="nav-icon">💡</span>
@@ -2074,11 +549,11 @@ p, li, .section-sub, .post-text, .composer-ta,
     </button>
     <button class="nav-item" id="nav-community" onclick="goPage('community')">
       <span class="nav-icon">⬡</span>
-      <span class="nav-label">Community</span>
+      <span class="nav-label">仲間</span>
     </button>
     <button class="nav-item" id="nav-book" onclick="goPage('book')">
       <span class="nav-icon">◎</span>
-      <span class="nav-label">Program</span>
+      <span class="nav-label">予約</span>
     </button>
     <button class="nav-item" id="nav-settings" onclick="goPage('settings')">
       <span class="nav-icon" style="font-size:16px;">⚙</span>
@@ -2095,20 +570,6 @@ p, li, .section-sub, .post-text, .composer-ta,
     <div class="sheet-body">
       <div class="sheet-close"><button onclick="closeTipSheet()">✕</button></div>
       <div id="tip-sheet-content"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ── SUCCESS SHEET ── -->
-<div class="overlay" id="success-overlay">
-  <div class="sheet" onclick="event.stopPropagation()">
-    <div class="sheet-handle"></div>
-    <div class="success-sheet">
-      <div class="ss-icon">✦</div>
-      <div class="ss-title">BOOKED</div>
-      <div class="ss-sub">予約が確定しました。セッション前日にリマインドをお送りします。</div>
-      <div class="ss-detail" id="ss-detail"></div>
-      <button class="btn-ok" onclick="closeSuccess()">確認 — ホームへ</button>
     </div>
   </div>
 </div>
@@ -2140,19 +601,18 @@ p, li, .section-sub, .post-text, .composer-ta,
   </div>
 </div>
 
-
-<!-- ══ 週次サマリーモーダル ══ -->
+<!-- ── 週次サマリーモーダル ── -->
 <div id="weekly-modal">
   <div class="wm-box">
     <div class="wm-eyebrow">Weekly Report</div>
     <div class="wm-title" id="wm-title">先週より<br><em id="wm-headline">成長中</em></div>
-    <div class="wm-sub" id="wm-sub">先週と比べた変化です。</div>
+    <div class="wm-sub" id="wm-sub">先週との比較です。</div>
     <div class="wm-items" id="wm-items"></div>
     <button class="wm-close-btn" onclick="closeWeeklyModal()">よし、やるか →</button>
   </div>
 </div>
 
-<!-- ══ マイルストーン演出 ══ -->
+<!-- ── マイルストーン演出 ── -->
 <div id="milestone-overlay">
   <div class="milestone-box">
     <span class="milestone-icon" id="ms-icon">🏆</span>
@@ -2167,1870 +627,7 @@ p, li, .section-sub, .post-text, .composer-ta,
   <span class="err-banner-close" onclick="document.getElementById('err-banner').classList.remove('show')">×</span>
   <span id="err-banner-text"></span>
 </div>
+
+<script src="app.js"></script>
 </body>
 </html>
-<script>
-// ══════════════════════════════
-//  DATA
-// ══════════════════════════════
-const MEMBER = { name:'田中 雄介', short:'田中', since:'2024-11-01', streak:23, rank:1, goal:'', avatar:null };
-
-const SNS = {
-  yt:{ sub:24100, views:1230000, posts:18, imp:450000 },
-  tt:{ sub:82000, views:890000,  posts:22, likes:340000 },
-  ig:{ sub:56000, reach:120000,  posts:12 },
-  x: { sub:31000, imp:450000,    posts:30, eng:8200 },
-};
-
-const MONTHLY = {
-  followers:[18200,19800,21100,22400,23500,24100],
-  views:    [780000,850000,920000,1050000,1150000,1230000],
-  posts:    [14,16,18,17,19,18],
-  likes:    [28000,31000,34000,38000,41000,45000],
-  imp:      [320000,350000,390000,420000,440000,450000],
-};
-const WEEKLY  = { followers:[23200,23500,23800,24100], views:[1180000,1200000,1215000,1230000], posts:[4,5,4,5], likes:[43000,44000,44500,45000], imp:[440000,445000,448000,450000] };
-const YEARLY  = { followers:[8200,18200,24100], views:[210000,780000,1230000], posts:[8,14,18], likes:[11000,28000,45000], imp:[120000,320000,450000] };
-const LABELS  = { month:['10月','11月','12月','1月','2月','3月'], week:['3/1週','3/2週','3/3週','3/4週'], year:['2023','2024','2025'] };
-
-const AXES = [
-  { key:'followers', label:'フォロワー', color:'#c8ff00', max:100000 },
-  { key:'views',     label:'再生数',     color:'#00f0ff', max:2000000 },
-  { key:'posts',     label:'投稿数',     color:'#9f6fff', max:80 },
-  { key:'likes',     label:'いいね',     color:'#ff3d80', max:500000 },
-  { key:'imp',       label:'インプレ',   color:'#ffb700', max:1000000 },
-  { key:'reach',     label:'リーチ',     color:'#00ffaa', max:300000 },
-];
-
-const METRICS = [
-  { key:'followers', label:'フォロワー' },
-  { key:'views',     label:'再生数' },
-  { key:'posts',     label:'投稿数' },
-  { key:'likes',     label:'いいね' },
-  { key:'imp',       label:'インプレ' },
-];
-
-const TIPS_DATA = [
-  { id:1, cat:'content', catLabel:'コンテンツ', color:'#00f0ff', bg:'rgba(0,240,255,0.08)', week:'Week 01', isNew:true, icon:'🎬',
-    title:'最初の3秒で全てが決まる',
-    preview:'視聴者の90%は冒頭3秒で離脱を判断します。冒頭に「結論」か「問い」を置くだけで視聴継続率が劇的に改善します。',
-    lead:'コンテンツの質より「入口の設計」が先です。どれだけ良い内容でも、最初の3秒で興味を掴めなければ誰にも届きません。',
-    points:['冒頭0〜3秒に「結論」か「強い問い」を置く','BGMや効果音でエネルギーを上げる','顔のアップ or 衝撃シーンからスタートする','テロップを最初から表示して視覚でも引き込む'],
-    body:'「今日は〇〇について話します」という導入は最も視聴者を失います。答えを先に言ってから理由を話す「結論ファースト」を徹底してください。' },
-  { id:2, cat:'algorithm', catLabel:'アルゴリズム', color:'#ffb700', bg:'rgba(255,183,0,0.08)', week:'Week 02', isNew:true, icon:'⚡',
-    title:'投稿後30分が勝負の窓',
-    preview:'TikTok・YouTubeのアルゴリズムは投稿直後の初速を最重要指標にします。投稿30分以内の集中拡散が鍵です。',
-    lead:'アルゴリズムは「人気なコンテンツ」を広めるのではなく「初速が速いコンテンツ」を広めます。',
-    points:['フォロワーに直接通知（ストーリー・X・LINEなど）','コメントへの即レスで滞在時間を伸ばす','自分でもコメントして最初のコメント欄を埋める'],
-    body:'プラットフォームは投稿直後にまず少数のユーザーにテスト配信します。そこでの反応率が高ければ次の大きな層に配信されます。' },
-  { id:3, cat:'growth', catLabel:'成長戦略', color:'#ff3d80', bg:'rgba(255,61,128,0.08)', week:'Week 03', isNew:false, icon:'📈',
-    title:'エンゲージメント率を見ろ',
-    preview:'フォロワー10万より、エンゲージメント率5%の1万フォロワーアカウントの方がビジネス価値は高い。',
-    lead:'フォロワー数は「見かけの資産」です。実際に動いてくれる人数こそが本当の影響力であり、収益に直結します。',
-    points:['TikTok: 3%以上で平均、8%以上で高エンゲージメント','Instagram: 2%以上で平均、6%以上で優秀','YouTube: 完了率40%以上、クリック率4%以上'],
-    body:'エンゲージメント率 = (いいね+コメント+シェア+保存) ÷ インプレッション × 100' },
-  { id:4, cat:'mindset', catLabel:'マインドセット', color:'#9f6fff', bg:'rgba(159,111,255,0.08)', week:'Week 04', isNew:false, icon:'🧠',
-    title:'継続できる人は仕組みを持つ',
-    preview:'モチベーションに頼った継続は必ず切れます。感情に依存しない制作フローを持つことが全ての基本です。',
-    lead:'「続けられない」のはあなたの意志の問題ではありません。仕組みが足りないだけです。',
-    points:['企画・撮影・編集・投稿の4工程を別の日に分ける','ネタ帳をメモアプリで常に開けるようにする','週次レビューで「次週の1本目」だけ決めておく'],
-    body:'「毎日投稿」は中級者以上の戦略です。初期は週2〜3本の質の高い投稿から始めてください。' },
-  { id:5, cat:'collab', catLabel:'コラボ', color:'#00ffaa', bg:'rgba(0,255,170,0.08)', week:'Week 05', isNew:false, icon:'🤝',
-    title:'コラボ相手の選び方で10倍変わる',
-    preview:'フォロワーが多い人とコラボすればいい訳ではありません。視聴者層の親和性が全てです。',
-    lead:'コラボの目的は「お互いの視聴者を交換すること」です。フォロワー数より視聴者の属性・興味の重なりを優先して選ぶ。',
-    points:['視聴者層の年齢・性別・興味が近い','フォロワー数は自分の0.5〜2倍の範囲が最適','投稿スタイルが補完関係にある'],
-    body:'「コラボしたいです」だけのDMは9割スルーされます。具体的な企画と双方のメリットを提示することが必須です。' },
-  { id:6, cat:'content', catLabel:'コンテンツ', color:'#00f0ff', bg:'rgba(0,240,255,0.08)', week:'Week 06', isNew:false, icon:'✂️',
-    title:'ショート動画の「型」を持て',
-    preview:'バズったショート動画の80%は5つの型のどれかに当てはまります。型を理解して使いこなすことで制作速度と再生数が同時に上がります。',
-    lead:'一から企画を考える必要はありません。型に自分のオリジナリティを乗せる方が圧倒的に速く、しかも伸びやすい。',
-    points:['【衝撃型】「え、これ本当に？」から始まる事実・検証','【共感型】「あるある」を刺激するシチュエーション','【学び型】「3秒で分かる〇〇」のHow-To形式','【感情型】感動・笑い・怒りの感情を動かすストーリー'],
-    body:'まず過去1ヶ月の自分の投稿を振り返り、どの型で作ったか分類してみてください。' },
-];
-
-const FILTER_CATS = [
-  { key:'all', label:'すべて' },
-  { key:'content', label:'コンテンツ' },
-  { key:'algorithm', label:'アルゴリズム' },
-  { key:'growth', label:'成長戦略' },
-  { key:'mindset', label:'マインドセット' },
-  { key:'collab', label:'コラボ' },
-];
-
-// ── ダミーメンバーデータ（実在感を出すためバリエーション豊富に）──
-const DUMMY_MEMBERS = [
-  { name:'渡辺 拓海', av:'渡', color:'#ff3d80', badge:'RANK #1', badgeColor:'#c8ff00' },
-  { name:'佐藤 美優', av:'佐', color:'#00f0ff', badge:'GROWING', badgeColor:'#00f0ff' },
-  { name:'伊藤 さくら', av:'伊', color:'#9f6fff', badge:'MEMBER', badgeColor:'rgba(242,240,255,0.3)' },
-  { name:'中村 蓮', av:'中', color:'#ffb700', badge:'TOP MEMBER', badgeColor:'#c8ff00' },
-  { name:'高橋 ひな', av:'高', color:'#00ffaa', badge:'GROWING', badgeColor:'#00f0ff' },
-  { name:'小林 悠斗', av:'小', color:'#ff7043', badge:'MEMBER', badgeColor:'rgba(242,240,255,0.3)' },
-  { name:'山田 彩花', av:'山', color:'#ab47bc', badge:'MEMBER', badgeColor:'rgba(242,240,255,0.3)' },
-  { name:'加藤 颯', av:'加', color:'#26c6da', badge:'GROWING', badgeColor:'#00f0ff' },
-];
-
-const DUMMY_POSTS_POOL = [
-  // 朝系（活動開始・気合い）
-  { text:'おはようございます！今日はいつもより1時間早く起きて編集してました。朝の集中力えぐい。このペース続けたい', ach:null, likes:14, timeSlot:'morning' },
-  { text:'今朝投稿した動画、もう<strong>3,200再生</strong>いってる🙌 朝イチで投稿するの正解だったかも。フォロワーさんの反応早い', ach:null, likes:22, timeSlot:'morning' },
-  { text:'今日から編集ワーク週5にしてみる実験スタート。まずは1週間試してみます。応援してください笑', ach:null, likes:11, timeSlot:'morning' },
-  { text:'昨日の動画の続きを朝から収録。台本作るより先に話し始めた方が自然になるって気づいてからだいぶ楽になった', ach:null, likes:17, timeSlot:'morning' },
-  // 昼系（作業中・報告）
-  { text:'今日はいつもより<strong>+2本</strong>出せてる〜！！テンポよく編集できてる日って気持ちいい。このまま夜まで走ります', ach:null, likes:26, timeSlot:'noon' },
-  { text:'昼休みに撮影して帰宅後に編集、これが今のスタイルになってきた。やっとルーティン固まってきた感', ach:null, likes:13, timeSlot:'noon' },
-  { text:'ショートが伸びてる。ここ3日で<strong>+890フォロワー</strong>。なんか急にアルゴリズムに乗れた感じがある', ach:{ icon:'📈', label:'Growing', val:'+890フォロワー' }, likes:38, timeSlot:'noon' },
-  // 夕方系（振り返り・進捗）
-  { text:'みんな頑張ってるの見てると刺激になる！！負けてらんない。今から編集頑張る🔥', ach:null, likes:31, timeSlot:'evening' },
-  { text:'今日3本投稿できた。疲れたけど満足感がすごい。週に1回これやるだけで月の本数全然変わってくるよね', ach:null, likes:19, timeSlot:'evening' },
-  { text:'TikTokでずっと伸び悩んでたけど、サムネ変えたら突然<strong>1.2万再生</strong>きた。見た目って本当に大事', ach:{ icon:'🎯', label:'Breakthrough', val:'1.2万再生' }, likes:44, timeSlot:'evening' },
-  { text:'面談でフィードバックもらった内容を即実行してみた。「最初の3秒」だけ変えたら視聴維持が全然違う。やっぱり試すのが一番', ach:null, likes:27, timeSlot:'evening' },
-  // 夜系（締め・翌日準備）
-  { text:'今日の投稿が夜になってじわじわ伸びてる。<strong>5,600再生</strong>。寝る前にこれ見るの好きすぎる笑', ach:null, likes:35, timeSlot:'night' },
-  { text:'明日の台本書き終えた。明後日撮影。ちゃんとストック作れてる。この流れを崩さないようにしたい', ach:null, likes:12, timeSlot:'night' },
-  { text:'今月の目標本数まであと2本。明日中に終わらせる予定。ぎりぎりだけど間に合わせます', ach:null, likes:9, timeSlot:'night' },
-  // 深夜系（1本のみ・控えめ）
-  { text:'また深夜作業してしまった…でも今日の編集すごく良い仕上がりになった気がする。明日の反応楽しみ', ach:null, likes:8, timeSlot:'latenight' },
-];
-
-let _dummyTimer = null;
-
-function injectRandomPost(silent){
-  const pool = DUMMY_POSTS_POOL;
-  const members = DUMMY_MEMBERS;
-  // 直前と違うメンバーを選ぶ
-  const lastName = appState.posts.find(x=>x.isDummy)?.name;
-  const eligible = members.filter(m=>m.name!==lastName);
-  const m = eligible[Math.floor(Math.random()*eligible.length)];
-  const p = pool[Math.floor(Math.random()*pool.length)];
-  const newPost = {
-    id: Date.now(),
-    name: m.name, av: m.av, color: m.color,
-    badge: m.badge, badgeColor: m.badgeColor,
-    time: 'たった今',
-    text: p.text,
-    ach: p.ach ? {...p.ach} : null,
-    likes: p.likes + Math.floor(Math.random()*6),
-    liked: false,
-    isDummy: true,
-    isMe: false,
-    ts: Date.now(),
-  };
-  // 自分の投稿（isMe）は保持、ダミーはその前に追加
-  const myPosts = appState.posts.filter(x=>x.isMe);
-  const dummies = appState.posts.filter(x=>!x.isMe);
-  dummies.unshift(newPost);
-  if(dummies.length > 18) dummies.pop();
-  appState.posts = [...myPosts, ...dummies];
-  // 時刻を経過に応じて更新
-  updatePostTimes();
-  if(!silent) renderFeed();
-  else renderFeed();
-}
-
-function updatePostTimes(){
-  const now = Date.now();
-  appState.posts.forEach(p=>{
-    if(!p.ts) return;
-    const min = Math.floor((now - p.ts) / 60000);
-    if(min < 1)       p.time = 'たった今';
-    else if(min < 60) p.time = `${min}分前`;
-    else if(min < 120) p.time = '1時間前';
-    else               p.time = `${Math.floor(min/60)}時間前`;
-  });
-}
-
-function startDummyTimer(){
-  if(_dummyTimer) clearInterval(_dummyTimer);
-  // 最初に1件挿入
-  injectRandomPost(false);
-  // 2〜4分ごとにランダムで新着投稿
-  function scheduleNext(){
-    const ms = (120 + Math.floor(Math.random()*120)) * 1000; // 2〜4分
-    _dummyTimer = setTimeout(()=>{
-      injectRandomPost(false);
-      scheduleNext();
-    }, ms);
-  }
-  scheduleNext();
-  // 1分ごとに時刻表示を更新
-  setInterval(()=>{ updatePostTimes(); renderFeed(); }, 60000);
-}
-
-const COMM_POSTS = [
-  { id:1, name:'渡辺 拓海', av:'渡', color:'#ff3d80', time:'2時間前', badge:'RANK #1', badgeColor:'#c8ff00',
-    text:'今週で<strong>YouTubeチャンネル登録者40万人</strong>を突破しました！参加してから8ヶ月、本当に継続してよかったです。',
-    ach:{ icon:'🏆', label:'Achievement', val:'40万人 突破' }, likes:24, liked:false, isDummy:true },
-  { id:2, name:'佐藤 美優', av:'佐', color:'#00f0ff', time:'5時間前', badge:'GROWING', badgeColor:'#00f0ff',
-    text:'TikTokのエンゲージメント率が先月比で<strong>+4.2%</strong>上がりました。投稿後30分の集中対応を始めてから明らかに初速が変わった感じがします。',
-    ach:null, likes:18, liked:false, isDummy:true },
-  { id:3, name:'伊藤 さくら', av:'伊', color:'#9f6fff', time:'2日前', badge:'MEMBER', badgeColor:'rgba(242,240,255,0.3)',
-    text:'初めて<strong>Instagramリール</strong>が1万再生を超えました！「共感型」で作った動画でした。ここのTipsがめちゃくちゃ役に立ってます。',
-    ach:{ icon:'🎉', label:'First Milestone', val:'1万再生 達成' }, likes:31, liked:false, isDummy:true },
-];
-
-const SESSIONS_DATA = [
-  { id:'strategy', icon:'⚡', type:'FLAGSHIP', name:'戦略セッション', dur:'60分',
-    desc:'現状の数値を深く分析し、次の1ヶ月の戦略を一緒に設計。月1回推奨のメインセッション。',
-    price:'¥included', priceNote:'月額費用に含まれています', color:'var(--lime)' },
-  { id:'content', icon:'🎬', type:'ADDON', name:'コンテンツ添削', dur:'45分',
-    desc:'動画・サムネイル・タイトルを実際に見ながらフィードバック。改善点を具体的に指摘します。',
-    price:'¥5,500', priceNote:'会員割引価格 (通常¥8,800)', color:'var(--cyan)' },
-  { id:'emergency', icon:'🔥', type:'URGENT', name:'緊急相談', dur:'30分',
-    desc:'「今すぐ話したい」ときのための緊急枠。バズった・炎上しそう・突然の案件など即対応。',
-    price:'¥3,300', priceNote:'会員割引価格 (通常¥5,500)', color:'var(--pink)' },
-];
-
-const SLOT_DATA = {
-  11:[{t:'10:00',a:true},{t:'14:00',a:true},{t:'19:00',a:true}],
-  12:[{t:'11:00',a:false},{t:'15:00',a:true},{t:'20:00',a:true}],
-  14:[{t:'10:00',a:true},{t:'14:00',a:false},{t:'18:00',a:true}],
-  17:[{t:'10:00',a:true},{t:'13:00',a:true},{t:'20:00',a:true}],
-  18:[{t:'11:00',a:true},{t:'16:00',a:true}],
-  20:[{t:'10:00',a:true},{t:'14:00',a:true},{t:'19:00',a:true}],
-  22:[{t:'13:00',a:true},{t:'20:00',a:true}],
-  24:[{t:'10:00',a:true},{t:'15:00',a:true}],
-  27:[{t:'11:00',a:true},{t:'14:00',a:true},{t:'20:00',a:true}],
-};
-
-// ══════════════════════════════
-//  STATE
-// ══════════════════════════════
-let appState = {
-  period:'month', metric:'followers',
-  tipFilter:'all',
-  session:null, calYear:2025, calMonth:2, calDay:null, calTime:null,
-  posts:[...COMM_POSTS],
-};
-let radarChart=null, lineChart=null, shareRadarChart=null;
-
-// ══════════════════════════════
-//  SUPABASE
-// ══════════════════════════════
-const SUPA_URL = 'https://vpjlxxxsxxyfddqncuaj.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZwamx4eHhzeHh5ZmRkcW5jdWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNTA4NjgsImV4cCI6MjA4ODYyNjg2OH0.zsCWK4-R_eo2yR9NEXEW9FQMmqbNgxNXotRzpbAs1jA';
-const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
-
-let currentUser = null;
-
-// セッション復元（ページ再読み込み時に自動ログイン）
-async function restoreSession(){
-  try {
-    const { data:{ session } } = await supa.auth.getSession();
-    if(session){
-      currentUser = session.user;
-      showApp();
-    } else {
-      const el = document.getElementById('screen-login');
-      if(el) el.style.display='flex';
-    }
-  } catch(e) {
-    console.error('restoreSession:', e);
-    const el = document.getElementById('screen-login');
-    if(el) el.style.display='flex';
-  }
-}
-
-function showApp(){
-  const login = document.getElementById('screen-login');
-  const app   = document.getElementById('app');
-  login.classList.add('out');
-  setTimeout(()=>{
-    login.style.display='none';
-    app.classList.add('visible');
-    loadUserAndInit();
-  }, 1200);
-}
-
-// ══════════════════════════════
-//  LOGIN
-// ══════════════════════════════
-async function doLogin(){
-
-  try {
-  const email = document.getElementById('l-email').value.trim();
-  const pass  = document.getElementById('l-pass').value.trim();
-  if(!email||!pass){ showToast('メールとパスワードを入力してください'); return; }
-
-  const btn = document.querySelector('.btn-login');
-  btn.textContent = '認証中...';
-  btn.disabled = true;
-
-  const { data, error } = await supa.auth.signInWithPassword({ email, password:pass });
-
-  if(error){
-    // 未登録ならサインアップ
-    if(error.message.includes('Invalid login') || error.message.includes('invalid')){
-      const { data:su, error:se } = await supa.auth.signUp({ email, password:pass });
-      if(se){ showToast('エラー: '+se.message); btn.textContent='ENTER'; btn.disabled=false; return; }
-      // ※ profiles作成はプロフィール設定画面(spSubmit)で行うためここでは作らない
-      currentUser = su.user;
-    } else {
-      showToast('ログインエラー: '+error.message);
-      btn.textContent='ENTER'; btn.disabled=false; return;
-    }
-  } else {
-    currentUser = data.user;
-  }
-
-  document.getElementById('screen-login').classList.add('out');
-  setTimeout(()=>showApp(), 600);
-  } catch(e) {
-    console.error('doLogin:', e);
-    const btn = document.querySelector('.btn-login');
-    if(btn){ btn.textContent='ENTER'; btn.disabled=false; }
-    showToast('ネットワークエラーが発生しました');
-  }
-}
-
-// ══════════════════════════════
-//  PROFILE SETUP
-// ══════════════════════════════
-const SP_GENRES = ['歌い手','ゲーム実況','Vtuber','ダンス','音楽制作','ラジオ/トーク','イラスト/アート','その他'];
-let spGenres = [];
-let spStep = 1;
-
-function initSetup(){
-  document.getElementById('screen-setup').classList.add('visible');
-  spRenderGenres();
-}
-
-function spRenderGenres(){
-  document.getElementById('sp-genre-pills').innerHTML = SP_GENRES.map(g=>`
-    <div class="gpill ${spGenres.includes(g)?'sel':''}" onclick="spToggleGenre('${g}')">${g}</div>
-  `).join('');
-}
-function spToggleGenre(g){
-  spGenres = spGenres.includes(g) ? spGenres.filter(x=>x!==g) : [...spGenres,g];
-  spRenderGenres();
-}
-
-function spValidate(id, type){
-  const el  = document.getElementById(id);
-  const val = el.value.trim();
-  const err = document.getElementById('sperr-'+id);
-  let ok = false;
-  if(type==='name') ok = val.length >= 2;
-  if(type==='yomi') ok = /^[ぁ-んー\s]+$/.test(val);
-  if(type==='req')  ok = val.length >= 1;
-  el.className = val ? (ok?'valid':'invalid') : '';
-  if(err) err.className = 'sf-err'+(val&&!ok?' show':'');
-  return ok;
-}
-
-function spValidateUrl(platform, domain){
-  const id  = 'sp-'+platform+'-url';
-  const val = document.getElementById(id).value.trim();
-  const err = document.getElementById('sperr-'+platform);
-  const chk = document.getElementById('urlchk-'+platform);
-  const badge = document.getElementById('ssb-badge-'+platform);
-  const block = document.getElementById('ssb-'+platform);
-  if(!val){
-    document.getElementById(id).className='';
-    err.className='sf-err'; chk.textContent='';
-    badge.textContent='未入力'; badge.className='ssb-badge';
-    block.classList.remove('has-url');
-    return true;
-  }
-  const domains = platform==='x' ? ['x.com','twitter.com'] : [domain];
-  const valid = domains.some(d=>val.includes(d)) && val.startsWith('http');
-  document.getElementById(id).className = valid?'valid':'invalid';
-  err.className  = 'sf-err'+(!valid?' show':'');
-  chk.textContent = valid?'✓':'✕';
-  chk.style.color = valid?'var(--green)':'#ff4444';
-  badge.textContent = valid?'✓ 入力済み':'要確認';
-  badge.className = 'ssb-badge'+(valid?' ok':'');
-  block.classList.toggle('has-url', valid);
-  return valid;
-}
-
-function spNext(from){
-  if(from===1){
-    const v1=spValidate('sp-name','name');
-    const v2=spValidate('sp-yomi','yomi');
-    const v3=spValidate('sp-stage','req');
-    const v4=spGenres.length>0;
-    const v5=document.getElementById('sp-status').value!=='';
-    if(!v4){showToast('ジャンルを1つ以上選んでください');return;}
-    if(!v5){document.getElementById('sperr-sp-status').className='sf-err show';return;}
-    if(!v1||!v2||!v3) return;
-  }
-  if(from===2){
-    const ps=['yt','tt','ig','x'], dm={yt:'youtube.com',tt:'tiktok.com',ig:'instagram.com',x:'x.com'};
-    let anyFilled=false, allOk=true;
-    ps.forEach(p=>{ const v=document.getElementById('sp-'+p+'-url').value.trim();
-      if(v){anyFilled=true; if(!spValidateUrl(p,dm[p]))allOk=false;} });
-    if(!anyFilled){showToast('SNSを最低1つ入力してください');return;}
-    if(!allOk){showToast('URLの形式を確認してください');return;}
-    spBuildConfirm();
-  }
-  spSetStep(from+1);
-}
-function spPrev(from){ spSetStep(from-1); }
-
-function spSetStep(n){
-  spStep=n;
-  document.querySelectorAll('.setup-panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('sp-'+n).classList.add('active');
-  document.querySelectorAll('.sp-step').forEach((s,i)=>{
-    s.classList.remove('active','done');
-    if(i+1<n)  s.classList.add('done');
-    if(i+1===n) s.classList.add('active');
-  });
-  document.getElementById('screen-setup').scrollTo({top:0,behavior:'smooth'});
-}
-
-const SP_STATUS_LABELS={
-  just_started:'これから始める',
-  under_1k:'1,000フォロワー未満',
-  '1k_10k':'1,000〜10,000フォロワー',
-  '10k_100k':'1万〜10万フォロワー',
-  over_100k:'10万フォロワー以上',
-};
-function spBuildConfirm(){
-  const rows=[
-    {l:'本名',    v:document.getElementById('sp-name').value.trim()},
-    {l:'よみがな',v:document.getElementById('sp-yomi').value.trim()},
-    {l:'活動名',  v:document.getElementById('sp-stage').value.trim()},
-    {l:'ジャンル',v:spGenres.join(' / ')},
-    {l:'状況',    v:SP_STATUS_LABELS[document.getElementById('sp-status').value]||''},
-    {l:'YouTube', v:document.getElementById('sp-yt-url').value.trim(), url:true},
-    {l:'TikTok',  v:document.getElementById('sp-tt-url').value.trim(), url:true},
-    {l:'Instagram',v:document.getElementById('sp-ig-url').value.trim(), url:true},
-    {l:'X',       v:document.getElementById('sp-x-url').value.trim(), url:true},
-  ].filter(r=>r.v);
-  document.getElementById('sp-confirm-block').innerHTML=rows.map(r=>`
-    <div class="conf-row">
-      <span class="conf-l">${r.l}</span>
-      <span class="${r.url?'conf-url':'conf-v'}">${r.v}</span>
-    </div>`).join('');
-}
-
-async function spSubmit(){
-
-  try {
-  const btn=document.getElementById('sp-submit-btn');
-  btn.textContent='保存中...'; btn.disabled=true;
-
-  // Supabase auth.usersへの反映を確実に待つ
-  await new Promise(r => setTimeout(r, 1000));
-
-  // セッションを最新に更新
-  const { data:{ session } } = await supa.auth.getSession();
-  if(session) currentUser = session.user;
-
-  const payload={
-    id:         currentUser.id,
-    name:       document.getElementById('sp-name').value.trim(),
-    yomi:       document.getElementById('sp-yomi').value.trim(),
-    stage_name: document.getElementById('sp-stage').value.trim(),
-    genres:     spGenres.join(','),
-    status:     document.getElementById('sp-status').value,
-    goal:       document.getElementById('sp-goal').value.trim(),
-    yt_url:     document.getElementById('sp-yt-url').value.trim()||null,
-    tt_url:     document.getElementById('sp-tt-url').value.trim()||null,
-    ig_url:     document.getElementById('sp-ig-url').value.trim()||null,
-    x_url:      document.getElementById('sp-x-url').value.trim()||null,
-    registered_at: new Date().toISOString(),
-    approved:   false,
-  };
-  const {error} = await supa.from('profiles').upsert(payload);
-  if(error){ showError('保存エラー: '+error.message); btn.textContent='登録してポータルへ →'; btn.disabled=false; return; }
-  MEMBER.name  = payload.stage_name || payload.name;
-  MEMBER.short = (payload.stage_name || payload.name || "").split(" ")[0] || MEMBER.name;
-  document.getElementById('screen-setup').classList.remove('visible');
-  loadUserAndInit();
-  } catch(e) {
-    console.error('spSubmit:', e);
-    showToast('保存エラー: ' + e.message);
-  }
-}
-
-// ══════════════════════════════
-//  USER DATA LOAD
-// ══════════════════════════════
-async function loadUserAndInit(){
-  if(!currentUser){ initApp(); return; }
-  try {
-  // プロフィール取得
-  let { data:prof } = await supa.from('profiles').select('*').eq('id',currentUser.id).single();
-
-  // 初回ログイン or プロフィール未設定 → セットアップ画面へ
-  if(!prof || !prof.stage_name){
-    initSetup();
-    return;
-  }
-
-  MEMBER.name  = prof.stage_name || prof.name || currentUser.email.split("@")[0];
-  MEMBER.short = (prof.stage_name || prof.name || "").split(" ")[0] || MEMBER.name;
-  if(prof.registered_at) MEMBER.since = prof.registered_at.split("T")[0];
-  if(prof.goal) MEMBER.goal = prof.goal;
-  document.getElementById("topbar-member").textContent = MEMBER.name;
-
-  // 最新のSNS数値を取得
-  const { data:stats } = await supa.from('sns_stats')
-    .select('*').eq('user_id',currentUser.id)
-    .order('recorded_at',{ascending:false}).limit(1);
-
-  if(stats && stats.length > 0){
-    const s = stats[0];
-    SNS.yt.sub    = s.yt_subscribers  || 0;
-    SNS.yt.views  = s.yt_views        || 0;
-    SNS.yt.posts  = s.yt_posts        || 0;
-    SNS.tt.sub    = s.tt_followers    || 0;
-    SNS.tt.views  = s.tt_views        || 0;
-    SNS.tt.posts  = s.tt_posts        || 0;
-    SNS.ig.sub    = s.ig_followers    || 0;
-    SNS.ig.reach  = s.ig_reach        || 0;
-    SNS.ig.posts  = s.ig_posts        || 0;
-    SNS.x.sub     = s.x_followers     || 0;
-    SNS.x.imp     = s.x_impressions   || 0;
-    SNS.x.posts   = s.x_posts         || 0;
-  }
-
-  initApp();
-  // 週次サマリー・マイルストーン確認
-  checkWeeklyAndMilestones(stats);
-  try{ updateGoalProgress(); }catch(e){ console.warn(e); }
-  } catch(e) {
-    console.error('loadUserAndInit:', e);
-    showToast('データ読み込みエラー。再ログインしてください。');
-    initApp();
-  }
-}
-
-// ══════════════════════════════
-//  SAVE STATS TO DB
-// ══════════════════════════════
-async function saveStatsToDB(){
-
-  try {
-  if(!currentUser){ showToast('ログインが必要です'); return; }
-
-  const payload = {
-    user_id:        currentUser.id,
-    recorded_at:    new Date().toISOString().split('T')[0],
-    yt_subscribers: SNS.yt.sub,
-    yt_views:       SNS.yt.views,
-    yt_posts:       SNS.yt.posts,
-    tt_followers:   SNS.tt.sub,
-    tt_views:       SNS.tt.views,
-    tt_posts:       SNS.tt.posts,
-    ig_followers:   SNS.ig.sub,
-    ig_reach:       SNS.ig.reach,
-    ig_posts:       SNS.ig.posts,
-    x_followers:    SNS.x.sub,
-    x_impressions:  SNS.x.imp,
-    x_posts:        SNS.x.posts,
-  };
-
-  const { error } = await supa.from('sns_stats').insert(payload);
-  if(error){ showToast('保存エラー: '+error.message); return; }
-  showToast('数値をDBに保存しました ✓');
-  updateGoalProgress();
-  checkWeeklyAndMilestones(null);
-  setTimeout(()=>goPage('home'),800);
-  } catch(e) {
-    console.error('saveStatsToDB:', e);
-    showToast('保存エラー: ' + e.message);
-  }
-}
-
-
-// ══════════════════════════════
-//  AVATAR & GOAL
-// ══════════════════════════════
-function applyAvatar(dataUrl){
-  MEMBER.avatar = dataUrl;
-  // topbar
-  const tb = document.getElementById('topbar-avatar-inner');
-  if(tb) tb.innerHTML = dataUrl ? `<img src="${dataUrl}">` : MEMBER.short[0]||'?';
-  // x-composer
-  const xav = document.getElementById('x-composer-av');
-  if(xav) xav.innerHTML = dataUrl ? `<img src="${dataUrl}">` : (MEMBER.short[0]||'?');
-  // home
-  const ha = document.getElementById('home-avatar-inner');
-  if(ha) ha.innerHTML = dataUrl ? `<img src="${dataUrl}">` : MEMBER.short[0]||'?';
-  // settings preview
-  const sp = document.getElementById('avatar-preview-inner');
-  if(sp) sp.innerHTML = dataUrl ? `<img src="${dataUrl}">` : MEMBER.short[0]||'?';
-  // composer
-  const ca = document.getElementById('composer-avatar-img');
-  if(ca){ ca.innerHTML = dataUrl ? `<img src="${dataUrl}">` : MEMBER.short[0]||'?'; }
-}
-
-// ── CROP 機能 ──
-let cropState = { img:null, x:0, y:0, scale:1, dragging:false, lastX:0, lastY:0 };
-
-function onAvatarFileSelected(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const img = new Image();
-    img.onload = () => {
-      cropState.img   = img;
-      cropState.x     = 0;
-      cropState.y     = 0;
-      cropState.scale = 1;
-      document.getElementById('avatar-crop-wrap').classList.add('visible');
-      drawCrop();
-    };
-    img.src = ev.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-function drawCrop(){
-  const wrap   = document.getElementById('crop-canvas-wrap');
-  const canvas = document.getElementById('crop-canvas');
-  const size   = wrap.offsetWidth;
-  canvas.width  = size;
-  canvas.height = size;
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0,0,size,size);
-  // 円クリップ
-  ctx.save();
-  ctx.beginPath();
-  ctx.arc(size/2,size/2,size/2,0,Math.PI*2);
-  ctx.clip();
-  ctx.fillStyle='#111';
-  ctx.fillRect(0,0,size,size);
-  if(cropState.img){
-    const s = cropState.scale;
-    const iw = cropState.img.width * s;
-    const ih = cropState.img.height * s;
-    const mx = Math.min(0, Math.max(size-iw, cropState.x));
-    const my = Math.min(0, Math.max(size-ih, cropState.y));
-    cropState.x = mx; cropState.y = my;
-    ctx.drawImage(cropState.img, mx, my, iw, ih);
-  }
-  ctx.restore();
-  // 円枠
-  ctx.strokeStyle='rgba(200,255,0,0.5)';
-  ctx.lineWidth=2;
-  ctx.beginPath();
-  ctx.arc(size/2,size/2,size/2-1,0,Math.PI*2);
-  ctx.stroke();
-}
-
-// タッチ・マウスドラッグ
-(function(){
-  let pending = false;
-  function setupDrag(){
-    const c = document.getElementById('crop-canvas');
-    if(!c) return;
-    function start(x,y){ cropState.dragging=true; cropState.lastX=x; cropState.lastY=y; }
-    function move(x,y){
-      if(!cropState.dragging) return;
-      cropState.x += x - cropState.lastX;
-      cropState.y += y - cropState.lastY;
-      cropState.lastX=x; cropState.lastY=y;
-      if(!pending){ pending=true; requestAnimationFrame(()=>{ drawCrop(); pending=false; }); }
-    }
-    function end(){ cropState.dragging=false; }
-    c.addEventListener('mousedown', e=>start(e.clientX,e.clientY));
-    c.addEventListener('mousemove', e=>move(e.clientX,e.clientY));
-    c.addEventListener('mouseup',   end);
-    c.addEventListener('touchstart', e=>{ const t=e.touches[0]; start(t.clientX,t.clientY); },{passive:true});
-    c.addEventListener('touchmove',  e=>{ const t=e.touches[0]; move(t.clientX,t.clientY); e.preventDefault(); },{passive:false});
-    c.addEventListener('touchend',   end);
-    // ピンチズーム
-    let lastDist=0;
-    c.addEventListener('touchmove', e=>{
-      if(e.touches.length===2){
-        const dx=e.touches[0].clientX-e.touches[1].clientX;
-        const dy=e.touches[0].clientY-e.touches[1].clientY;
-        const dist=Math.sqrt(dx*dx+dy*dy);
-        if(lastDist){ cropState.scale = Math.max(0.5, Math.min(4, cropState.scale*(dist/lastDist))); drawCrop(); }
-        lastDist=dist;
-      } else { lastDist=0; }
-    },{passive:false});
-    c.addEventListener('touchend', ()=>{ lastDist=0; });
-    // ホイールズーム
-    c.addEventListener('wheel', e=>{
-      cropState.scale = Math.max(0.5, Math.min(4, cropState.scale*(e.deltaY<0?1.08:0.93)));
-      drawCrop(); e.preventDefault();
-    },{passive:false});
-  }
-  // DOMロード後にセットアップ
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setupDrag);
-  else setupDrag();
-  // settingsページが表示されたタイミングでも再セット
-  const orig = window.goPage;
-  // （goPage内でsetupDragを再度呼ばなくても一度登録されればOK）
-})();
-
-function cancelCrop(){
-  document.getElementById('avatar-crop-wrap').classList.remove('visible');
-  document.getElementById('avatar-file-input').value='';
-}
-
-function saveCrop(){
-  const canvas = document.getElementById('crop-canvas');
-  const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-  applyAvatar(dataUrl);
-  // localStorageに保存（小さい画像なのでOK）
-  try{ localStorage.setItem('xector1_avatar_'+currentUser?.id, dataUrl); } catch(e){}
-  cancelCrop();
-  showToast('アイコンを保存しました ✓');
-}
-
-function loadAvatarFromStorage(){
-  if(!currentUser) return;
-  try{
-    const saved = localStorage.getItem('xector1_avatar_'+currentUser.id);
-    if(saved) applyAvatar(saved);
-    else applyAvatar(null);
-  } catch(e){}
-}
-
-
-// ── SETTINGS から SNS 数値保存 ──
-async function saveStatsFromSettings(){
-
-  try {
-  const g = id => { const v=parseInt(document.getElementById(id)?.value||'0'); return isNaN(v)?0:v; };
-  SNS.yt.sub   = g('s-yt-sub')   || SNS.yt.sub;
-  SNS.yt.views = g('s-yt-views') || SNS.yt.views;
-  SNS.yt.posts = g('s-yt-posts') || SNS.yt.posts;
-  SNS.tt.sub   = g('s-tt-sub')   || SNS.tt.sub;
-  SNS.tt.views = g('s-tt-views') || SNS.tt.views;
-  SNS.tt.posts = g('s-tt-posts') || SNS.tt.posts;
-  SNS.ig.sub   = g('s-ig-sub')   || SNS.ig.sub;
-  SNS.ig.reach = g('s-ig-reach') || SNS.ig.reach;
-  SNS.ig.posts = g('s-ig-posts') || SNS.ig.posts;
-  SNS.x.sub    = g('s-x-sub')    || SNS.x.sub;
-  SNS.x.imp    = g('s-x-imp')    || SNS.x.imp;
-  SNS.x.posts  = g('s-x-posts')  || SNS.x.posts;
-
-  // ホームのKPIグリッドを再描画
-  renderKPIGrid();
-  initRadar();
-  renderMetricScroll();
-  initLineChart();
-
-  // DBに保存
-  if(currentUser){
-    const payload = {
-      user_id: currentUser.id,
-      recorded_at: new Date().toISOString().split('T')[0],
-      yt_subscribers: SNS.yt.sub, yt_views: SNS.yt.views, yt_posts: SNS.yt.posts,
-      tt_followers: SNS.tt.sub,   tt_views: SNS.tt.views, tt_posts: SNS.tt.posts,
-      ig_followers: SNS.ig.sub,   ig_reach: SNS.ig.reach, ig_posts: SNS.ig.posts,
-      x_followers: SNS.x.sub,     x_impressions: SNS.x.imp, x_posts: SNS.x.posts,
-    };
-    const { error } = await supa.from('sns_stats').insert(payload);
-    if(error){ showToast('DB保存エラー: '+error.message); return; }
-  }
-  showToast('数値を更新しました ✓');
-  updateGoalProgress();
-  } catch(e) {
-    console.error('saveStatsFromSettings:', e);
-    showToast('保存エラー: ' + e.message);
-  }
-}
-
-// ── 設定ページを開いたとき現在値をフィールドにセット ──
-function prefillSettingsSNS(){
-  const set = (id, val) => { const el=document.getElementById(id); if(el&&val!==undefined&&val!==null) el.value=val; };
-  // 名前と目標をプリフィル
-  const nameEl = document.getElementById('settings-name');
-  if(nameEl && MEMBER.name) nameEl.value = MEMBER.name;
-  const goalEl = document.getElementById('settings-goal');
-  if(goalEl && MEMBER.goal) goalEl.value = MEMBER.goal;
-  set('s-yt-sub',   SNS.yt.sub);
-  set('s-yt-views', SNS.yt.views);
-  set('s-yt-posts', SNS.yt.posts);
-  set('s-tt-sub',   SNS.tt.sub);
-  set('s-tt-views', SNS.tt.views);
-  set('s-tt-posts', SNS.tt.posts);
-  set('s-ig-sub',   SNS.ig.sub);
-  set('s-ig-reach', SNS.ig.reach);
-  set('s-ig-posts', SNS.ig.posts);
-  set('s-x-sub',    SNS.x.sub);
-  set('s-x-imp',    SNS.x.imp);
-  set('s-x-posts',  SNS.x.posts);
-}
-
-
-// ── Program タブ切り替え ──
-function switchProgram(n){
-  [1,2,3].forEach(i=>{
-    const tab = document.getElementById('prog-tab-'+i);
-    const panel = document.getElementById('ycbm-panel-'+i);
-    if(tab)   tab.classList.toggle('active', i===n);
-    if(panel) panel.style.display = i===n ? 'block' : 'none';
-  });
-}
-
-
-// ── STATS: 準備中判定 ──
-function checkStatsPending(){
-  const hasData = SNS.yt.sub>0 || SNS.tt.sub>0 || SNS.ig.sub>0 || SNS.x.sub>0;
-  const pending = document.getElementById('stats-pending');
-  const radar   = document.querySelector('.radar-card');
-  const periodTabs = document.querySelector('.period-tabs');
-  const metricScroll = document.getElementById('metric-scroll');
-  const lineCard = document.querySelector('.line-card');
-  if(pending){
-    pending.style.display = hasData ? 'none' : 'block';
-    if(radar) radar.style.display = hasData ? 'block' : 'none';
-    if(periodTabs) periodTabs.style.display = hasData ? 'flex' : 'none';
-    if(metricScroll) metricScroll.style.display = hasData ? 'flex' : 'none';
-    if(lineCard) lineCard.style.display = hasData ? 'block' : 'none';
-  }
-  if(hasData) animateCharts();
-}
-
-// ── グラフカウントアップアニメーション ──
-function animateCharts(){
-  // レーダーチャート：データを0から増やして描画
-  const norm = getRadarData();
-  const score = getScore(norm);
-  const grade = getGrade(score);
-  document.getElementById('radar-score').textContent = '—';
-  document.getElementById('radar-grade').textContent = '集計中...';
-
-  if(radarChart) radarChart.destroy();
-  const ctx = document.getElementById('radar-chart').getContext('2d');
-  const zeroed = norm.map(()=>0);
-  radarChart = new Chart(ctx,{
-    type:'radar',
-    data:{ labels:AXES.map(a=>a.label), datasets:[{
-      data:[...zeroed], backgroundColor:'rgba(200,255,0,0.07)', borderColor:'#c8ff00',
-      borderWidth:2, pointBackgroundColor:AXES.map(a=>a.color),
-      pointBorderColor:'transparent', pointRadius:4,
-    }]},
-    options:{ responsive:true, maintainAspectRatio:false, animation:{duration:0},
-      plugins:{ legend:{display:false} },
-      scales:{ r:{ min:0, max:100, backgroundColor:'transparent',
-        grid:{color:'rgba(255,255,255,0.04)'}, angleLines:{color:'rgba(255,255,255,0.06)'},
-        pointLabels:{color:'rgba(242,240,255,.5)',font:{family:'Space Mono',size:9}},
-        ticks:{display:false} }}}
-  });
-
-  // 0→実値へ段階的にアニメーション（1.2秒）
-  let step = 0; const steps = 40;
-  const timer = setInterval(()=>{
-    step++;
-    const t = step/steps;
-    const ease = 1 - Math.pow(1-t, 3); // ease-out cubic
-    radarChart.data.datasets[0].data = norm.map(v => v*ease);
-    radarChart.update('none');
-    if(step >= steps){
-      clearInterval(timer);
-      // スコア表示
-      const sc = document.getElementById('radar-score');
-      const gr = document.getElementById('radar-grade');
-      let cur=0; const target=score;
-      const sc_timer = setInterval(()=>{
-        cur = Math.min(cur+3, target);
-        sc.textContent = cur;
-        if(cur>=target){ clearInterval(sc_timer); sc.style.color=grade.c; gr.textContent='GRADE '+grade.g; }
-      },20);
-    }
-  }, 30);
-
-  // ラインチャートはフェードイン
-  setTimeout(()=>{ initLineChart(); }, 600);
-}
-
-
-// ── コミュニティ定期投稿（1〜2分おき） ──
-function startCommunityTimer(){
-  // 時間帯別の投稿スロット定義
-  // 朝(6-10): 2本, 昼(11-14): 1本, 夕(15-19): 2本, 夜(20-22): 1本, 深夜(23): 1本, 0-5時: なし
-  function getTimeSlot(h){
-    if(h>=6  && h<11) return 'morning';
-    if(h>=11 && h<15) return 'noon';
-    if(h>=15 && h<20) return 'evening';
-    if(h>=20 && h<23) return 'night';
-    if(h>=23)         return 'latenight';
-    return null; // 0-5時は投稿なし
-  }
-  function getSlotPool(slot){
-    if(!slot) return [];
-    const matching = DUMMY_POSTS_POOL.filter(p=>p.timeSlot===slot);
-    // 該当スロットがなければ全部から選ぶ（フォールバック）
-    return matching.length > 0 ? matching : DUMMY_POSTS_POOL;
-  }
-  function getDelayMs(h){
-    // 時間帯ごとの投稿間隔（現実感のある間隔）
-    if(h>=6  && h<11) return (25 + Math.random()*20) * 60000;  // 25〜45分
-    if(h>=11 && h<15) return (40 + Math.random()*30) * 60000;  // 40〜70分
-    if(h>=15 && h<20) return (20 + Math.random()*20) * 60000;  // 20〜40分
-    if(h>=20 && h<23) return (35 + Math.random()*25) * 60000;  // 35〜60分
-    if(h>=23)         return (50 + Math.random()*40) * 60000;  // 50〜90分
-    // 0-5時: 次の朝6時まで待つ
-    const now = new Date();
-    const next6 = new Date(now); next6.setHours(6,0,0,0);
-    if(next6<=now) next6.setDate(next6.getDate()+1);
-    return next6-now + Math.random()*1800000; // 6時 + ランダム0〜30分
-  }
-  function scheduleNext(){
-    const h = new Date().getHours();
-    const delay = getDelayMs(h);
-    setTimeout(()=>{
-      const slot = getTimeSlot(new Date().getHours());
-      if(slot){ // 深夜0-5時はスキップ
-        const pool = getSlotPool(slot);
-        const members = DUMMY_MEMBERS;
-        const lastName = appState.posts.find(x=>x.isDummy)?.name;
-        const eligible = members.filter(m=>m.name!==lastName);
-        const m = eligible[Math.floor(Math.random()*eligible.length)];
-        const p = pool[Math.floor(Math.random()*pool.length)];
-        const newPost = {
-          id:Date.now(), name:m.name, av:m.av, color:m.color,
-          badge:m.badge, badgeColor:m.badgeColor, time:'たった今',
-          text:p.text, ach:p.ach?{...p.ach}:null,
-          likes:p.likes+Math.floor(Math.random()*6), liked:false, isDummy:true, isMe:false, ts:Date.now()
-        };
-        const commPage = document.getElementById('page-community');
-        if(commPage && commPage.classList.contains('active')){
-          const myPosts = appState.posts.filter(x=>x.isMe);
-          const dummies = appState.posts.filter(x=>!x.isMe);
-          dummies.unshift(newPost);
-          if(dummies.length>18) dummies.pop();
-          appState.posts = [...myPosts,...dummies];
-          updatePostTimes(); renderFeed();
-        } else {
-          appState.posts.push(newPost);
-        }
-      }
-      scheduleNext();
-    }, delay);
-  }
-  scheduleNext();
-}
-
-
-// ══════════════════════════════
-//  週次サマリー & マイルストーン
-// ══════════════════════════════
-const MILESTONE_THRESHOLDS = [1000, 5000, 10000, 50000, 100000, 500000, 1000000];
-
-function fmtMilestone(n){
-  if(n >= 1000000) return (n/10000).toFixed(0)+'万';
-  if(n >= 10000)   return (n/10000).toFixed(0)+'万';
-  if(n >= 1000)    return (n/1000).toFixed(0)+'千';
-  return String(n);
-}
-
-// 前週データとの比較・マイルストーン検出
-async function checkWeeklyAndMilestones(currentStats){
-  if(!currentUser) return;
-  try {
-
-  // 1週間前のデータを取得
-  const weekAgo = new Date();
-  weekAgo.setDate(weekAgo.getDate() - 7);
-  const weekAgoStr = weekAgo.toISOString().split('T')[0];
-
-  const { data:prevData } = await supa.from('sns_stats')
-    .select('*').eq('user_id', currentUser.id)
-    .lte('recorded_at', weekAgoStr)
-    .order('recorded_at', {ascending:false}).limit(1);
-
-  const prev = prevData?.[0] || null;
-
-  // 比較データ構築
-  const platforms = [
-    { key:'yt', label:'YouTube', sub:'登録者', plat:'#ff4040', curr:SNS.yt.sub, prevVal: prev?.yt_subscribers||0 },
-    { key:'tt', label:'TikTok',  sub:'フォロワー', plat:'#69d9d0', curr:SNS.tt.sub, prevVal: prev?.tt_followers||0 },
-    { key:'ig', label:'Instagram', sub:'フォロワー', plat:'#e040fb', curr:SNS.ig.sub, prevVal: prev?.ig_followers||0 },
-    { key:'x',  label:'X',      sub:'フォロワー', plat:'#c8c8c8', curr:SNS.x.sub, prevVal: prev?.x_followers||0 },
-  ];
-
-  const hasAnyData = platforms.some(p => p.curr > 0);
-  if(!hasAnyData) return;
-
-  // ── マイルストーン検出 ──
-  // 前回データがある場合のみ（新規登録直後のフォロワー数は除外）
-  if(prev){
-    for(const p of platforms){
-      for(const thr of MILESTONE_THRESHOLDS){
-        if(p.prevVal < thr && p.curr >= thr){
-          // マイルストーン達成！
-          setTimeout(()=> showMilestone(p.label, p.sub, thr), 800);
-          return; // 一度に1つだけ表示
-        }
-      }
-    }
-  }
-
-  // ── 週次サマリーモーダル ──
-  // 今週初回ログイン時のみ表示（localStorageで管理）
-  const today = new Date().toISOString().split('T')[0];
-  const lastShown = localStorage.getItem('xector1_weekly_shown_' + currentUser.id);
-  const weekStart = getWeekStart();
-  if(lastShown && lastShown >= weekStart) return; // 今週すでに表示済み
-
-  // 変化があるものだけ表示
-  const items = platforms.filter(p => p.curr > 0);
-  if(!items.length) return;
-
-  // モーダル構築
-  const wm = document.getElementById('weekly-modal');
-  const wmItems = document.getElementById('wm-items');
-  const wmHeadline = document.getElementById('wm-headline');
-  const wmSub = document.getElementById('wm-sub');
-
-  if(prev){
-    const gains = items.map(p => ({ ...p, delta: p.curr - p.prevVal }));
-    const totalDelta = gains.reduce((s,p) => s + p.delta, 0);
-    wmHeadline.textContent = totalDelta >= 0 ? '成長中！' : '踏ん張り時';
-    wmSub.textContent = `先週との比較です。数値を確認してみましょう。`;
-    wmItems.innerHTML = gains.map(p => `
-      <div class="wm-item">
-        <div class="wm-item-left">
-          <span class="wm-item-dot" style="background:${p.plat}"></span>
-          <div>
-            <div class="wm-item-plat">${p.label} ${p.sub}</div>
-            <div class="wm-item-val">${fmtNum(p.curr)}</div>
-          </div>
-        </div>
-        <div class="wm-item-delta ${p.delta<0?'dn':''}">${p.delta>=0?'+':''}${fmtNum(Math.abs(p.delta))}</div>
-      </div>`).join('');
-  } else {
-    wmHeadline.textContent = '現在の数値';
-    wmSub.textContent = '来週から週次比較が表示されます。';
-    wmItems.innerHTML = items.map(p => `
-      <div class="wm-item">
-        <div class="wm-item-left">
-          <span class="wm-item-dot" style="background:${p.plat}"></span>
-          <div>
-            <div class="wm-item-plat">${p.label} ${p.sub}</div>
-            <div class="wm-item-val">${fmtNum(p.curr)}</div>
-          </div>
-        </div>
-        <div class="wm-item-delta">—</div>
-      </div>`).join('');
-  }
-
-  // 少し遅らせて表示（ログイン演出が終わってから）
-  setTimeout(()=>{ wm.classList.add('show'); }, 1400);
-  localStorage.setItem('xector1_weekly_shown_' + currentUser.id, today);
-  } catch(e){ console.warn('weekly check error:', e); }
-}
-
-function getWeekStart(){
-  const d = new Date();
-  const day = d.getDay();
-  const diff = d.getDate() - day + (day===0?-6:1);
-  const mon = new Date(d.setDate(diff));
-  return mon.toISOString().split('T')[0];
-}
-
-function closeWeeklyModal(){
-  document.getElementById('weekly-modal').classList.remove('show');
-}
-
-// ── マイルストーン演出 ──
-function showMilestone(platLabel, subLabel, val){
-  const overlay = document.getElementById('milestone-overlay');
-  document.getElementById('ms-val').textContent = fmtMilestone(val);
-  document.getElementById('ms-plat').textContent = platLabel + ' ' + subLabel;
-  const icons = {1000:'⭐',5000:'🌟',10000:'🎉',50000:'🚀',100000:'🏆',500000:'👑',1000000:'💎'};
-  document.getElementById('ms-icon').textContent = icons[val] || '🏆';
-
-  overlay.classList.add('show');
-  launchConfetti();
-  setTimeout(()=>{ overlay.classList.remove('show'); }, 4000);
-}
-
-function launchConfetti(){
-  const colors = ['#c8ff00','#00f0ff','#ff3d80','#ffb700','#ffffff','#00ffaa'];
-  for(let i=0;i<60;i++){
-    const el = document.createElement('div');
-    el.className = 'confetti-piece';
-    el.style.cssText = `
-      left:${Math.random()*100}vw;
-      top:-10px;
-      background:${colors[Math.floor(Math.random()*colors.length)]};
-      width:${4+Math.random()*8}px;
-      height:${4+Math.random()*8}px;
-      transform:rotate(${Math.random()*360}deg);
-      animation:confettiFall ${1.5+Math.random()*2}s ${Math.random()*0.8}s ease-in forwards;
-    `;
-    document.body.appendChild(el);
-    setTimeout(()=>el.remove(), 4000);
-  }
-}
-
-// ══════════════════════════════
-//  目標プログレスバー
-// ══════════════════════════════
-function updateGoalProgress(){ try {
-  const wrap = document.getElementById('goal-progress-wrap');
-  const barFill = document.getElementById('goal-progress-bar');
-  const pctEl = document.getElementById('goal-progress-pct');
-  const textEl = document.getElementById('goal-progress-text');
-  const detailEl = document.getElementById('goal-progress-detail');
-
-  if(!wrap) return;
-
-  // 目標テキストから数値・プラットフォームをパース
-  const goal = MEMBER.goal || '';
-  if(!goal){ wrap.style.display='none'; return; }
-
-  // 例：「YouTube10万人達成」「TikTok5万フォロワー」などをパース
-  const numMatch = goal.match(/([0-9０-９]+(?:[.．][0-9０-９]+)?)[\s　]*(?:万|千)?/);
-  if(!numMatch){ wrap.style.display='none'; return; }
-
-  let targetNum = parseFloat(numMatch[1].replace(/[０-９]/g, c=>String.fromCharCode(c.charCodeAt(0)-65248)));
-  if(goal.includes('万')) targetNum *= 10000;
-  else if(goal.includes('千')) targetNum *= 1000;
-
-  if(!targetNum || targetNum <= 0){ wrap.style.display='none'; return; }
-
-  // どのSNSの目標かを検出
-  let currVal = 0;
-  let platLabel = '';
-  let platColor = 'var(--lime)';
-
-  if(/youtube|yt|ユーチューブ/i.test(goal)){
-    currVal = SNS.yt.sub; platLabel='YouTube 登録者'; platColor='#ff4040';
-  } else if(/tiktok|tt|ティックトック/i.test(goal)){
-    currVal = SNS.tt.sub; platLabel='TikTok フォロワー'; platColor='#69d9d0';
-  } else if(/instagram|ig|インスタ/i.test(goal)){
-    currVal = SNS.ig.sub; platLabel='Instagram フォロワー'; platColor='#e040fb';
-  } else if(/twitter|x(?![a-z])|ツイッター/i.test(goal)){
-    currVal = SNS.x.sub; platLabel='X フォロワー'; platColor='#c8c8c8';
-  } else {
-    // プラットフォーム不明な場合は最大値を使う
-    const all = [SNS.yt.sub, SNS.tt.sub, SNS.ig.sub, SNS.x.sub];
-    currVal = Math.max(...all);
-    platLabel = 'フォロワー';
-  }
-
-  const pct = Math.min(100, Math.round(currVal / targetNum * 100));
-  const remaining = Math.max(0, targetNum - currVal);
-
-  wrap.style.display = 'block';
-  wrap.style.borderLeftColor = platColor;
-  pctEl.style.color = platColor;
-  pctEl.textContent = pct + '%';
-  textEl.textContent = goal.length > 30 ? goal.substring(0,28)+'…' : goal;
-  detailEl.innerHTML = `
-    <span class="gpd-item">現在 <span class="gpd-val" style="color:${platColor}">${fmtNum(currVal)}</span></span>
-    <span class="gpd-item">目標 <span class="gpd-val">${fmtNum(targetNum)}</span></span>
-    <span class="gpd-item">残り <span class="gpd-val">${fmtNum(remaining)}</span></span>
-  `;
-
-  // バーアニメーション（少し遅らせて）
-  setTimeout(()=>{
-    barFill.style.background = platColor;
-    barFill.style.boxShadow = `0 0 8px ${platColor}80`;
-    barFill.style.width = pct + '%';
-  }, 300);
-  } catch(e){ console.warn('updateGoalProgress error:', e); }
-}
-
-// ══════════════════════════════
-//  自動コメント（投稿から30秒〜2分後）
-// ══════════════════════════════
-const AUTO_COMMENTS = [
-  { text:'めちゃくちゃ参考になります！私もやってみます🔥' },
-  { text:'すごい！数字に表れてますね。継続の力を感じます。' },
-  { text:'自分も同じ悩みがあったので、とても共感できます。' },
-  { text:'このやり方、詳しく聞いてみたいです！' },
-  { text:'お疲れ様です！着実に成長してますね👏' },
-  { text:'このTips、私も試してみます。ありがとうございます！' },
-  { text:'そのやり方知らなかったです。早速真似させてもらいます。' },
-  { text:'継続が大事って、本当にそうですよね。自分も頑張ります。' },
-  { text:'数字より内容を重視してたら自然とフォロワー増えた感じがします。' },
-  { text:'最近投稿頻度落ちてたので刺激受けました！ありがとう😊' },
-];
-
-function scheduleAutoComment(postId){
-  const delay = 30000 + Math.random() * 90000; // 30秒〜2分
-  setTimeout(()=>{
-    const post = appState.posts.find(p => p.id === postId);
-    if(!post) return; // 投稿が消えていたらスキップ
-    const members = DUMMY_MEMBERS;
-    const m = members[Math.floor(Math.random() * members.length)];
-    const c = AUTO_COMMENTS[Math.floor(Math.random() * AUTO_COMMENTS.length)];
-    if(!post.comments) post.comments = [];
-    post.comments.push({ name:m.name, av:m.av, color:m.color, text:c.text });
-    renderFeed();
-    showToast(m.name + 'さんがコメントしました 💬');
-    // 2回目のコメント（50%の確率で3〜8分後）
-    if(Math.random() > 0.5){
-      setTimeout(()=>{
-        const p2 = appState.posts.find(p => p.id === postId);
-        if(!p2) return;
-        const m2 = members.filter(x=>x.name!==m.name)[Math.floor(Math.random()*( members.length-1))];
-        const c2 = AUTO_COMMENTS[Math.floor(Math.random()*AUTO_COMMENTS.length)];
-        if(!p2.comments) p2.comments=[];
-        p2.comments.push({ name:m2.name, av:m2.av, color:m2.color, text:c2.text });
-        renderFeed();
-      }, 180000 + Math.random()*300000);
-    }
-  }, delay);
-}
-
-// ── GOAL SAVE ──
-async function saveGoal(){
-
-  try {
-  const text = document.getElementById('settings-goal').value.trim();
-  if(!text){ showToast('目標を入力してください'); return; }
-  if(!currentUser){ showToast('ログインが必要です'); return; }
-  MEMBER.goal = text;
-  // goal-cardに即時反映
-  const gt = document.getElementById('goal-text');
-  if(gt) gt.textContent = text;
-  // DBに保存
-  const { error } = await supa.from('profiles').update({ goal: text }).eq('id', currentUser.id);
-  if(error){ showToast('保存エラー: '+error.message); return; }
-  showToast('目標を保存しました ✓');
-  updateGoalProgress();
-  } catch(e) {
-    console.error('saveGoal:', e);
-    showToast('保存エラー: ' + e.message);
-  }
-}
-
-
-// ── SETTINGS: 名前変更 ──
-async function saveName(){
-  try {
-  const input = document.getElementById('settings-name');
-  const text = input ? input.value.trim() : '';
-  if(!text){ showToast('名前を入力してください'); return; }
-  if(!currentUser){ showToast('ログインが必要です'); return; }
-  MEMBER.name  = text;
-  MEMBER.short = text.split(/[\s　]/)[0] || text;
-  // UIに即時反映（全箇所）
-  const topbar = document.getElementById('topbar-member');
-  if(topbar) topbar.textContent = MEMBER.name;
-  const hn = document.getElementById('home-name');
-  if(hn) hn.textContent = MEMBER.short;
-  // DBに保存
-  const { error } = await supa.from('profiles').update({ stage_name: text }).eq('id', currentUser.id);
-  if(error){ showToast('保存エラー: '+error.message); return; }
-  showToast('名前を保存しました ✓');
-  } catch(e) {
-    console.error('saveName:', e);
-    showToast('保存エラー: ' + e.message);
-  }
-}
-// ── youcanbookme iframe リサイズ ──
-function resizeYcbm(iframe){
-  try{
-    const h = iframe.contentWindow.document.body.scrollHeight;
-    if(h > 300) iframe.style.height = h + 'px';
-  } catch(e){
-    iframe.style.height = '700px';
-  }
-}
-
-// ══════════════════════════════
-//  INIT
-// ══════════════════════════════
-function initApp(){
-  checkStatsPending();
-  // DB取得後の名前をUIに反映
-  const bfName = document.getElementById("bf-name");
-  if(bfName) bfName.value = MEMBER.name;
-  const topbar = document.getElementById("topbar-member");
-  if(topbar) topbar.textContent = MEMBER.name;
-  // アバター
-  loadAvatarFromStorage();
-  applyAvatar(MEMBER.avatar);
-  startCommunityTimer();
-  // composerのアバター反映
-  const ca = document.getElementById('composer-avatar-img');
-  if(ca){ if(MEMBER.avatar) ca.innerHTML=`<img src="${MEMBER.avatar}">`; else ca.textContent=MEMBER.short[0]||'?'; }
-  // 目標カード
-  const gt = document.getElementById('goal-text');
-  if(gt) gt.textContent = MEMBER.goal || '目標を設定してください →';
-  // プログレスバー
-  try{ updateGoalProgress(); }catch(e){ console.warn(e); }
-  // settingsのinitial文字
-  const tb2 = document.getElementById('topbar-avatar-inner');
-  if(tb2 && !MEMBER.avatar) tb2.textContent = MEMBER.short[0]||'?';
-  const ha2 = document.getElementById('home-avatar-inner');
-  if(ha2 && !MEMBER.avatar) ha2.textContent = MEMBER.short[0]||'?';
-  const sp2 = document.getElementById('avatar-preview-inner');
-  if(sp2 && !MEMBER.avatar) sp2.textContent = MEMBER.short[0]||'?';
-  // X-composer アバター
-  const xav = document.getElementById('x-composer-av');
-  if(xav){ if(MEMBER.avatar) xav.innerHTML=`<img src="${MEMBER.avatar}">`; else xav.textContent=MEMBER.short[0]||'?'; }
-  setGreeting();
-  renderStreakDots();
-  renderKPIGrid();
-  initRadar();
-  renderMetricScroll();
-  initLineChart();
-  renderInputForm();
-  renderFilterRow();
-  renderTipsList();
-  try{ renderCommStats(); }catch(e){ console.warn('renderCommStats:',e); }
-  renderFeed();
-  try{ renderSessionList(); }catch(e){ console.warn('renderSessionList:',e); }
-  try{ renderCalendar(); }catch(e){ console.warn('renderCalendar:',e); }
-  try{ renderTimeSlots(null); }catch(e){ console.warn('renderTimeSlots:',e); }
-}
-
-// ── GREETING ──
-function setGreeting(){
-  const h=new Date().getHours();
-  const g = h<12?'Good morning':h<18?'Good afternoon':'Good evening';
-  document.getElementById('home-greeting').textContent=g;
-  document.getElementById('home-name').textContent=MEMBER.short;
-  const days=Math.floor((new Date()-new Date(MEMBER.since))/86400000);
-  document.getElementById('home-since').textContent=`Member since Nov 2024 — Day ${days}`;
-}
-
-// ── STREAK ──
-function renderStreakDots(){
-  const c=document.getElementById('streak-dots');
-  c.innerHTML='';
-  for(let i=0;i<14;i++){
-    const d=document.createElement('div');
-    d.className='sd'+(i<MEMBER.streak&&i<14?' on':'');
-    c.appendChild(d);
-  }
-}
-
-// ── HOME KPI ──
-function renderKPIGrid(){
-  const kpis=[
-    { label:'YouTube',   sub:'フォロワー数', plat:'#ff4040', val:fmtNum(SNS.yt.sub), rawVal:SNS.yt.sub, delta:'+1,200', up:true },
-    { label:'TikTok',    sub:'フォロワー数', plat:'#69d9d0', val:fmtNum(SNS.tt.sub), rawVal:SNS.tt.sub, delta:'+340',   up:true },
-    { label:'Instagram', sub:'フォロワー数', plat:'#e040fb', val:fmtNum(SNS.ig.sub), rawVal:SNS.ig.sub, delta:'+180',   up:true },
-    { label:'X',         sub:'フォロワー数', plat:'#c8c8c8', val:fmtNum(SNS.x.sub),  rawVal:SNS.x.sub,  delta:'+90',    up:true },
-  ];
-  document.getElementById('kpi-grid').innerHTML=kpis.map((k,i)=>`
-    <div class="kpi-card" style="animation:pageIn .8s ${i*120}ms cubic-bezier(.2,0,.4,1) both">
-      <div class="kpi-card-label">
-        <span class="kpi-plat" style="background:${k.plat}"></span>${k.label}
-      </div>
-      <div class="kpi-card-sub">${k.sub}</div>
-      <div class="kpi-card-val" data-final="${k.rawVal}">0</div>
-      <div class="kpi-card-delta ${k.up?'up':'dn'}">${k.delta} 先月比</div>
-    </div>`).join('');
-  // カウントアップ
-  setTimeout(()=>{
-    document.querySelectorAll('.kpi-card-val[data-final]').forEach(el=>{
-      const final = parseInt(el.dataset.final)||0;
-      const dur = 900, step = 16;
-      const steps = dur/step;
-      let cur = 0;
-      const t = setInterval(()=>{
-        cur++;
-        const v = Math.round(final*(cur/steps));
-        el.textContent = fmtNum(v);
-        if(cur>=steps){ el.textContent=fmtNum(final); clearInterval(t); }
-      },step);
-    });
-  },100);
-}
-
-// ── RADAR ──
-function getRadarData(){
-  const total={
-    followers: SNS.yt.sub+SNS.tt.sub+SNS.ig.sub+SNS.x.sub,
-    views:     SNS.yt.views+SNS.tt.views,
-    posts:     SNS.yt.posts+SNS.tt.posts+SNS.ig.posts+SNS.x.posts,
-    likes:     SNS.tt.likes,
-    imp:       SNS.yt.imp+SNS.x.imp,
-    reach:     SNS.ig.reach,
-  };
-  return AXES.map(a=>Math.min((total[a.key]||0)/a.max*100,100));
-}
-function getScore(norm){ return Math.round(norm.reduce((s,v)=>s+v,0)/norm.length); }
-function getGrade(s){ return s>=80?{g:'S',c:'#c8ff00'}:s>=65?{g:'A',c:'#00f0ff'}:s>=50?{g:'B',c:'#9f6fff'}:s>=35?{g:'C',c:'#ffb700'}:{g:'D',c:'#ff3d80'}; }
-
-function showStatsEmpty(){
-  // データが全部0のとき「準備中」表示
-  const total = SNS.yt.sub+SNS.tt.sub+SNS.ig.sub+SNS.x.sub;
-  const radarCard = document.querySelector('.radar-card');
-  const lineCard  = document.querySelector('.line-card');
-  const empty = document.getElementById('stats-empty');
-  if(total === 0){
-    if(radarCard) radarCard.style.display='none';
-    if(lineCard)  lineCard.style.display='none';
-    document.querySelector('.period-tabs').style.display='none';
-    document.querySelector('.metric-scroll')?.style && (document.querySelector('.metric-scroll').style.display='none');
-    if(empty) empty.style.display='block';
-    return true;
-  }
-  if(radarCard) radarCard.style.display='';
-  if(lineCard)  lineCard.style.display='';
-  document.querySelector('.period-tabs').style.display='';
-  if(empty) empty.style.display='none';
-  return false;
-}
-
-function initRadar(){
-  const norm=getRadarData();
-  const score=getScore(norm);
-  const grade=getGrade(score);
-  document.getElementById('radar-score').textContent=score;
-  document.getElementById('radar-score').style.color=grade.c;
-  document.getElementById('radar-grade').textContent='GRADE '+grade.g;
-
-  if(radarChart) radarChart.destroy();
-  const ctx=document.getElementById('radar-chart').getContext('2d');
-  radarChart=new Chart(ctx,{
-    type:'radar',
-    data:{ labels:AXES.map(a=>a.label), datasets:[{
-      data:norm, backgroundColor:'rgba(200,255,0,0.07)', borderColor:'#c8ff00',
-      borderWidth:2, pointBackgroundColor:AXES.map(a=>a.color),
-      pointBorderColor:'transparent', pointRadius:4,
-    }]},
-    options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false}, tooltip:{
-        backgroundColor:'#131318', borderColor:'rgba(255,255,255,0.1)', borderWidth:1,
-        titleColor:'rgba(242,240,255,.5)', bodyColor:'#c8ff00',
-        titleFont:{family:'Space Mono',size:8}, bodyFont:{family:'Bebas Neue',size:18},
-        padding:10, callbacks:{ label:c=>'  '+Math.round(c.raw)+' pts' }
-      }},
-      scales:{ r:{ min:0, max:100, backgroundColor:'transparent',
-        grid:{color:'rgba(255,255,255,0.04)'}, angleLines:{color:'rgba(255,255,255,0.06)'},
-        pointLabels:{color:'rgba(242,240,255,.4)',font:{family:'Space Mono',size:9}},
-        ticks:{display:false} }}}
-  });
-}
-
-// ── METRIC SCROLL ──
-function renderMetricScroll(){
-  const data = appState.period==='month'?MONTHLY:appState.period==='week'?WEEKLY:YEARLY;
-  document.getElementById('metric-scroll').innerHTML=METRICS.map(m=>`
-    <div class="metric-chip ${appState.metric===m.key?'active':''}" onclick="selectMetric('${m.key}')">
-      <div class="mc-label">${m.label}</div>
-      <div class="mc-val">${fmtNum(data[m.key]?.[data[m.key].length-1]||0)}</div>
-    </div>`).join('');
-}
-
-function selectMetric(key){
-  appState.metric=key;
-  renderMetricScroll();
-  updateLineChart();
-  document.getElementById('lc-title').textContent=METRICS.find(m=>m.key===key).label+'推移';
-}
-
-// ── LINE CHART ──
-function initLineChart(){
-  if(lineChart) lineChart.destroy();
-  const ctx=document.getElementById('line-chart').getContext('2d');
-  const data=getLineData();
-  const grad=ctx.createLinearGradient(0,0,0,160);
-  grad.addColorStop(0,'rgba(200,255,0,0.15)');
-  grad.addColorStop(1,'rgba(200,255,0,0)');
-  lineChart=new Chart(ctx,{
-    type:'line',
-    data:{ labels:data.labels, datasets:[{
-      data:data.vals, borderColor:'#c8ff00', backgroundColor:grad,
-      borderWidth:2, pointBackgroundColor:'#c8ff00', pointBorderColor:'#050507',
-      pointBorderWidth:2, pointRadius:4, tension:0.4, fill:true,
-    }]},
-    options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false}, tooltip:{
-        backgroundColor:'#131318', borderColor:'rgba(255,255,255,0.1)', borderWidth:1,
-        bodyColor:'#c8ff00', bodyFont:{family:'Bebas Neue',size:18}, padding:10,
-        callbacks:{ label:c=>'  '+fmtNum(c.raw) }
-      }},
-      scales:{
-        x:{ grid:{color:'rgba(255,255,255,0.03)'}, ticks:{color:'rgba(242,240,255,.3)',font:{family:'Space Mono',size:8}}, border:{display:false} },
-        y:{ grid:{color:'rgba(255,255,255,0.03)'}, ticks:{color:'rgba(242,240,255,.3)',font:{family:'Space Mono',size:8},callback:v=>fmtNum(v)}, border:{display:false} }
-      }
-    }
-  });
-}
-
-function getLineData(){
-  const src=appState.period==='month'?MONTHLY:appState.period==='week'?WEEKLY:YEARLY;
-  return { labels:LABELS[appState.period], vals:src[appState.metric]||src.followers };
-}
-
-function updateLineChart(){
-  const d=getLineData();
-  lineChart.data.labels=d.labels;
-  lineChart.data.datasets[0].data=d.vals;
-  lineChart.update();
-}
-
-function setPeriod(p,btn){
-  appState.period=p;
-  document.querySelectorAll('.pt').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  const lbl={month:'Monthly',week:'Weekly',year:'Yearly'};
-  document.getElementById('lc-sub').textContent=lbl[p];
-  renderMetricScroll();
-  updateLineChart();
-}
-
-// ── INPUT FORM ──
-function renderInputForm(){
-  const platforms=[
-    { key:'yt', cls:'pb-yt', icon:'🎬', bg:'rgba(255,64,64,0.1)', name:'YouTube',
-      fields:[{id:'yt-sub',l:'登録者数',v:SNS.yt.sub},{id:'yt-views',l:'総再生数',v:SNS.yt.views},{id:'yt-posts',l:'月間投稿数',v:SNS.yt.posts},{id:'yt-imp',l:'インプレ',v:SNS.yt.imp}]},
-    { key:'tt', cls:'pb-tt', icon:'♪', bg:'rgba(105,217,208,0.1)', name:'TikTok',
-      fields:[{id:'tt-sub',l:'フォロワー',v:SNS.tt.sub},{id:'tt-views',l:'月間再生数',v:SNS.tt.views},{id:'tt-posts',l:'月間投稿数',v:SNS.tt.posts},{id:'tt-likes',l:'総いいね',v:SNS.tt.likes}]},
-    { key:'ig', cls:'pb-ig', icon:'◈', bg:'rgba(224,64,251,0.1)', name:'Instagram',
-      fields:[{id:'ig-sub',l:'フォロワー',v:SNS.ig.sub},{id:'ig-reach',l:'月間リーチ',v:SNS.ig.reach},{id:'ig-posts',l:'月間投稿数',v:SNS.ig.posts}]},
-    { key:'x', cls:'pb-x', icon:'✕', bg:'rgba(200,200,200,0.07)', name:'X / Twitter',
-      fields:[{id:'x-sub',l:'フォロワー',v:SNS.x.sub},{id:'x-imp',l:'月間インプレ',v:SNS.x.imp},{id:'x-posts',l:'月間投稿数',v:SNS.x.posts},{id:'x-eng',l:'エンゲージ',v:SNS.x.eng}]},
-  ];
-  document.getElementById('input-form').innerHTML=platforms.map(p=>`
-    <div class="platform-block ${p.cls}">
-      <div class="pb-head">
-        <div class="pb-icon" style="background:${p.bg}">${p.icon}</div>
-        <div class="pb-name">${p.name}</div>
-      </div>
-      <div class="pb-fields">
-        ${p.fields.map(f=>`<div class="pf"><label>${f.l}</label><input type="number" id="${f.id}" value="${f.v}"></div>`).join('')}
-      </div>
-    </div>`).join('');
-}
-
-function saveStats(){
-  const g=(id)=>parseFloat(document.getElementById(id)?.value)||0;
-  SNS.yt.sub   =g("yt-sub")   ||SNS.yt.sub;
-  SNS.yt.views =g("yt-views") ||SNS.yt.views;
-  SNS.yt.posts =g("yt-posts") ||SNS.yt.posts;
-  SNS.tt.sub   =g("tt-sub")   ||SNS.tt.sub;
-  SNS.tt.views =g("tt-views") ||SNS.tt.views;
-  SNS.tt.posts =g("tt-posts") ||SNS.tt.posts;
-  SNS.ig.sub   =g("ig-sub")   ||SNS.ig.sub;
-  SNS.ig.reach =g("ig-reach") ||SNS.ig.reach;
-  SNS.ig.posts =g("ig-posts") ||SNS.ig.posts;
-  SNS.x.sub    =g("x-sub")    ||SNS.x.sub;
-  SNS.x.imp    =g("x-imp")    ||SNS.x.imp;
-  SNS.x.posts  =g("x-posts")  ||SNS.x.posts;
-  initRadar(); renderKPIGrid(); renderMetricScroll();
-  saveStatsToDB();
-}
-
-// ── TIPS ──
-function renderFilterRow(){
-  document.getElementById('filter-row').innerHTML=FILTER_CATS.map(c=>`
-    <button class="fb ${appState.tipFilter===c.key?'active':''}" onclick="setTipFilter('${c.key}')">${c.label}</button>`).join('');
-}
-function setTipFilter(k){
-  appState.tipFilter=k;
-  renderFilterRow();
-  renderTipsList();
-}
-function renderTipsList(){
-  const list=appState.tipFilter==='all'?TIPS_DATA:TIPS_DATA.filter(t=>t.cat===appState.tipFilter);
-  document.getElementById('tips-list').innerHTML=list.map(t=>`
-    <div class="tip-row" onclick="openTipSheet(${t.id})">
-      <div class="tip-accent" style="background:${t.color}"></div>
-      <div class="tip-body-wrap">
-        <div class="tip-meta-row">
-          <span class="tip-cat-tag" style="background:${t.bg};color:${t.color};border:1px solid ${t.color}22">${t.catLabel}</span>
-          <span class="tip-week-tag">${t.week}</span>
-          ${t.isNew?'<span class="tip-new">NEW</span>':''}
-        </div>
-        <div class="tip-title-text">${t.title}</div>
-        <div class="tip-preview">${t.preview}</div>
-      </div>
-      <div class="tip-row-icon">${t.icon}</div>
-    </div>`).join('');
-}
-
-function openTipSheet(id){
-  const t=TIPS_DATA.find(x=>x.id===id);
-  if(!t) return;
-  document.getElementById('tip-sheet-content').innerHTML=`
-    <div class="tip-meta-row" style="margin-bottom:12px;">
-      <span class="tip-cat-tag" style="background:${t.bg};color:${t.color};border:1px solid ${t.color}22;padding:3px 8px;border-radius:2px;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;">${t.catLabel}</span>
-      <span style="font-family:'Space Mono',monospace;font-size:10px;color:rgba(242,240,255,0.55);letter-spacing:0px;margin-left:8px;">${t.week}</span>
-    </div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;line-height:1.05;margin-bottom:16px;">${t.title}</div>
-    <div style="font-size:14px;color:var(--white);line-height:1.75;margin-bottom:20px;border-left:2px solid ${t.color};padding-left:16px;">${t.lead}</div>
-    <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:${t.color};margin-bottom:10px;font-weight:700;">やること</div>
-    <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
-      ${t.points.map(p=>`<li style="font-size:13px;color:rgba(242,240,255,0.7);padding-left:16px;position:relative;line-height:1.7;"><span style="position:absolute;left:0;color:${t.color}">—</span>${p}</li>`).join('')}
-    </ul>
-    <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(242,240,255,0.55);margin-bottom:8px;font-weight:700;">解説</div>
-    <div style="font-size:13px;color:rgba(242,240,255,0.65);line-height:1.75;">${t.body}</div>
-    <div style="margin-top:24px;">
-      <button onclick="closeTipSheet()" style="background:${t.color};color:#000;border:none;width:100%;padding:13px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:4px;cursor:pointer;">理解した — 実践する</button>
-    </div>`;
-  document.getElementById('tip-overlay').classList.add('open');
-}
-function closeTipSheet(e){
-  if(!e||e.target===document.getElementById('tip-overlay'))
-    document.getElementById('tip-overlay').classList.remove('open');
-}
-
-// ── COMMUNITY ──
-function renderCommStats(){
-  const el = document.getElementById('comm-stats');
-  if(!el) return;
-  const stats=[
-    {label:'Active Members',val:'39',color:'var(--green)'},
-    {label:'Posts This Week',val:'127',color:'var(--lime)'},
-    {label:'Avg Growth',val:'+38%',color:'var(--cyan)'},
-    {label:'Next Session',val:'3/15',color:'var(--gold)'},
-  ];
-  el.innerHTML=stats.map(s=>`
-    <div class="cs-card">
-      <div class="cs-label">${s.label}</div>
-      <div class="cs-val" style="color:${s.color}">${s.val}</div>
-    </div>`).join('');
-}
-function renderFeed(){
-  const el = document.getElementById('feed');
-  if(!el) return;
-  el.innerHTML = appState.posts.map((p,i)=>{
-    const avHtml = (!p.isDummy && MEMBER.avatar)
-      ? `<img src="${MEMBER.avatar}">`
-      : p.av;
-    const achHtml = p.ach ? `
-      <div class="post-ach">
-        <span class="ach-icon">${p.ach.icon}</span>
-        <div class="ach-info">
-          <div class="ach-label">${p.ach.label}</div>
-          <div class="ach-val">${p.ach.val}</div>
-        </div>
-      </div>` : '';
-    return `
-    <div class="post-card" style="animation:pageIn .4s ${i*35}ms ease both">
-      <div class="post-avatar" style="background:${p.color}22;color:${p.color}">${avHtml}</div>
-      <div class="post-body">
-        <div class="post-header">
-          <span class="post-name">${p.name}</span>
-          <span class="post-badge" style="background:${p.badgeColor}22;color:${p.badgeColor};border:1px solid ${p.badgeColor}44;">${p.badge}</span>
-          <span class="post-time">${p.time}</span>
-        </div>
-        <div class="post-text">${p.text}</div>
-        ${achHtml}
-        <div class="post-actions">
-          <button class="post-like ${p.liked?'liked':''}" onclick="toggleLike(${p.id})">${p.liked?'♥':'♡'} ${p.likes}</button>
-        </div>
-        ${p.comments && p.comments.length ? `
-        <div class="post-comments">
-          ${p.comments.map(c=>`
-            <div class="post-comment">
-              <div class="pc-av" style="background:${c.color}22;color:${c.color}">${c.av}</div>
-              <div class="pc-body">
-                <div class="pc-name">${c.name}</div>
-                <div class="pc-text">${c.text}</div>
-              </div>
-            </div>`).join('')}
-        </div>` : ''}
-      </div>
-    </div>`;
-  }).join('');
-}
-function toggleLike(id){
-  const p=appState.posts.find(x=>x.id===id);
-  if(!p) return;
-  p.liked=!p.liked; p.likes+=p.liked?1:-1;
-  renderFeed();
-}
-function submitPost(){
-  const raw=document.getElementById('composer-ta').value.trim();
-  if(!raw){showToast('テキストを入力してください');return;}
-  // XSSサニタイズ
-  const text = raw.replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  const newPost = {id:Date.now(),name:MEMBER.name,av:MEMBER.short[0]||'?',color:'#c8ff00',time:'たった今',badge:'MEMBER',badgeColor:'rgba(242,240,255,0.3)',text,ach:null,likes:0,liked:false,isMe:true,isDummy:false,comments:[]};
-  appState.posts.unshift(newPost);
-  document.getElementById('composer-ta').value='';
-  renderFeed();
-  showToast('投稿しました ✓');
-  // 自動コメントをスケジュール
-  scheduleAutoComment(newPost.id);
-}
-
-// ── SESSIONS ──
-function renderSessionList(){
-  const slEl=document.getElementById('session-list');
-  if(!slEl) return;
-  slEl.innerHTML=SESSIONS_DATA.map(s=>`
-    <div class="session-row ${appState.session===s.id?'sel':''}" onclick="selectSession('${s.id}')">
-      <div class="sr-check">SELECTED ✓</div>
-      <div class="sr-top">
-        <span class="sr-icon">${s.icon}</span>
-        <span class="sr-type">${s.type}</span>
-      </div>
-      <div class="sr-name">${s.name}</div>
-      <div class="sr-desc">${s.desc}</div>
-      <div class="sr-bottom">
-        <div class="sr-price" style="color:${s.color}">${s.price}</div>
-        <div class="sr-dur">${s.dur}</div>
-      </div>
-    </div>`).join('');
-}
-function selectSession(id){
-  appState.session=id;
-  renderSessionList();
-  showToast(SESSIONS_DATA.find(s=>s.id===id).name+' を選択');
-}
-
-// ── CALENDAR ──
-const MONTH_N=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-const DAY_N=['SUN','MON','TUE','WED','THU','FRI','SAT'];
-
-function renderCalendar(){
-  const calMonth = document.getElementById('cal-month');
-  const calGrid  = document.getElementById('cal-grid');
-  if(!calMonth || !calGrid) return;
-  calMonth.textContent=`${appState.calYear}年 ${MONTH_N[appState.calMonth]}`;
-  const first=new Date(appState.calYear,appState.calMonth,1).getDay();
-  const dim=new Date(appState.calYear,appState.calMonth+1,0).getDate();
-  const today=new Date();
-  let html=DAY_N.map(d=>`<div class="cal-dh">${d}</div>`).join('');
-  for(let i=0;i<first;i++) html+=`<div class="cal-c empty"></div>`;
-  for(let d=1;d<=dim;d++){
-    const cd=new Date(appState.calYear,appState.calMonth,d);
-    const past=cd<new Date(today.getFullYear(),today.getMonth(),today.getDate());
-    const isToday=cd.toDateString()===today.toDateString();
-    const hasSlot=!!SLOT_DATA[d];
-    const hasOpen=hasSlot&&SLOT_DATA[d].some(s=>s.a);
-    const isSel=appState.calDay===d;
-    let cls='cal-c';
-    if(past) cls+=' past';
-    else if(isSel) cls+=' sel';
-    else if(hasOpen) cls+=' slot';
-    else if(SLOT_DATA[d]&&!hasOpen) cls+=' avail';
-    else cls+=' avail';
-    if(isToday) cls+=' today';
-    html+=`<div class="${cls}" onclick="selectDay(${d})">${d}</div>`;
-  }
-  calGrid.innerHTML=html;
-}
-function selectDay(d){
-  appState.calDay=d; appState.calTime=null;
-  renderCalendar(); renderTimeSlots(d);
-}
-function renderTimeSlots(d){
-  const twDate   = document.getElementById('tw-date');
-  const timeSlot = document.getElementById('time-slots');
-  if(!twDate || !timeSlot) return;
-  const dayN=['日','月','火','水','木','金','土'];
-  twDate.textContent =
-    d ? `${appState.calMonth+1}月${d}日（${dayN[new Date(appState.calYear,appState.calMonth,d).getDay()]}）` : '日付を選択';
-  const slots=d?SLOT_DATA[d]:null;
-  timeSlot.innerHTML=!slots
-    ? `<div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dim2)">← 日付を選択してください</div>`
-    : slots.map(s=>`<div class="ts ${!s.a?'full':''} ${appState.calTime===s.t&&s.a?'sel':''}" onclick="${s.a?`selectTime('${s.t}')`:''}">${s.t}</div>`).join('');
-}
-function selectTime(t){ appState.calTime=t; renderTimeSlots(appState.calDay); showToast(t+' を選択'); }
-function prevMonth(){ if(appState.calMonth===0){appState.calMonth=11;appState.calYear--;}else appState.calMonth--; appState.calDay=null;appState.calTime=null; renderCalendar(); renderTimeSlots(null); }
-function nextMonth(){ if(appState.calMonth===11){appState.calMonth=0;appState.calYear++;}else appState.calMonth++; appState.calDay=null;appState.calTime=null; renderCalendar(); renderTimeSlots(null); }
-
-function submitBooking(){
-  if(!appState.session){showToast('セッションを選択してください');return;}
-  if(!appState.calDay){showToast('日程を選択してください');return;}
-  if(!appState.calTime){showToast('時間を選択してください');return;}
-  const s=SESSIONS_DATA.find(x=>x.id===appState.session);
-  const dayN=['日','月','火','水','木','金','土'];
-  const dateStr=`${appState.calMonth+1}月${appState.calDay}日（${dayN[new Date(appState.calYear,appState.calMonth,appState.calDay).getDay()]}）`;
-  document.getElementById('ss-detail').innerHTML=[
-    {l:'セッション',v:s.name},{l:'日時',v:`${dateStr} ${appState.calTime}〜`},
-    {l:'時間',v:s.dur},{l:'料金',v:s.price}
-  ].map(r=>`<div class="ssd-row"><span class="ssd-l">${r.l}</span><span class="ssd-v">${r.v}</span></div>`).join('');
-  document.getElementById('success-overlay').classList.add('open');
-}
-function closeSuccess(){
-  document.getElementById('success-overlay').classList.remove('open');
-  appState.session=null; appState.calDay=null; appState.calTime=null;
-  renderSessionList(); renderCalendar(); renderTimeSlots(null);
-  goPage('home');
-}
-
-// ── SHARE SHEET ──
-function openShareSheet(){
-  const norm=getRadarData();
-  const score=getScore(norm);
-  const grade=getGrade(score);
-  const now=new Date();
-  document.getElementById('sc-name').textContent=MEMBER.name;
-  document.getElementById('sc-period').textContent=`${now.getFullYear()}年${now.getMonth()+1}月`;
-  document.getElementById('sc-score').textContent=score;
-  document.getElementById('sc-score').style.color=grade.c;
-  document.getElementById('sc-rank-tag').textContent=`RANK #${MEMBER.rank} — GRADE ${grade.g}`;
-  document.getElementById('sc-grid').innerHTML=[
-    {l:'YouTube',v:fmtNum(SNS.yt.sub)},{l:'TikTok',v:fmtNum(SNS.tt.sub)},
-    {l:'総再生数',v:fmtNum(SNS.yt.views+SNS.tt.views)},{l:'月間投稿',v:(SNS.yt.posts+SNS.tt.posts+SNS.ig.posts+SNS.x.posts)+'本'},
-  ].map(s=>`<div><div class="sc-stat-l">${s.l}</div><div class="sc-stat-v">${s.v}</div></div>`).join('');
-  if(shareRadarChart) shareRadarChart.destroy();
-  const ctx=document.getElementById('share-radar').getContext('2d');
-  shareRadarChart=new Chart(ctx,{
-    type:'radar',
-    data:{ labels:AXES.map(a=>a.label), datasets:[{
-      data:norm, backgroundColor:'rgba(200,255,0,0.08)', borderColor:'#c8ff00',
-      borderWidth:1.5, pointBackgroundColor:AXES.map(a=>a.color),
-      pointBorderColor:'transparent', pointRadius:3,
-    }]},
-    options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{enabled:false}},
-      scales:{ r:{ min:0,max:100, grid:{color:'rgba(255,255,255,0.05)'}, angleLines:{color:'rgba(255,255,255,0.05)'},
-        pointLabels:{color:'rgba(242,240,255,.35)',font:{family:'Space Mono',size:7}}, ticks:{display:false} }}}
-  });
-  document.getElementById('share-overlay').classList.add('open');
-}
-function closeShareSheet(e){
-  if(!e||e.target===document.getElementById('share-overlay')){
-    document.getElementById('share-overlay').classList.remove('open');
-    if(shareRadarChart){shareRadarChart.destroy();shareRadarChart=null;}
-  }
-}
-
-// ── PAGE NAV ──
-function goPage(name){
-  // 光ラインSE
-  const sl = document.getElementById('scan-line-overlay');
-  if(sl){ sl.classList.remove('scanning'); void sl.offsetWidth; sl.classList.add('scanning'); }
-  // nav アイコン1回転
-  const navEl = document.getElementById('nav-'+name);
-  if(navEl){
-    const ico = navEl.querySelector('.nav-icon');
-    if(ico){ ico.classList.remove('spin'); void ico.offsetWidth; ico.classList.add('spin');
-      ico.addEventListener('animationend',()=>ico.classList.remove('spin'),{once:true}); }
-  }
-
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  const page = document.getElementById('page-'+name);
-  const nav  = document.getElementById('nav-'+name);
-  if(page) page.classList.add('active');
-  if(nav)  nav.classList.add('active');
-  document.querySelector('.app-content').scrollTo(0,0);
-  // settingsページを開いたとき目標・SNS数値をプリフィル
-  if(name==='settings'){
-    const gi = document.getElementById('settings-goal');
-    if(gi) gi.value = MEMBER.goal || '';
-    prefillSettingsSNS();
-  }
-  // コミュニティページを開くたびにランダム投稿を先頭に追加
-  if(name==='community' && !_dummyTimer) startDummyTimer();
-}
-
-// ── UTILS ──
-function fmtNum(n){
-  if(!n||n===0) return '0';
-  if(n>=10000) return (n/10000).toFixed(1)+'万';
-  return n.toLocaleString();
-}
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2800);
-}
-function showError(msg){
-  // エラーは常時表示・コピペ可能なバナーで表示
-  const b=document.getElementById('err-banner');
-  document.getElementById('err-banner-text').textContent=msg;
-  b.classList.add('show');
-}
-
-// 起動時の処理
-window.addEventListener("load", async ()=>{
-  const isIos=()=>/iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
-  const isStandalone=()=>window.navigator.standalone===true;
-  if(isIos()&&!isStandalone()){
-    setTimeout(()=>showToast("ホーム画面に追加するとアプリとして使えます"),3000);
-  }
-  // Supabaseセッション復元
-  await restoreSession();
-});
-</script>
