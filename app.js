@@ -541,7 +541,15 @@ async function loadUserAndInit(){
   try{ updateGoalProgress(); }catch(e){ console.warn(e); }
   } catch(e) {
     console.error('loadUserAndInit:', e);
-    showToast('データ読み込みエラー。再ログインしてください。');
+    if(e && (e.message||'').toLowerCase().includes('fetch')){
+      showError(
+        '⚠ データ読み込み失敗: Supabaseに接続できません。\n' +
+        '① https://supabase.com/dashboard でプロジェクトが「Active」か確認\n' +
+        '② ネットワーク接続を確認してください'
+      );
+    } else {
+      showToast('データ読み込みエラー: ' + (e.message || '不明なエラー'));
+    }
     initApp();
   }
 }
@@ -1362,6 +1370,8 @@ function renderStreakDots(){
 
 // ── HOME KPI ──
 function renderKPIGrid(){
+  const grid = document.getElementById('kpi-grid');
+  if(!grid) return; // kpi-strip に置き換えたため存在しない場合はスキップ
   const kpis=[
     { label:'YouTube',   sub:'フォロワー数', plat:'#ff4040', val:fmtNum(SNS.yt.sub), rawVal:SNS.yt.sub, delta:'+1,200', up:true },
     { label:'TikTok',    sub:'フォロワー数', plat:'#69d9d0', val:fmtNum(SNS.tt.sub), rawVal:SNS.tt.sub, delta:'+340',   up:true },
