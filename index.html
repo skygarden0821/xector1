@@ -8,8 +8,6 @@
 <meta name="apple-mobile-web-app-title" content="XECTOR1">
 <meta name="theme-color" content="#050507">
 <title>XECTOR1 — Member Portal</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -18,193 +16,9 @@
 <div class="scan-line-overlay" id="scan-line-overlay"></div>
 
 <!-- ══════════════════════════════
-     LOGIN
-══════════════════════════════ -->
-<div id="screen-login">
-  <div class="login-glow"></div>
-  <div class="login-wrap">
-    <div class="login-logo">
-      <span class="login-logo-mark">XECTOR1</span>
-      <div class="login-logo-sub">Member Portal</div>
-    </div>
-    <div class="login-card">
-      <div class="login-eyebrow">Limited Access</div>
-      <div class="lf">
-        <label>Email</label>
-        <input type="email" id="l-email" placeholder="your@email.com" autocomplete="email">
-      </div>
-      <div class="lf">
-        <label>Password</label>
-        <input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
-      </div>
-      <button class="btn-login" onclick="doLogin()">
-        <span>ENTER</span>
-        <span style="position:relative;z-index:1">→</span>
-      </button>
-    </div>
-    <div class="login-footer">XECTOR1 — 招待メンバー限定</div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════
-     PROFILE SETUP
-══════════════════════════════ -->
-<div id="screen-setup">
-  <div class="setup-wrap">
-    <div class="setup-header">
-      <div class="setup-logo"><div class="logo-dot"></div>XECTOR1</div>
-      <div class="setup-eyebrow">First Time Setup</div>
-      <div class="setup-title">PROFILE<br><em>SETUP</em></div>
-      <div class="setup-sub">ポータルを使い始める前に、あなたの情報を登録してください。<br>SNS URLは正確に入力してください。</div>
-    </div>
-
-    <div class="setup-progress" id="setup-progress">
-      <div class="sp-step active" id="spp-1"><div class="sp-num">1</div><div class="sp-label">基本情報</div></div>
-      <div class="sp-step" id="spp-2"><div class="sp-num">2</div><div class="sp-label">SNS</div></div>
-      <div class="sp-step" id="spp-3"><div class="sp-num">3</div><div class="sp-label">確認</div></div>
-    </div>
-
-    <!-- Step 1: 基本情報 -->
-    <div class="setup-panel active" id="sp-1">
-      <div class="sp-section-label">Step 01</div>
-      <div class="sp-section-title">基本情報</div>
-      <div class="sf-row">
-        <div class="sf">
-          <label>本名 <span class="req">*</span></label>
-          <input type="text" id="sp-name" placeholder="田中 雄介" oninput="spValidate('sp-name','name')">
-          <div class="sf-err" id="sperr-sp-name">名前を入力してください</div>
-        </div>
-        <div class="sf">
-          <label>よみがな <span class="req">*</span></label>
-          <input type="text" id="sp-yomi" placeholder="たなか ゆうすけ" oninput="spValidate('sp-yomi','yomi')">
-          <div class="sf-err" id="sperr-sp-yomi">ひらがなで入力してください</div>
-        </div>
-      </div>
-      <div class="sf">
-        <label>活動名（表示名） <span class="req">*</span></label>
-        <input type="text" id="sp-stage" placeholder="Yuu / ゆうくん etc." oninput="spValidate('sp-stage','req')">
-        <div class="sf-hint">配信・SNSで使用している名前</div>
-        <div class="sf-err" id="sperr-sp-stage">活動名を入力してください</div>
-      </div>
-      <div class="sf">
-        <label>ジャンル <span class="req">*</span></label>
-        <div class="genre-pills" id="sp-genre-pills"></div>
-        <div class="sf-hint" style="margin-top:8px;">複数選択可</div>
-      </div>
-      <div class="sf">
-        <label>現在の状況 <span class="req">*</span></label>
-        <select id="sp-status" onchange="spValidate('sp-status','req')">
-          <option value="">--- 選択してください ---</option>
-          <option value="just_started">これから始める</option>
-          <option value="under_1k">1,000フォロワー未満</option>
-          <option value="1k_10k">1,000〜10,000フォロワー</option>
-          <option value="10k_100k">1万〜10万フォロワー</option>
-          <option value="over_100k">10万フォロワー以上</option>
-        </select>
-        <div class="sf-err" id="sperr-sp-status">選択してください</div>
-      </div>
-      <div class="sf">
-        <label>目標 <span class="opt">任意</span></label>
-        <textarea id="sp-goal" placeholder="例：2025年末までにYouTube10万人達成する" style="min-height:60px;"></textarea>
-      </div>
-      <button class="btn-setup-next" onclick="spNext(1)">次へ →</button>
-    </div>
-
-    <!-- Step 2: SNS情報 -->
-    <div class="setup-panel" id="sp-2">
-      <div class="sp-section-label">Step 02</div>
-      <div class="sp-section-title">SNS情報</div>
-      <div style="font-size:13px;color:rgba(242,240,255,0.5);margin-bottom:16px;line-height:1.7;">
-        使っているSNSのURLを入力してください。<br>最低1つ必須です。
-      </div>
-
-      <div class="sns-setup-block" id="ssb-yt">
-        <div class="ssb-head">
-          <div class="ssb-icon" style="background:rgba(255,64,64,0.12)">🎬</div>
-          <div class="ssb-name" style="color:#ff4040">YouTube</div>
-          <div class="ssb-badge" id="ssb-badge-yt">未入力</div>
-        </div>
-        <div class="sf">
-          <div class="url-wrap">
-            <input type="url" id="sp-yt-url" placeholder="https://youtube.com/@yourchannel" oninput="spValidateUrl('yt','youtube.com')">
-            <span class="url-chk" id="urlchk-yt"></span>
-          </div>
-          <div class="sf-err" id="sperr-yt">youtube.com のURLを入力してください</div>
-        </div>
-      </div>
-
-      <div class="sns-setup-block" id="ssb-tt">
-        <div class="ssb-head">
-          <div class="ssb-icon" style="background:rgba(105,217,208,0.12)">♪</div>
-          <div class="ssb-name" style="color:#69d9d0">TikTok</div>
-          <div class="ssb-badge" id="ssb-badge-tt">未入力</div>
-        </div>
-        <div class="sf">
-          <div class="url-wrap">
-            <input type="url" id="sp-tt-url" placeholder="https://tiktok.com/@yourhandle" oninput="spValidateUrl('tt','tiktok.com')">
-            <span class="url-chk" id="urlchk-tt"></span>
-          </div>
-          <div class="sf-err" id="sperr-tt">tiktok.com のURLを入力してください</div>
-        </div>
-      </div>
-
-      <div class="sns-setup-block" id="ssb-ig">
-        <div class="ssb-head">
-          <div class="ssb-icon" style="background:rgba(224,64,251,0.10)">◈</div>
-          <div class="ssb-name" style="color:#e040fb">Instagram</div>
-          <div class="ssb-badge" id="ssb-badge-ig">未入力</div>
-        </div>
-        <div class="sf">
-          <div class="url-wrap">
-            <input type="url" id="sp-ig-url" placeholder="https://instagram.com/yourhandle" oninput="spValidateUrl('ig','instagram.com')">
-            <span class="url-chk" id="urlchk-ig"></span>
-          </div>
-          <div class="sf-err" id="sperr-ig">instagram.com のURLを入力してください</div>
-        </div>
-      </div>
-
-      <div class="sns-setup-block" id="ssb-x">
-        <div class="ssb-head">
-          <div class="ssb-icon" style="background:rgba(180,180,180,0.08)">✕</div>
-          <div class="ssb-name" style="color:#aaa">X / Twitter</div>
-          <div class="ssb-badge" id="ssb-badge-x">未入力</div>
-        </div>
-        <div class="sf">
-          <div class="url-wrap">
-            <input type="url" id="sp-x-url" placeholder="https://x.com/yourhandle" oninput="spValidateUrl('x','x.com')">
-            <span class="url-chk" id="urlchk-x"></span>
-          </div>
-          <div class="sf-hint">twitter.com のURLでも可</div>
-          <div class="sf-err" id="sperr-x">x.com または twitter.com のURLを入力してください</div>
-        </div>
-      </div>
-
-      <div style="background:var(--s1);border:1px solid var(--border);border-radius:2px;
-        padding:12px 16px;margin-bottom:16px;font-size:12px;color:rgba(242,240,255,0.5);line-height:1.7;">
-        ℹ SNS URLはYoshi（管理者）のみが確認します。第三者には公開されません。
-      </div>
-      <button class="btn-setup-next" onclick="spNext(2)">確認へ →</button>
-      <button class="btn-setup-back" onclick="spPrev(2)">← 戻る</button>
-    </div>
-
-    <!-- Step 3: 確認 -->
-    <div class="setup-panel" id="sp-3">
-      <div class="sp-section-label">Step 03</div>
-      <div class="sp-section-title">内容確認</div>
-      <div style="font-size:13px;color:rgba(242,240,255,0.5);margin-bottom:20px;line-height:1.7;">
-        入力内容を確認して、問題なければ登録してください。
-      </div>
-      <div class="conf-block" id="sp-confirm-block"></div>
-      <button class="btn-setup-next" id="sp-submit-btn" onclick="spSubmit()">登録してポータルへ →</button>
-      <button class="btn-setup-back" onclick="spPrev(3)">← 戻る</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════
      APP
 ══════════════════════════════ -->
-<div id="app">
+<div id="app" class="visible">
 
   <!-- TOP BAR -->
   <header class="app-topbar">
@@ -225,17 +39,16 @@
 
     <!-- ── HOME ── -->
     <div id="page-home" class="page active">
-      <!-- HERO -->
       <div class="home-hero">
         <div class="home-hero-bg"></div>
         <div class="home-hero-top">
           <div>
             <div class="home-greeting" id="home-greeting">Good evening</div>
-            <div class="home-name">こんにちは、<br><em id="home-name">田中</em></div>
-            <div class="home-since" id="home-since">Member since Nov 2024 — Day 129</div>
+            <div class="home-name">こんにちは、<br><em id="home-name">メンバー</em></div>
+            <div class="home-since" id="home-since">Member since Nov 2024</div>
           </div>
           <div class="home-avatar-wrap" onclick="goPage('settings')">
-            <div class="home-avatar" id="home-avatar">
+            <div class="home-avatar">
               <div class="home-avatar-inner" id="home-avatar-inner">?</div>
             </div>
             <div class="home-avatar-label">プロフィール</div>
@@ -243,43 +56,27 @@
         </div>
       </div>
 
-      <!-- 目標プログレス（目標設定済み時） -->
-      <div class="goal-progress-wrap" id="goal-progress-wrap" onclick="goPage('settings')" style="display:none">
-        <div class="goal-progress-top">
-          <div class="goal-progress-title">MY GOAL</div>
-          <div class="goal-progress-pct" id="goal-progress-pct">0%</div>
-        </div>
-        <div class="goal-progress-text" id="goal-progress-text">目標を設定してください</div>
-        <div class="goal-progress-bar-bg">
-          <div class="goal-progress-bar-fill" id="goal-progress-bar"></div>
-        </div>
-        <div class="goal-progress-detail" id="goal-progress-detail"></div>
-      </div>
-
-      <!-- 目標未設定時 -->
+      <!-- 目標カード -->
       <div class="goal-card" id="goal-card" onclick="goPage('settings')">
         <div class="goal-eyebrow">MY GOAL</div>
         <div class="goal-text" id="goal-text">目標を設定してください →</div>
       </div>
 
       <!-- ストリーク -->
-      <div class="streak-block" style="margin-top:16px;">
-        <div class="streak-num" id="streak-num">23</div>
+      <div class="streak-block">
+        <div class="streak-num" id="streak-num">0</div>
         <div>
           <div class="streak-label">日連続アクティブ</div>
           <div class="streak-dots" id="streak-dots"></div>
         </div>
       </div>
 
-      <!-- SNS 数値チップ（横スクロール） -->
-      <div class="kpi-strip" id="kpi-strip"></div>
-
-      <!-- 2×2 アクショングリッド -->
+      <!-- アクショングリッド -->
       <div class="action-grid">
-        <div class="action-card" onclick="goPage('stats')">
-          <div class="ac-icon">📊</div>
-          <div class="ac-label">Weekly Update</div>
-          <div class="ac-title">SNS数値を更新</div>
+        <div class="action-card" onclick="goPage('tips')">
+          <div class="ac-icon">💡</div>
+          <div class="ac-label">This Week</div>
+          <div class="ac-title">最新Tipsを見る</div>
           <div class="ac-arrow">→</div>
         </div>
         <div class="action-card" onclick="goPage('book')">
@@ -288,74 +85,20 @@
           <div class="ac-title">面談を予約</div>
           <div class="ac-arrow">→</div>
         </div>
-        <div class="action-card" onclick="goPage('tips')">
-          <div class="ac-icon">💡</div>
-          <div class="ac-label">This Week</div>
-          <div class="ac-title">最新Tipsを見る</div>
-          <div class="ac-arrow">→</div>
-        </div>
         <div class="action-card" onclick="goPage('community')">
           <div class="ac-icon">👥</div>
           <div class="ac-label">Community</div>
           <div class="ac-title">仲間の投稿を見る</div>
           <div class="ac-arrow">→</div>
         </div>
-      </div>
-    </div>
-
-    <!-- ── STATS ── -->
-    <div id="page-stats" class="page">
-      <div class="stats-header">
-        <div class="eyebrow">Growth Analytics</div>
-        <div class="big-title">MY<br><em>STATS</em></div>
-      </div>
-
-      <div id="stats-empty" style="display:none;padding:60px 20px;text-align:center;">
-        <div style="font-size:40px;margin-bottom:16px;">📊</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;margin-bottom:8px;">準備中</div>
-        <div style="font-size:14px;color:rgba(242,240,255,0.5);line-height:1.7;">スタッフがデータを登録するまでお待ちください。<br>設定ページから自分で入力することもできます。</div>
-        <button onclick="goPage('settings')" style="margin-top:24px;background:transparent;border:1px solid rgba(200,255,0,0.4);color:var(--lime);padding:12px 28px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;cursor:pointer;border-radius:4px;">設定で入力する →</button>
-      </div>
-
-      <div class="radar-card">
-        <div class="rc-top">
-          <div>
-            <div class="rc-title">総合スコア</div>
-            <div class="rc-score" id="radar-score">—</div>
-            <div class="rc-grade" id="radar-grade">—</div>
-          </div>
-          <button class="tag tag-lime" style="cursor:pointer;border:none;" onclick="openShareSheet()">📸 SHARE</button>
+        <div class="action-card" onclick="goPage('settings')">
+          <div class="ac-icon">🎯</div>
+          <div class="ac-label">My Goal</div>
+          <div class="ac-title">目標・設定を編集</div>
+          <div class="ac-arrow">→</div>
         </div>
-        <div class="radar-wrap"><canvas id="radar-chart"></canvas></div>
       </div>
-
-      <div class="period-tabs">
-        <div class="pt active" onclick="setPeriod('month',this)">月次</div>
-        <div class="pt" onclick="setPeriod('week',this)">週次</div>
-        <div class="pt" onclick="setPeriod('year',this)">年次</div>
-      </div>
-
-      <div class="metric-scroll" id="metric-scroll"></div>
-
-      <div class="line-card">
-        <div class="lc-header">
-          <div>
-            <div class="lc-title" id="lc-title">フォロワー推移</div>
-            <div class="lc-sub" id="lc-sub">Monthly</div>
-          </div>
-        </div>
-        <div class="lc-wrap"><canvas id="line-chart"></canvas></div>
-      </div>
-
-      <div class="stats-pending" id="stats-pending">
-        <div class="stats-pending-icon">◈</div>
-        <div class="stats-pending-title">データ準備中</div>
-        <div class="stats-pending-sub">SNSの数値はスタッフが定期的に更新します。<br>設定から自分で入力することもできます。</div>
-        <button class="stats-pending-btn" onclick="goPage('settings')">設定で入力する →</button>
-      </div>
-
-      <div class="input-form" id="input-form"></div>
-    </div>
+    </div><!-- /page-home -->
 
     <!-- ── TIPS ── -->
     <div id="page-tips" class="page">
@@ -386,7 +129,7 @@
       <div class="feed" id="feed"></div>
     </div>
 
-    <!-- ── BOOK (Program) ── -->
+    <!-- ── BOOK ── -->
     <div id="page-book" class="page">
       <div class="book-header">
         <div class="eyebrow">Program</div>
@@ -424,14 +167,14 @@
         </div>
       </div>
       <div style="height:20px;"></div>
-    </div>
+    </div><!-- /page-book -->
 
     <!-- ── SETTINGS ── -->
     <div id="page-settings" class="page">
       <div class="settings-section">
         <div class="eyebrow">Account</div>
         <div class="settings-title">SETTINGS</div>
-        <div class="settings-sub">表示名・目標・SNS数値を編集できます</div>
+        <div class="settings-sub">表示名・目標・アイコンを編集できます</div>
       </div>
 
       <!-- アバター編集 -->
@@ -482,66 +225,16 @@
         <button class="goal-save-btn" onclick="saveGoal()">SAVE GOAL →</button>
       </div>
 
-      <!-- SNS数値手動更新 -->
-      <div class="settings-sns-wrap">
-        <div class="settings-label" style="margin:24px 20px 4px;">SNS 数値を更新</div>
-        <div style="padding:0 20px 12px;"><span class="edit-badge">✏ EDITABLE — 数値を直接入力してください</span></div>
-
-        <div class="sns-platform-block">
-          <div class="sns-plat-header"><span class="sns-dot" style="background:#ff4040"></span>YouTube</div>
-          <div class="sns-input-row">
-            <div class="sns-input-group"><label>チャンネル登録者</label><input type="number" id="s-yt-sub" placeholder="0" min="0"></div>
-            <div class="sns-input-group"><label>総再生回数</label><input type="number" id="s-yt-views" placeholder="0" min="0"></div>
-            <div class="sns-input-group"><label>投稿数</label><input type="number" id="s-yt-posts" placeholder="0" min="0"></div>
-          </div>
-        </div>
-
-        <div class="sns-platform-block">
-          <div class="sns-plat-header"><span class="sns-dot" style="background:#69d9d0"></span>TikTok</div>
-          <div class="sns-input-row">
-            <div class="sns-input-group"><label>フォロワー</label><input type="number" id="s-tt-sub" placeholder="0" min="0"></div>
-            <div class="sns-input-group"><label>総再生回数</label><input type="number" id="s-tt-views" placeholder="0" min="0"></div>
-            <div class="sns-input-group"><label>投稿数</label><input type="number" id="s-tt-posts" placeholder="0" min="0"></div>
-          </div>
-        </div>
-
-        <div class="sns-platform-block">
-          <div class="sns-plat-header"><span class="sns-dot" style="background:#e040fb"></span>Instagram</div>
-          <div class="sns-input-row">
-            <div class="sns-input-group"><label>フォロワー</label><input type="number" id="s-ig-sub" placeholder="0" min="0"></div>
-            <div class="sns-input-group"><label>リーチ数</label><input type="number" id="s-ig-reach" placeholder="0" min="0"></div>
-            <div class="sns-input-group"><label>投稿数</label><input type="number" id="s-ig-posts" placeholder="0" min="0"></div>
-          </div>
-        </div>
-
-        <div class="sns-platform-block">
-          <div class="sns-plat-header"><span class="sns-dot" style="background:#c8c8c8"></span>X (Twitter)</div>
-          <div class="sns-input-row">
-            <div class="sns-input-group"><label>フォロワー</label><input type="number" id="s-x-sub" placeholder="0" min="0"></div>
-            <div class="sns-input-group"><label>インプレッション</label><input type="number" id="s-x-imp" placeholder="0" min="0"></div>
-            <div class="sns-input-group"><label>投稿数</label><input type="number" id="s-x-posts" placeholder="0" min="0"></div>
-          </div>
-        </div>
-
-        <div style="padding:0 20px 8px;">
-          <button class="goal-save-btn" onclick="saveStatsFromSettings()">SAVE & UPDATE →</button>
-        </div>
-      </div>
-
-      <div style="height:40px;"></div>
+      <div style="height:60px;"></div>
     </div><!-- /page-settings -->
 
-  </main><!-- /app-content -->
+  </main>
 
   <!-- BOTTOM NAV -->
   <nav class="app-nav">
     <button class="nav-item active" id="nav-home" onclick="goPage('home')">
       <span class="nav-icon">⬡</span>
       <span class="nav-label">ホーム</span>
-    </button>
-    <button class="nav-item" id="nav-stats" onclick="goPage('stats')">
-      <span class="nav-icon">◈</span>
-      <span class="nav-label">実績</span>
     </button>
     <button class="nav-item" id="nav-tips" onclick="goPage('tips')">
       <span class="nav-icon">💡</span>
@@ -574,59 +267,7 @@
   </div>
 </div>
 
-<!-- ── SHARE SHEET ── -->
-<div class="overlay" id="share-overlay" onclick="closeShareSheet(event)">
-  <div class="sheet" onclick="event.stopPropagation()">
-    <div class="sheet-handle"></div>
-    <div class="share-sheet">
-      <div class="sheet-close"><button onclick="closeShareSheet()">✕</button></div>
-      <div class="share-card-inner">
-        <div class="sc-logo">XECTOR1</div>
-        <div class="sc-sub">SNS Growth Report</div>
-        <div class="sc-name" id="sc-name">田中 雄介</div>
-        <div class="sc-period" id="sc-period">2025年3月</div>
-        <div class="sc-radar"><canvas id="share-radar" width="160" height="160"></canvas></div>
-        <div class="sc-grid" id="sc-grid"></div>
-        <div class="sc-score-row">
-          <div><div class="sc-score-l">総合スコア</div></div>
-          <div class="sc-score-v" id="sc-score">—</div>
-        </div>
-        <div class="sc-footer-row">
-          <span class="sc-tag" id="sc-rank-tag">MEMBER</span>
-          <span class="sc-url">xector1.jp</span>
-        </div>
-      </div>
-      <button class="btn-share-dl" onclick="showToast('スクショして拡散してください 📸')">📸 スクショ用カード</button>
-    </div>
-  </div>
-</div>
-
-<!-- ── 週次サマリーモーダル ── -->
-<div id="weekly-modal">
-  <div class="wm-box">
-    <div class="wm-eyebrow">Weekly Report</div>
-    <div class="wm-title" id="wm-title">先週より<br><em id="wm-headline">成長中</em></div>
-    <div class="wm-sub" id="wm-sub">先週との比較です。</div>
-    <div class="wm-items" id="wm-items"></div>
-    <button class="wm-close-btn" onclick="closeWeeklyModal()">よし、やるか →</button>
-  </div>
-</div>
-
-<!-- ── マイルストーン演出 ── -->
-<div id="milestone-overlay">
-  <div class="milestone-box">
-    <span class="milestone-icon" id="ms-icon">🏆</span>
-    <div class="milestone-label">Milestone Reached</div>
-    <div class="milestone-val" id="ms-val">10万</div>
-    <div class="milestone-plat" id="ms-plat">YouTubeチャンネル登録者</div>
-  </div>
-</div>
-
 <div class="toast" id="toast"></div>
-<div class="err-banner" id="err-banner">
-  <span class="err-banner-close" onclick="document.getElementById('err-banner').classList.remove('show')">×</span>
-  <span id="err-banner-text"></span>
-</div>
 
 <script src="app.js"></script>
 </body>
