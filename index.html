@@ -6,19 +6,22 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="XECTOR1">
-<meta name="theme-color" content="#09090f">
+<meta name="theme-color" content="#06060a">
 <title>XECTOR1 Member Portal</title>
 
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Noto+Sans+JP:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div id="app">
 
+  <!-- ═══════════ TOPBAR ═══════════ -->
   <header class="topbar">
     <div class="topbar-brand">
       <span class="brand-dot"></span>
-      <span class="brand-name">XECTOR1</span>
+      <span class="brand-name">XECTOR<span class="brand-num">1</span></span>
     </div>
     <div class="topbar-right">
       <span class="topbar-member-name" id="topbar-member"></span>
@@ -30,30 +33,50 @@
 
   <main class="scroll-area" id="scroll-area">
 
-    <!-- ═══ HOME ═══ -->
+    <!-- ═══════════ HOME ═══════════ -->
     <div id="page-home" class="page active">
+
+      <!-- HERO -->
       <section class="hero">
-        <div class="hero-copy">
-          <p class="hero-greeting" id="home-greeting">こんにちは</p>
-          <h1 class="hero-name" id="home-name">メンバー<span class="hero-san">さん</span></h1>
-          <div class="member-badge">
-            <span class="member-badge-dot"></span>
-            <span class="member-badge-text">MEMBER</span>
-          </div>
+        <div class="hero-stamp">
+          <span class="stamp-date" id="hero-date"></span>
+          <span class="stamp-divider"></span>
+          <span class="stamp-day" id="hero-day"></span>
         </div>
-        <button class="av-btn hero-av-btn" onclick="goPage('settings')" aria-label="設定">
-          <div class="av av-hero" id="home-av">?</div>
-        </button>
+        <div class="hero-row">
+          <div class="hero-copy">
+            <p class="hero-greeting" id="home-greeting">こんにちは</p>
+            <h1 class="hero-name" id="home-name">メンバー<span class="hero-san">さん</span></h1>
+          </div>
+          <button class="av-btn hero-av-btn" onclick="goPage('settings')" aria-label="設定">
+            <div class="av av-hero" id="home-av">?</div>
+          </button>
+        </div>
+
+        <div class="hero-status">
+          <div class="status-pill">
+            <span class="status-pill-dot"></span>
+            <span class="status-pill-text">MEMBER</span>
+          </div>
+          <div class="status-meta" id="status-days">— 日</div>
+        </div>
       </section>
 
+      <!-- GOAL -->
       <button class="goal-frame" onclick="goPage('settings')" aria-label="目標を設定する">
         <div class="goal-frame-inner">
-          <span class="goal-kicker">MY GOAL</span>
+          <span class="goal-kicker">
+            <span class="goal-kicker-line"></span>
+            MY GOAL
+          </span>
           <p class="goal-text" id="goal-text">目標を設定してください</p>
         </div>
-        <span class="goal-caret">›</span>
+        <span class="goal-edit">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+        </span>
       </button>
 
+      <!-- ACTIONS -->
       <div class="actions">
         <button class="action action-primary" onclick="goPage('book')">
           <div class="action-body">
@@ -67,8 +90,8 @@
         </button>
         <button class="action action-secondary" onclick="goPage('tips')">
           <div class="action-body">
-            <span class="action-kicker">KNOWLEDGE</span>
-            <span class="action-title">Tips を読む</span>
+            <span class="action-kicker">KNOWLEDGE BASE</span>
+            <span class="action-title">Tipsを読む</span>
             <span class="action-desc">今週の成長ノウハウをチェック</span>
           </div>
           <span class="action-badge action-badge-dark">
@@ -76,58 +99,82 @@
           </span>
         </button>
       </div>
+
+      <!-- TODAY'S PICK -->
+      <div class="pick-section">
+        <div class="pick-section-head">
+          <span class="pick-kicker">TODAY'S PICK</span>
+          <span class="pick-kicker-num" id="pick-num">— / —</span>
+        </div>
+        <button class="pick-card" id="pick-card" onclick="openPick()">
+          <div class="pick-card-tag" id="pick-tag"></div>
+          <p class="pick-card-title" id="pick-title">—</p>
+          <div class="pick-card-foot">
+            <span class="pick-card-meta" id="pick-meta">—</span>
+            <span class="pick-card-arrow">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </span>
+          </div>
+        </button>
+      </div>
+
+      <div style="height:36px"></div>
     </div>
 
-    <!-- ═══ TIPS ═══ -->
+    <!-- ═══════════ TIPS ═══════════ -->
     <div id="page-tips" class="page">
       <div class="page-head">
+        <span class="page-eyebrow">KNOWLEDGE BASE</span>
         <h2 class="page-title">Tips</h2>
         <p class="page-sub">Xector1だけのノウハウ集</p>
       </div>
+
       <div class="tips-exclusive">
         <div class="tips-exclusive-kicker">
           <span class="exclusive-dot"></span>
-          MEMBER ONLY
+          MEMBER ONLY ARCHIVE
         </div>
-        <p class="tips-exclusive-copy">累計800組以上のアーティストと向き合ってきた Xector1 が、ここだけにまとめた社外秘のノウハウです。活動の武器として使い倒してください。</p>
+        <p class="tips-exclusive-copy">累計800組以上のアーティストと向き合ってきたXector1が、ここだけにまとめた社外秘のノウハウ。あなたの活動の武器として使い倒してください。</p>
+        <div class="tips-exclusive-stats">
+          <div class="exclusive-stat">
+            <span class="exclusive-stat-num" id="tips-total">0</span>
+            <span class="exclusive-stat-lbl">ARTICLES</span>
+          </div>
+          <div class="exclusive-stat-div"></div>
+          <div class="exclusive-stat">
+            <span class="exclusive-stat-num" id="tips-cats">0</span>
+            <span class="exclusive-stat-lbl">CATEGORIES</span>
+          </div>
+        </div>
       </div>
+
       <div class="filters" id="filter-row"></div>
       <div class="tip-list" id="tips-list"></div>
+      <div style="height:36px"></div>
     </div>
 
-    <!-- ═══
-    <!-- ═══ TIP ARTICLE ═══ -->
-    <div id="page-tip-article" class="page">
-      <div class="article-topbar">
-        <button class="article-back-btn" onclick="closeTipArticle()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
-          Tips一覧
-        </button>
-      </div>
-      <div class="article-wrap">
-        <div class="article-bar" id="tip-article-bar"></div>
-        <div class="article-meta" id="tip-article-meta"></div>
-        <h1 class="article-title" id="tip-article-title"></h1>
-        <div class="article-body" id="tip-article-body"></div>
-      </div>
-    </div>
-
-    <!-- ═══ 制作 ═══ -->
+    <!-- ═══════════ 制作 ═══════════ -->
     <div id="page-seisaku" class="page">
       <div class="page-head">
+        <span class="page-eyebrow">PRODUCTION</span>
         <h2 class="page-title">制作</h2>
         <p class="page-sub">Xector1の制作チームに直接依頼できます</p>
       </div>
 
       <div class="seisaku-intro">
-        <span class="seisaku-intro-badge">商用利用OK</span>
+        <span class="seisaku-intro-badge">商用利用 OK</span>
         <p class="seisaku-intro-text">グッズ展開・配信登録・SNS投稿にそのまま使えます。権利はあなたに帰属。フォーム1つでやりとりが完結します。</p>
       </div>
 
       <!-- イラスト -->
       <div class="seisaku-block">
         <div class="seisaku-block-head">
-          <h3 class="seisaku-block-title">イラスト制作</h3>
+          <div class="seisaku-block-head-left">
+            <span class="seisaku-block-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+            </span>
+            <h3 class="seisaku-block-title">イラスト制作</h3>
+          </div>
         </div>
         <div class="price-list">
           <div class="price-row"><span class="price-name">企画時キービジュアル</span><span class="price-val">¥25,000</span></div>
@@ -135,13 +182,21 @@
           <div class="price-row"><span class="price-name">SNSアイコン（バストアップ）</span><span class="price-val">¥9,000</span></div>
           <div class="price-row"><span class="price-name">デフォルメイラスト</span><span class="price-val">¥4,500</span></div>
         </div>
-        <a class="btn-solid btn-form" href="https://forms.gle/wFoujvkfWBbSNfLM8" target="_blank" rel="noopener">依頼フォームへ →</a>
+        <a class="btn-form" href="https://forms.gle/wFoujvkfWBbSNfLM8" target="_blank" rel="noopener">
+          依頼フォームへ
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+        </a>
       </div>
 
       <!-- MIX -->
       <div class="seisaku-block">
         <div class="seisaku-block-head">
-          <h3 class="seisaku-block-title">MIX・マスタリング</h3>
+          <div class="seisaku-block-head-left">
+            <span class="seisaku-block-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+            </span>
+            <h3 class="seisaku-block-title">MIX・マスタリング</h3>
+          </div>
         </div>
         <p class="price-group-label">BASE</p>
         <div class="price-list">
@@ -156,13 +211,21 @@
           <div class="price-row"><span class="price-name">動画エンコード</span><span class="price-val">¥1,000</span></div>
           <div class="price-row"><span class="price-name">コラボ</span><span class="price-val">¥5,000</span></div>
         </div>
-        <a class="btn-solid btn-form" href="https://forms.gle/wFoujvkfWBbSNfLM8" target="_blank" rel="noopener">依頼フォームへ →</a>
+        <a class="btn-form" href="https://forms.gle/wFoujvkfWBbSNfLM8" target="_blank" rel="noopener">
+          依頼フォームへ
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+        </a>
       </div>
 
       <!-- MV -->
       <div class="seisaku-block">
         <div class="seisaku-block-head">
-          <h3 class="seisaku-block-title">MV撮影・動画編集</h3>
+          <div class="seisaku-block-head-left">
+            <span class="seisaku-block-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+            </span>
+            <h3 class="seisaku-block-title">MV撮影・動画編集</h3>
+          </div>
         </div>
         <p class="price-group-label">BASE</p>
         <div class="price-list">
@@ -175,13 +238,21 @@
           <div class="price-row"><span class="price-name">MV映像編集</span><span class="price-val">¥50,000</span></div>
           <div class="price-row"><span class="price-name">スタジオレンタル</span><span class="price-val">加算</span></div>
         </div>
-        <a class="btn-solid btn-form" href="https://forms.gle/wFoujvkfWBbSNfLM8" target="_blank" rel="noopener">依頼フォームへ →</a>
+        <a class="btn-form" href="https://forms.gle/wFoujvkfWBbSNfLM8" target="_blank" rel="noopener">
+          依頼フォームへ
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+        </a>
       </div>
 
       <!-- スピードオプション -->
       <div class="seisaku-block seisaku-block-speed">
         <div class="seisaku-block-head">
-          <h3 class="seisaku-block-title">スピードオプション</h3>
+          <div class="seisaku-block-head-left">
+            <span class="seisaku-block-icon seisaku-block-icon-accent">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </span>
+            <h3 class="seisaku-block-title">スピードオプション</h3>
+          </div>
           <span class="seisaku-block-note">全サービス共通</span>
         </div>
         <div class="price-list">
@@ -190,36 +261,51 @@
         </div>
       </div>
 
-      <div style="height:36px"></div>
+      <div style="height:48px"></div>
     </div>
 
-    <!-- ═══ BOOK ═══ -->
+    <!-- ═══════════ BOOK ═══════════ -->
     <div id="page-book" class="page">
       <div class="page-head">
+        <span class="page-eyebrow">BOOKING</span>
         <h2 class="page-title">予約</h2>
         <p class="page-sub">セッションを選んで日程を予約してください</p>
       </div>
+
       <a class="rulebook-link" href="https://docs.google.com/document/d/1vhECxaHXvovLKNmmOFged8pR0biWdhIPI_9OiP__QHE/edit?usp=sharing" target="_blank" rel="noopener">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-        予約ルールブックを確認する
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+        <svg class="rulebook-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <span class="rulebook-text">予約ルールブックを確認する</span>
+        <svg class="rulebook-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
       </a>
+
       <div class="tab-row">
-        <button class="tab active" id="prog-tab-1" onclick="switchProgram(1)">プロデュース</button>
-        <button class="tab" id="prog-tab-2" onclick="switchProgram(2)">ボイトレ A</button>
-        <button class="tab" id="prog-tab-3" onclick="switchProgram(3)">ボイトレ B</button>
+        <button class="tab active" id="prog-tab-1" onclick="switchProgram(1)">
+          <span class="tab-num">01</span>
+          <span class="tab-label">プロデュース</span>
+        </button>
+        <button class="tab" id="prog-tab-2" onclick="switchProgram(2)">
+          <span class="tab-num">02</span>
+          <span class="tab-label">ボイトレ A</span>
+        </button>
+        <button class="tab" id="prog-tab-3" onclick="switchProgram(3)">
+          <span class="tab-num">03</span>
+          <span class="tab-label">ボイトレ B</span>
+        </button>
       </div>
+
       <div class="ycbm" id="ycbm-panel-1"><iframe src="https://skygarden0821.youcanbook.me/" frameborder="0" scrolling="yes" allowtransparency="true"></iframe></div>
       <div class="ycbm" id="ycbm-panel-2" style="display:none"><iframe src="https://xector1voice01.youcanbook.me/" frameborder="0" scrolling="yes" allowtransparency="true"></iframe></div>
       <div class="ycbm" id="ycbm-panel-3" style="display:none"><iframe src="https://xector1voice02.youcanbook.me/" frameborder="0" scrolling="yes" allowtransparency="true"></iframe></div>
     </div>
 
-    <!-- ═══ SETTINGS ═══ -->
+    <!-- ═══════════ SETTINGS ═══════════ -->
     <div id="page-settings" class="page">
       <div class="page-head">
+        <span class="page-eyebrow">PROFILE</span>
         <h2 class="page-title">設定</h2>
         <p class="page-sub">プロフィールと目標を編集します</p>
       </div>
+
       <div class="setting-block">
         <p class="setting-label">アイコン画像</p>
         <div class="av-edit-area">
@@ -230,7 +316,7 @@
         </div>
         <input type="file" id="av-input" accept="image/*" style="display:none" onchange="onAvatarFileSelected(event)">
         <div class="crop-panel" id="crop-panel">
-          <p class="crop-note">ドラッグで位置を調整　ピンチでズーム</p>
+          <p class="crop-note">ドラッグで位置を調整 ・ ピンチでズーム</p>
           <div class="crop-stage" id="crop-stage"><canvas id="crop-canvas"></canvas></div>
           <div class="crop-row">
             <button class="btn-ghost" onclick="cancelCrop()">キャンセル</button>
@@ -238,22 +324,25 @@
           </div>
         </div>
       </div>
+
       <div class="setting-block">
         <p class="setting-label">表示名</p>
         <input class="field" type="text" id="settings-name" placeholder="例：田中雄介">
         <button class="btn-solid" onclick="saveName()">保存する</button>
       </div>
+
       <div class="setting-block">
         <p class="setting-label">目標</p>
         <textarea class="field field-ta" id="settings-goal" placeholder="例：2025年末までにYouTube登録者10万人達成する"></textarea>
         <button class="btn-solid" onclick="saveGoal()">保存する</button>
       </div>
+
       <div style="height:72px"></div>
     </div>
 
   </main>
 
-  <!-- BOTTOM NAV -->
+  <!-- ═══════════ BOTTOM NAV ═══════════ -->
   <nav class="nav">
     <button class="nav-item active" id="nav-home" onclick="goPage('home')">
       <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -279,13 +368,13 @@
 
 </div>
 
-<!-- TIP シート -->
+<!-- ═══════════ TIP SHEET ═══════════ -->
 <div class="sheet-overlay" id="tip-overlay" onclick="closeTip(event)">
   <div class="sheet" onclick="event.stopPropagation()">
     <div class="sheet-notch"></div>
     <div class="sheet-scroll">
       <button class="sheet-back" onclick="closeTip()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
         閉じる
       </button>
       <div id="tip-content"></div>
@@ -294,6 +383,7 @@
 </div>
 
 <div class="toast" id="toast"></div>
+
 <script src="tips-data.js"></script>
 <script src="app.js"></script>
 </body>
