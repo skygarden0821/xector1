@@ -1,494 +1,460 @@
 // ════════════════════════════════════════════════════════════
-//  app.js — XECTOR1 MEMBER PORTAL
-//  Tipsの追加・修正は tips-data.js を編集してください
+//   XECTOR1 Member Portal — Native App v4
 // ════════════════════════════════════════════════════════════
 
-const MEMBER = {
-  name:   'メンバー',
-  short:  'メンバー',
-  since:  '2024-11-01',
-  goal:   '',
-  avatar: null
-};
+const LS_NAME = 'xector1_name';
+const LS_GOAL = 'xector1_goal';
+const LS_AV   = 'xector1_av';
+const LS_JOIN = 'xector1_joined';
 
-// ─── カテゴリ定義（ラベル・色） ───
+// カテゴリ表示テーブル
 const CATS = {
-  content:   { label: 'コンテンツ',     color: 'var(--cat-content)'   },
-  algorithm: { label: 'アルゴリズム',   color: 'var(--cat-algorithm)' },
-  growth:    { label: '成長戦略',       color: 'var(--cat-growth)'    },
-  mindset:   { label: 'マインドセット', color: 'var(--cat-mindset)'   },
-  collab:    { label: 'コラボ',         color: 'var(--cat-collab)'    },
+  content:   { label:'コンテンツ',     color:'var(--cat-content)' },
+  algorithm: { label:'アルゴリズム',   color:'var(--cat-algorithm)' },
+  growth:    { label:'成長戦略',       color:'var(--cat-growth)' },
+  mindset:   { label:'マインドセット', color:'var(--cat-mindset)' },
+  collab:    { label:'コラボ',         color:'var(--cat-collab)' },
 };
 
 let activeFilter = 'all';
 
-// ════════════════════════════════════════════════════════════
-//  STORAGE
-// ════════════════════════════════════════════════════════════
-function loadStorage() {
-  try {
-    const n = localStorage.getItem('x1_name');
-    if (n) {
-      MEMBER.name = n;
-      MEMBER.short = n.split(/[\s　]/)[0] || n;
+// ─── ユーティリティ ───
+function $(id){ return document.getElementById(id); }
+function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function readMinutes(text){ return Math.max(1, Math.round((text||'').length / 400)); }
+function previewOf(text, n){
+  const flat = (text||'').replace(/^[■・]\s*/gm,'').replace(/\n+/g,' ').trim();
+  return flat.slice(0, n||80);
+}
+
+// ─── 簡易マークダウン パーサ ───
+function renderBody(body){
+  const lines = (body || '').split('\n');
+  let html = '';
+  let buf = [];
+  let inList = false;
+
+  const flushPara = ()=>{
+    if (buf.length){
+      html += `<p class="sheet-p">${escapeHtml(buf.join(' '))}</p>`;
+      buf = [];
     }
-    const g = localStorage.getItem('x1_goal');
-    if (g) MEMBER.goal = g;
-    const a = localStorage.getItem('x1_avatar');
-    if (a) MEMBER.avatar = a;
-    const s = localStorage.getItem('x1_since');
-    if (s) MEMBER.since = s;
-    else localStorage.setItem('x1_since', MEMBER.since);
-  } catch (_) {}
+  };
+  const closeList = ()=>{
+    if (inList){ html += '</div>'; inList = false; }
+  };
+
+  for (let raw of lines){
+    const line = raw.trim();
+    if (!line){ flushPara(); closeList(); continue; }
+
+    if (line.startsWith('■')){
+      flushPara(); closeList();
+      const text = line.replace(/^■\s*/,'');
+      html += `<h3 class="sheet-h">${escapeHtml(text)}</h3>`;
+      continue;
+    }
+
+    if (line.startsWith('・')){
+      flushPara();
+      if (!inList){ html += '<div class="sheet-ul">'; inList = true; }
+      const text = line.replace(/^・\s*/,'');
+      html += `<div class="sheet-li">${escapeHtml(text)}</div>`;
+      continue;
+    }
+
+    closeList();
+    buf.push(line);
+  }
+  flushPara(); closeList();
+  return html;
 }
 
-function saveName() {
-  const v = document.getElementById('settings-name').value.trim();
-  if (!v) { toast('名前を入力してください'); return; }
-  MEMBER.name  = v;
-  MEMBER.short = v.split(/[\s　]/)[0] || v;
-  try { localStorage.setItem('x1_name', v); } catch (_) {}
-  document.getElementById('topbar-member').textContent = MEMBER.name;
-  document.getElementById('home-name').innerHTML =
-    MEMBER.short + '<span class="hero-san">さん</span>';
-  toast('名前を保存しました');
+// ─── トースト ───
+let toastTimer = null;
+function toast(msg){
+  const el = $('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> el.classList.remove('show'), 2200);
 }
 
-function saveGoal() {
-  const v = document.getElementById('settings-goal').value.trim();
-  if (!v) { toast('目標を入力してください'); return; }
-  MEMBER.goal = v;
-  try { localStorage.setItem('x1_goal', v); } catch (_) {}
-  document.getElementById('goal-text').textContent = v;
-  toast('目標を保存しました');
-}
-
-// ════════════════════════════════════════════════════════════
-//  AVATAR (Crop)
-// ════════════════════════════════════════════════════════════
-let crop = { img: null, x: 0, y: 0, scale: 1, drag: false, lx: 0, ly: 0 };
-
-function applyAvatar(url) {
-  MEMBER.avatar = url;
-  ['topbar-av', 'home-av', 'av-preview'].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.innerHTML = url
-      ? `<img src="${url}" alt="">`
-      : (MEMBER.short[0] || '?');
+// ─── アバター適用 ───
+function applyAvatar(){
+  const av = localStorage.getItem(LS_AV);
+  const name = (localStorage.getItem(LS_NAME) || '').trim();
+  const initial = name ? name.charAt(0).toUpperCase() : '?';
+  const targets = ['av-preview','bar-av'];
+  targets.forEach(id=>{
+    const el = $(id); if (!el) return;
+    if (av){
+      el.style.backgroundImage = `url(${av})`;
+      el.textContent = '';
+    } else {
+      el.style.backgroundImage = '';
+      el.textContent = initial;
+    }
   });
 }
 
-function onAvatarFileSelected(e) {
-  const f = e.target.files[0];
+// ─── 入会日数 ───
+function ensureJoinDate(){
+  let j = localStorage.getItem(LS_JOIN);
+  if (!j){
+    j = String(Date.now());
+    localStorage.setItem(LS_JOIN, j);
+  }
+  return parseInt(j, 10);
+}
+function daysAsMember(){
+  const j = ensureJoinDate();
+  return Math.max(1, Math.floor((Date.now() - j) / (1000*60*60*24)) + 1);
+}
+
+// ─── ホーム描画 ───
+function renderHome(){
+  const name = (localStorage.getItem(LS_NAME) || '').trim() || 'ゲスト';
+  $('hero-name').textContent = name;
+  $('hero-days').textContent = daysAsMember();
+  $('hero-tips-count').textContent = (typeof TIPS !== 'undefined' ? TIPS.length : 0);
+
+  const goal = (localStorage.getItem(LS_GOAL) || '').trim();
+  $('goal-text').textContent = goal || 'タップして目標を設定';
+
+  renderPick();
+  renderRecentTips();
+}
+
+// ─── Today's Pick ───
+function pickIndexForToday(){
+  if (typeof TIPS === 'undefined' || !TIPS.length) return 0;
+  const d = new Date();
+  const seed = d.getFullYear()*10000 + (d.getMonth()+1)*100 + d.getDate();
+  return seed % TIPS.length;
+}
+function renderPick(){
+  if (typeof TIPS === 'undefined' || !TIPS.length) return;
+  const idx = pickIndexForToday();
+  const tip = TIPS[idx];
+  const cat = CATS[tip.cat] || { label: tip.cat, color: 'var(--lime)' };
+
+  $('pick-num').textContent = String(idx+1).padStart(2,'0') + ' / ' + String(TIPS.length).padStart(2,'0');
+  $('pick-tag').textContent = cat.label;
+  $('pick-tag').style.color = cat.color;
+  $('pick-meta').textContent = `${readMinutes(tip.body)} MIN READ`;
+  $('pick-title').textContent = tip.title;
+  $('pick-preview').textContent = previewOf(tip.body, 100);
+  $('pick-stripe').style.background = cat.color;
+
+  $('pick-card').dataset.tipId = tip.id;
+}
+function openPick(){
+  const id = parseInt($('pick-card').dataset.tipId, 10);
+  if (id) openTip(id);
+}
+
+// ─── 最近のTips ───
+function renderRecentTips(){
+  if (typeof TIPS === 'undefined' || !TIPS.length) return;
+  const wrap = $('recent-tips'); wrap.innerHTML = '';
+  const list = TIPS.slice().sort((a,b)=> b.id - a.id).slice(0, 4);
+  list.forEach(tip=>{
+    const cat = CATS[tip.cat] || { label: tip.cat, color: 'var(--lime)' };
+    const el = document.createElement('button');
+    el.className = 'feed-card';
+    el.onclick = ()=> openTip(tip.id);
+    el.innerHTML = `
+      <span class="feed-stripe" style="background:${cat.color}"></span>
+      <div class="feed-body">
+        <div class="feed-meta-row">
+          <span class="feed-cat" style="color:${cat.color}">${escapeHtml(cat.label)}</span>
+          <span class="feed-min">${readMinutes(tip.body)} MIN</span>
+          ${tip.isNew ? '<span class="feed-new">NEW</span>' : ''}
+        </div>
+        <p class="feed-title">${escapeHtml(tip.title)}</p>
+      </div>
+    `;
+    wrap.appendChild(el);
+  });
+}
+
+// ─── Tipsページ：フィルタchip ───
+function renderFilters(){
+  const row = $('filter-row');
+  if (!row) return;
+  row.innerHTML = '';
+  const all = document.createElement('button');
+  all.className = 'chip' + (activeFilter==='all' ? ' active' : '');
+  all.textContent = 'すべて';
+  all.onclick = ()=> setFilter('all');
+  row.appendChild(all);
+  Object.keys(CATS).forEach(key=>{
+    const b = document.createElement('button');
+    b.className = 'chip' + (activeFilter===key ? ' active' : '');
+    b.textContent = CATS[key].label;
+    b.onclick = ()=> setFilter(key);
+    row.appendChild(b);
+  });
+}
+function setFilter(key){
+  activeFilter = key;
+  renderFilters();
+  renderTips();
+}
+
+// ─── Tipsページ：リスト ───
+function renderTips(){
+  if (typeof TIPS === 'undefined') return;
+  const list = $('tips-list');
+  const empty = $('tips-empty');
+  const q = ($('tip-search')?.value || '').trim().toLowerCase();
+  const clearBtn = $('search-clear');
+  if (clearBtn) clearBtn.classList.toggle('show', q.length > 0);
+
+  let items = TIPS.slice().sort((a,b)=> b.id - a.id);
+  if (activeFilter !== 'all') items = items.filter(t => t.cat === activeFilter);
+  if (q) items = items.filter(t =>
+    t.title.toLowerCase().includes(q) || (t.body||'').toLowerCase().includes(q)
+  );
+
+  list.innerHTML = '';
+  if (!items.length){
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  items.forEach(tip=>{
+    const cat = CATS[tip.cat] || { label: tip.cat, color: 'var(--lime)' };
+    const el = document.createElement('button');
+    el.className = 'tip-card';
+    el.onclick = ()=> openTip(tip.id);
+    el.innerHTML = `
+      <span class="tip-stripe" style="background:${cat.color}"></span>
+      <div class="tip-body">
+        <div class="tip-meta-row">
+          <span class="tip-cat" style="color:${cat.color}">${escapeHtml(cat.label)}</span>
+          <span class="tip-min">${readMinutes(tip.body)} MIN READ</span>
+          ${tip.isNew ? '<span class="tip-new">NEW</span>' : ''}
+        </div>
+        <p class="tip-title">${escapeHtml(tip.title)}</p>
+        <p class="tip-preview">${escapeHtml(previewOf(tip.body, 90))}</p>
+      </div>
+    `;
+    list.appendChild(el);
+  });
+}
+function clearSearch(){
+  const el = $('tip-search'); if (!el) return;
+  el.value = '';
+  renderTips();
+  el.focus();
+}
+
+// ─── Tip シート ───
+function openTip(id){
+  const tip = (typeof TIPS !== 'undefined') ? TIPS.find(t => t.id === id) : null;
+  if (!tip) return;
+  const cat = CATS[tip.cat] || { label: tip.cat, color: 'var(--lime)' };
+
+  $('tip-content').innerHTML = `
+    <span class="sheet-cat" style="color:${cat.color}">${escapeHtml(cat.label)}</span>
+    <h1 class="sheet-h1">${escapeHtml(tip.title)}</h1>
+    <div class="sheet-meta">
+      <span class="sheet-meta-item">${escapeHtml(String(tip.week||'—'))}</span>
+      <span class="sheet-meta-item">${readMinutes(tip.body)} MIN READ</span>
+      <span class="sheet-meta-item">#${String(tip.id).padStart(3,'0')}</span>
+    </div>
+    ${renderBody(tip.body)}
+  `;
+
+  const ov = $('tip-overlay');
+  ov.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeTip(e){
+  if (e && e.target.closest('.sheet')) return;
+  $('tip-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ─── ページ切り替え ───
+function goPage(p){
+  document.querySelectorAll('.page').forEach(el=> el.classList.remove('active'));
+  const target = $('page-'+p);
+  if (target) target.classList.add('active');
+
+  document.querySelectorAll('.nav-item').forEach(el=> el.classList.remove('active'));
+  const navBtn = $('nav-'+p);
+  if (navBtn) navBtn.classList.add('active');
+
+  $('scroll-area').scrollTo(0,0);
+
+  if (p === 'home') renderHome();
+  if (p === 'tips') renderTips();
+  if (p === 'settings') prefill();
+}
+
+// ─── 予約ページ：プログラム切り替え（segmented control） ───
+function switchProgram(n){
+  for (let i=1; i<=3; i++){
+    const tab = $(`prog-tab-${i}`);
+    const panel = $(`ycbm-panel-${i}`);
+    if (tab) tab.classList.toggle('active', i===n);
+    if (panel) panel.style.display = (i===n ? 'block' : 'none');
+  }
+  // segmented thumb 動かす
+  const thumb = $('seg-thumb');
+  if (thumb){
+    thumb.style.transform = `translateX(${(n-1)*100}%)`;
+  }
+}
+
+// ─── 設定 prefill ───
+function prefill(){
+  const n = localStorage.getItem(LS_NAME) || '';
+  const g = localStorage.getItem(LS_GOAL) || '';
+  if ($('settings-name')) $('settings-name').value = n;
+  if ($('settings-goal')) $('settings-goal').value = g;
+  applyAvatar();
+}
+function saveAll(){
+  const n = ($('settings-name')?.value || '').trim();
+  const g = ($('settings-goal')?.value || '').trim();
+  localStorage.setItem(LS_NAME, n);
+  localStorage.setItem(LS_GOAL, g);
+  applyAvatar();
+  toast('保存しました');
+  renderHome();
+}
+
+// ─── アバター crop ───
+let cropImg = null;
+let cropScale = 1;
+let cropX = 0, cropY = 0;
+let dragLast = null;
+let pinchLast = 0;
+
+function onAvatarFileSelected(e){
+  const f = e.target.files && e.target.files[0];
   if (!f) return;
   const r = new FileReader();
   r.onload = ev => {
     const img = new Image();
-    img.onload = () => {
-      crop = { img, x: 0, y: 0, scale: 1, drag: false, lx: 0, ly: 0 };
-      document.getElementById('crop-panel').classList.add('open');
-      drawCrop();
+    img.onload = ()=> {
+      cropImg = img;
+      cropScale = 1; cropX = 0; cropY = 0;
+      $('crop-panel').classList.add('open');
+      requestAnimationFrame(setupCrop);
     };
     img.src = ev.target.result;
   };
   r.readAsDataURL(f);
+  e.target.value = '';
 }
-
-function drawCrop() {
-  const stage  = document.getElementById('crop-stage');
-  const canvas = document.getElementById('crop-canvas');
-  const size   = stage.offsetWidth;
-  canvas.width = canvas.height = size;
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, size, size);
-  ctx.save();
-  ctx.beginPath();
-  ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
-  ctx.clip();
-  ctx.fillStyle = '#1a1a1a';
-  ctx.fillRect(0, 0, size, size);
-  if (crop.img) {
-    const iw = crop.img.width  * crop.scale;
-    const ih = crop.img.height * crop.scale;
-    crop.x = Math.min(0, Math.max(size - iw, crop.x));
-    crop.y = Math.min(0, Math.max(size - ih, crop.y));
-    ctx.drawImage(crop.img, crop.x, crop.y, iw, ih);
+function setupCrop(){
+  const stage = $('crop-stage');
+  const canvas = $('crop-canvas');
+  const w = stage.clientWidth, h = stage.clientHeight;
+  canvas.width = w; canvas.height = h;
+  fitCrop();
+  drawCrop();
+  bindCropEvents();
+}
+function fitCrop(){
+  if (!cropImg) return;
+  const c = $('crop-canvas');
+  const cw = c.width, ch = c.height;
+  const ir = cropImg.width / cropImg.height;
+  const cr = cw / ch;
+  if (ir > cr){
+    cropScale = ch / cropImg.height;
+  } else {
+    cropScale = cw / cropImg.width;
   }
-  ctx.restore();
-  ctx.strokeStyle = 'rgba(212,255,61,.7)';
-  ctx.lineWidth = 2.5;
-  ctx.beginPath();
-  ctx.arc(size / 2, size / 2, size / 2 - 1.5, 0, Math.PI * 2);
-  ctx.stroke();
+  cropX = (cw - cropImg.width*cropScale) / 2;
+  cropY = (ch - cropImg.height*cropScale) / 2;
 }
-
-(function () {
-  let pend = false, ld = 0;
-  function bind() {
-    const c = document.getElementById('crop-canvas');
-    if (!c) return;
-    const s = (x, y) => { crop.drag = true; crop.lx = x; crop.ly = y; };
-    const m = (x, y) => {
-      if (!crop.drag) return;
-      crop.x += x - crop.lx;
-      crop.y += y - crop.ly;
-      crop.lx = x; crop.ly = y;
-      if (!pend) {
-        pend = true;
-        requestAnimationFrame(() => { drawCrop(); pend = false; });
-      }
-    };
-    const e = () => { crop.drag = false; };
-    c.addEventListener('mousedown',  ev => s(ev.clientX, ev.clientY));
-    c.addEventListener('mousemove',  ev => m(ev.clientX, ev.clientY));
-    c.addEventListener('mouseup',   e);
-    c.addEventListener('mouseleave', e);
-    c.addEventListener('touchstart', ev => {
-      const t = ev.touches[0]; s(t.clientX, t.clientY);
-    }, { passive: true });
-    c.addEventListener('touchmove', ev => {
-      if (ev.touches.length === 2) {
-        const dx = ev.touches[0].clientX - ev.touches[1].clientX;
-        const dy = ev.touches[0].clientY - ev.touches[1].clientY;
-        const d  = Math.sqrt(dx * dx + dy * dy);
-        if (ld) crop.scale = Math.max(0.5, Math.min(4, crop.scale * (d / ld)));
-        ld = d;
-        drawCrop();
-      } else {
-        ld = 0;
-        const t = ev.touches[0];
-        m(t.clientX, t.clientY);
-      }
-      ev.preventDefault();
-    }, { passive: false });
-    c.addEventListener('touchend', () => { ld = 0; e(); });
-    c.addEventListener('wheel', ev => {
-      crop.scale = Math.max(0.5, Math.min(4, crop.scale * (ev.deltaY < 0 ? 1.08 : 0.93)));
-      drawCrop();
-      ev.preventDefault();
-    }, { passive: false });
-  }
-  document.readyState === 'loading'
-    ? document.addEventListener('DOMContentLoaded', bind)
-    : bind();
-})();
-
-function cancelCrop() {
-  document.getElementById('crop-panel').classList.remove('open');
-  document.getElementById('av-input').value = '';
+function drawCrop(){
+  const c = $('crop-canvas'); if (!c || !cropImg) return;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0,0,c.width,c.height);
+  ctx.drawImage(cropImg, cropX, cropY, cropImg.width*cropScale, cropImg.height*cropScale);
 }
-
-function saveCrop() {
-  const url = document.getElementById('crop-canvas').toDataURL('image/jpeg', 0.88);
-  applyAvatar(url);
-  try { localStorage.setItem('x1_avatar', url); } catch (_) {}
-  cancelCrop();
-  toast('アイコンを保存しました');
-}
-
-// ════════════════════════════════════════════════════════════
-//  TIPS
-// ════════════════════════════════════════════════════════════
-
-// 本文の簡易マークアップを HTML に変換
-//   ■ 見出し  → <h3 class="sheet-h">
-//   ・項目   → <ul><li>
-//   空行     → 段落区切り
-//   その他   → <p>
-function renderBody(body) {
-  const lines = body.split('\n');
-  let html = '';
-  let inList = false;
-  let buffer = [];
-
-  const flushBuffer = () => {
-    if (buffer.length) {
-      html += `<p class="sheet-p">${buffer.join('<br>')}</p>`;
-      buffer = [];
-    }
+function bindCropEvents(){
+  const c = $('crop-canvas');
+  c.onpointerdown = e => { dragLast = {x:e.clientX, y:e.clientY}; c.setPointerCapture(e.pointerId); };
+  c.onpointermove = e => {
+    if (!dragLast) return;
+    cropX += e.clientX - dragLast.x;
+    cropY += e.clientY - dragLast.y;
+    dragLast = {x:e.clientX, y:e.clientY};
+    drawCrop();
   };
-  const flushList = () => {
-    if (inList) { html += '</ul>'; inList = false; }
+  c.onpointerup = ()=> dragLast = null;
+  c.onpointercancel = ()=> dragLast = null;
+
+  c.onwheel = e => {
+    e.preventDefault();
+    const f = e.deltaY < 0 ? 1.06 : 0.94;
+    zoomCrop(f, c.width/2, c.height/2);
   };
 
-  for (const raw of lines) {
-    const line = raw.trim();
-    if (!line) {
-      flushBuffer();
-      flushList();
-      continue;
+  let touching = [];
+  c.ontouchstart = e => {
+    if (e.touches.length === 2){
+      const a = e.touches[0], b = e.touches[1];
+      pinchLast = Math.hypot(a.clientX-b.clientX, a.clientY-b.clientY);
     }
-    if (line.startsWith('■')) {
-      flushBuffer();
-      flushList();
-      html += `<h3 class="sheet-h">${escapeHtml(line.slice(1).trim())}</h3>`;
-    } else if (line.startsWith('・')) {
-      flushBuffer();
-      if (!inList) { html += '<ul class="sheet-ul">'; inList = true; }
-      html += `<li>${escapeHtml(line.slice(1).trim())}</li>`;
-    } else {
-      if (inList) flushList();
-      buffer.push(escapeHtml(line));
+  };
+  c.ontouchmove = e => {
+    if (e.touches.length === 2){
+      e.preventDefault();
+      const a = e.touches[0], b = e.touches[1];
+      const d = Math.hypot(a.clientX-b.clientX, a.clientY-b.clientY);
+      if (pinchLast){
+        const f = d / pinchLast;
+        zoomCrop(f, c.width/2, c.height/2);
+        pinchLast = d;
+      }
     }
-  }
-  flushBuffer();
-  flushList();
-  return html;
+  };
+}
+function zoomCrop(f, cx, cy){
+  const newScale = Math.min(8, Math.max(0.2, cropScale * f));
+  const ratio = newScale / cropScale;
+  cropX = cx - (cx - cropX) * ratio;
+  cropY = cy - (cy - cropY) * ratio;
+  cropScale = newScale;
+  drawCrop();
+}
+function cancelCrop(){
+  $('crop-panel').classList.remove('open');
+  cropImg = null;
+}
+function saveCrop(){
+  const c = $('crop-canvas'); if (!c) return;
+  const out = document.createElement('canvas');
+  out.width = 320; out.height = 320;
+  const oc = out.getContext('2d');
+  oc.drawImage(c, 0, 0, c.width, c.height, 0, 0, 320, 320);
+  const dataUrl = out.toDataURL('image/jpeg', 0.85);
+  localStorage.setItem(LS_AV, dataUrl);
+  applyAvatar();
+  $('crop-panel').classList.remove('open');
+  cropImg = null;
+  toast('プロフィール写真を更新');
 }
 
-function escapeHtml(s) {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-// 推定読了時間（日本語400文字/分）
-function readMinutes(body) {
-  const chars = body.replace(/\s/g, '').length;
-  return Math.max(1, Math.round(chars / 400));
-}
-
-// 1行プレビュー（本文の最初の文）
-function previewOf(body) {
-  const first = body.split('\n').find(l => l.trim() && !l.startsWith('■') && !l.startsWith('・'));
-  return first ? first.trim().slice(0, 80) : '';
-}
-
-function catInfo(cat) {
-  return CATS[cat] || { label: cat, color: 'var(--tx2)' };
-}
-
-// ─── フィルター ───
-function setFilter(k) {
-  activeFilter = k;
+// ─── 起動 ───
+window.addEventListener('DOMContentLoaded', ()=>{
+  ensureJoinDate();
+  applyAvatar();
+  prefill();
+  renderHome();
   renderFilters();
   renderTips();
-}
-
-function renderFilters() {
-  const cats = ['all', ...Object.keys(CATS).filter(c => TIPS.some(t => t.cat === c))];
-  document.getElementById('filter-row').innerHTML = cats.map(c => {
-    const label = c === 'all' ? 'ALL' : catInfo(c).label;
-    const active = activeFilter === c ? 'active' : '';
-    return `<button class="chip ${active}" onclick="setFilter('${c}')">${escapeHtml(label)}</button>`;
-  }).join('');
-}
-
-// ─── Tip リスト ───
-function renderTips() {
-  const list = activeFilter === 'all'
-    ? TIPS
-    : TIPS.filter(t => t.cat === activeFilter);
-
-  const container = document.getElementById('tips-list');
-  if (!list.length) {
-    container.innerHTML = '<div class="tip-empty">該当するTipsがありません</div>';
-    return;
-  }
-
-  // 1件目はフィーチャー、それ以降はリスト
-  const [featured, ...rest] = list;
-  const featuredHtml = `
-    <button class="tip-card-featured" onclick="openTip(${featured.id})">
-      <div class="tip-featured-head">
-        <span class="tip-featured-tag" style="color:${catInfo(featured.cat).color}">
-          <span class="tip-featured-tag-dot" style="background:${catInfo(featured.cat).color}"></span>
-          ${escapeHtml(catInfo(featured.cat).label)}
-        </span>
-        <span class="tip-featured-num">${String(featured.id).padStart(2, '0')}</span>
-      </div>
-      <p class="tip-featured-title">${escapeHtml(featured.title)}</p>
-      <div class="tip-featured-foot">
-        <span class="tip-featured-meta">
-          ${escapeHtml(featured.week)}
-          <span class="tip-meta-dot"></span>
-          ${readMinutes(featured.body)}分
-          ${featured.isNew ? '<span class="tip-meta-dot"></span>NEW' : ''}
-        </span>
-        <span class="tip-featured-cta">
-          READ
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </span>
-      </div>
-    </button>
-  `;
-
-  const restHtml = rest.map(t => `
-    <button class="tip-card" onclick="openTip(${t.id})">
-      <span class="tip-card-num">${String(t.id).padStart(2, '0')}</span>
-      <div class="tip-card-body">
-        <div class="tip-card-meta">
-          <span class="tip-tag" style="color:${catInfo(t.cat).color}">${escapeHtml(catInfo(t.cat).label)}</span>
-          <span class="tip-wk">${escapeHtml(t.week)}</span>
-          ${t.isNew ? '<span class="tip-new">NEW</span>' : ''}
-        </div>
-        <p class="tip-title">${escapeHtml(t.title)}</p>
-      </div>
-      <span class="tip-card-arrow">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </span>
-    </button>
-  `).join('');
-
-  container.innerHTML = featuredHtml + restHtml;
-}
-
-// ─── Tip シート ───
-function openTip(id) {
-  const t = TIPS.find(x => x.id === id);
-  if (!t) return;
-  const c = catInfo(t.cat);
-  document.getElementById('tip-content').innerHTML = `
-    <div class="sheet-meta-row">
-      <span class="sheet-tag" style="background:color-mix(in srgb, ${c.color} 12%, transparent); color:${c.color}; border:1px solid color-mix(in srgb, ${c.color} 30%, transparent);">
-        <span class="sheet-tag-dot" style="background:${c.color}"></span>
-        ${escapeHtml(c.label)}
-      </span>
-      <span class="sheet-meta-item">${escapeHtml(t.week)}</span>
-      <span class="sheet-meta-dot"></span>
-      <span class="sheet-meta-item">${readMinutes(t.body)} MIN READ</span>
-      <span class="sheet-week">#${String(t.id).padStart(2, '0')}</span>
-    </div>
-    <h2 class="sheet-title">${escapeHtml(t.title)}</h2>
-    <div class="sheet-body">${renderBody(t.body)}</div>
-    <button class="sheet-cta" onclick="closeTip()">理解した — 実践する</button>
-  `;
-  document.getElementById('tip-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeTip(e) {
-  if (!e || e.target === document.getElementById('tip-overlay')) {
-    document.getElementById('tip-overlay').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-}
-
-// ─── HOME: TODAY'S PICK ───
-let pickedTipId = null;
-
-function renderPick() {
-  if (!TIPS.length) return;
-  // 日付ベースで安定的に1つ選ぶ（同じ日には同じTipが出る）
-  const seed = Math.floor(new Date().getTime() / 86400000);
-  const tip = TIPS[seed % TIPS.length];
-  pickedTipId = tip.id;
-  const c = catInfo(tip.cat);
-
-  document.getElementById('pick-tag').innerHTML = `
-    <span class="pick-card-tag-dot" style="background:${c.color}"></span>
-    <span style="color:${c.color}">${escapeHtml(c.label)}</span>
-  `;
-  document.getElementById('pick-title').textContent = tip.title;
-  document.getElementById('pick-meta').textContent = `${tip.week} · ${readMinutes(tip.body)}分で読了`;
-  document.getElementById('pick-num').textContent =
-    `${String(tip.id).padStart(2, '0')} / ${String(TIPS.length).padStart(2, '0')}`;
-}
-
-function openPick() {
-  if (pickedTipId) openTip(pickedTipId);
-}
-
-// ════════════════════════════════════════════════════════════
-//  BOOK
-// ════════════════════════════════════════════════════════════
-function switchProgram(n) {
-  [1, 2, 3].forEach(i => {
-    document.getElementById(`prog-tab-${i}`)?.classList.toggle('active', i === n);
-    const p = document.getElementById(`ycbm-panel-${i}`);
-    if (p) p.style.display = i === n ? 'block' : 'none';
-  });
-}
-
-// ════════════════════════════════════════════════════════════
-//  NAV
-// ════════════════════════════════════════════════════════════
-function goPage(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-  document.getElementById(`page-${name}`)?.classList.add('active');
-  document.getElementById(`nav-${name}`)?.classList.add('active');
-  document.getElementById('scroll-area').scrollTo(0, 0);
-  if (name === 'settings') prefill();
-}
-
-function prefill() {
-  const n = document.getElementById('settings-name');
-  if (n && MEMBER.name !== 'メンバー') n.value = MEMBER.name;
-  const g = document.getElementById('settings-goal');
-  if (g) g.value = MEMBER.goal || '';
-}
-
-// ════════════════════════════════════════════════════════════
-//  INIT
-// ════════════════════════════════════════════════════════════
-function formatDate() {
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const dd = String(d.getDate()).padStart(2, '0');
-  const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-  return { date: `${y}.${m}.${dd}`, day: days[d.getDay()] };
-}
-
-function daysAsMember() {
-  try {
-    const since = new Date(MEMBER.since);
-    const today = new Date();
-    return Math.max(1, Math.floor((today - since) / 86400000));
-  } catch (_) {
-    return 1;
-  }
-}
-
-function init() {
-  // 日付スタンプ
-  const { date, day } = formatDate();
-  document.getElementById('hero-date').textContent = date;
-  document.getElementById('hero-day').textContent = day;
-
-  // 挨拶
-  const h = new Date().getHours();
-  document.getElementById('home-greeting').textContent =
-    h < 12 ? 'おはようございます' : h < 18 ? 'こんにちは' : 'こんばんは';
-
-  // 名前
-  document.getElementById('home-name').innerHTML =
-    MEMBER.short + '<span class="hero-san">さん</span>';
-  document.getElementById('topbar-member').textContent = MEMBER.name;
-
-  // 在籍日数
-  document.getElementById('status-days').textContent = `${daysAsMember()}日目`;
-
-  // 目標
-  document.getElementById('goal-text').textContent = MEMBER.goal || '目標を設定してください';
-
-  // アバター
-  applyAvatar(MEMBER.avatar);
-
-  // Tips
-  renderFilters();
-  renderTips();
-  renderPick();
-
-  // Tips統計
-  document.getElementById('tips-total').textContent = String(TIPS.length).padStart(2, '0');
-  const uniqueCats = new Set(TIPS.map(t => t.cat));
-  document.getElementById('tips-cats').textContent = String(uniqueCats.size).padStart(2, '0');
-}
-
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2400);
-}
-
-window.addEventListener('load', () => {
-  loadStorage();
-  init();
+  switchProgram(1);
 });
