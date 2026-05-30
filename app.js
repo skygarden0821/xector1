@@ -7,7 +7,6 @@ const LS_GOAL = 'xector1_goal';
 const LS_AV   = 'xector1_av';
 const LS_JOIN = 'xector1_joined';
 
-// カテゴリ表示テーブル
 const CATS = {
   content:   { label:'コンテンツ',     color:'var(--cat-content)' },
   algorithm: { label:'アルゴリズム',   color:'var(--cat-algorithm)' },
@@ -18,7 +17,6 @@ const CATS = {
 
 let activeFilter = 'all';
 
-// ─── ユーティリティ ───
 function $(id){ return document.getElementById(id); }
 function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function readMinutes(text){ return Math.max(1, Math.round((text||'').length / 400)); }
@@ -27,7 +25,6 @@ function previewOf(text, n){
   return flat.slice(0, n||80);
 }
 
-// ─── 簡易マークダウン パーサ ───
 function renderBody(body){
   const lines = (body || '').split('\n');
   let html = '';
@@ -35,34 +32,24 @@ function renderBody(body){
   let inList = false;
 
   const flushPara = ()=>{
-    if (buf.length){
-      html += `<p class="sheet-p">${escapeHtml(buf.join(' '))}</p>`;
-      buf = [];
-    }
+    if (buf.length){ html += `<p class="sheet-p">${escapeHtml(buf.join(' '))}</p>`; buf = []; }
   };
-  const closeList = ()=>{
-    if (inList){ html += '</div>'; inList = false; }
-  };
+  const closeList = ()=>{ if (inList){ html += '</div>'; inList = false; } };
 
   for (let raw of lines){
     const line = raw.trim();
     if (!line){ flushPara(); closeList(); continue; }
-
     if (line.startsWith('■')){
       flushPara(); closeList();
-      const text = line.replace(/^■\s*/,'');
-      html += `<h3 class="sheet-h">${escapeHtml(text)}</h3>`;
+      html += `<h3 class="sheet-h">${escapeHtml(line.replace(/^■\s*/,''))}</h3>`;
       continue;
     }
-
     if (line.startsWith('・')){
       flushPara();
       if (!inList){ html += '<div class="sheet-ul">'; inList = true; }
-      const text = line.replace(/^・\s*/,'');
-      html += `<div class="sheet-li">${escapeHtml(text)}</div>`;
+      html += `<div class="sheet-li">${escapeHtml(line.replace(/^・\s*/,''))}</div>`;
       continue;
     }
-
     closeList();
     buf.push(line);
   }
@@ -70,7 +57,6 @@ function renderBody(body){
   return html;
 }
 
-// ─── トースト ───
 let toastTimer = null;
 function toast(msg){
   const el = $('toast');
@@ -80,53 +66,32 @@ function toast(msg){
   toastTimer = setTimeout(()=> el.classList.remove('show'), 2200);
 }
 
-// ─── アバター適用 ───
 function applyAvatar(){
   const av = localStorage.getItem(LS_AV);
   const name = (localStorage.getItem(LS_NAME) || '').trim();
   const initial = name ? name.charAt(0).toUpperCase() : '?';
-  const targets = ['av-preview','bar-av'];
-  targets.forEach(id=>{
+  ['av-preview','bar-av'].forEach(id=>{
     const el = $(id); if (!el) return;
-    if (av){
-      el.style.backgroundImage = `url(${av})`;
-      el.textContent = '';
-    } else {
-      el.style.backgroundImage = '';
-      el.textContent = initial;
-    }
+    if (av){ el.style.backgroundImage = `url(${av})`; el.textContent = ''; }
+    else { el.style.backgroundImage = ''; el.textContent = initial; }
   });
 }
 
-// ─── 入会日数 ───
 function ensureJoinDate(){
   let j = localStorage.getItem(LS_JOIN);
-  if (!j){
-    j = String(Date.now());
-    localStorage.setItem(LS_JOIN, j);
-  }
+  if (!j){ j = String(Date.now()); localStorage.setItem(LS_JOIN, j); }
   return parseInt(j, 10);
 }
-function daysAsMember(){
-  const j = ensureJoinDate();
-  return Math.max(1, Math.floor((Date.now() - j) / (1000*60*60*24)) + 1);
-}
 
-// ─── ホーム描画 ───
 function renderHome(){
   const name = (localStorage.getItem(LS_NAME) || '').trim() || 'ゲスト';
   $('hero-name').textContent = name;
-  $('hero-days').textContent = daysAsMember();
-  $('hero-tips-count').textContent = (typeof TIPS !== 'undefined' ? TIPS.length : 0);
-
   const goal = (localStorage.getItem(LS_GOAL) || '').trim();
   $('goal-text').textContent = goal || 'タップして目標を設定';
-
   renderPick();
   renderRecentTips();
 }
 
-// ─── Today's Pick ───
 function pickIndexForToday(){
   if (typeof TIPS === 'undefined' || !TIPS.length) return 0;
   const d = new Date();
@@ -138,7 +103,6 @@ function renderPick(){
   const idx = pickIndexForToday();
   const tip = TIPS[idx];
   const cat = CATS[tip.cat] || { label: tip.cat, color: 'var(--lime)' };
-
   $('pick-num').textContent = String(idx+1).padStart(2,'0') + ' / ' + String(TIPS.length).padStart(2,'0');
   $('pick-tag').textContent = cat.label;
   $('pick-tag').style.color = cat.color;
@@ -146,7 +110,6 @@ function renderPick(){
   $('pick-title').textContent = tip.title;
   $('pick-preview').textContent = previewOf(tip.body, 100);
   $('pick-stripe').style.background = cat.color;
-
   $('pick-card').dataset.tipId = tip.id;
 }
 function openPick(){
@@ -154,7 +117,6 @@ function openPick(){
   if (id) openTip(id);
 }
 
-// ─── 最近のTips ───
 function renderRecentTips(){
   if (typeof TIPS === 'undefined' || !TIPS.length) return;
   const wrap = $('recent-tips'); wrap.innerHTML = '';
@@ -179,10 +141,8 @@ function renderRecentTips(){
   });
 }
 
-// ─── Tipsページ：フィルタchip ───
 function renderFilters(){
-  const row = $('filter-row');
-  if (!row) return;
+  const row = $('filter-row'); if (!row) return;
   row.innerHTML = '';
   const all = document.createElement('button');
   all.className = 'chip' + (activeFilter==='all' ? ' active' : '');
@@ -197,13 +157,8 @@ function renderFilters(){
     row.appendChild(b);
   });
 }
-function setFilter(key){
-  activeFilter = key;
-  renderFilters();
-  renderTips();
-}
+function setFilter(key){ activeFilter = key; renderFilters(); renderTips(); }
 
-// ─── Tipsページ：リスト ───
 function renderTips(){
   if (typeof TIPS === 'undefined') return;
   const list = $('tips-list');
@@ -214,15 +169,10 @@ function renderTips(){
 
   let items = TIPS.slice().sort((a,b)=> b.id - a.id);
   if (activeFilter !== 'all') items = items.filter(t => t.cat === activeFilter);
-  if (q) items = items.filter(t =>
-    t.title.toLowerCase().includes(q) || (t.body||'').toLowerCase().includes(q)
-  );
+  if (q) items = items.filter(t => t.title.toLowerCase().includes(q) || (t.body||'').toLowerCase().includes(q));
 
   list.innerHTML = '';
-  if (!items.length){
-    empty.style.display = 'block';
-    return;
-  }
+  if (!items.length){ empty.style.display = 'block'; return; }
   empty.style.display = 'none';
 
   items.forEach(tip=>{
@@ -247,17 +197,13 @@ function renderTips(){
 }
 function clearSearch(){
   const el = $('tip-search'); if (!el) return;
-  el.value = '';
-  renderTips();
-  el.focus();
+  el.value = ''; renderTips(); el.focus();
 }
 
-// ─── Tip シート ───
 function openTip(id){
   const tip = (typeof TIPS !== 'undefined') ? TIPS.find(t => t.id === id) : null;
   if (!tip) return;
   const cat = CATS[tip.cat] || { label: tip.cat, color: 'var(--lime)' };
-
   $('tip-content').innerHTML = `
     <span class="sheet-cat" style="color:${cat.color}">${escapeHtml(cat.label)}</span>
     <h1 class="sheet-h1">${escapeHtml(tip.title)}</h1>
@@ -268,9 +214,7 @@ function openTip(id){
     </div>
     ${renderBody(tip.body)}
   `;
-
-  const ov = $('tip-overlay');
-  ov.classList.add('open');
+  $('tip-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 function closeTip(e){
@@ -279,24 +223,19 @@ function closeTip(e){
   document.body.style.overflow = '';
 }
 
-// ─── ページ切り替え ───
 function goPage(p){
   document.querySelectorAll('.page').forEach(el=> el.classList.remove('active'));
   const target = $('page-'+p);
   if (target) target.classList.add('active');
-
   document.querySelectorAll('.nav-item').forEach(el=> el.classList.remove('active'));
   const navBtn = $('nav-'+p);
   if (navBtn) navBtn.classList.add('active');
-
   $('scroll-area').scrollTo(0,0);
-
   if (p === 'home') renderHome();
   if (p === 'tips') renderTips();
   if (p === 'settings') prefill();
 }
 
-// ─── 予約ページ：プログラム切り替え（segmented control） ───
 function switchProgram(n){
   for (let i=1; i<=3; i++){
     const tab = $(`prog-tab-${i}`);
@@ -304,14 +243,10 @@ function switchProgram(n){
     if (tab) tab.classList.toggle('active', i===n);
     if (panel) panel.style.display = (i===n ? 'block' : 'none');
   }
-  // segmented thumb 動かす
   const thumb = $('seg-thumb');
-  if (thumb){
-    thumb.style.transform = `translateX(${(n-1)*100}%)`;
-  }
+  if (thumb) thumb.style.transform = `translateX(${(n-1)*100}%)`;
 }
 
-// ─── 設定 prefill ───
 function prefill(){
   const n = localStorage.getItem(LS_NAME) || '';
   const g = localStorage.getItem(LS_GOAL) || '';
@@ -330,11 +265,7 @@ function saveAll(){
 }
 
 // ─── アバター crop ───
-let cropImg = null;
-let cropScale = 1;
-let cropX = 0, cropY = 0;
-let dragLast = null;
-let pinchLast = 0;
+let cropImg = null, cropScale = 1, cropX = 0, cropY = 0, dragLast = null, pinchLast = 0;
 
 function onAvatarFileSelected(e){
   const f = e.target.files && e.target.files[0];
@@ -342,12 +273,7 @@ function onAvatarFileSelected(e){
   const r = new FileReader();
   r.onload = ev => {
     const img = new Image();
-    img.onload = ()=> {
-      cropImg = img;
-      cropScale = 1; cropX = 0; cropY = 0;
-      $('crop-panel').classList.add('open');
-      requestAnimationFrame(setupCrop);
-    };
+    img.onload = ()=>{ cropImg = img; cropScale = 1; cropX = 0; cropY = 0; $('crop-panel').classList.add('open'); requestAnimationFrame(setupCrop); };
     img.src = ev.target.result;
   };
   r.readAsDataURL(f);
@@ -358,9 +284,7 @@ function setupCrop(){
   const canvas = $('crop-canvas');
   const w = stage.clientWidth, h = stage.clientHeight;
   canvas.width = w; canvas.height = h;
-  fitCrop();
-  drawCrop();
-  bindCropEvents();
+  fitCrop(); drawCrop(); bindCropEvents();
 }
 function fitCrop(){
   if (!cropImg) return;
@@ -368,19 +292,14 @@ function fitCrop(){
   const cw = c.width, ch = c.height;
   const ir = cropImg.width / cropImg.height;
   const cr = cw / ch;
-  if (ir > cr){
-    cropScale = ch / cropImg.height;
-  } else {
-    cropScale = cw / cropImg.width;
-  }
+  cropScale = ir > cr ? ch / cropImg.height : cw / cropImg.width;
   cropX = (cw - cropImg.width*cropScale) / 2;
   cropY = (ch - cropImg.height*cropScale) / 2;
 }
 function drawCrop(){
   const c = $('crop-canvas'); if (!c || !cropImg) return;
   const ctx = c.getContext('2d');
-  ctx.fillStyle = '#000';
-  ctx.fillRect(0,0,c.width,c.height);
+  ctx.fillStyle = '#000'; ctx.fillRect(0,0,c.width,c.height);
   ctx.drawImage(cropImg, cropX, cropY, cropImg.width*cropScale, cropImg.height*cropScale);
 }
 function bindCropEvents(){
@@ -388,21 +307,12 @@ function bindCropEvents(){
   c.onpointerdown = e => { dragLast = {x:e.clientX, y:e.clientY}; c.setPointerCapture(e.pointerId); };
   c.onpointermove = e => {
     if (!dragLast) return;
-    cropX += e.clientX - dragLast.x;
-    cropY += e.clientY - dragLast.y;
-    dragLast = {x:e.clientX, y:e.clientY};
-    drawCrop();
+    cropX += e.clientX - dragLast.x; cropY += e.clientY - dragLast.y;
+    dragLast = {x:e.clientX, y:e.clientY}; drawCrop();
   };
   c.onpointerup = ()=> dragLast = null;
   c.onpointercancel = ()=> dragLast = null;
-
-  c.onwheel = e => {
-    e.preventDefault();
-    const f = e.deltaY < 0 ? 1.06 : 0.94;
-    zoomCrop(f, c.width/2, c.height/2);
-  };
-
-  let touching = [];
+  c.onwheel = e => { e.preventDefault(); zoomCrop(e.deltaY < 0 ? 1.06 : 0.94, c.width/2, c.height/2); };
   c.ontouchstart = e => {
     if (e.touches.length === 2){
       const a = e.touches[0], b = e.touches[1];
@@ -414,41 +324,28 @@ function bindCropEvents(){
       e.preventDefault();
       const a = e.touches[0], b = e.touches[1];
       const d = Math.hypot(a.clientX-b.clientX, a.clientY-b.clientY);
-      if (pinchLast){
-        const f = d / pinchLast;
-        zoomCrop(f, c.width/2, c.height/2);
-        pinchLast = d;
-      }
+      if (pinchLast){ zoomCrop(d/pinchLast, c.width/2, c.height/2); pinchLast = d; }
     }
   };
 }
 function zoomCrop(f, cx, cy){
   const newScale = Math.min(8, Math.max(0.2, cropScale * f));
   const ratio = newScale / cropScale;
-  cropX = cx - (cx - cropX) * ratio;
-  cropY = cy - (cy - cropY) * ratio;
-  cropScale = newScale;
-  drawCrop();
+  cropX = cx - (cx - cropX) * ratio; cropY = cy - (cy - cropY) * ratio;
+  cropScale = newScale; drawCrop();
 }
-function cancelCrop(){
-  $('crop-panel').classList.remove('open');
-  cropImg = null;
-}
+function cancelCrop(){ $('crop-panel').classList.remove('open'); cropImg = null; }
 function saveCrop(){
   const c = $('crop-canvas'); if (!c) return;
   const out = document.createElement('canvas');
   out.width = 320; out.height = 320;
-  const oc = out.getContext('2d');
-  oc.drawImage(c, 0, 0, c.width, c.height, 0, 0, 320, 320);
-  const dataUrl = out.toDataURL('image/jpeg', 0.85);
-  localStorage.setItem(LS_AV, dataUrl);
+  out.getContext('2d').drawImage(c, 0, 0, c.width, c.height, 0, 0, 320, 320);
+  localStorage.setItem(LS_AV, out.toDataURL('image/jpeg', 0.85));
   applyAvatar();
-  $('crop-panel').classList.remove('open');
-  cropImg = null;
+  $('crop-panel').classList.remove('open'); cropImg = null;
   toast('プロフィール写真を更新');
 }
 
-// ─── 起動 ───
 window.addEventListener('DOMContentLoaded', ()=>{
   ensureJoinDate();
   applyAvatar();
