@@ -6,187 +6,160 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="XECTOR1">
-<meta name="theme-color" content="#0a0a0e">
-<title>XECTOR1 Member Portal</title>
-
+<meta name="theme-color" content="#000000">
+<title>Xector1 Production｜Member Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div id="app">
 
-  <!-- ═══════════ APP HEADER (sticky) ═══════════ -->
-  <header class="app-bar" id="app-bar">
+  <!-- APP BAR -->
+  <header class="app-bar">
     <div class="app-bar-inner">
-      <span class="brand-mark">XECTOR<span class="brand-mark-1">1</span></span>
-      <div class="app-bar-actions">
-        <button class="ab-btn" onclick="toast('新着のお知らせはありません')" aria-label="お知らせ">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
-        </button>
-        <button class="ab-av" onclick="goPage('settings')" aria-label="プロフィール">
-          <div class="av av-sm" id="bar-av">?</div>
-        </button>
-      </div>
+      <span class="brand">XECTOR<span class="brand-1">1</span></span>
+      <button class="bar-av-btn" onclick="goPage('settings')" aria-label="設定">
+        <div class="av av-sm" id="bar-av">?</div>
+      </button>
     </div>
   </header>
 
   <main class="scroll-area" id="scroll-area">
 
-    <!-- ═══════════ HOME ═══════════ -->
+    <!-- ══════════ HOME ══════════ -->
     <div id="page-home" class="page active">
 
-      <!-- HERO MEMBERSHIP CARD -->
-      <div class="member-hero">
-        <div class="member-hero-shine"></div>
-        <div class="member-hero-grid"></div>
-        <div class="member-hero-top">
-          <span class="member-hero-brand">XECTOR1</span>
-          <span class="member-hero-pill">MEMBER</span>
-        </div>
-        <div class="member-hero-mid">
-          <p class="member-hero-label">お帰りなさい</p>
-          <h2 class="member-hero-name" id="hero-name">ゲスト</h2>
-        </div>
+      <!-- Greeting -->
+      <div class="home-header">
+        <p class="home-greeting">お帰りなさい</p>
+        <h1 class="home-name" id="hero-name">ゲスト</h1>
       </div>
 
-      <!-- QUICK ACTION GRID -->
-      <div class="qa-grid">
-        <button class="qa-tile" onclick="goPage('book')">
-          <span class="qa-icon qa-icon-lime">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          </span>
-          <span class="qa-lbl">予約</span>
-        </button>
-        <button class="qa-tile" onclick="goPage('tips')">
-          <span class="qa-icon qa-icon-cyan">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-4 12.7V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.3A7 7 0 0 0 12 2z"/><line x1="9" y1="22" x2="15" y2="22"/></svg>
-          </span>
-          <span class="qa-lbl">Tips</span>
-        </button>
-        <button class="qa-tile" onclick="goPage('seisaku')">
-          <span class="qa-icon qa-icon-pink">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="1.2"/><circle cx="17.5" cy="10.5" r="1.2"/><circle cx="8.5" cy="7.5" r="1.2"/><circle cx="6.5" cy="12.5" r="1.2"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.6-.7 1.6-1.7 0-.4-.2-.8-.4-1.1-.3-.3-.4-.6-.4-1.1a1.6 1.6 0 0 1 1.7-1.7H16.5c3 0 5.5-2.5 5.5-5.5C22 6 17.5 2 12 2z"/></svg>
-          </span>
-          <span class="qa-lbl">制作</span>
-        </button>
-        <button class="qa-tile" onclick="window.open('https://forms.gle/wFoujvkfWBbSNfLM8','_blank')">
-          <span class="qa-icon qa-icon-orange">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          </span>
-          <span class="qa-lbl">問合せ</span>
-        </button>
-      </div>
-
-      <!-- GOAL CARD -->
-      <button class="goal-card" onclick="goPage('settings')" aria-label="目標を編集">
-        <div class="goal-card-top">
-          <span class="goal-card-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
-          </span>
-          <span class="goal-card-label">マイゴール</span>
-          <span class="goal-card-edit">編集 ›</span>
+      <!-- 1年後の目標 -->
+      <button class="goal-block" onclick="goPage('settings')" aria-label="目標を編集">
+        <div class="goal-block-top">
+          <span class="goal-block-label">1年後の目標</span>
+          <span class="goal-block-edit">編集</span>
         </div>
-        <p class="goal-card-text" id="goal-text">タップして目標を設定</p>
+        <p class="goal-block-text" id="goal-text">目標を設定してください</p>
       </button>
 
-      <!-- TODAY'S PICK -->
+      <!-- Quick Actions -->
+      <div class="qa-row">
+        <button class="qa-item" onclick="goPage('book')">
+          <span class="qa-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2.5"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </span>
+          <span class="qa-label">予約</span>
+        </button>
+        <button class="qa-item" onclick="goPage('tips')">
+          <span class="qa-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-4 12.7V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.3A7 7 0 0 0 12 2z"/><line x1="9" y1="22" x2="15" y2="22"/></svg>
+          </span>
+          <span class="qa-label">Tips</span>
+        </button>
+        <button class="qa-item" onclick="goPage('seisaku')">
+          <span class="qa-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="1.2"/><circle cx="17.5" cy="10.5" r="1.2"/><circle cx="8.5" cy="7.5" r="1.2"/><circle cx="6.5" cy="12.5" r="1.2"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.6-.7 1.6-1.7 0-.4-.2-.8-.4-1.1-.3-.3-.4-.6-.4-1.1a1.6 1.6 0 0 1 1.7-1.7H16.5c3 0 5.5-2.5 5.5-5.5C22 6 17.5 2 12 2z"/></svg>
+          </span>
+          <span class="qa-label">制作</span>
+        </button>
+        <button class="qa-item" onclick="window.open('https://forms.gle/wFoujvkfWBbSNfLM8','_blank')">
+          <span class="qa-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </span>
+          <span class="qa-label">問合せ</span>
+        </button>
+      </div>
+
+      <!-- Divider -->
+      <div class="divider"></div>
+
+      <!-- Today's Pick -->
       <section class="section">
         <div class="section-head">
-          <h2 class="section-title">今日のピック</h2>
-          <span class="section-meta" id="pick-num"></span>
+          <span class="section-label">TODAY</span>
+          <span class="section-count" id="pick-num"></span>
         </div>
         <button class="pick-card" id="pick-card" onclick="openPick()">
-          <div class="pick-stripe" id="pick-stripe"></div>
-          <div class="pick-body">
-            <div class="pick-tags">
-              <span class="pick-tag" id="pick-tag"></span>
-              <span class="pick-min" id="pick-meta"></span>
-            </div>
-            <p class="pick-title" id="pick-title">—</p>
-            <p class="pick-preview" id="pick-preview">—</p>
+          <span class="pick-thumb" id="pick-thumb" style="display:none"></span>
+          <div class="pick-meta-row">
+            <span class="pick-cat" id="pick-tag"></span>
+            <span class="pick-min" id="pick-meta"></span>
           </div>
-          <div class="pick-cta-row">
-            <span class="pick-cta">続きを読む</span>
-            <span class="pick-arrow">→</span>
+          <p class="pick-title" id="pick-title">—</p>
+          <p class="pick-preview" id="pick-preview">—</p>
+          <div class="pick-foot">
+            <span class="pick-cta" id="pick-cta">続きを読む</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
         </button>
       </section>
 
-      <!-- RECENT TIPS -->
+      <!-- Recent Tips -->
       <section class="section">
         <div class="section-head">
-          <h2 class="section-title">最近のTips</h2>
-          <button class="section-more" onclick="goPage('tips')">すべて</button>
+          <span class="section-label">最近のTips</span>
+          <button class="section-link" onclick="goPage('tips')">すべて表示</button>
         </div>
-        <div class="feed" id="recent-tips"></div>
+        <div id="recent-tips"></div>
       </section>
 
-      <div style="height:32px"></div>
+      <div class="page-end"></div>
     </div>
 
-    <!-- ═══════════ TIPS ═══════════ -->
+    <!-- ══════════ TIPS ══════════ -->
     <div id="page-tips" class="page">
-
-      <header class="page-head">
+      <div class="page-head">
         <h1 class="page-h1">Tips</h1>
-        <p class="page-sub">XECTOR1だけのノウハウ集</p>
-      </header>
+        <p class="page-sub">Xector1 Production のノウハウ＆コラム</p>
+      </div>
 
-      <!-- SEARCH -->
       <div class="search-wrap">
         <span class="search-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </span>
         <input class="search-input" type="text" id="tip-search" placeholder="キーワードで検索" oninput="renderTips()">
         <button class="search-clear" id="search-clear" onclick="clearSearch()">
-          <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><line x1="9" y1="9" x2="15" y2="15" stroke="#0a0a0e" stroke-width="2.5" stroke-linecap="round"/><line x1="15" y1="9" x2="9" y2="15" stroke="#0a0a0e" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
 
-      <!-- FILTER CHIPS -->
       <div class="chip-scroll">
         <div class="chip-row" id="filter-row"></div>
       </div>
 
-      <!-- TIP LIST -->
       <div class="tip-list" id="tips-list"></div>
-      <div class="empty" id="tips-empty" style="display:none">
-        <p class="empty-icon">📭</p>
+      <div class="empty-state" id="tips-empty" style="display:none">
         <p class="empty-text">該当するTipsが見つかりません</p>
       </div>
-      <div style="height:32px"></div>
+      <div class="page-end"></div>
     </div>
 
-    <!-- ═══════════ 制作（準備中） ═══════════ -->
+    <!-- ══════════ 制作（準備中） ══════════ -->
     <div id="page-seisaku" class="page">
-      <div class="coming-soon-wrap">
-        <div class="coming-soon-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="1.2"/><circle cx="17.5" cy="10.5" r="1.2"/><circle cx="8.5" cy="7.5" r="1.2"/><circle cx="6.5" cy="12.5" r="1.2"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.6-.7 1.6-1.7 0-.4-.2-.8-.4-1.1-.3-.3-.4-.6-.4-1.1a1.6 1.6 0 0 1 1.7-1.7H16.5c3 0 5.5-2.5 5.5-5.5C22 6 17.5 2 12 2z"/></svg>
-        </div>
+      <div class="coming-soon">
+        <p class="coming-soon-en">COMING SOON</p>
         <h2 class="coming-soon-title">準備中</h2>
         <p class="coming-soon-sub">このページは現在準備中です。<br>もうしばらくお待ちください。</p>
       </div>
     </div>
 
-    <!-- ═══════════ BOOK ═══════════ -->
+    <!-- ══════════ BOOK ══════════ -->
     <div id="page-book" class="page">
-
-      <header class="page-head">
+      <div class="page-head">
         <h1 class="page-h1">予約</h1>
         <p class="page-sub">セッションを選んで予約</p>
-      </header>
+      </div>
 
-      <a class="info-row" href="https://docs.google.com/document/d/1vhECxaHXvovLKNmmOFged8pR0biWdhIPI_9OiP__QHE/edit?usp=sharing" target="_blank" rel="noopener">
-        <span class="info-row-icon">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        </span>
-        <span class="info-row-text">予約ルールブックを確認</span>
-        <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      <a class="doc-link" href="https://docs.google.com/document/d/1vhECxaHXvovLKNmmOFged8pR0biWdhIPI_9OiP__QHE/edit?usp=sharing" target="_blank" rel="noopener">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <span>予約ルールブックを確認</span>
+        <svg class="link-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </a>
 
-      <!-- iOS-style segmented control -->
       <div class="seg-control">
         <span class="seg-thumb" id="seg-thumb"></span>
         <button class="seg active" id="prog-tab-1" onclick="switchProgram(1)">プロデュース</button>
@@ -199,29 +172,27 @@
       <div class="ycbm" id="ycbm-panel-3" style="display:none"><iframe src="https://xector1voice02.youcanbook.me/" frameborder="0" scrolling="yes" allowtransparency="true"></iframe></div>
     </div>
 
-    <!-- ═══════════ SETTINGS ═══════════ -->
+    <!-- ══════════ SETTINGS ══════════ -->
     <div id="page-settings" class="page">
-
-      <header class="page-head">
+      <div class="page-head">
         <h1 class="page-h1">設定</h1>
         <p class="page-sub">プロフィールと目標を編集</p>
-      </header>
+      </div>
 
-      <!-- AVATAR HERO -->
-      <div class="settings-avatar">
-        <button class="settings-avatar-btn" onclick="document.getElementById('av-input').click()">
+      <div class="settings-avatar-wrap">
+        <button class="av-btn" onclick="document.getElementById('av-input').click()">
           <div class="av av-xl" id="av-preview">?</div>
-          <span class="settings-avatar-edit">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <span class="av-edit-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           </span>
         </button>
-        <p class="settings-avatar-hint">タップで写真を変更</p>
+        <p class="av-hint">タップで写真を変更</p>
       </div>
 
       <input type="file" id="av-input" accept="image/*" style="display:none" onchange="onAvatarFileSelected(event)">
 
       <div class="crop-panel" id="crop-panel">
-        <p class="crop-note">ドラッグで位置調整 ・ ピンチでズーム</p>
+        <p class="crop-note">ドラッグで位置調整 · ピンチでズーム</p>
         <div class="crop-stage" id="crop-stage"><canvas id="crop-canvas"></canvas></div>
         <div class="crop-row">
           <button class="btn-ghost" onclick="cancelCrop()">キャンセル</button>
@@ -229,86 +200,59 @@
         </div>
       </div>
 
-      <!-- iOS-STYLE GROUPED LIST -->
       <p class="group-label">プロフィール</p>
       <div class="group">
-        <div class="group-cell">
-          <span class="group-cell-icon group-cell-icon-cyan">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          </span>
-          <span class="group-cell-label">表示名</span>
-          <input class="group-cell-input" type="text" id="settings-name" placeholder="例：田中雄介">
+        <div class="group-row">
+          <span class="group-row-label">表示名</span>
+          <input class="group-row-input" type="text" id="settings-name" placeholder="例：田中雄介">
         </div>
-        <div class="group-cell group-cell-stack">
-          <div class="group-cell-stack-head">
-            <span class="group-cell-icon group-cell-icon-lime">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
-            </span>
-            <span class="group-cell-label">目標</span>
-          </div>
-          <textarea class="group-cell-ta" id="settings-goal" placeholder="例：2026年末までにYouTube登録者10万人達成"></textarea>
+        <div class="group-row group-row-stack">
+          <span class="group-row-label">1年後の目標</span>
+          <textarea class="group-row-ta" id="settings-goal" placeholder="例：2026年末までにYouTube登録者10万人達成"></textarea>
         </div>
       </div>
 
       <button class="btn-save" onclick="saveAll()">変更を保存</button>
 
-      <p class="group-label">サポート</p>
-      <div class="group">
-        <a class="group-cell group-link" href="https://forms.gle/wFoujvkfWBbSNfLM8" target="_blank" rel="noopener">
-          <span class="group-cell-icon group-cell-icon-orange">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          </span>
-          <span class="group-cell-label">問い合わせ</span>
-          <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </a>
-        <a class="group-cell group-link" href="https://docs.google.com/document/d/1vhECxaHXvovLKNmmOFged8pR0biWdhIPI_9OiP__QHE/edit?usp=sharing" target="_blank" rel="noopener">
-          <span class="group-cell-icon group-cell-icon-pink">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          </span>
-          <span class="group-cell-label">予約ルールブック</span>
-          <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </a>
-      </div>
-
-      <p class="group-foot">XECTOR1 Member Portal v4</p>
-      <div style="height:32px"></div>
+      <p class="group-foot">Xector1 Production</p>
+      <div class="page-end"></div>
     </div>
 
   </main>
 
-  <!-- ═══════════ BOTTOM NAV ═══════════ -->
+  <!-- BOTTOM NAV -->
   <nav class="nav">
     <button class="nav-item active" id="nav-home" onclick="goPage('home')">
       <span class="nav-icon-wrap">
-        <svg class="nav-svg nav-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <svg class="nav-svg nav-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         <svg class="nav-svg nav-fill" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2h-5v-9h-4v9H5a2 2 0 0 1-2-2z"/></svg>
       </span>
       <span class="nav-lbl">ホーム</span>
     </button>
     <button class="nav-item" id="nav-tips" onclick="goPage('tips')">
       <span class="nav-icon-wrap">
-        <svg class="nav-svg nav-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-4 12.7V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.3A7 7 0 0 0 12 2z"/><line x1="9" y1="22" x2="15" y2="22"/></svg>
+        <svg class="nav-svg nav-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-4 12.7V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.3A7 7 0 0 0 12 2z"/><line x1="9" y1="22" x2="15" y2="22"/></svg>
         <svg class="nav-svg nav-fill" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-4 12.7V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.3A7 7 0 0 0 12 2z"/></svg>
       </span>
       <span class="nav-lbl">Tips</span>
     </button>
     <button class="nav-item" id="nav-seisaku" onclick="goPage('seisaku')">
       <span class="nav-icon-wrap">
-        <svg class="nav-svg nav-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        <svg class="nav-svg nav-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
         <svg class="nav-svg nav-fill" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 2 7 12 12 22 7 12 2"/></svg>
       </span>
       <span class="nav-lbl">制作</span>
     </button>
     <button class="nav-item" id="nav-book" onclick="goPage('book')">
       <span class="nav-icon-wrap">
-        <svg class="nav-svg nav-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <svg class="nav-svg nav-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         <svg class="nav-svg nav-fill" viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM5 10h14v10H5z"/></svg>
       </span>
       <span class="nav-lbl">予約</span>
     </button>
     <button class="nav-item" id="nav-settings" onclick="goPage('settings')">
       <span class="nav-icon-wrap">
-        <svg class="nav-svg nav-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <svg class="nav-svg nav-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         <svg class="nav-svg nav-fill" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.3 0-10 1.7-10 5v2h20v-2c0-3.3-6.7-5-10-5z"/></svg>
       </span>
       <span class="nav-lbl">設定</span>
@@ -317,7 +261,7 @@
 
 </div>
 
-<!-- ═══════════ TIP SHEET ═══════════ -->
+<!-- TIP SHEET -->
 <div class="sheet-overlay" id="tip-overlay" onclick="closeTip(event)">
   <div class="sheet" onclick="event.stopPropagation()">
     <div class="sheet-grabber"></div>
@@ -325,7 +269,7 @@
       <div id="tip-content"></div>
     </div>
     <button class="sheet-close" onclick="closeTip()" aria-label="閉じる">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   </div>
 </div>
