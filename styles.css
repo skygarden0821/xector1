@@ -1233,6 +1233,15 @@ a { color: inherit; text-decoration: none; }
   flex: 1;
 }
 .sheet-scroll::-webkit-scrollbar { display: none; }
+
+/* シートを開いたとき、中身が下から上へ時間差で出る */
+.sheet-overlay.open .sheet-anim {
+  animation: sheet-rise .55s var(--ease) both;
+}
+@keyframes sheet-rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 .sheet-close {
   position: absolute;
   top: 14px;
@@ -1377,7 +1386,8 @@ a { color: inherit; text-decoration: none; }
   .sweep { display: none; }
   .coming-soon-en { opacity: 0.6; }
   .page.active [data-stagger],
-  .rise {
+  .rise,
+  .sheet-anim {
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;

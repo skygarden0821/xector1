@@ -44,7 +44,7 @@ function listPreview(tip, n) {
 function renderBody(body) {
   const lines = (body || '').split('\n');
   let html = '', buf = [], inList = false;
-  const flushPara = () => { if (buf.length) { html += `<p class="sheet-p">${escapeHtml(buf.join(' '))}</p>`; buf = []; } };
+  const flushPara = () => { if (buf.length) { html += `<p class="sheet-p sheet-anim">${escapeHtml(buf.join(' '))}</p>`; buf = []; } };
   const closeList = () => { if (inList) { html += '</div>'; inList = false; } };
 
   for (let raw of lines) {
@@ -52,12 +52,12 @@ function renderBody(body) {
     if (!line) { flushPara(); closeList(); continue; }
     if (line.startsWith('■')) {
       flushPara(); closeList();
-      html += `<h3 class="sheet-h">${escapeHtml(line.replace(/^■\s*/, ''))}</h3>`;
+      html += `<h3 class="sheet-h sheet-anim">${escapeHtml(line.replace(/^■\s*/, ''))}</h3>`;
       continue;
     }
     if (line.startsWith('・')) {
       flushPara();
-      if (!inList) { html += '<div class="sheet-ul">'; inList = true; }
+      if (!inList) { html += '<div class="sheet-ul sheet-anim">'; inList = true; }
       html += `<div class="sheet-li">${escapeHtml(line.replace(/^・\s*/, ''))}</div>`;
       continue;
     }
@@ -268,16 +268,26 @@ function openTip(id) {
 
   const cat = CATS[tip.cat] || { label: tip.cat, color: 'var(--t3)' };
   $('tip-content').innerHTML = `
-    ${tip.thumb ? `<div class="sheet-thumb" style="background-image:url('${escapeHtml(tip.thumb)}')"></div>` : ''}
-    <span class="sheet-cat" style="color:${cat.color}">${escapeHtml(cat.label)}</span>
-    <h1 class="sheet-h1">${escapeHtml(tip.title)}</h1>
-    <div class="sheet-meta">
+    ${tip.thumb ? `<div class="sheet-thumb sheet-anim" style="background-image:url('${escapeHtml(tip.thumb)}')"></div>` : ''}
+    <span class="sheet-cat sheet-anim" style="color:${cat.color}">${escapeHtml(cat.label)}</span>
+    <h1 class="sheet-h1 sheet-anim">${escapeHtml(tip.title)}</h1>
+    <div class="sheet-meta sheet-anim">
       <span class="sheet-meta-item">${escapeHtml(String(tip.week || '—'))}</span>
       <span class="sheet-meta-item">${readMinutes(tip.body)} MIN READ</span>
       <span class="sheet-meta-item">#${String(tip.id).padStart(3, '0')}</span>
     </div>
     ${renderBody(tip.body)}
   `;
+
+  // 中身を下から上へ、時間差で出す
+  const anims = $('tip-content').querySelectorAll('.sheet-anim');
+  anims.forEach((el, i) => {
+    el.style.animationDelay = Math.min(i * 60, 600) + 'ms';
+  });
+  // スクロール位置をリセット
+  const sc = document.querySelector('.sheet-scroll');
+  if (sc) sc.scrollTop = 0;
+
   $('tip-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
