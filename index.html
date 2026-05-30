@@ -24,6 +24,7 @@
         <div class="av av-sm" id="bar-av">?</div>
       </button>
     </div>
+    <span class="sweep" id="sweep"></span>
   </header>
 
   <main class="scroll-area" id="scroll-area">
@@ -32,13 +33,13 @@
     <div id="page-home" class="page active">
 
       <!-- Greeting -->
-      <div class="home-header">
+      <div class="home-header" data-stagger>
         <p class="home-greeting">お帰りなさい</p>
         <h1 class="home-name" id="hero-name">ゲスト</h1>
       </div>
 
       <!-- 1年後の目標 -->
-      <button class="goal-block" onclick="goPage('settings')" aria-label="目標を編集">
+      <button class="goal-block" data-stagger onclick="goPage('settings')" aria-label="目標を編集">
         <div class="goal-block-top">
           <span class="goal-block-label">1年後の目標</span>
           <span class="goal-block-edit">編集</span>
@@ -47,7 +48,7 @@
       </button>
 
       <!-- Quick Actions -->
-      <div class="qa-row">
+      <div class="qa-row" data-stagger>
         <button class="qa-item" onclick="goPage('book')">
           <span class="qa-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2.5"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -75,10 +76,10 @@
       </div>
 
       <!-- Divider -->
-      <div class="divider"></div>
+      <div class="divider" data-stagger></div>
 
       <!-- Today's Pick -->
-      <section class="section">
+      <section class="section" data-stagger>
         <div class="section-head">
           <span class="section-label">TODAY</span>
           <span class="section-count" id="pick-num"></span>
@@ -99,7 +100,7 @@
       </section>
 
       <!-- Recent Tips -->
-      <section class="section">
+      <section class="section" data-stagger>
         <div class="section-head">
           <span class="section-label">最近のTips</span>
           <button class="section-link" onclick="goPage('tips')">すべて表示</button>
@@ -112,12 +113,12 @@
 
     <!-- ══════════ TIPS ══════════ -->
     <div id="page-tips" class="page">
-      <div class="page-head">
+      <div class="page-head" data-stagger>
         <h1 class="page-h1">Tips</h1>
         <p class="page-sub">Xector1 Production のノウハウ＆コラム</p>
       </div>
 
-      <div class="search-wrap">
+      <div class="search-wrap" data-stagger>
         <span class="search-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </span>
@@ -140,7 +141,7 @@
 
     <!-- ══════════ 制作（準備中） ══════════ -->
     <div id="page-seisaku" class="page">
-      <div class="coming-soon">
+      <div class="coming-soon" data-stagger>
         <p class="coming-soon-en">COMING SOON</p>
         <h2 class="coming-soon-title">準備中</h2>
         <p class="coming-soon-sub">このページは現在準備中です。<br>もうしばらくお待ちください。</p>
@@ -149,18 +150,18 @@
 
     <!-- ══════════ BOOK ══════════ -->
     <div id="page-book" class="page">
-      <div class="page-head">
+      <div class="page-head" data-stagger>
         <h1 class="page-h1">予約</h1>
         <p class="page-sub">セッションを選んで予約</p>
       </div>
 
-      <a class="doc-link" href="https://docs.google.com/document/d/1vhECxaHXvovLKNmmOFged8pR0biWdhIPI_9OiP__QHE/edit?usp=sharing" target="_blank" rel="noopener">
+      <a class="doc-link" data-stagger href="https://docs.google.com/document/d/1vhECxaHXvovLKNmmOFged8pR0biWdhIPI_9OiP__QHE/edit?usp=sharing" target="_blank" rel="noopener">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         <span>予約ルールブックを確認</span>
         <svg class="link-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </a>
 
-      <div class="seg-control">
+      <div class="seg-control" data-stagger>
         <span class="seg-thumb" id="seg-thumb"></span>
         <button class="seg active" id="prog-tab-1" onclick="switchProgram(1)">プロデュース</button>
         <button class="seg" id="prog-tab-2" onclick="switchProgram(2)">ボイトレA</button>
@@ -179,7 +180,7 @@
         <p class="page-sub">プロフィールと目標を編集</p>
       </div>
 
-      <div class="settings-avatar-wrap">
+      <div class="settings-avatar-wrap" data-stagger>
         <button class="av-btn" onclick="document.getElementById('av-input').click()">
           <div class="av av-xl" id="av-preview">?</div>
           <span class="av-edit-badge">
@@ -200,19 +201,19 @@
         </div>
       </div>
 
-      <p class="group-label">プロフィール</p>
-      <div class="group">
+      <p class="group-label" data-stagger>プロフィール</p>
+      <div class="group" data-stagger>
         <div class="group-row">
           <span class="group-row-label">表示名</span>
           <input class="group-row-input" type="text" id="settings-name" placeholder="例：田中雄介">
         </div>
         <div class="group-row group-row-stack">
           <span class="group-row-label">1年後の目標</span>
-          <textarea class="group-row-ta" id="settings-goal" placeholder="例：2026年末までにYouTube登録者10万人達成"></textarea>
+          <textarea class="group-row-ta" id="settings-goal" placeholder="ここに1年後の目標を書いてください"></textarea>
         </div>
       </div>
 
-      <button class="btn-save" onclick="saveAll()">変更を保存</button>
+      <button class="btn-save" data-stagger onclick="saveAll()">変更を保存</button>
 
       <p class="group-foot">Xector1 Production</p>
       <div class="page-end"></div>

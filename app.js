@@ -154,11 +154,12 @@ function renderRecentTips() {
   const container = document.createElement('div');
   container.className = 'feed-list';
   const list = TIPS.slice().sort((a, b) => b.id - a.id).slice(0, 4);
-  list.forEach(tip => {
+  list.forEach((tip, i) => {
     const cat = CATS[tip.cat] || { label: tip.cat, color: 'var(--t3)' };
     const ext = isExternal(tip);
     const el = document.createElement('button');
-    el.className = 'feed-item';
+    el.className = 'feed-item rise';
+    el.style.animationDelay = (i * 50) + 'ms';
     el.onclick = () => openTip(tip.id);
     el.innerHTML = `
       <div class="feed-item-body">
@@ -221,11 +222,12 @@ function renderTips() {
   if (!items.length) { empty.style.display = 'block'; return; }
   empty.style.display = 'none';
 
-  items.forEach(tip => {
+  items.forEach((tip, i) => {
     const cat = CATS[tip.cat] || { label: tip.cat, color: 'var(--t3)' };
     const ext = isExternal(tip);
     const el = document.createElement('button');
-    el.className = 'tip-card' + (tip.thumb ? ' has-thumb' : '');
+    el.className = 'tip-card rise' + (tip.thumb ? ' has-thumb' : '');
+    el.style.animationDelay = Math.min(i * 45, 360) + 'ms';
     el.onclick = () => openTip(tip.id);
     el.innerHTML = `
       ${tip.thumb ? `<span class="tip-thumb" style="background-image:url('${escapeHtml(tip.thumb)}')"></span>` : ''}
@@ -286,10 +288,25 @@ function closeTip(e) {
 }
 
 // ─── ページ切替 ───
+let currentPage = 'home';
 function goPage(p) {
+  if (p === currentPage && document.querySelector('.page.active')) {
+    // 同じタブ再タップ：トップへスクロールのみ
+    $('scroll-area').scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+  currentPage = p;
+
+  // 光のラインを走らせる
+  fireSweep();
+
   document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
   const target = $('page-' + p);
-  if (target) target.classList.add('active');
+  if (target) {
+    target.classList.add('active');
+    // ステガード（時間差）アニメを再起動
+    restagger(target);
+  }
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
   const navBtn = $('nav-' + p);
   if (navBtn) navBtn.classList.add('active');
@@ -297,6 +314,27 @@ function goPage(p) {
   if (p === 'home') renderHome();
   if (p === 'tips') renderTips();
   if (p === 'settings') prefill();
+}
+
+// 光のラインエフェクト（アプリバー直下を一瞬ウィンと走る）
+function fireSweep() {
+  const sweep = $('sweep');
+  if (!sweep) return;
+  sweep.classList.remove('run');
+  // reflow を強制してアニメを再発火
+  void sweep.offsetWidth;
+  sweep.classList.add('run');
+}
+
+// ページ内の要素を時間差でフェードイン
+function restagger(page) {
+  const items = page.querySelectorAll('[data-stagger]');
+  items.forEach((el, i) => {
+    el.style.animation = 'none';
+    void el.offsetWidth;
+    el.style.animation = '';
+    el.style.animationDelay = (i * 55) + 'ms';
+  });
 }
 
 // ─── 予約セグメント ───
@@ -402,4 +440,9 @@ window.addEventListener('DOMContentLoaded', () => {
   renderFilters();
   renderTips();
   switchProgram(1);
+
+  // 初回ロードの登場演出
+  const home = $('page-home');
+  if (home) restagger(home);
+  fireSweep();
 });
