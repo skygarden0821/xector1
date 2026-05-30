@@ -8,11 +8,11 @@ const LS_AV   = 'xector1_av';
 const LS_JOIN = 'xector1_joined';
 
 const CATS = {
-  content:   { label: 'Content',   color: 'var(--cat-content)' },
-  algorithm: { label: 'Algorithm', color: 'var(--cat-algorithm)' },
-  growth:    { label: 'Growth',    color: 'var(--cat-growth)' },
-  mindset:   { label: 'Mindset',   color: 'var(--cat-mindset)' },
-  collab:    { label: 'Collab',    color: 'var(--cat-collab)' },
+  content:   { label: 'コンテンツ',     color: 'var(--cat-content)' },
+  algorithm: { label: 'アルゴリズム',   color: 'var(--cat-algorithm)' },
+  growth:    { label: '成長戦略',       color: 'var(--cat-growth)' },
+  mindset:   { label: 'マインドセット', color: 'var(--cat-mindset)' },
+  collab:    { label: 'コラボ',         color: 'var(--cat-collab)' },
 };
 
 let activeFilter = 'all';
