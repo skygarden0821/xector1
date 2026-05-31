@@ -395,12 +395,22 @@ function renderChart(stats) {
 function renderHome() {
   const name = (localStorage.getItem(LS_NAME) || '').trim() || 'ゲスト';
   $('hero-name').textContent = name;
+  const greetEl = $('home-greeting');
+  if (greetEl) greetEl.textContent = greetingByTime();
   const goal = (localStorage.getItem(LS_GOAL) || '').trim();
   $('goal-text').textContent = goal || '目標を設定してください';
   applyAvatar();
   renderGrowth();
   renderPick();
   renderRecentTips();
+}
+
+// 時間帯に応じたあいさつ
+function greetingByTime() {
+  const h = new Date().getHours();
+  if (h >= 5 && h < 12)  return 'おはようございます';
+  if (h >= 12 && h < 18) return 'こんにちは';
+  return 'こんばんは';   // 18〜翌5時
 }
 
 // ─── Today's Pick ───

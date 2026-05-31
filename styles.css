@@ -1779,3 +1779,197 @@ a { color: inherit; text-decoration: none; }
     filter: none !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   AUTH GATE（ログイン / 新規登録）
+   ═══════════════════════════════════════════════════════════ */
+
+.auth-gate {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: var(--bg);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  padding-top: calc(24px + env(safe-area-inset-top));
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+}
+.auth-gate.show { display: flex; }
+/* ゲート表示中は背面スクロール抑制 */
+body.locked { overflow: hidden; }
+
+/* 上部のアンビエント光 */
+.auth-gate::before {
+  content: '';
+  position: absolute;
+  top: -5%;
+  left: 50%;
+  width: 150%;
+  height: 40%;
+  transform: translateX(-50%);
+  background: radial-gradient(55% 60% at 50% 0%,
+              rgba(127,180,230,0.12) 0%,
+              rgba(127,180,230,0.03) 40%,
+              transparent 72%);
+  pointer-events: none;
+}
+
+.auth-card {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  background:
+    linear-gradient(180deg, rgba(143,200,255,0.05), transparent 45%),
+    var(--s1);
+  border: 1px solid var(--b1);
+  border-radius: 22px;
+  padding: 32px 24px 26px;
+  box-shadow: 0 24px 60px -28px rgba(0,0,0,0.9);
+}
+.auth-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 12%; right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ice-bright), transparent);
+}
+
+.auth-brand {
+  font-family: var(--en);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-align: center;
+  color: #fff;
+}
+.auth-tagline {
+  margin: 6px 0 24px;
+  text-align: center;
+  font-family: var(--en);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--t3);
+  text-transform: uppercase;
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  background: var(--s2);
+  border: 1px solid var(--b0);
+  border-radius: 12px;
+  padding: 3px;
+  margin-bottom: 22px;
+}
+.auth-tab {
+  padding: 10px 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--t3);
+  border-radius: 9px;
+  text-align: center;
+  transition: color .2s, background .2s;
+}
+.auth-tab.active {
+  color: #04121f;
+  background: linear-gradient(180deg, var(--ice-bright), var(--ice));
+  box-shadow: 0 4px 12px -4px var(--ice-glow);
+}
+
+.auth-field { margin-bottom: 14px; }
+.auth-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--t2);
+  margin-bottom: 7px;
+  letter-spacing: 0.02em;
+}
+.auth-input {
+  width: 100%;
+  min-height: 46px;
+  box-sizing: border-box;
+  background: var(--s2);
+  border: 1px solid var(--b1);
+  border-radius: 11px;
+  padding: 0 14px;
+  color: #fff;
+  font-size: 16px;          /* iOS自動ズーム防止 */
+  font-weight: 500;
+  font-family: inherit;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+.auth-input::placeholder { color: var(--t4); font-weight: 400; }
+.auth-input:focus {
+  border-color: var(--ice);
+  box-shadow: 0 0 0 3px var(--ice-faint);
+}
+
+.auth-error {
+  margin: 4px 2px 0;
+  min-height: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #ff8a8a;
+  line-height: 1.5;
+}
+
+.auth-submit {
+  width: 100%;
+  margin-top: 14px;
+  padding: 15px;
+  background: linear-gradient(180deg, var(--ice-bright), var(--ice-deep));
+  color: #04121f;
+  font-size: 15px;
+  font-weight: 800;
+  border-radius: 13px;
+  letter-spacing: 0.04em;
+  box-shadow: 0 12px 32px -12px var(--ice-glow);
+  transition: transform .15s var(--ease), opacity .15s;
+}
+.auth-submit:active { transform: scale(.98) translateY(1px); }
+.auth-submit:disabled { opacity: 0.6; }
+
+.auth-hint {
+  margin: 16px 0 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--t3);
+  line-height: 1.6;
+}
+.auth-foot {
+  margin: 22px 0 0;
+  font-family: var(--en);
+  font-size: 11px;
+  color: var(--t4);
+  letter-spacing: 0.06em;
+}
+
+/* アカウント情報・ログアウト */
+.account-email {
+  font-size: 13px;
+  color: var(--t2);
+  font-weight: 500;
+  word-break: break-all;
+  text-align: right;
+}
+.btn-logout {
+  display: block;
+  width: 100%;
+  margin: 14px 0 0;
+  padding: 14px;
+  background: transparent;
+  color: #ff8a8a;
+  font-size: 14px;
+  font-weight: 700;
+  border: 1px solid rgba(255,138,138,0.3);
+  border-radius: var(--r-card);
+  transition: background .15s, transform .12s;
+}
+.btn-logout:active { background: rgba(255,138,138,0.08); transform: scale(.99); }
