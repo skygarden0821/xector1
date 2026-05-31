@@ -105,7 +105,7 @@ function ensureJoinDate() {
 // 指標の定義（agg: 累計の出し方 sum=合計 / latest=最新値）
 const METRICS = {
   views:     { label: '再生数',     unit: '回', short: '再生数',     agg: 'sum',    totalLabel: '累計再生数' },
-  posts:     { label: '投稿本数',   unit: '本', short: '投稿',       agg: 'sum',    totalLabel: '累計投稿本数' },
+  posts:     { label: '投稿本数',   unit: '本', short: '投稿数',     agg: 'sum',    totalLabel: '累計投稿本数' },
   followers: { label: 'フォロワー', unit: '人', short: 'フォロワー', agg: 'latest', totalLabel: '現在のフォロワー' },
 };
 
@@ -680,6 +680,8 @@ function saveAll() {
   applyAvatar();
   toast('保存しました');
   renderHome();
+  // 保存が反映されたことを体感できるよう、少し待ってリロード
+  setTimeout(() => { location.reload(); }, 650);
 }
 
 // ─── 成長記録：設定画面の月セレクトを構築（直近24ヶ月） ───

@@ -17,6 +17,7 @@ const db = getFirestore(app);
 setPersistence(auth, browserLocalPersistence).catch(() => {});
 
 let authMode = 'login';
+let justAuthenticated = false;  // ログイン/登録ボタンで認証した直後か
 
 // ─── エラーメッセージ ───
 function jpError(code) {
@@ -82,6 +83,7 @@ window.submitAuth = async function () {
       await signInWithEmailAndPassword(auth, email, password);
       // ログイン後の入室可否は onAuthStateChanged 内で検証
     }
+    justAuthenticated = true;  // 手動ログイン/登録が成功した
   } catch (e) {
     showError(e.message && e.userFacing ? e.message : jpError(e.code));
     btn.disabled = false;
@@ -149,6 +151,25 @@ window.doLogout = async function () {
   try { await signOut(auth); } catch (e) {}
 };
 
+// ─── ウェルカム演出 ───
+function showWelcome() {
+  const ov = document.getElementById('welcome-overlay');
+  if (!ov) return;
+  // 表示名（localStorage）があれば差し込む
+  const nameEl = document.getElementById('welcome-name');
+  if (nameEl) {
+    let nm = '';
+    try { nm = (localStorage.getItem('xector1_name') || '').trim(); } catch (_) {}
+    nameEl.textContent = nm ? nm + ' さんが' : '';
+  }
+  // 一旦リセットして再生
+  ov.classList.remove('show');
+  void ov.offsetWidth;
+  ov.classList.add('show');
+  // 演出後に確実に隠す（CSSのdelay+durationより少し長め）
+  setTimeout(() => { ov.classList.remove('show'); ov.style.display = 'none'; setTimeout(()=>{ ov.style.display=''; }, 50); }, 3000);
+}
+
 // ─── 認証状態の監視 ───
 onAuthStateChanged(auth, async (user) => {
   const gate = document.getElementById('auth-gate');
@@ -177,6 +198,12 @@ onAuthStateChanged(auth, async (user) => {
     if (pw) pw.value = '';
     const cd = document.getElementById('auth-code');
     if (cd) cd.value = '';
+
+    // 手動ログイン/登録の直後だけ、ウェルカム演出を出す
+    if (justAuthenticated) {
+      justAuthenticated = false;
+      showWelcome();
+    }
   } else {
     gate.classList.add('show');
     document.body.classList.add('locked');

@@ -10,10 +10,17 @@
 <title>Xector1 Production｜Member Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+<!-- ═══════════ WELCOME（ログイン成功演出） ═══════════ -->
+<div id="welcome-overlay" class="welcome-overlay">
+  <span class="welcome-ring"></span>
+  <div class="welcome-mark">XECTOR<span class="brand-1">1</span></div>
+  <p class="welcome-text"><span class="welcome-name" id="welcome-name"></span> ログインしました</p>
+</div>
 
 <!-- ═══════════ AUTH GATE（ログイン/新規登録） ═══════════ -->
 <div id="auth-gate" class="auth-gate">
@@ -194,8 +201,8 @@
     <!-- ══════════ TIPS ══════════ -->
     <div id="page-tips" class="page">
       <div class="page-head" data-stagger>
-        <h1 class="page-h1">Tips</h1>
-        <p class="page-sub">Xector1 Production のノウハウ＆コラム</p>
+        <h1 class="page-h1">ノウハウ集</h1>
+        <p class="page-sub">活動で詰まったとき、読んでほしいTips</p>
       </div>
 
       <div class="search-wrap" data-stagger>

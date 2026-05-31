@@ -51,7 +51,7 @@
 
   /* Type — Apple風の端正なモダンゴシック */
   --en: 'Inter', system-ui, -apple-system, sans-serif;
-  --jp: 'Zen Kaku Gothic New', 'Inter', system-ui, -apple-system, sans-serif;
+  --jp: 'Noto Sans JP', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 *, *::before, *::after {
@@ -1973,3 +1973,116 @@ body.locked { overflow: hidden; }
   transition: background .15s, transform .12s;
 }
 .btn-logout:active { background: rgba(255,138,138,0.08); transform: scale(.99); }
+
+/* ═══════════════════════════════════════════════════════════
+   起動アニメ（ログインゲート）── 車のイグニッション風
+   ═══════════════════════════════════════════════════════════ */
+
+/* ブランドロゴの点灯シーケンス */
+.auth-gate.show .auth-brand {
+  animation: ignite 1.5s var(--ease) both;
+}
+@keyframes ignite {
+  0%   { opacity: 0; letter-spacing: 0.5em; filter: blur(6px); }
+  18%  { opacity: 0.15; }
+  24%  { opacity: 0.9; }   /* フリッカー */
+  28%  { opacity: 0.25; }
+  36%  { opacity: 1; filter: blur(0); }
+  100% { opacity: 1; letter-spacing: 0.18em; filter: blur(0); }
+}
+/* ロゴの「1」が遅れて灯る */
+.auth-gate.show .auth-brand .brand-1 {
+  animation: ignite-accent 1.8s var(--ease) both;
+}
+@keyframes ignite-accent {
+  0%, 40% { color: #fff; text-shadow: none; }
+  55%     { color: var(--ice-bright); text-shadow: 0 0 18px var(--ice-glow); }
+  70%     { text-shadow: 0 0 6px var(--ice-glow); }
+  100%    { color: var(--ice-bright); text-shadow: 0 0 12px var(--ice-glow); }
+}
+/* タグライン・カード内要素が遅れてフェードイン */
+.auth-gate.show .auth-tagline { animation: boot-fade .7s var(--ease) both; animation-delay: .9s; }
+.auth-gate.show .auth-tabs    { animation: boot-fade .7s var(--ease) both; animation-delay: 1.05s; }
+.auth-gate.show .auth-field   { animation: boot-fade .7s var(--ease) both; animation-delay: 1.15s; }
+.auth-gate.show .auth-submit  { animation: boot-fade .7s var(--ease) both; animation-delay: 1.3s; }
+.auth-gate.show .auth-hint    { animation: boot-fade .7s var(--ease) both; animation-delay: 1.4s; }
+@keyframes boot-fade {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/* カード上辺の光ラインが左→右に走る */
+.auth-gate.show .auth-card::before {
+  animation: boot-sweep 1.4s var(--ease-io) both;
+  animation-delay: .3s;
+}
+@keyframes boot-sweep {
+  0%   { opacity: 0; transform: scaleX(0); transform-origin: left; }
+  40%  { opacity: 1; }
+  100% { opacity: 1; transform: scaleX(1); transform-origin: left; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ログイン成功アニメ（ウェルカム・オーバーレイ）
+   ═══════════════════════════════════════════════════════════ */
+
+.welcome-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 600;
+  background: var(--bg);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 18px;
+}
+.welcome-overlay.show { display: flex; animation: welcome-out .6s var(--ease) forwards; animation-delay: 2.2s; }
+@keyframes welcome-out {
+  to { opacity: 0; visibility: hidden; }
+}
+/* 中央から広がる光のリング */
+.welcome-ring {
+  position: absolute;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--ice-bright);
+  box-shadow: 0 0 30px var(--ice-glow);
+  animation: ring-expand 1.6s var(--ease-io) forwards;
+}
+@keyframes ring-expand {
+  0%   { width: 10px; height: 10px; opacity: 1; }
+  70%  { opacity: 0.5; }
+  100% { width: 600px; height: 600px; opacity: 0; }
+}
+.welcome-mark {
+  position: relative;
+  font-family: var(--en);
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: #fff;
+  opacity: 0;
+  animation: welcome-mark-in 1s var(--ease) both;
+  animation-delay: .3s;
+}
+.welcome-mark .brand-1 { color: var(--ice-bright); text-shadow: 0 0 16px var(--ice-glow); }
+@keyframes welcome-mark-in {
+  0%   { opacity: 0; transform: scale(.8); filter: blur(8px); }
+  60%  { opacity: 1; filter: blur(0); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.welcome-text {
+  position: relative;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ice-bright);
+  letter-spacing: 0.08em;
+  opacity: 0;
+  animation: welcome-text-in .8s var(--ease) both;
+  animation-delay: 1s;
+}
+@keyframes welcome-text-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.welcome-name { color: #fff; }
