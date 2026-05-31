@@ -102,11 +102,11 @@ function ensureJoinDate() {
 //   成長記録（Growth）
 // ════════════════════════════════════════════════════════════
 
-// 指標の定義
+// 指標の定義（agg: 累計の出し方 sum=合計 / latest=最新値）
 const METRICS = {
-  views:     { label: '再生数',     unit: '回',     short: '再生数' },
-  posts:     { label: '投稿本数',   unit: '本',     short: '投稿' },
-  followers: { label: 'フォロワー', unit: '人',     short: 'フォロワー' },
+  views:     { label: '再生数',     unit: '回', short: '再生数',     agg: 'sum',    totalLabel: '累計再生数' },
+  posts:     { label: '投稿本数',   unit: '本', short: '投稿',       agg: 'sum',    totalLabel: '累計投稿本数' },
+  followers: { label: 'フォロワー', unit: '人', short: 'フォロワー', agg: 'latest', totalLabel: '現在のフォロワー' },
 };
 
 let activeMetric = 'views';   // 表示中の指標
@@ -158,15 +158,46 @@ function fmtDelta(n) {
   return s + fmtNum(Math.abs(n));
 }
 
+// 累計の計算（指標の集計方法に従う）
+function computeTotal(stats, metric) {
+  const m = METRICS[metric];
+  const entries = Object.keys(stats)
+    .filter(k => stats[k]?.[metric] != null && stats[k][metric] !== '')
+    .sort(); // キーは "YYYY-MM" なので文字列ソートで時系列順
+  if (entries.length === 0) return null;
+
+  if (m.agg === 'latest') {
+    // 最新月の値（フォロワーなど積み上げ型）
+    const lastKey = entries[entries.length - 1];
+    return Number(stats[lastKey][metric]);
+  }
+  // 合計（再生数・投稿本数）
+  return entries.reduce((sum, k) => sum + Number(stats[k][metric]), 0);
+}
+
 // ─── 指標タブ切替 ───
 function setMetric(m) {
   activeMetric = m;
   renderGrowth();
 }
-// ─── 期間切替 ───
+// ─── 期間切替（プリセット） ───
 function setRange(r) {
   activeRange = r;
+  const inp = $('range-input');
+  if (inp) inp.value = '';  // プリセット選択時は自由入力欄をクリア
   renderGrowth();
+}
+// ─── 期間切替（自由入力） ───
+function applyCustomRange() {
+  const inp = $('range-input');
+  if (!inp) return;
+  let v = parseInt(inp.value, 10);
+  if (isNaN(v) || v < 1) { toast('1以上の月数を入力してください'); return; }
+  v = Math.min(v, 60);   // 最大5年
+  inp.value = v;
+  activeRange = v;
+  renderGrowth();
+  toast(`直近${v}ヶ月を表示中`);
 }
 
 // ─── 成長セクション全体を描画 ───
@@ -188,8 +219,20 @@ function renderGrowth() {
 
   renderMetricTabs();
   renderRangeTabs();
+  renderTotal(stats);
   renderCompareCards(stats);
   renderChart(stats);
+}
+
+// ─── 累計表示 ───
+function renderTotal(stats) {
+  const labelEl = $('total-label');
+  const valueEl = $('total-value');
+  if (!labelEl || !valueEl) return;
+  const m = METRICS[activeMetric];
+  const total = computeTotal(stats, activeMetric);
+  labelEl.textContent = m.totalLabel;
+  valueEl.textContent = total != null ? `${fmtNum(total)} ${m.unit}` : '—';
 }
 
 // ─── 指標タブ ───
@@ -206,13 +249,15 @@ function renderMetricTabs() {
   });
 }
 
-// ─── 期間タブ ───
+// ─── 期間タブ（プリセット） ───
 function renderRangeTabs() {
   const row = $('range-tabs');
   if (!row) return;
   row.innerHTML = '';
-  [3, 6, 12].forEach(r => {
+  const presets = [3, 6, 12];
+  presets.forEach(r => {
     const b = document.createElement('button');
+    // プリセット値と完全一致するときだけアクティブ
     b.className = 'range-chip' + (activeRange === r ? ' active' : '');
     b.textContent = r + 'ヶ月';
     b.onclick = () => setRange(r);

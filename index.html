@@ -100,8 +100,24 @@
           <!-- グラフカード -->
           <div class="chart-card">
             <div class="metric-tabs" id="metric-tabs"></div>
+
+            <!-- 累計表示 -->
+            <div class="total-row">
+              <span class="total-label" id="total-label">累計再生数</span>
+              <span class="total-value" id="total-value">—</span>
+            </div>
+
             <div class="growth-chart" id="growth-chart"></div>
-            <div class="range-tabs" id="range-tabs"></div>
+
+            <!-- 期間切替（プリセット＋自由入力） -->
+            <div class="range-bar">
+              <div class="range-tabs" id="range-tabs"></div>
+              <div class="range-custom">
+                <input class="range-input" type="number" inputmode="numeric" id="range-input" min="1" max="60" placeholder="">
+                <span class="range-unit">ヶ月</span>
+                <button class="range-apply" onclick="applyCustomRange()">表示</button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -191,14 +207,14 @@
 
       <div class="seg-control" data-stagger>
         <span class="seg-thumb" id="seg-thumb"></span>
-        <button class="seg active" id="prog-tab-1" onclick="switchProgram(1)">プロデュース</button>
-        <button class="seg" id="prog-tab-2" onclick="switchProgram(2)">ボイトレA</button>
-        <button class="seg" id="prog-tab-3" onclick="switchProgram(3)">ボイトレB</button>
+        <button class="seg active" id="prog-tab-1" onclick="switchProgram(1)">ボイトレA</button>
+        <button class="seg" id="prog-tab-2" onclick="switchProgram(2)">ボイトレB</button>
+        <button class="seg" id="prog-tab-3" onclick="switchProgram(3)">プロデュース</button>
       </div>
 
-      <div class="ycbm" id="ycbm-panel-1"><iframe src="https://skygarden0821.youcanbook.me/" frameborder="0" scrolling="yes" allowtransparency="true"></iframe></div>
-      <div class="ycbm" id="ycbm-panel-2" style="display:none"><iframe src="https://xector1voice01.youcanbook.me/" frameborder="0" scrolling="yes" allowtransparency="true"></iframe></div>
-      <div class="ycbm" id="ycbm-panel-3" style="display:none"><iframe src="https://xector1voice02.youcanbook.me/" frameborder="0" scrolling="yes" allowtransparency="true"></iframe></div>
+      <div class="ycbm" id="ycbm-panel-1"><iframe src="https://xector1voice01.youcanbook.me/" frameborder="0" scrolling="yes" allowtransparency="true"></iframe></div>
+      <div class="ycbm" id="ycbm-panel-2" style="display:none"><iframe src="https://xector1voice02.youcanbook.me/" frameborder="0" scrolling="yes" allowtransparency="true"></iframe></div>
+      <div class="ycbm" id="ycbm-panel-3" style="display:none"><iframe src="https://skygarden0821.youcanbook.me/" frameborder="0" scrolling="yes" allowtransparency="true"></iframe></div>
     </div>
 
     <!-- ══════════ SETTINGS ══════════ -->
