@@ -104,6 +104,65 @@ function spinAvatar(e) {
   setTimeout(() => { el.classList.remove('av-spin'); avatarSpinning = false; }, 950);
 }
 
+// タップ判定：通常は回転、一定時間内に3回で棒人間が登場
+let avatarTapCount = 0;
+let avatarTapTimer = null;
+let buddyPlaying = false;
+function tapAvatar(e) {
+  if (e) e.preventDefault();
+  avatarTapCount++;
+
+  if (avatarTapCount >= 3) {
+    // 3回到達 → 棒人間
+    clearTimeout(avatarTapTimer);
+    avatarTapCount = 0;
+    showBuddy();
+    return;
+  }
+  // それ以外は通常の回転
+  spinAvatar(e);
+  // 一定時間内に次が来なければカウントリセット
+  clearTimeout(avatarTapTimer);
+  avatarTapTimer = setTimeout(() => { avatarTapCount = 0; }, 800);
+}
+
+// 棒人間が出てきて、なでて、励まして、隠れる
+const BUDDY_LINES = ['頑張ろう！', 'いい感じ！', '今日もえらい！', 'ファイト！'];
+function showBuddy() {
+  if (buddyPlaying) return;
+  buddyPlaying = true;
+
+  const buddy = $('buddy');
+  const bubble = $('buddy-bubble');
+  if (!buddy || !bubble) { buddyPlaying = false; return; }
+
+  // セリフをランダムに
+  bubble.textContent = BUDDY_LINES[Math.floor(Math.random() * BUDDY_LINES.length)];
+
+  // クラスを一旦リセットして再生
+  buddy.classList.remove('buddy-play');
+  bubble.classList.remove('buddy-bubble-show');
+  void buddy.offsetWidth;
+
+  buddy.classList.add('buddy-play');     // 登場→なでる→退場（CSS側で制御）
+  // 吹き出しは少し遅れて出す
+  setTimeout(() => bubble.classList.add('buddy-bubble-show'), 700);
+
+  // アバターを軽く揺らす（なでられている感）
+  const av = $('home-av');
+  if (av) {
+    setTimeout(() => av.classList.add('av-pat'), 650);
+    setTimeout(() => av.classList.remove('av-pat'), 1700);
+  }
+
+  // 後始末
+  setTimeout(() => {
+    buddy.classList.remove('buddy-play');
+    bubble.classList.remove('buddy-bubble-show');
+    buddyPlaying = false;
+  }, 3400);
+}
+
 // ─── 入会日 ───
 function ensureJoinDate() {
   let j = localStorage.getItem(LS_JOIN);

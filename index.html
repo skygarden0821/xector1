@@ -78,9 +78,29 @@
           <p class="home-greeting" id="home-greeting">おかえりなさい</p>
           <h1 class="home-name" id="hero-name">ゲスト</h1>
         </div>
-        <button class="home-av-btn" onclick="spinAvatar(event)" aria-label="プロフィール写真">
-          <div class="av home-av" id="home-av">?</div>
-        </button>
+        <div class="home-av-stage">
+          <!-- 吹き出し -->
+          <div class="buddy-bubble" id="buddy-bubble"></div>
+          <!-- 棒人間（アバターの後ろ／左から登場） -->
+          <div class="buddy" id="buddy" aria-hidden="true">
+            <svg viewBox="0 0 60 90" width="46" height="69">
+              <!-- 頭 -->
+              <circle class="bd-stroke" cx="22" cy="16" r="9" fill="none"/>
+              <!-- 胴 -->
+              <line class="bd-stroke" x1="22" y1="25" x2="22" y2="56"/>
+              <!-- 脚 -->
+              <line class="bd-stroke" x1="22" y1="56" x2="13" y2="80"/>
+              <line class="bd-stroke" x1="22" y1="56" x2="31" y2="80"/>
+              <!-- 左腕（固定気味） -->
+              <line class="bd-stroke" x1="22" y1="34" x2="10" y2="46"/>
+              <!-- 右腕（なでる腕・付け根から先端へ） -->
+              <line class="bd-stroke bd-arm" id="buddy-arm" x1="22" y1="34" x2="40" y2="30"/>
+            </svg>
+          </div>
+          <button class="home-av-btn" onclick="tapAvatar(event)" aria-label="プロフィール写真">
+            <div class="av home-av" id="home-av">?</div>
+          </button>
+        </div>
       </div>
 
       <!-- 1年後の目標 -->

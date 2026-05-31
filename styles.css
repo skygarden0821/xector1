@@ -279,6 +279,7 @@ a { color: inherit; text-decoration: none; }
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  overflow: visible;
 }
 .home-header-text { min-width: 0; flex: 1; }
 
@@ -310,6 +311,104 @@ a { color: inherit; text-decoration: none; }
   0%   { transform: rotate(0deg) scale(1); }
   15%  { transform: rotate(20deg) scale(1.06); }   /* 軽く溜め */
   100% { transform: rotate(380deg) scale(1); }     /* 1回転＋αして自然停止 */
+}
+
+/* ═══════════ 棒人間（3回タップで登場） ═══════════ */
+.home-av-stage {
+  position: relative;
+  flex-shrink: 0;
+  /* 棒人間が左にはみ出して動けるよう余白を確保 */
+}
+.home-av-btn {
+  position: relative;
+  z-index: 2;   /* アバターは棒人間より前面 */
+}
+.home-av { position: relative; z-index: 2; }
+
+/* 棒人間本体：通常は隠れている（アバターの後ろ・左） */
+.buddy {
+  position: absolute;
+  z-index: 1;             /* アバターの後ろ */
+  left: 50%;
+  top: 50%;
+  transform: translate(-30%, -45%) translateX(0) scale(0.6);
+  opacity: 0;
+  pointer-events: none;
+  transform-origin: bottom center;
+}
+.bd-stroke {
+  stroke: var(--ice-bright);
+  stroke-width: 3;
+  stroke-linecap: round;
+  fill: none;
+  filter: drop-shadow(0 0 4px var(--ice-glow));
+}
+
+/* 再生：左から出てくる → なでる位置で滞在 → 引っ込む */
+.buddy.buddy-play {
+  animation: buddy-inout 3.4s var(--ease) forwards;
+}
+@keyframes buddy-inout {
+  0%   { opacity: 0; transform: translate(-30%, -45%) translateX(0)     scale(0.6); }
+  14%  { opacity: 1; transform: translate(-30%, -45%) translateX(-40px) scale(0.95); }   /* 左横に登場 */
+  20%  { transform: translate(-30%, -45%) translateX(-38px) scale(0.95) rotate(-3deg); }
+  /* なでてる間、軽く上下＆傾き */
+  35%  { transform: translate(-30%, -47%) translateX(-38px) scale(0.95) rotate(2deg); }
+  50%  { transform: translate(-30%, -45%) translateX(-38px) scale(0.95) rotate(-2deg); }
+  65%  { transform: translate(-30%, -47%) translateX(-38px) scale(0.95) rotate(2deg); }
+  /* お辞儀っぽく沈んでから退場 */
+  80%  { opacity: 1; transform: translate(-30%, -42%) translateX(-38px) scale(0.95) rotate(0deg); }
+  100% { opacity: 0; transform: translate(-30%, -45%) translateX(6px)   scale(0.6); }  /* アバター裏へ引っ込む */
+}
+
+/* なでる腕：付け根(22,34)を軸に上下にさする */
+.buddy-arm { transform-origin: 22px 34px; }
+.buddy.buddy-play .buddy-arm {
+  animation: buddy-pat 0.4s ease-in-out 0.7s 4;   /* 登場後に4回なでる */
+}
+@keyframes buddy-pat {
+  0%   { transform: rotate(0deg); }
+  50%  { transform: rotate(-22deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* 吹き出し */
+.buddy-bubble {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: -6px;
+  transform: translate(-115%, -100%) scale(0.6);
+  opacity: 0;
+  background: var(--ice-bright);
+  color: #04121f;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  padding: 7px 11px;
+  border-radius: 12px;
+  border-bottom-right-radius: 3px;
+  white-space: nowrap;
+  box-shadow: 0 8px 20px -8px var(--ice-glow);
+  pointer-events: none;
+}
+.buddy-bubble.buddy-bubble-show {
+  animation: buddy-bubble-pop 2s var(--ease) forwards;
+}
+@keyframes buddy-bubble-pop {
+  0%   { opacity: 0; transform: translate(-115%, -90%) scale(0.6); }
+  12%  { opacity: 1; transform: translate(-115%, -100%) scale(1.08); }
+  20%  { transform: translate(-115%, -100%) scale(1); }
+  80%  { opacity: 1; transform: translate(-115%, -100%) scale(1); }
+  100% { opacity: 0; transform: translate(-115%, -96%) scale(0.85); }
+}
+
+/* なでられているアバターの揺れ */
+.av-pat { animation: av-pat-anim 0.5s ease-in-out 2; }
+@keyframes av-pat-anim {
+  0%, 100% { transform: rotate(0deg); }
+  30%      { transform: rotate(-3deg) translateY(1px); }
+  70%      { transform: rotate(3deg) translateY(-1px); }
 }
 .home-greeting {
   margin: 0 0 6px;
