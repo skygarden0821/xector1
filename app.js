@@ -6,6 +6,7 @@ const LS_NAME = 'xector1_name';
 const LS_GOAL = 'xector1_goal';
 const LS_AV   = 'xector1_av';
 const LS_JOIN = 'xector1_joined';
+const LS_STATS = 'xector1_stats';  // 成長記録 { "2026-05": {views, posts, followers} }
 
 const CATS = {
   content:   { label: 'コンテンツ',     color: 'var(--cat-content)' },
@@ -97,12 +98,261 @@ function ensureJoinDate() {
   return parseInt(j, 10);
 }
 
+// ════════════════════════════════════════════════════════════
+//   成長記録（Growth）
+// ════════════════════════════════════════════════════════════
+
+// 指標の定義
+const METRICS = {
+  views:     { label: '再生数',     unit: '回',     short: '再生数' },
+  posts:     { label: '投稿本数',   unit: '本',     short: '投稿' },
+  followers: { label: 'フォロワー', unit: '人',     short: 'フォロワー' },
+};
+
+let activeMetric = 'views';   // 表示中の指標
+let activeRange  = 6;         // 表示月数（3 / 6 / 12）
+
+// ─── データ読み書き ───
+function loadStats() {
+  try {
+    const raw = localStorage.getItem(LS_STATS);
+    return raw ? JSON.parse(raw) : {};
+  } catch { return {}; }
+}
+function saveStats(obj) {
+  localStorage.setItem(LS_STATS, JSON.stringify(obj));
+}
+// "2026-05" のキーを生成
+function monthKey(d) {
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+}
+// キー → 表示用ラベル "5月" / "26年1月"
+function monthLabel(key) {
+  const [y, m] = key.split('-');
+  return parseInt(m, 10) + '月';
+}
+// 直近 n ヶ月のキー配列（古い→新しい、今月まで）
+function recentMonthKeys(n) {
+  const keys = [];
+  const now = new Date();
+  for (let i = n - 1; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    keys.push(monthKey(d));
+  }
+  return keys;
+}
+// 数値を見やすく整形（12300 → 1.2万 / 1234 → 1,234）
+function fmtNum(n) {
+  if (n == null || isNaN(n)) return '—';
+  n = Number(n);
+  if (n >= 10000) {
+    const man = n / 10000;
+    return (man >= 100 ? Math.round(man) : man.toFixed(1).replace(/\.0$/, '')) + '万';
+  }
+  return n.toLocaleString('ja-JP');
+}
+// 差分の整形（+1,200 など）
+function fmtDelta(n) {
+  if (n == null || isNaN(n)) return '';
+  const s = n > 0 ? '+' : (n < 0 ? '−' : '±');
+  return s + fmtNum(Math.abs(n));
+}
+
+// ─── 指標タブ切替 ───
+function setMetric(m) {
+  activeMetric = m;
+  renderGrowth();
+}
+// ─── 期間切替 ───
+function setRange(r) {
+  activeRange = r;
+  renderGrowth();
+}
+
+// ─── 成長セクション全体を描画 ───
+function renderGrowth() {
+  const stats = loadStats();
+  const hasAny = Object.keys(stats).length > 0;
+
+  const emptyEl = $('growth-empty');
+  const bodyEl  = $('growth-body');
+  if (!emptyEl || !bodyEl) return;
+
+  if (!hasAny) {
+    emptyEl.style.display = 'block';
+    bodyEl.style.display = 'none';
+    return;
+  }
+  emptyEl.style.display = 'none';
+  bodyEl.style.display = 'block';
+
+  renderMetricTabs();
+  renderRangeTabs();
+  renderCompareCards(stats);
+  renderChart(stats);
+}
+
+// ─── 指標タブ ───
+function renderMetricTabs() {
+  const row = $('metric-tabs');
+  if (!row) return;
+  row.innerHTML = '';
+  Object.keys(METRICS).forEach(key => {
+    const b = document.createElement('button');
+    b.className = 'metric-tab' + (activeMetric === key ? ' active' : '');
+    b.textContent = METRICS[key].short;
+    b.onclick = () => setMetric(key);
+    row.appendChild(b);
+  });
+}
+
+// ─── 期間タブ ───
+function renderRangeTabs() {
+  const row = $('range-tabs');
+  if (!row) return;
+  row.innerHTML = '';
+  [3, 6, 12].forEach(r => {
+    const b = document.createElement('button');
+    b.className = 'range-chip' + (activeRange === r ? ' active' : '');
+    b.textContent = r + 'ヶ月';
+    b.onclick = () => setRange(r);
+    row.appendChild(b);
+  });
+}
+
+// ─── 比較カード（今月の数値＋先月比） ───
+function renderCompareCards(stats) {
+  const wrap = $('compare-cards');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+
+  const now = new Date();
+  const thisKey = monthKey(now);
+  const lastKey = monthKey(new Date(now.getFullYear(), now.getMonth() - 1, 1));
+
+  Object.keys(METRICS).forEach(key => {
+    const cur  = stats[thisKey]?.[key];
+    const prev = stats[lastKey]?.[key];
+    const hasCur = (cur != null && cur !== '');
+    const hasPrev = (prev != null && prev !== '');
+
+    let deltaHtml = '<span class="cmp-delta cmp-flat">先月データなし</span>';
+    if (hasCur && hasPrev) {
+      const d = Number(cur) - Number(prev);
+      const cls = d > 0 ? 'cmp-up' : (d < 0 ? 'cmp-down' : 'cmp-flat');
+      const pct = Number(prev) !== 0 ? Math.round((d / Number(prev)) * 100) : null;
+      const pctStr = pct != null ? ` (${d > 0 ? '+' : ''}${pct}%)` : '';
+      deltaHtml = `<span class="cmp-delta ${cls}">${fmtDelta(d)}${pctStr}</span>`;
+    }
+
+    const el = document.createElement('div');
+    el.className = 'cmp-card' + (activeMetric === key ? ' active' : '');
+    el.onclick = () => setMetric(key);
+    el.innerHTML = `
+      <span class="cmp-label">${METRICS[key].short}</span>
+      <span class="cmp-value">${hasCur ? fmtNum(cur) : '—'}</span>
+      ${deltaHtml}
+    `;
+    wrap.appendChild(el);
+  });
+}
+
+// ─── SVG折れ線グラフ ───
+function renderChart(stats) {
+  const host = $('growth-chart');
+  if (!host) return;
+
+  const keys = recentMonthKeys(activeRange);
+  const vals = keys.map(k => {
+    const v = stats[k]?.[activeMetric];
+    return (v != null && v !== '') ? Number(v) : null;
+  });
+
+  // データが入っている点だけ抽出
+  const present = vals.map((v, i) => ({ v, i })).filter(p => p.v != null);
+  const m = METRICS[activeMetric];
+
+  if (present.length === 0) {
+    host.innerHTML = `<div class="chart-empty">${m.label}のデータがありません</div>`;
+    return;
+  }
+
+  // 描画領域
+  const W = 320, H = 180;
+  const padL = 8, padR = 8, padT = 18, padB = 26;
+  const innerW = W - padL - padR;
+  const innerH = H - padT - padB;
+
+  const maxV = Math.max(...present.map(p => p.v));
+  const minV = Math.min(...present.map(p => p.v), 0);
+  const range = (maxV - minV) || 1;
+
+  const n = keys.length;
+  const x = i => padL + (n === 1 ? innerW / 2 : (innerW * i) / (n - 1));
+  const y = v => padT + innerH - ((v - minV) / range) * innerH;
+
+  // 線・面のパス（データのある点のみ繋ぐ）
+  let linePath = '', areaPath = '';
+  present.forEach((p, idx) => {
+    const px = x(p.i), py = y(p.v);
+    linePath += (idx === 0 ? `M${px},${py}` : ` L${px},${py}`);
+  });
+  if (present.length > 0) {
+    const firstX = x(present[0].i);
+    const lastX = x(present[present.length - 1].i);
+    areaPath = `M${firstX},${padT + innerH} ` +
+      present.map(p => `L${x(p.i)},${y(p.v)}`).join(' ') +
+      ` L${lastX},${padT + innerH} Z`;
+  }
+
+  // 点
+  let dots = '';
+  present.forEach((p, idx) => {
+    const isLast = idx === present.length - 1;
+    dots += `<circle cx="${x(p.i)}" cy="${y(p.v)}" r="${isLast ? 4.5 : 3}"
+              class="chart-dot${isLast ? ' chart-dot-last' : ''}" />`;
+  });
+
+  // X軸ラベル
+  let labels = '';
+  keys.forEach((k, i) => {
+    // 月数が多いときは間引く
+    const skip = (n > 6 && i % 2 !== 0 && i !== n - 1);
+    if (!skip) {
+      labels += `<text x="${x(i)}" y="${H - 8}" class="chart-xlabel" text-anchor="middle">${monthLabel(k)}</text>`;
+    }
+  });
+
+  // 最新値の注釈
+  const lastP = present[present.length - 1];
+  const annotation = `
+    <text x="${x(lastP.i)}" y="${y(lastP.v) - 12}" class="chart-annot" text-anchor="middle">${fmtNum(lastP.v)}</text>
+  `;
+
+  host.innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" class="chart-svg" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="var(--ice)" stop-opacity="0.28"/>
+          <stop offset="100%" stop-color="var(--ice)" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      ${areaPath ? `<path d="${areaPath}" fill="url(#areaGrad)" class="chart-area"/>` : ''}
+      <path d="${linePath}" fill="none" class="chart-line"/>
+      ${dots}
+      ${annotation}
+      ${labels}
+    </svg>
+  `;
+}
+
 // ─── ホーム ───
 function renderHome() {
   const name = (localStorage.getItem(LS_NAME) || '').trim() || 'ゲスト';
   $('hero-name').textContent = name;
   const goal = (localStorage.getItem(LS_GOAL) || '').trim();
   $('goal-text').textContent = goal || '目標を設定してください';
+  renderGrowth();
   renderPick();
   renderRecentTips();
 }
@@ -364,6 +614,7 @@ function prefill() {
   if ($('settings-name')) $('settings-name').value = localStorage.getItem(LS_NAME) || '';
   if ($('settings-goal')) $('settings-goal').value = localStorage.getItem(LS_GOAL) || '';
   applyAvatar();
+  buildMonthSelect();
 }
 function saveAll() {
   const n = ($('settings-name')?.value || '').trim();
@@ -373,6 +624,63 @@ function saveAll() {
   applyAvatar();
   toast('保存しました');
   renderHome();
+}
+
+// ─── 成長記録：設定画面の月セレクトを構築（直近24ヶ月） ───
+function buildMonthSelect() {
+  const sel = $('stat-month');
+  if (!sel) return;
+  const cur = sel.value; // 既存選択を保持
+  sel.innerHTML = '';
+  const now = new Date();
+  for (let i = 0; i < 24; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const key = monthKey(d);
+    const opt = document.createElement('option');
+    opt.value = key;
+    opt.textContent = `${d.getFullYear()}年 ${d.getMonth() + 1}月`;
+    sel.appendChild(opt);
+  }
+  sel.value = cur || monthKey(now);
+  loadMonthInputs();
+}
+// 選択中の月の値を入力欄へ反映
+function loadMonthInputs() {
+  const sel = $('stat-month');
+  if (!sel) return;
+  const stats = loadStats();
+  const rec = stats[sel.value] || {};
+  if ($('stat-views'))     $('stat-views').value     = (rec.views     != null ? rec.views     : '');
+  if ($('stat-posts'))     $('stat-posts').value     = (rec.posts     != null ? rec.posts     : '');
+  if ($('stat-followers')) $('stat-followers').value = (rec.followers != null ? rec.followers : '');
+}
+// 月の記録を保存
+function saveMonthStats() {
+  const sel = $('stat-month');
+  if (!sel) return;
+  const key = sel.value;
+  const parseField = (id) => {
+    const raw = ($(id)?.value || '').trim().replace(/[,，\s]/g, '');
+    if (raw === '') return null;
+    const n = Number(raw);
+    return isNaN(n) ? null : Math.max(0, Math.round(n));
+  };
+  const views     = parseField('stat-views');
+  const posts     = parseField('stat-posts');
+  const followers = parseField('stat-followers');
+
+  const stats = loadStats();
+  if (views == null && posts == null && followers == null) {
+    delete stats[key];
+  } else {
+    stats[key] = {};
+    if (views != null)     stats[key].views = views;
+    if (posts != null)     stats[key].posts = posts;
+    if (followers != null) stats[key].followers = followers;
+  }
+  saveStats(stats);
+  toast(`${monthLabel(key)}の記録を保存しました`);
+  renderGrowth();
 }
 
 // ─── アバター crop ───

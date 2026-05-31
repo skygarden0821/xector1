@@ -78,6 +78,34 @@
       <!-- Divider -->
       <div class="divider" data-stagger></div>
 
+      <!-- 成長記録 -->
+      <section class="section" data-stagger>
+        <div class="section-head">
+          <span class="section-label">成長記録</span>
+          <button class="section-link" onclick="goPage('settings')">記録する</button>
+        </div>
+
+        <!-- データ未入力 -->
+        <button class="growth-empty" id="growth-empty" onclick="goPage('settings')" style="display:none">
+          <span class="growth-empty-title">数字を記録して、成長を可視化しよう</span>
+          <span class="growth-empty-sub">設定画面から、月ごとの再生数・投稿本数・フォロワー数を入力できます。</span>
+          <span class="growth-empty-cta">記録をはじめる →</span>
+        </button>
+
+        <!-- データあり -->
+        <div class="growth-body" id="growth-body" style="display:none">
+          <!-- 比較カード -->
+          <div class="compare-cards" id="compare-cards"></div>
+
+          <!-- グラフカード -->
+          <div class="chart-card">
+            <div class="metric-tabs" id="metric-tabs"></div>
+            <div class="growth-chart" id="growth-chart"></div>
+            <div class="range-tabs" id="range-tabs"></div>
+          </div>
+        </div>
+      </section>
+
       <!-- Today's Pick -->
       <section class="section" data-stagger>
         <div class="section-head">
@@ -214,6 +242,32 @@
       </div>
 
       <button class="btn-save" data-stagger onclick="saveAll()">変更を保存</button>
+
+      <!-- 成長記録の入力 -->
+      <p class="group-label" data-stagger>成長記録</p>
+      <div class="group" data-stagger>
+        <div class="group-row">
+          <span class="group-row-label">対象の月</span>
+          <select class="group-row-select" id="stat-month" onchange="loadMonthInputs()"></select>
+        </div>
+        <div class="group-row">
+          <span class="group-row-label">再生数</span>
+          <input class="group-row-input" type="number" inputmode="numeric" id="stat-views" placeholder="例：12000">
+          <span class="group-row-unit">回</span>
+        </div>
+        <div class="group-row">
+          <span class="group-row-label">投稿本数</span>
+          <input class="group-row-input" type="number" inputmode="numeric" id="stat-posts" placeholder="例：8">
+          <span class="group-row-unit">本</span>
+        </div>
+        <div class="group-row">
+          <span class="group-row-label">フォロワー</span>
+          <input class="group-row-input" type="number" inputmode="numeric" id="stat-followers" placeholder="例：1500">
+          <span class="group-row-unit">人</span>
+        </div>
+      </div>
+      <p class="group-hint" data-stagger>空欄の項目は記録されません。後からいつでも修正できます。</p>
+      <button class="btn-save btn-save-ice" data-stagger onclick="saveMonthStats()">この月の記録を保存</button>
 
       <p class="group-foot">Xector1 Production</p>
       <div class="page-end"></div>
