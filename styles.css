@@ -84,6 +84,7 @@ a { color: inherit; text-decoration: none; }
 #app {
   height: 100vh;
   height: 100dvh;
+  width: 100%;
   max-width: 480px;
   margin: 0 auto;
   background: var(--bg);
@@ -91,6 +92,7 @@ a { color: inherit; text-decoration: none; }
   flex-direction: column;
   position: relative;
   isolation: isolate;
+  overflow-x: hidden;
 }
 /* アンビエント：上部の微かな光だまり（アイスブルー） */
 #app::before {
@@ -223,6 +225,7 @@ a { color: inherit; text-decoration: none; }
 .scroll-area {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
   padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom));
@@ -231,7 +234,7 @@ a { color: inherit; text-decoration: none; }
 }
 .scroll-area::-webkit-scrollbar { display: none; }
 
-.page { display: none; padding: 0 var(--pad); }
+.page { display: none; padding: 0 var(--pad); width: 100%; box-sizing: border-box; }
 .page.active {
   display: block;
   /* ページ全体がふわりとクロスフェードで現れる */
@@ -609,6 +612,7 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  gap: 10px;
   padding: 2px 2px 14px;
   margin-bottom: 12px;
   border-bottom: 1px solid var(--b0);
@@ -618,6 +622,7 @@ a { color: inherit; text-decoration: none; }
   font-weight: 600;
   color: var(--t2);
   letter-spacing: 0.02em;
+  flex-shrink: 0;
 }
 .total-value {
   font-family: var(--en);
@@ -625,6 +630,9 @@ a { color: inherit; text-decoration: none; }
   font-weight: 800;
   color: #fff;
   letter-spacing: -0.02em;
+  text-align: right;
+  min-width: 0;
+  white-space: nowrap;
 }
 
 /* グラフ本体 */
@@ -1282,31 +1290,50 @@ a { color: inherit; text-decoration: none; }
 }
 .group-row {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
   padding: 14px 16px;
   border-bottom: 1px solid var(--b0);
-  min-height: 50px;
 }
 .group-row:last-child { border-bottom: 0; }
 .group-row-label {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--t1);
-  flex-shrink: 0;
-  min-width: 90px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--t2);
+  letter-spacing: 0.02em;
+}
+/* 入力＋単位を横並びにする内側ラッパ */
+.group-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: var(--s2);
+  border: 1px solid var(--b1);
+  border-radius: 10px;
+  padding: 0 12px;
+  min-height: 44px;
+  transition: border-color .15s, box-shadow .15s;
+}
+.group-field:focus-within {
+  border-color: var(--ice);
+  box-shadow: 0 0 0 3px var(--ice-faint);
 }
 .group-row-input {
   flex: 1;
+  width: 100%;
+  min-width: 0;
   background: transparent;
   border: 0;
   outline: 0;
-  text-align: right;
-  color: var(--t1);
-  font-size: 14px;
+  text-align: left;
+  color: #fff;
+  font-size: 16px;          /* iOSで16px未満だと自動ズームするため16px固定 */
+  font-weight: 500;
   padding: 0;
 }
-.group-row-input::placeholder { color: var(--t4); }
+.group-row-input::placeholder { color: var(--t4); font-weight: 400; }
 
 /* number入力のスピンボタンを消す */
 .group-row-input[type="number"]::-webkit-inner-spin-button,
@@ -1318,31 +1345,36 @@ a { color: inherit; text-decoration: none; }
 
 /* 単位ラベル */
 .group-row-unit {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--t3);
   font-weight: 500;
   flex-shrink: 0;
-  margin-left: 2px;
 }
 
 /* 月セレクト */
 .group-row-select {
-  flex: 1;
-  background: transparent;
-  border: 0;
+  width: 100%;
+  min-width: 0;
+  background: var(--s2);
+  border: 1px solid var(--b1);
+  border-radius: 10px;
   outline: 0;
-  text-align: right;
+  text-align: left;
   color: var(--ice-bright);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   font-family: inherit;
-  padding: 0 4px 0 0;
+  padding: 0 36px 0 12px;
+  min-height: 44px;
   -webkit-appearance: none;
   appearance: none;
   cursor: pointer;
-  direction: rtl;
+  /* 右端にシェブロン */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238fc8ff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
 }
-.group-row-select option { background: var(--s2); color: var(--t1); direction: ltr; }
+.group-row-select option { background: var(--s2); color: var(--t1); }
 
 /* ヒント文 */
 .group-hint {
@@ -1356,30 +1388,26 @@ a { color: inherit; text-decoration: none; }
 .btn-save-ice {
   margin-top: 10px;
 }
-.group-row-stack {
-  flex-direction: column;
-  align-items: stretch;
-  gap: 10px;
-  padding: 16px;
-}
 .group-row-ta {
   width: 100%;
-  min-height: 80px;
+  min-width: 0;
+  min-height: 88px;
   background: var(--s2);
-  border: 1px solid var(--b0);
+  border: 1px solid var(--b1);
   border-radius: 10px;
-  padding: 10px 12px;
-  color: var(--t1);
-  font-size: 14px;
+  padding: 11px 12px;
+  color: #fff;
+  font-size: 16px;          /* iOS自動ズーム防止 */
   line-height: 1.6;
   outline: none;
   resize: none;
   font-family: inherit;
+  box-sizing: border-box;
 }
 .group-row-ta::placeholder { color: var(--t4); }
 .group-row-ta:focus {
-  border-color: var(--b2);
-  box-shadow: 0 0 0 3px rgba(255,255,255,0.05);
+  border-color: var(--ice);
+  box-shadow: 0 0 0 3px var(--ice-faint);
 }
 .group-link { cursor: pointer; transition: background .15s; }
 .group-link:active { background: var(--s2); }

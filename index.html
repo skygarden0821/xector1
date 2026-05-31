@@ -249,9 +249,11 @@
       <div class="group" data-stagger>
         <div class="group-row">
           <span class="group-row-label">表示名</span>
-          <input class="group-row-input" type="text" id="settings-name" placeholder="例：田中雄介">
+          <div class="group-field">
+            <input class="group-row-input" type="text" id="settings-name" placeholder="例：田中雄介">
+          </div>
         </div>
-        <div class="group-row group-row-stack">
+        <div class="group-row">
           <span class="group-row-label">1年後の目標</span>
           <textarea class="group-row-ta" id="settings-goal" placeholder="ここに1年後の目標を書いてください"></textarea>
         </div>
@@ -268,18 +270,24 @@
         </div>
         <div class="group-row">
           <span class="group-row-label">再生数</span>
-          <input class="group-row-input" type="number" inputmode="numeric" id="stat-views" placeholder="例：12000">
-          <span class="group-row-unit">回</span>
+          <div class="group-field">
+            <input class="group-row-input" type="number" inputmode="numeric" id="stat-views" placeholder="例：12000">
+            <span class="group-row-unit">回</span>
+          </div>
         </div>
         <div class="group-row">
           <span class="group-row-label">投稿本数</span>
-          <input class="group-row-input" type="number" inputmode="numeric" id="stat-posts" placeholder="例：8">
-          <span class="group-row-unit">本</span>
+          <div class="group-field">
+            <input class="group-row-input" type="number" inputmode="numeric" id="stat-posts" placeholder="例：8">
+            <span class="group-row-unit">本</span>
+          </div>
         </div>
         <div class="group-row">
           <span class="group-row-label">フォロワー</span>
-          <input class="group-row-input" type="number" inputmode="numeric" id="stat-followers" placeholder="例：1500">
-          <span class="group-row-unit">人</span>
+          <div class="group-field">
+            <input class="group-row-input" type="number" inputmode="numeric" id="stat-followers" placeholder="例：1500">
+            <span class="group-row-unit">人</span>
+          </div>
         </div>
       </div>
       <p class="group-hint" data-stagger>空欄の項目は記録されません。後からいつでも修正できます。</p>
