@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>招待コード投入（一時ページ）</title>
+<style>
+  body { font-family: system-ui, sans-serif; background:#07090c; color:#f4f7fa; margin:0; padding:24px; line-height:1.7; }
+  .wrap { max-width:480px; margin:0 auto; }
+  h1 { font-size:20px; }
+  .box { background:#14181e; border:1px solid rgba(190,210,235,.16); border-radius:14px; padding:18px; margin:16px 0; }
+  input { width:100%; box-sizing:border-box; min-height:46px; background:#1c222a; border:1px solid rgba(190,210,235,.2); border-radius:10px; padding:0 14px; color:#fff; font-size:16px; margin:6px 0; }
+  button { width:100%; padding:15px; border:0; border-radius:12px; font-size:15px; font-weight:800; cursor:pointer; margin-top:10px; }
+  .primary { background:#5aa7ee; color:#04121f; }
+  .log { font-family:monospace; font-size:12px; white-space:pre-wrap; background:#0d0f12; border-radius:10px; padding:12px; margin-top:12px; max-height:300px; overflow:auto; }
+  .ok { color:#8fc8ff; } .err { color:#ff8a8a; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>招待コード 一括投入</h1>
+  <p>※これは使い捨ての管理ページです。投入が終わったら削除します。</p>
+
+  <div class="box">
+    <p>① 管理者でログイン（既に作ったアカウントのメール／パス）</p>
+    <input type="email" id="email" placeholder="メールアドレス">
+    <input type="password" id="password" placeholder="パスワード">
+    <button class="primary" onclick="doLogin()">ログイン</button>
+  </div>
+
+  <div class="box">
+    <p>② ログイン後に押す（50件を投入）</p>
+    <button class="primary" onclick="doInsert()">招待コードを投入する</button>
+  </div>
+
+  <div class="log" id="log">ログ：</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDeGNbH9fS3mNqzsHN-No8dQGAvAZHm_lU",
+  authDomain: "xector1app.firebaseapp.com",
+  projectId: "xector1app",
+  storageBucket: "xector1app.firebasestorage.app",
+  messagingSenderId: "644754924432",
+  appId: "1:644754924432:web:fe4113e400ddf282d1c915"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const CODES = ["X1-77PK-MGUX","X1-8CNJ-8GR5","X1-3AHJ-Y8EG","X1-G42C-76BD","X1-NHAX-3FBU","X1-BJYU-5A9U","X1-KZNA-TM3J","X1-PK5M-R77P","X1-869S-A5XW","X1-WK2Y-M5AN","X1-P4WZ-UH5T","X1-JCTM-GAK9","X1-MVQ4-2JC4","X1-85YV-HPSZ","X1-7SA2-XT8R","X1-DE65-XYWR","X1-9W63-NE2B","X1-ASB4-YVR4","X1-QEFK-7DJR","X1-WH37-BS2R","X1-48KW-UEWR","X1-37HN-UY9V","X1-AUUH-7KAX","X1-4RAM-59YZ","X1-AVXN-Z7CQ","X1-8N46-Q7U7","X1-ATUQ-GZHA","X1-J7JU-JB7U","X1-KZWY-MW8E","X1-WEXV-YZAS","X1-ZVRF-CNTS","X1-BT92-X5T2","X1-XPNH-EKVW","X1-VDK8-KU54","X1-PF9E-853V","X1-3XMQ-FUZU","X1-92MD-J82U","X1-8EHV-ST72","X1-HNJV-BGHM","X1-D62U-R4SF","X1-XSEY-6D8Y","X1-NSVW-HP9Z","X1-8ZHC-GZFX","X1-ATMM-C48U","X1-JYPQ-BMYM","X1-E996-5QF3","X1-UHHM-RRQM","X1-TEVG-X9R6","X1-PYFX-86KM","X1-C8UP-CMV9"];
+
+function log(msg, cls){ const el=document.getElementById('log'); el.innerHTML += '\n' + (cls?'<span class="'+cls+'">'+msg+'</span>':msg); el.scrollTop=el.scrollHeight; }
+
+window.doLogin = async function(){
+  const email=document.getElementById('email').value.trim();
+  const pw=document.getElementById('password').value;
+  try { await signInWithEmailAndPassword(auth,email,pw); log('ログイン成功: '+email,'ok'); }
+  catch(e){ log('ログイン失敗: '+e.code,'err'); }
+};
+
+window.doInsert = async function(){
+  if(!auth.currentUser){ log('先にログインしてください','err'); return; }
+  log('投入開始… ('+CODES.length+'件)');
+  let added=0, skipped=0;
+  for(const code of CODES){
+    try {
+      const ref = doc(db,'invite_codes',code);
+      const snap = await getDoc(ref);
+      if(snap.exists()){ skipped++; continue; }
+      await setDoc(ref,{ used:false, usedBy:null, usedAt:null, note:'' });
+      added++;
+      log('追加: '+code,'ok');
+    } catch(e){ log('失敗 '+code+': '+e.code,'err'); }
+  }
+  log('=== 完了 追加'+added+'件 / スキップ'+skipped+'件 ===','ok');
+};
+
+onAuthStateChanged(auth,(u)=>{ if(u) log('現在ログイン中: '+u.email,'ok'); });
+</script>
+</body>
+</html>
