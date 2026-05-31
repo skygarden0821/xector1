@@ -104,30 +104,25 @@ function spinAvatar(e) {
   setTimeout(() => { el.classList.remove('av-spin'); avatarSpinning = false; }, 950);
 }
 
-// タップ判定：通常は回転、一定時間内に3回で棒人間が登場
+// タップ判定：通常は回転、累計3回ごとに棒人間が登場（秒数制限なし）
 let avatarTapCount = 0;
-let avatarTapTimer = null;
 let buddyPlaying = false;
 function tapAvatar(e) {
   if (e) e.preventDefault();
+  if (buddyPlaying) return;   // 演出中は無視
   avatarTapCount++;
 
-  if (avatarTapCount >= 3) {
-    // 3回到達 → 棒人間
-    clearTimeout(avatarTapTimer);
-    avatarTapCount = 0;
+  if (avatarTapCount % 3 === 0) {
+    // 3回ごと → 棒人間
     showBuddy();
     return;
   }
   // それ以外は通常の回転
   spinAvatar(e);
-  // 一定時間内に次が来なければカウントリセット
-  clearTimeout(avatarTapTimer);
-  avatarTapTimer = setTimeout(() => { avatarTapCount = 0; }, 800);
 }
 
-// 棒人間が出てきて、なでて、励まして、隠れる
-const BUDDY_LINES = ['頑張ろう！', 'いい感じ！', '今日もえらい！', 'ファイト！'];
+// 棒人間が出てきて、キョロキョロ→なでなで→上を指して励ます→戻る
+const BUDDY_LINES = ['いっしょにがんばろう！', 'きょうもえらい！', 'いいかんじ！', 'ファイト！', 'やればできる！'];
 function showBuddy() {
   if (buddyPlaying) return;
   buddyPlaying = true;
@@ -136,31 +131,29 @@ function showBuddy() {
   const bubble = $('buddy-bubble');
   if (!buddy || !bubble) { buddyPlaying = false; return; }
 
-  // セリフをランダムに
   bubble.textContent = BUDDY_LINES[Math.floor(Math.random() * BUDDY_LINES.length)];
 
-  // クラスを一旦リセットして再生
+  // リセットして再生
   buddy.classList.remove('buddy-play');
   bubble.classList.remove('buddy-bubble-show');
   void buddy.offsetWidth;
+  buddy.classList.add('buddy-play');
 
-  buddy.classList.add('buddy-play');     // 登場→なでる→退場（CSS側で制御）
-  // 吹き出しは少し遅れて出す
-  setTimeout(() => bubble.classList.add('buddy-bubble-show'), 700);
-
-  // アバターを軽く揺らす（なでられている感）
   const av = $('home-av');
-  if (av) {
-    setTimeout(() => av.classList.add('av-pat'), 650);
-    setTimeout(() => av.classList.remove('av-pat'), 1700);
-  }
 
-  // 後始末
-  setTimeout(() => {
+  // フェーズに合わせてアバターの反応・吹き出しを連動（全体 約7秒）
+  // 0.0-1.2s 登場＆キョロキョロ
+  // 1.2-3.6s なでなで（アバター揺れ）
+  const t1 = setTimeout(() => { if (av) av.classList.add('av-pat'); }, 1200);
+  const t2 = setTimeout(() => { if (av) av.classList.remove('av-pat'); }, 3600);
+  // 3.6-5.2s 上を指して「がんばろう！」（吹き出し）
+  const t3 = setTimeout(() => bubble.classList.add('buddy-bubble-show'), 3700);
+  // 5.2-7.0s キョロキョロして戻る
+  const t4 = setTimeout(() => {
     buddy.classList.remove('buddy-play');
     bubble.classList.remove('buddy-bubble-show');
     buddyPlaying = false;
-  }, 3400);
+  }, 7000);
 }
 
 // ─── 入会日 ───
