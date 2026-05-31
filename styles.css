@@ -313,129 +313,76 @@ a { color: inherit; text-decoration: none; }
   100% { transform: rotate(380deg) scale(1); }     /* 1回転＋αして自然停止 */
 }
 
-/* ═══════════ 棒人間（3回タップごとに登場・レトロ ドット調） ═══════════ */
-.home-av-stage {
-  position: relative;
-  flex-shrink: 0;
-}
-.home-av-btn {
-  position: relative;
-  z-index: 2;
-}
+/* ═══════════ 棒人間（3回タップごと・コマアニメ／RunCat風） ═══════════ */
+.home-av-stage { position: relative; flex-shrink: 0; }
+.home-av-btn { position: relative; z-index: 2; }
 .home-av { position: relative; z-index: 2; }
 
-/* 棒人間本体：通常は隠れている（アバターの後ろ・左） */
+/* 棒人間の箱：位置・大きさは data-phase でフェーズ切替、transitionで滑らかに */
 .buddy {
   position: absolute;
-  z-index: 1;
+  z-index: 1;                 /* アバターの後ろ */
   left: 50%;
   top: 50%;
-  transform: translate(-30%, -45%) translateX(0) scale(0.6);
   opacity: 0;
   pointer-events: none;
-  transform-origin: bottom center;
+  /* 初期：アバター中央の裏、小さい */
+  transform: translate(-50%, -42%) scale(0.4);
+  transition: transform .26s var(--ease), opacity .2s linear;
 }
-/* ドット調のブロック（少しにじみのない硬い発光） */
-.bd-px {
-  fill: var(--ice-bright);
-}
-.bd-eye { fill: #04121f; }
+.buddy.buddy-active { opacity: 1; }
 
-/* ── 再生：登場→キョロキョロ→なで→指差し→キョロキョロ→退場（約7秒） ── */
-.buddy.buddy-play {
-  animation: buddy-inout 7s steps(1, end) forwards;
-}
-@keyframes buddy-inout {
-  /* 登場（左にスッと） */
-  0%   { opacity: 0; transform: translate(-30%, -45%) translateX(0)    scale(0.55); }
-  6%   { opacity: 1; transform: translate(-30%, -45%) translateX(-42px) scale(0.95); }
-  /* キョロキョロ（左右に小さく傾く） */
-  9%   { transform: translate(-30%, -45%) translateX(-42px) scale(0.95) rotate(-5deg); }
-  13%  { transform: translate(-30%, -45%) translateX(-42px) scale(0.95) rotate(5deg); }
-  16%  { transform: translate(-30%, -45%) translateX(-42px) scale(0.95) rotate(0deg); }
-  /* なでなで（アバターに寄って上下に弾む） */
-  20%  { transform: translate(-30%, -47%) translateX(-40px) scale(0.95); }
-  26%  { transform: translate(-30%, -44%) translateX(-40px) scale(0.95); }
-  32%  { transform: translate(-30%, -47%) translateX(-40px) scale(0.95); }
-  38%  { transform: translate(-30%, -44%) translateX(-40px) scale(0.95); }
-  44%  { transform: translate(-30%, -46%) translateX(-40px) scale(0.95); }
-  /* 指差し（ぴたっと止まって上を指す＝少し胸を張る） */
-  50%  { transform: translate(-30%, -46%) translateX(-42px) scale(1); }
-  68%  { transform: translate(-30%, -46%) translateX(-42px) scale(1); }
-  /* キョロキョロ（戻る前にまた見回す） */
-  74%  { transform: translate(-30%, -45%) translateX(-42px) scale(0.95) rotate(5deg); }
-  80%  { transform: translate(-30%, -45%) translateX(-42px) scale(0.95) rotate(-5deg); }
-  86%  { transform: translate(-30%, -45%) translateX(-42px) scale(0.95) rotate(0deg); }
-  /* アバター裏へ引っ込む */
-  100% { opacity: 0; transform: translate(-30%, -45%) translateX(8px)  scale(0.55); }
-}
+/* フェーズごとの居場所（アバターの左隣に立つ） */
+.buddy[data-phase="enter1"] { transform: translate(-50%, -42%) scale(0.4); opacity: .4; }
+.buddy[data-phase="enter2"] { transform: translate(-72%, -45%) scale(0.8); opacity: 1; }
+.buddy[data-phase="side"]   { transform: translate(-96%, -48%) scale(1); opacity: 1; }
+.buddy[data-phase="pat"]    { transform: translate(-86%, -50%) scale(1); opacity: 1; }
+.buddy[data-phase="jump"]   { transform: translate(-96%, -58%) scale(1.04); opacity: 1; }
 
-/* 目のキョロキョロ（左右に動く） */
-.buddy.buddy-play .bd-eye {
-  animation: buddy-eye 7s steps(1, end) forwards;
+/* 線の描画（くっきりした線画＋発光） */
+.buddy-svg .bd-lines line,
+.buddy-svg .bd-lines circle {
+  stroke: var(--ice-bright);
+  stroke-width: 3.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  filter: drop-shadow(0 0 4px var(--ice-glow));
 }
-@keyframes buddy-eye {
-  0%, 8%   { transform: translateX(0); }
-  10%      { transform: translateX(-2px); }   /* 左見る */
-  14%      { transform: translateX(2px); }    /* 右見る */
-  16%, 72% { transform: translateX(0); }
-  75%      { transform: translateX(2px); }
-  81%      { transform: translateX(-2px); }
-  86%, 100%{ transform: translateX(0); }
-}
+.buddy-svg .bd-eye { fill: var(--ice-bright); stroke: none; }
 
-/* 右腕：なで（往復）→指差し（上にビシッ） */
-.bd-arm { transform-origin: 21px 17px; }
-.buddy.buddy-play .bd-arm {
-  animation: buddy-arm 7s steps(1, end) forwards;
-}
-@keyframes buddy-arm {
-  0%, 16%  { transform: rotate(0deg); }
-  /* なで往復 */
-  20%      { transform: rotate(-30deg); }
-  26%      { transform: rotate(-8deg); }
-  32%      { transform: rotate(-30deg); }
-  38%      { transform: rotate(-8deg); }
-  44%      { transform: rotate(-30deg); }
-  /* 指差し（上方向にピン） */
-  50%, 68% { transform: rotate(-80deg); }
-  /* 戻す */
-  74%, 100%{ transform: rotate(0deg); }
-}
-
-/* 吹き出し：背景なし・青文字・ドット調フォント */
+/* 吹き出し：背景なし・青文字・等幅レトロ */
 .buddy-bubble {
   position: absolute;
   z-index: 3;
   left: 50%;
-  top: 4px;
-  transform: translate(-118%, -100%) scale(0.8);
+  top: -2px;
+  transform: translate(-120%, -100%) scale(0.9);
   opacity: 0;
   color: var(--ice-bright);
-  font-family: 'Courier New', 'Osaka-Mono', monospace;
+  font-family: 'Courier New', monospace;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.04em;
   white-space: nowrap;
   text-shadow: 0 0 6px var(--ice-glow);
   pointer-events: none;
-  /* ドットの縁取り風 */
   -webkit-font-smoothing: none;
 }
 .buddy-bubble.buddy-bubble-show {
-  animation: buddy-bubble-pop 3.3s steps(1, end) forwards;
+  animation: buddy-bubble-pop 2.4s steps(1,end) forwards;
 }
 @keyframes buddy-bubble-pop {
-  0%   { opacity: 0; transform: translate(-118%, -90%) scale(0.8); }
-  8%   { opacity: 1; transform: translate(-118%, -100%) scale(1); }
-  10%  { opacity: 0; }   /* チカッと点滅（レトロ感） */
-  13%  { opacity: 1; }
-  85%  { opacity: 1; transform: translate(-118%, -100%) scale(1); }
-  100% { opacity: 0; transform: translate(-118%, -100%) scale(1); }
+  0%   { opacity: 0; transform: translate(-120%, -92%) scale(0.9); }
+  6%   { opacity: 1; transform: translate(-120%, -100%) scale(1); }
+  9%   { opacity: 0; }    /* チカッ */
+  12%  { opacity: 1; }
+  88%  { opacity: 1; transform: translate(-120%, -100%) scale(1); }
+  100% { opacity: 0; }
 }
 
 /* なでられているアバターの揺れ */
-.av-pat { animation: av-pat-anim 0.6s steps(2, end) infinite; }
+.av-pat { animation: av-pat-anim 0.4s ease-in-out infinite; }
 @keyframes av-pat-anim {
   0%, 100% { transform: rotate(0deg); }
   30%      { transform: rotate(-3deg) translateY(1px); }

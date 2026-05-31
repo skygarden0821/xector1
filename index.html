@@ -81,32 +81,9 @@
         <div class="home-av-stage">
           <!-- 吹き出し -->
           <div class="buddy-bubble" id="buddy-bubble"></div>
-          <!-- 棒人間（ドット調・アバターの後ろ／左から登場） -->
+          <!-- 棒人間（コマアニメ／JSでポーズを差し替え） -->
           <div class="buddy" id="buddy" aria-hidden="true">
-            <svg viewBox="0 0 32 48" width="56" height="84" shape-rendering="crispEdges">
-              <!-- 頭（四角ブロック） -->
-              <rect class="bd-px" x="11" y="3"  width="9" height="9"/>
-              <!-- 目（キョロキョロする） -->
-              <rect class="bd-eye" id="buddy-eye" x="14" y="6" width="2" height="2"/>
-              <!-- 首・胴 -->
-              <rect class="bd-px" x="14" y="12" width="3" height="3"/>
-              <rect class="bd-px" x="12" y="15" width="7" height="13"/>
-              <!-- 脚 -->
-              <rect class="bd-px" x="12" y="28" width="3" height="13"/>
-              <rect class="bd-px" x="16" y="28" width="3" height="13"/>
-              <!-- 足 -->
-              <rect class="bd-px" x="10" y="41" width="5" height="3"/>
-              <rect class="bd-px" x="16" y="41" width="5" height="3"/>
-              <!-- 左腕（固定） -->
-              <rect class="bd-px" x="8"  y="16" width="4" height="3"/>
-              <rect class="bd-px" x="6"  y="19" width="3" height="4"/>
-              <!-- 右腕（なで／指差しで動く） -->
-              <g class="bd-arm" id="buddy-arm">
-                <rect class="bd-px" x="19" y="16" width="4" height="3"/>
-                <rect class="bd-px" x="22" y="14" width="3" height="4"/>
-                <rect class="bd-px" x="24" y="12" width="3" height="3"/>
-              </g>
-            </svg>
+            <svg class="buddy-svg" id="buddy-svg" viewBox="0 0 60 90" width="50" height="75"></svg>
           </div>
           <button class="home-av-btn" onclick="tapAvatar(event)" aria-label="プロフィール写真">
             <div class="av home-av" id="home-av">?</div>

@@ -121,39 +121,145 @@ function tapAvatar(e) {
   spinAvatar(e);
 }
 
-// 棒人間が出てきて、キョロキョロ→なでなで→上を指して励ます→戻る
+// ════════════════════════════════════════════════════════════
+//  棒人間コマアニメ（RunCat風・パラパラ漫画）
+// ════════════════════════════════════════════════════════════
+// 各ポーズを「線のセット」で定義。共通の頭・胴・脚＋ポーズ別の腕・足。
+// drawBuddy(pose) が #buddy-svg の中身を描き替える。
+
 const BUDDY_LINES = ['いっしょにがんばろう！', 'きょうもえらい！', 'いいかんじ！', 'ファイト！', 'やればできる！'];
+
+// 線を引くヘルパ
+function L(x1,y1,x2,y2){ return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" />`; }
+function HEAD(cx,cy){ return `<circle cx="${cx}" cy="${cy}" r="9" fill="none" />`; }
+
+// ポーズ定義（viewBox 60x90、足元が下）
+const BUDDY_POSES = {
+  // 立ち・正面（目は中央）
+  stand: () => HEAD(30,16) + `<circle class="bd-eye" cx="30" cy="16" r="1.6" />`
+    + L(30,25,30,55) + L(30,55,22,80) + L(30,55,38,80)   // 胴＋脚
+    + L(30,33,20,44) + L(30,33,40,44),                    // 両腕だらり
+  // キョロ左（顔と体を左へ、目も左）
+  lookL: () => HEAD(27,16) + `<circle class="bd-eye" cx="24" cy="16" r="1.6" />`
+    + L(30,25,30,55) + L(30,55,22,80) + L(30,55,38,80)
+    + L(30,33,19,42) + L(30,33,41,42),
+  // キョロ右
+  lookR: () => HEAD(33,16) + `<circle class="bd-eye" cx="36" cy="16" r="1.6" />`
+    + L(30,25,30,55) + L(30,55,22,80) + L(30,55,38,80)
+    + L(30,33,19,42) + L(30,33,41,42),
+  // なで・腕上（アバター側=右の腕を上げる）
+  patUp: () => HEAD(31,15) + `<circle class="bd-eye" cx="33" cy="15" r="1.6" />`
+    + L(30,24,30,55) + L(30,55,22,80) + L(30,55,38,80)
+    + L(30,32,20,44)                          // 左腕
+    + L(30,32,44,26) + L(44,26,50,22),        // 右腕を上へ（なでる手）
+  // なで・腕下
+  patDown: () => HEAD(31,16) + `<circle class="bd-eye" cx="33" cy="16" r="1.6" />`
+    + L(30,25,30,55) + L(30,55,22,80) + L(30,55,38,80)
+    + L(30,33,20,44)
+    + L(30,33,44,34) + L(44,34,50,32),        // 右腕を下へ
+  // ジャンプして上を指す（足が浮く・腕ピン上）
+  point: () => HEAD(30,13) + `<circle class="bd-eye" cx="30" cy="13" r="1.6" />`
+    + L(30,22,30,52)
+    + L(30,52,24,72) + L(30,52,36,72)         // 脚は曲げ気味（ジャンプ）
+    + L(30,30,22,40)                          // 左腕
+    + L(30,30,42,18) + L(42,18,48,8),         // 右腕を空へビシッ
+  // 着地・小
+  land: () => HEAD(30,17) + `<circle class="bd-eye" cx="30" cy="17" r="1.6" />`
+    + L(30,26,30,55) + L(30,55,21,79) + L(30,55,39,79)
+    + L(30,34,21,45) + L(30,34,39,45),
+};
+
+// 描画
+function drawBuddy(pose) {
+  const svg = $('buddy-svg');
+  if (!svg) return;
+  const fn = BUDDY_POSES[pose] || BUDDY_POSES.stand;
+  svg.innerHTML = `<g class="bd-lines">${fn()}</g>`;
+}
+
+// コマ割りシーケンス：[ポーズ, 表示ms] の並び
+// 位置・スケールは buddy 要素側の data 属性で制御
+function buildBuddySequence() {
+  return [
+    // 登場（アバター裏からひょこっと、まだ小さい→出る）：位置はCSSのphaseで
+    { pose:'land',    ms:120, phase:'enter1' },
+    { pose:'stand',   ms:160, phase:'enter2' },
+    // キョロキョロ
+    { pose:'lookL',   ms:380, phase:'side' },
+    { pose:'lookR',   ms:380, phase:'side' },
+    { pose:'lookL',   ms:320, phase:'side' },
+    { pose:'stand',   ms:260, phase:'side' },
+    // なでなで（手を上下に何往復も：生き生き）
+    { pose:'patUp',   ms:200, phase:'pat' },
+    { pose:'patDown', ms:200, phase:'pat' },
+    { pose:'patUp',   ms:200, phase:'pat' },
+    { pose:'patDown', ms:200, phase:'pat' },
+    { pose:'patUp',   ms:200, phase:'pat' },
+    { pose:'patDown', ms:200, phase:'pat' },
+    { pose:'patUp',   ms:200, phase:'pat' },
+    { pose:'patDown', ms:200, phase:'pat' },
+    // ためてジャンプ→上を指す（吹き出し）
+    { pose:'land',    ms:180, phase:'side' },
+    { pose:'point',   ms:260, phase:'jump', say:true },
+    { pose:'land',    ms:160, phase:'side' },
+    { pose:'point',   ms:520, phase:'jump' },
+    { pose:'stand',   ms:300, phase:'side' },
+    // 戻る前にキョロ
+    { pose:'lookR',   ms:340, phase:'side' },
+    { pose:'lookL',   ms:340, phase:'side' },
+    { pose:'stand',   ms:220, phase:'side' },
+    // 退場（アバター裏へ）
+    { pose:'stand',   ms:160, phase:'enter2' },
+    { pose:'land',    ms:160, phase:'enter1' },
+  ];
+}
+
+let buddyTimers = [];
+function clearBuddyTimers(){ buddyTimers.forEach(t=>clearTimeout(t)); buddyTimers = []; }
+
 function showBuddy() {
   if (buddyPlaying) return;
   buddyPlaying = true;
 
   const buddy = $('buddy');
   const bubble = $('buddy-bubble');
-  if (!buddy || !bubble) { buddyPlaying = false; return; }
-
-  bubble.textContent = BUDDY_LINES[Math.floor(Math.random() * BUDDY_LINES.length)];
-
-  // リセットして再生
-  buddy.classList.remove('buddy-play');
-  bubble.classList.remove('buddy-bubble-show');
-  void buddy.offsetWidth;
-  buddy.classList.add('buddy-play');
-
   const av = $('home-av');
+  if (!buddy) { buddyPlaying = false; return; }
 
-  // フェーズに合わせてアバターの反応・吹き出しを連動（全体 約7秒）
-  // 0.0-1.2s 登場＆キョロキョロ
-  // 1.2-3.6s なでなで（アバター揺れ）
-  const t1 = setTimeout(() => { if (av) av.classList.add('av-pat'); }, 1200);
-  const t2 = setTimeout(() => { if (av) av.classList.remove('av-pat'); }, 3600);
-  // 3.6-5.2s 上を指して「がんばろう！」（吹き出し）
-  const t3 = setTimeout(() => bubble.classList.add('buddy-bubble-show'), 3700);
-  // 5.2-7.0s キョロキョロして戻る
-  const t4 = setTimeout(() => {
-    buddy.classList.remove('buddy-play');
+  if (bubble) {
+    bubble.textContent = BUDDY_LINES[Math.floor(Math.random()*BUDDY_LINES.length)];
     bubble.classList.remove('buddy-bubble-show');
+  }
+
+  const seq = buildBuddySequence();
+  let t = 0;
+  buddy.classList.add('buddy-active');
+
+  seq.forEach((frame) => {
+    buddyTimers.push(setTimeout(() => {
+      drawBuddy(frame.pose);
+      // フェーズ（位置・大きさ）を data 属性で切替（CSSが拾う）
+      buddy.setAttribute('data-phase', frame.phase);
+      // なで中だけアバターを揺らす
+      if (av) {
+        if (frame.phase === 'pat') av.classList.add('av-pat');
+        else av.classList.remove('av-pat');
+      }
+      // 指差しの頭で吹き出し
+      if (frame.say && bubble) bubble.classList.add('buddy-bubble-show');
+    }, t));
+    t += frame.ms;
+  });
+
+  // 終了処理
+  buddyTimers.push(setTimeout(() => {
+    buddy.classList.remove('buddy-active');
+    buddy.removeAttribute('data-phase');
+    if (bubble) bubble.classList.remove('buddy-bubble-show');
+    if (av) av.classList.remove('av-pat');
+    drawBuddy('stand');
     buddyPlaying = false;
-  }, 7000);
+  }, t + 100));
 }
 
 // ─── 入会日 ───
