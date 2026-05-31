@@ -358,10 +358,11 @@ a { color: inherit; text-decoration: none; }
 /* 吹き出し：背景なし・青文字・等幅レトロ */
 .buddy-bubble {
   position: absolute;
-  z-index: 3;
+  z-index: 4;
   left: 50%;
-  top: -2px;
-  transform: translate(-120%, -100%) scale(0.9);
+  top: -10px;
+  /* 棒人間（アバター左隣）の真上あたりに置き、アイコンと重ねない */
+  transform: translate(-210%, -100%) scale(0.9);
   opacity: 0;
   color: var(--ice-bright);
   font-family: 'Courier New', monospace;
@@ -377,11 +378,11 @@ a { color: inherit; text-decoration: none; }
   animation: buddy-bubble-pop 2.4s steps(1,end) forwards;
 }
 @keyframes buddy-bubble-pop {
-  0%   { opacity: 0; transform: translate(-120%, -92%) scale(0.9); }
-  6%   { opacity: 1; transform: translate(-120%, -100%) scale(1); }
+  0%   { opacity: 0; transform: translate(-210%, -92%) scale(0.9); }
+  6%   { opacity: 1; transform: translate(-210%, -100%) scale(1); }
   9%   { opacity: 0; }    /* チカッ */
   12%  { opacity: 1; }
-  88%  { opacity: 1; transform: translate(-120%, -100%) scale(1); }
+  88%  { opacity: 1; transform: translate(-210%, -100%) scale(1); }
   100% { opacity: 0; }
 }
 

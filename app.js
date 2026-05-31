@@ -131,42 +131,39 @@ const BUDDY_LINES = ['いっしょにがんばろう！', 'きょうもえらい
 
 // 線を引くヘルパ
 function L(x1,y1,x2,y2){ return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" />`; }
-function HEAD(cx,cy){ return `<circle cx="${cx}" cy="${cy}" r="9" fill="none" />`; }
+function HEAD(cx,cy){ return `<circle cx="${cx}" cy="${cy}" r="10" fill="none" />`; }
+// 点目2つ（横並び）。dx で視線を左右に振れる
+function EYES(cx,cy,dx){ dx = dx||0;
+  return `<circle class="bd-eye" cx="${cx-3+dx}" cy="${cy}" r="1.7" />`
+       + `<circle class="bd-eye" cx="${cx+3+dx}" cy="${cy}" r="1.7" />`;
+}
 
-// ポーズ定義（viewBox 60x90、足元が下）
+// ポーズ定義（viewBox 60x90）。頭・胴・脚は各ポーズで一貫させ、ブレさせない。
+// 体の中心線 x=30、頭の中心 y=15、足元 y=82。
+const BODY = L(30,25,30,56) + L(30,56,23,82) + L(30,56,37,82);  // 胴＋両脚（共通・固定）
+
 const BUDDY_POSES = {
-  // 立ち・正面（目は中央）
-  stand: () => HEAD(30,16) + `<circle class="bd-eye" cx="30" cy="16" r="1.6" />`
-    + L(30,25,30,55) + L(30,55,22,80) + L(30,55,38,80)   // 胴＋脚
-    + L(30,33,20,44) + L(30,33,40,44),                    // 両腕だらり
-  // キョロ左（顔と体を左へ、目も左）
-  lookL: () => HEAD(27,16) + `<circle class="bd-eye" cx="24" cy="16" r="1.6" />`
-    + L(30,25,30,55) + L(30,55,22,80) + L(30,55,38,80)
-    + L(30,33,19,42) + L(30,33,41,42),
-  // キョロ右
-  lookR: () => HEAD(33,16) + `<circle class="bd-eye" cx="36" cy="16" r="1.6" />`
-    + L(30,25,30,55) + L(30,55,22,80) + L(30,55,38,80)
-    + L(30,33,19,42) + L(30,33,41,42),
-  // なで・腕上（アバター側=右の腕を大きく上げてなでる）
-  patUp: () => HEAD(30,16) + `<circle class="bd-eye" cx="32" cy="16" r="1.6" />`
-    + L(30,25,30,55) + L(30,55,22,80) + L(30,55,38,80)
-    + L(30,33,20,44)                          // 左腕だらり
-    + L(30,32,46,22) + L(46,22,56,16),        // 右腕を高く（なでる手・大きく）
-  // なで・腕下
-  patDown: () => HEAD(30,17) + `<circle class="bd-eye" cx="32" cy="17" r="1.6" />`
-    + L(30,26,30,55) + L(30,55,22,80) + L(30,55,38,80)
-    + L(30,34,20,45)
-    + L(30,33,46,32) + L(46,32,56,30),        // 右腕を下げる（往復でなで）
-  // ジャンプして上を指す（足が浮く・腕ピン上）
-  point: () => HEAD(30,13) + `<circle class="bd-eye" cx="30" cy="13" r="1.6" />`
-    + L(30,22,30,52)
-    + L(30,52,24,72) + L(30,52,36,72)         // 脚は曲げ気味（ジャンプ）
-    + L(30,30,22,40)                          // 左腕
-    + L(30,30,42,18) + L(42,18,48,8),         // 右腕を空へビシッ
-  // 着地・小
-  land: () => HEAD(30,17) + `<circle class="bd-eye" cx="30" cy="17" r="1.6" />`
-    + L(30,26,30,55) + L(30,55,21,79) + L(30,55,39,79)
-    + L(30,34,21,45) + L(30,34,39,45),
+  // 立ち（正面・目まんなか）
+  stand: () => HEAD(30,15) + EYES(30,15,0) + BODY
+    + L(30,33,21,45) + L(30,33,39,45),
+  // 左を見る（目が左へ）
+  lookL: () => HEAD(30,15) + EYES(30,15,-2.5) + BODY
+    + L(30,33,21,45) + L(30,33,39,45),
+  // 右を見る（目が右へ）
+  lookR: () => HEAD(30,15) + EYES(30,15,2.5) + BODY
+    + L(30,33,21,45) + L(30,33,39,45),
+  // なで・腕上（右腕を高く上げる。左腕はだらり）
+  patUp: () => HEAD(30,15) + EYES(30,15,1.5) + BODY
+    + L(30,33,21,45)
+    + L(30,32,45,23) + L(45,23,54,17),
+  // なで・腕下（右腕を下ろす）→ patUpとの2コマでなでる
+  patDown: () => HEAD(30,15) + EYES(30,15,1.5) + BODY
+    + L(30,33,21,45)
+    + L(30,34,45,33) + L(45,33,54,31),
+  // 指差し（両足そろえて踏ん張り、右腕を空へピン・目は上向き気味）
+  point: () => HEAD(30,15) + EYES(30,14,0) + BODY
+    + L(30,33,21,45)
+    + L(30,31,40,20) + L(40,20,46,9),
 };
 
 // 描画
@@ -182,32 +179,32 @@ function drawBuddy(pose) {
 function buildBuddySequence() {
   return [
     // ── 登場（裏からひょこっと、出る瞬間だけキョロ）──
-    { pose:'land',    ms:140, phase:'enter1' },
-    { pose:'lookL',   ms:220, phase:'enter2' },
-    { pose:'lookR',   ms:220, phase:'enter2' },
-    { pose:'stand',   ms:200, phase:'side' },
-    // ── しっかり立って、がっつり なでなで（長め・大きく往復）──
-    { pose:'patUp',   ms:230, phase:'pat' },
-    { pose:'patDown', ms:230, phase:'pat' },
-    { pose:'patUp',   ms:230, phase:'pat' },
-    { pose:'patDown', ms:230, phase:'pat' },
-    { pose:'patUp',   ms:230, phase:'pat' },
-    { pose:'patDown', ms:230, phase:'pat' },
-    { pose:'patUp',   ms:230, phase:'pat' },
-    { pose:'patDown', ms:230, phase:'pat' },
-    { pose:'patUp',   ms:230, phase:'pat' },
-    { pose:'patDown', ms:230, phase:'pat' },
+    { pose:'stand',   ms:160, phase:'enter1' },
+    { pose:'lookL',   ms:240, phase:'enter2' },
+    { pose:'lookR',   ms:240, phase:'enter2' },
+    { pose:'stand',   ms:220, phase:'side' },
+    // ── しっかり立って、がっつり なでなで（patUp/Downの2コマでパキパキ往復）──
+    { pose:'patUp',   ms:240, phase:'pat' },
+    { pose:'patDown', ms:240, phase:'pat' },
+    { pose:'patUp',   ms:240, phase:'pat' },
+    { pose:'patDown', ms:240, phase:'pat' },
+    { pose:'patUp',   ms:240, phase:'pat' },
+    { pose:'patDown', ms:240, phase:'pat' },
+    { pose:'patUp',   ms:240, phase:'pat' },
+    { pose:'patDown', ms:240, phase:'pat' },
+    { pose:'patUp',   ms:240, phase:'pat' },
+    { pose:'patDown', ms:240, phase:'pat' },
     { pose:'stand',   ms:240, phase:'side' },
-    // ── ジャンプして「いっしょにがんばろう！」と上を指す（しっかり溜める）──
-    { pose:'land',    ms:200, phase:'side' },
+    // ── ジャンプして「いっしょにがんばろう！」と上を指す ──
+    { pose:'stand',   ms:180, phase:'side' },
     { pose:'point',   ms:300, phase:'jump', say:true },
-    { pose:'land',    ms:180, phase:'jump' },
-    { pose:'point',   ms:700, phase:'jump' },
-    { pose:'stand',   ms:280, phase:'side' },
+    { pose:'stand',   ms:160, phase:'side' },
+    { pose:'point',   ms:760, phase:'jump' },
+    { pose:'stand',   ms:300, phase:'side' },
     // ── 隠れる（入る瞬間だけキョロ）──
-    { pose:'lookR',   ms:220, phase:'side' },
-    { pose:'lookL',   ms:220, phase:'enter2' },
-    { pose:'land',    ms:160, phase:'enter1' },
+    { pose:'lookR',   ms:240, phase:'side' },
+    { pose:'lookL',   ms:240, phase:'enter2' },
+    { pose:'stand',   ms:160, phase:'enter1' },
   ];
 }
 
