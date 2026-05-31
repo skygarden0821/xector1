@@ -86,7 +86,7 @@ function applyAvatar() {
   const initial = name ? name.charAt(0).toUpperCase() : '?';
   ['av-preview', 'bar-av'].forEach(id => {
     const el = $(id); if (!el) return;
-    if (av) { el.style.backgroundImage = `url(${av})`; el.textContent = ''; }
+    if (av) { el.style.backgroundImage = `url("${av}")`; el.textContent = ''; }
     else { el.style.backgroundImage = ''; el.textContent = initial; }
   });
 }
@@ -397,6 +397,7 @@ function renderHome() {
   $('hero-name').textContent = name;
   const goal = (localStorage.getItem(LS_GOAL) || '').trim();
   $('goal-text').textContent = goal || '目標を設定してください';
+  applyAvatar();
   renderGrowth();
   renderPick();
   renderRecentTips();
