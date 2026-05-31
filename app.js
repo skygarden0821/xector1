@@ -84,11 +84,24 @@ function applyAvatar() {
   const av = localStorage.getItem(LS_AV);
   const name = (localStorage.getItem(LS_NAME) || '').trim();
   const initial = name ? name.charAt(0).toUpperCase() : '?';
-  ['av-preview', 'bar-av'].forEach(id => {
+  ['av-preview', 'home-av'].forEach(id => {
     const el = $(id); if (!el) return;
     if (av) { el.style.backgroundImage = `url("${av}")`; el.textContent = ''; }
     else { el.style.backgroundImage = ''; el.textContent = initial; }
   });
+}
+
+// アバターを触ると、勢いよく1回転して自然に戻る遊び心
+let avatarSpinning = false;
+function spinAvatar(e) {
+  if (e) e.preventDefault();
+  const el = $('home-av');
+  if (!el || avatarSpinning) return;
+  avatarSpinning = true;
+  el.classList.remove('av-spin');
+  void el.offsetWidth;      // リフロー強制（連続タップで再生し直せるように）
+  el.classList.add('av-spin');
+  setTimeout(() => { el.classList.remove('av-spin'); avatarSpinning = false; }, 950);
 }
 
 // ─── 入会日 ───

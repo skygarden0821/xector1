@@ -185,17 +185,6 @@ a { color: inherit; text-decoration: none; }
   text-shadow: 0 0 12px var(--ice-glow);
 }
 
-.bar-av-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity .15s;
-}
-.bar-av-btn:active { opacity: 0.6; }
-
 /* ═══════════════════════════════════════════════════════════
    AVATARS
    ═══════════════════════════════════════════════════════════ */
@@ -286,6 +275,41 @@ a { color: inherit; text-decoration: none; }
 
 .home-header {
   padding: 28px 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.home-header-text { min-width: 0; flex: 1; }
+
+/* 名前の右の大きいアバター */
+.home-av-btn {
+  flex-shrink: 0;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.home-av {
+  width: 66px;
+  height: 66px;
+  font-size: 24px;
+  border-width: 1px;
+  box-shadow: 0 8px 24px -10px rgba(0,0,0,0.8);
+  transition: transform .2s var(--ease);
+  will-change: transform;
+}
+.home-av-btn:active .home-av:not(.av-spin) { transform: scale(0.94); }
+
+/* 触ると勢いよく1回転して、自然に減速しながら戻る */
+.av-spin {
+  animation: av-spin-anim .9s cubic-bezier(.18,.7,.28,1) both;
+}
+@keyframes av-spin-anim {
+  0%   { transform: rotate(0deg) scale(1); }
+  15%  { transform: rotate(20deg) scale(1.06); }   /* 軽く溜め */
+  100% { transform: rotate(380deg) scale(1); }     /* 1回転＋αして自然停止 */
 }
 .home-greeting {
   margin: 0 0 6px;

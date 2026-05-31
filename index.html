@@ -63,9 +63,6 @@
   <header class="app-bar">
     <div class="app-bar-inner">
       <span class="brand">XECTOR<span class="brand-1">1</span></span>
-      <button class="bar-av-btn" onclick="goPage('settings')" aria-label="設定">
-        <div class="av av-sm" id="bar-av">?</div>
-      </button>
     </div>
     <span class="sweep" id="sweep"></span>
   </header>
@@ -77,8 +74,13 @@
 
       <!-- Greeting -->
       <div class="home-header" data-stagger>
-        <p class="home-greeting" id="home-greeting">おかえりなさい</p>
-        <h1 class="home-name" id="hero-name">ゲスト</h1>
+        <div class="home-header-text">
+          <p class="home-greeting" id="home-greeting">おかえりなさい</p>
+          <h1 class="home-name" id="hero-name">ゲスト</h1>
+        </div>
+        <button class="home-av-btn" onclick="spinAvatar(event)" aria-label="プロフィール写真">
+          <div class="av home-av" id="home-av">?</div>
+        </button>
       </div>
 
       <!-- 1年後の目標 -->
@@ -110,7 +112,7 @@
           </span>
           <span class="qa-label">制作</span>
         </button>
-        <button class="qa-item" onclick="window.open('https://forms.gle/wFoujvkfWBbSNfLM8','_blank')">
+        <button class="qa-item" onclick="window.open('https://docs.google.com/document/d/1vhECxaHXvovLKNmmOFged8pR0biWdhIPI_9OiP__QHE/edit?usp=sharing','_blank')">
           <span class="qa-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           </span>
