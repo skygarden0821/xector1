@@ -321,23 +321,27 @@ a { color: inherit; text-decoration: none; }
 /* 棒人間の箱：位置・大きさは data-phase でフェーズ切替、transitionで滑らかに */
 .buddy {
   position: absolute;
-  z-index: 1;                 /* アバターの後ろ */
+  z-index: 3;                 /* アバターと並んでしっかり見える */
   left: 50%;
   top: 50%;
   opacity: 0;
   pointer-events: none;
-  /* 初期：アバター中央の裏、小さい */
-  transform: translate(-50%, -42%) scale(0.4);
-  transition: transform .26s var(--ease), opacity .2s linear;
+  /* 初期：アバター中央の裏、小さい（ここから出入りする） */
+  transform: translate(-50%, -38%) scale(0.45);
+  transition: transform .3s var(--ease), opacity .22s linear;
 }
 .buddy.buddy-active { opacity: 1; }
 
-/* フェーズごとの居場所（アバターの左隣に立つ） */
-.buddy[data-phase="enter1"] { transform: translate(-50%, -42%) scale(0.4); opacity: .4; }
-.buddy[data-phase="enter2"] { transform: translate(-72%, -45%) scale(0.8); opacity: 1; }
-.buddy[data-phase="side"]   { transform: translate(-96%, -48%) scale(1); opacity: 1; }
-.buddy[data-phase="pat"]    { transform: translate(-86%, -50%) scale(1); opacity: 1; }
-.buddy[data-phase="jump"]   { transform: translate(-96%, -58%) scale(1.04); opacity: 1; }
+/* フェーズごとの居場所 */
+/* enter：アバターの裏からひょこっと（小さい・半分隠れ） */
+.buddy[data-phase="enter1"] { transform: translate(-58%, -40%) scale(0.5); opacity: .5; }
+.buddy[data-phase="enter2"] { transform: translate(-95%, -46%) scale(0.85); opacity: 1; }
+/* side：アバター左隣にしっかり立つ（重ならない） */
+.buddy[data-phase="side"]   { transform: translate(-122%, -50%) scale(1.1); opacity: 1; }
+/* pat：なでる時はアバターに少し寄る（が重ならない。腕だけ届く） */
+.buddy[data-phase="pat"]    { transform: translate(-108%, -50%) scale(1.1); opacity: 1; }
+/* jump：少しジャンプして上を指す */
+.buddy[data-phase="jump"]   { transform: translate(-122%, -62%) scale(1.15); opacity: 1; }
 
 /* 線の描画（くっきりした線画＋発光） */
 .buddy-svg .bd-lines line,
