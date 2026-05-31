@@ -237,8 +237,18 @@
       <input type="file" id="av-input" accept="image/*" style="display:none" onchange="onAvatarFileSelected(event)">
 
       <div class="crop-panel" id="crop-panel">
-        <p class="crop-note">ドラッグで位置調整 · ピンチでズーム</p>
-        <div class="crop-stage" id="crop-stage"><canvas id="crop-canvas"></canvas></div>
+        <p class="crop-note">円の中がアイコンになります · ドラッグで移動 · ピンチでズーム</p>
+        <div class="crop-stage" id="crop-stage">
+          <canvas id="crop-canvas"></canvas>
+          <div class="crop-overlay">
+            <div class="crop-circle">
+            <span class="cg cg-v1"></span>
+            <span class="cg cg-v2"></span>
+            <span class="cg cg-h1"></span>
+            <span class="cg cg-h2"></span>
+          </div>
+          </div>
+        </div>
         <div class="crop-row">
           <button class="btn-ghost" onclick="cancelCrop()">キャンセル</button>
           <button class="btn-solid" onclick="saveCrop()">保存</button>

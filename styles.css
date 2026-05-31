@@ -1245,13 +1245,45 @@ a { color: inherit; text-decoration: none; }
   text-align: center;
 }
 .crop-stage {
+  position: relative;
   width: 100%;
   aspect-ratio: 1;
   background: #000;
   border-radius: 12px;
   overflow: hidden;
 }
-.crop-stage canvas { width: 100%; height: 100%; touch-action: none; }
+.crop-stage canvas { width: 100%; height: 100%; touch-action: none; display: block; }
+
+/* クロップのガイド（円マスク＋グリッド）。タップは透過 */
+.crop-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.crop-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 78%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.9);
+  /* 円の外側を暗くして反映範囲を明示 */
+  box-shadow: 0 0 0 1000px rgba(0,0,0,0.55);
+  overflow: hidden;
+}
+/* 三分割グリッド（縦2本・横2本） */
+.cg {
+  position: absolute;
+  background: rgba(255,255,255,0.25);
+}
+.cg-v1, .cg-v2 { top: 0; bottom: 0; width: 1px; }
+.cg-v1 { left: 33.33%; }
+.cg-v2 { left: 66.66%; }
+.cg-h1, .cg-h2 { left: 0; right: 0; height: 1px; }
+.cg-h1 { top: 33.33%; }
+.cg-h2 { top: 66.66%; }
 .crop-row {
   display: grid;
   grid-template-columns: 1fr 1fr;

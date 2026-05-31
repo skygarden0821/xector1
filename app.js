@@ -787,9 +787,15 @@ function zoomCrop(f, cx, cy) {
 function cancelCrop() { $('crop-panel').classList.remove('open'); cropImg = null; }
 function saveCrop() {
   const c = $('crop-canvas'); if (!c) return;
+  // ガイドの円（ステージの78%）に対応する中央正方形を切り出す
+  const ratio = 0.78;
+  const side = Math.min(c.width, c.height) * ratio;
+  const sx = (c.width - side) / 2;
+  const sy = (c.height - side) / 2;
+
   const out = document.createElement('canvas');
   out.width = out.height = 320;
-  out.getContext('2d').drawImage(c, 0, 0, c.width, c.height, 0, 0, 320, 320);
+  out.getContext('2d').drawImage(c, sx, sy, side, side, 0, 0, 320, 320);
   localStorage.setItem(LS_AV, out.toDataURL('image/jpeg', 0.85));
   applyAvatar(); $('crop-panel').classList.remove('open'); cropImg = null;
   toast('プロフィール写真を更新しました');
