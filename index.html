@@ -131,10 +131,10 @@
       <!-- Divider -->
       <div class="divider" data-stagger></div>
 
-      <!-- 成長記録 -->
+      <!-- 活動記録 -->
       <section class="section" data-stagger>
         <div class="section-head">
-          <span class="section-label">成長記録</span>
+          <span class="section-label">活動記録</span>
           <button class="section-link" onclick="goPage('settings')">記録する</button>
         </div>
 
@@ -324,8 +324,8 @@
 
       <button class="btn-save" data-stagger onclick="saveAll()">変更を保存</button>
 
-      <!-- 成長記録の入力 -->
-      <p class="group-label" data-stagger>成長記録</p>
+      <!-- 活動記録の入力 -->
+      <p class="group-label" data-stagger>活動記録</p>
       <div class="group" data-stagger>
         <div class="group-row">
           <span class="group-row-label">対象の月</span>
@@ -434,5 +434,33 @@
 <!-- Firebase 認証 -->
 <script src="firebase-config.js"></script>
 <script type="module" src="auth.js"></script>
+
+<!-- Service Worker（更新を自動反映） -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      // 新しいバージョンを検知したら、有効化後に自動でリロード
+      reg.addEventListener('updatefound', () => {
+        const sw = reg.installing;
+        if (!sw) return;
+        sw.addEventListener('statechange', () => {
+          if (sw.state === 'installed' && navigator.serviceWorker.controller) {
+            // 既存ユーザーに新版が入った → 次回更新を促す（静かに反映）
+            sw.postMessage('skip');
+          }
+        });
+      });
+    }).catch(() => {});
+    // コントローラ変更時（新SW有効化時）に一度だけリロード
+    let refreshed = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (refreshed) return;
+      refreshed = true;
+      location.reload();
+    });
+  });
+}
+</script>
 </body>
 </html>

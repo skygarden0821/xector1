@@ -436,21 +436,24 @@ function renderCompareCards(stats) {
   if (!wrap) return;
   wrap.innerHTML = '';
 
-  const now = new Date();
-  const thisKey = monthKey(now);
-  const lastKey = monthKey(new Date(now.getFullYear(), now.getMonth() - 1, 1));
-
   Object.keys(METRICS).forEach(key => {
-    const cur  = stats[thisKey]?.[key];
-    const prev = stats[lastKey]?.[key];
-    const hasCur = (cur != null && cur !== '');
-    const hasPrev = (prev != null && prev !== '');
+    // この指標でデータがある月を時系列で集める
+    const months = Object.keys(stats)
+      .filter(k => stats[k]?.[key] != null && stats[k][key] !== '')
+      .sort();  // "YYYY-MM" は文字列ソートで時系列
 
-    let deltaHtml = '<span class="cmp-delta cmp-flat">先月データなし</span>';
+    const latestKey = months[months.length - 1];        // 最新の入力済み月
+    const prevKey   = months[months.length - 2];         // その1つ前
+    const cur  = latestKey ? Number(stats[latestKey][key]) : null;
+    const prev = prevKey   ? Number(stats[prevKey][key])   : null;
+    const hasCur  = (cur  != null);
+    const hasPrev = (prev != null);
+
+    let deltaHtml = '<span class="cmp-delta cmp-flat">前月比なし</span>';
     if (hasCur && hasPrev) {
-      const d = Number(cur) - Number(prev);
+      const d = cur - prev;
       const cls = d > 0 ? 'cmp-up' : (d < 0 ? 'cmp-down' : 'cmp-flat');
-      const pct = Number(prev) !== 0 ? Math.round((d / Number(prev)) * 100) : null;
+      const pct = prev !== 0 ? Math.round((d / prev) * 100) : null;
       const pctStr = pct != null ? ` (${d > 0 ? '+' : ''}${pct}%)` : '';
       deltaHtml = `<span class="cmp-delta ${cls}">${fmtDelta(d)}${pctStr}</span>`;
     }
