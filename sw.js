@@ -3,7 +3,7 @@
 //  記事やコードを更新したら、下の CACHE_VERSION の数字を1つ上げて
 //  git push すれば、会員のアプリにも自動で反映されます。
 // ════════════════════════════════════════════════════════════
-const CACHE_VERSION = 'v1';            // ← 更新時はここを v2, v3... と上げる
+const CACHE_VERSION = 'v2';            // ← 更新時はここを v2, v3... と上げる
 const CACHE_NAME = 'xector1-' + CACHE_VERSION;
 
 // インストール時：すぐ新SWを有効化

@@ -18,6 +18,7 @@ setPersistence(auth, browserLocalPersistence).catch(() => {});
 
 let authMode = 'login';
 let justAuthenticated = false;  // ログイン/登録ボタンで認証した直後か
+let signingUp = false;          // 新規登録の処理中（コード確定前）か
 
 // ─── エラーメッセージ ───
 function jpError(code) {
@@ -103,7 +104,17 @@ async function handleSignup(email, password) {
   if (snap.data().used === true) { const e = new Error('この招待コードは既に使用されています。'); e.userFacing = true; throw e; }
 
   // 2) アカウント作成
-  const cred = await createUserWithEmailAndPassword(auth, email, password);
+  //    ※作成と同時に onAuthStateChanged が発火するが、この時点では
+  //      まだ usedBy / members を書いていないため入室判定が誤って弾く。
+  //      signingUp フラグを立て、登録処理中は入室チェックを省略させる。
+  signingUp = true;
+  let cred;
+  try {
+    cred = await createUserWithEmailAndPassword(auth, email, password);
+  } catch (e) {
+    signingUp = false;
+    throw e;
+  }
   const uid = cred.user.uid;
 
   // 3) コードを使用済みに（ルールで used:false→true のみ許可）
@@ -111,6 +122,7 @@ async function handleSignup(email, password) {
     await updateDoc(ref, { used: true, usedBy: uid, usedAt: Date.now() });
   } catch (e) {
     // コード確定に失敗したら、作ったアカウントは消してロールバック
+    signingUp = false;
     try { await deleteUser(cred.user); } catch (_) {}
     const err = new Error('登録処理に失敗しました。もう一度お試しください。'); err.userFacing = true; throw err;
   }
@@ -176,6 +188,24 @@ onAuthStateChanged(auth, async (user) => {
   const appEl = document.getElementById('app');
 
   if (user) {
+    // 新規登録の処理中は、まだコード確定（usedBy/members書き込み）前なので
+    // 入室チェックを省略して即入室扱いにする（登録処理側が裏で確定させる）。
+    if (signingUp) {
+      signingUp = false;
+      gate.classList.remove('show');
+      document.body.classList.remove('locked');
+      appEl.style.display = '';
+      const em0 = document.getElementById('account-email');
+      if (em0) em0.textContent = user.email || '—';
+      const pw0 = document.getElementById('auth-password');
+      if (pw0) pw0.value = '';
+      const cd0 = document.getElementById('auth-code');
+      if (cd0) cd0.value = '';
+      justAuthenticated = false;
+      showWelcome();
+      return;
+    }
+
     // 入室可否チェック（招待コードが生きているか）
     const allowed = await isAccessAllowed(user);
     if (!allowed) {
