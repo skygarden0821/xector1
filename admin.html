@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>招待コード管理（管理者用）</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px;
+    font-family: system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+    background: #0f1216; color: #e6e9ef; line-height: 1.6;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { color: #8b93a3; font-size: 13px; margin: 0 0 20px; }
+  .card {
+    background: #171b22; border: 1px solid #262c38; border-radius: 12px;
+    padding: 18px 20px; margin-bottom: 16px;
+  }
+  .card h2 { font-size: 15px; margin: 0 0 12px; color: #cdd3df; }
+  label { display: block; font-size: 12px; color: #8b93a3; margin: 10px 0 4px; }
+  input {
+    width: 100%; padding: 10px 12px; border-radius: 8px;
+    border: 1px solid #2c3340; background: #0f1216; color: #e6e9ef; font-size: 14px;
+  }
+  button {
+    appearance: none; border: 0; border-radius: 8px; cursor: pointer;
+    padding: 10px 16px; font-size: 14px; font-weight: 600; margin: 4px 6px 4px 0;
+    background: #3b82f6; color: #fff;
+  }
+  button.sec { background: #2c3340; color: #e6e9ef; }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  .stat { display: flex; gap: 16px; flex-wrap: wrap; margin: 8px 0; }
+  .stat div { background: #0f1216; border: 1px solid #262c38; border-radius: 8px; padding: 8px 14px; font-size: 13px; }
+  .stat b { font-size: 18px; display: block; }
+  #log {
+    margin-top: 12px; max-height: 240px; overflow: auto; font-size: 12px;
+    background: #0b0d11; border: 1px solid #262c38; border-radius: 8px; padding: 10px;
+    white-space: pre-wrap; font-family: ui-monospace, Menlo, Consolas, monospace;
+  }
+  .ok { color: #4ade80; } .err { color: #f87171; } .warn { color: #fbbf24; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #232a35; }
+  th { color: #8b93a3; font-weight: 600; position: sticky; top: 0; background: #171b22; }
+  .scroll { max-height: 340px; overflow: auto; border: 1px solid #262c38; border-radius: 8px; }
+  .pill { font-size: 11px; padding: 2px 8px; border-radius: 999px; }
+  .pill.used { background: #3a2530; color: #f9a8c0; }
+  .pill.free { background: #1f3a2a; color: #86efac; }
+  .note { font-size: 12px; color: #fbbf24; background: #2a230f; border: 1px solid #4a3c10; border-radius: 8px; padding: 10px 12px; }
+  code { background: #0b0d11; padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>招待コード管理</h1>
+  <p class="sub">管理者専用ページ。Firestore の <code>invite_codes</code> コレクションへ200件の招待コードを登録・確認します。</p>
+
+  <div class="card">
+    <h2>1. 管理者ログイン</h2>
+    <p class="sub" style="margin:0 0 8px">Firestore へ書き込むため、オーナーのアカウントでログインしてください。</p>
+    <div id="who" class="sub"></div>
+    <label for="adm-email">メールアドレス</label>
+    <input id="adm-email" type="email" autocomplete="username" placeholder="owner@example.com">
+    <label for="adm-pass">パスワード</label>
+    <input id="adm-pass" type="password" autocomplete="current-password" placeholder="••••••••">
+    <div style="margin-top:12px">
+      <button id="btn-login">ログイン</button>
+      <button id="btn-logout" class="sec">ログアウト</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. 一括登録（200件）</h2>
+    <p class="note">
+      この操作は <code>invite_codes/{コード}</code> を <code>used:false</code> で作成します。
+      既に存在するコードは上書きしません（使用済み状態を保護）。
+      Firestore セキュリティルールでオーナーの書き込みが許可されている必要があります。
+    </p>
+    <div class="stat" id="counts">
+      <div>合計<b id="c-total">200</b></div>
+      <div>登録済<b id="c-exist">–</b></div>
+      <div>未使用<b id="c-free">–</b></div>
+      <div>使用済<b id="c-used">–</b></div>
+    </div>
+    <div>
+      <button id="btn-check" class="sec">現在の状況を確認</button>
+      <button id="btn-seed">200件を一括登録</button>
+      <button id="btn-csv" class="sec">CSVをダウンロード</button>
+    </div>
+    <div id="log"></div>
+  </div>
+
+  <div class="card">
+    <h2>3. 一覧（使用状況）</h2>
+    <p class="sub" style="margin:0 0 6px">「現在の状況を確認」を押すと最新の使用状況を読み込みます。</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>#</th><th>招待コード</th><th>状況</th><th>使用者(uid)</th><th>使用日時</th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="firebase-config.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getAuth, setPersistence, browserLocalPersistence,
+  signInWithEmailAndPassword, signOut, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getFirestore, doc, getDoc, setDoc, getDocs, collection
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ── 200件の招待コード（生成済み・固定） ─────────────────────────
+const CODES = [
+  "XEC-26SMPJ", "XEC-272E2J", "XEC-2EHRXJ", "XEC-2K7UTW", "XEC-2VUH73", "XEC-34WA38", "XEC-3CKFVV", "XEC-3CN3NB", "XEC-3FT28R", "XEC-3TFP28",
+  "XEC-3WXQ5R", "XEC-45FCFY", "XEC-46T5P9", "XEC-47MKJP", "XEC-4GCDV8", "XEC-4JX5K8", "XEC-4KBFJ6", "XEC-4RQDT5", "XEC-539BRD", "XEC-53KYNN",
+  "XEC-5E9EMM", "XEC-5NXZHS", "XEC-5Q6HTX", "XEC-5RPUW7", "XEC-5SM385", "XEC-5VR4Z2", "XEC-5XHEY6", "XEC-643AB6", "XEC-68AC7Q", "XEC-68AP2V",
+  "XEC-6ADYGY", "XEC-6K8HU4", "XEC-6MPVZK", "XEC-6NFUC3", "XEC-6VUP7Y", "XEC-72V3KS", "XEC-762ECY", "XEC-793BVB", "XEC-7BG9XG", "XEC-7D8X88",
+  "XEC-7DADRN", "XEC-7XQ7C5", "XEC-83DD2G", "XEC-8EVFJQ", "XEC-8PZDF3", "XEC-8QSGHB", "XEC-8S6XYF", "XEC-8SSMRK", "XEC-8TP2J2", "XEC-8VNR6R",
+  "XEC-93CY56", "XEC-97GT3S", "XEC-9FASC7", "XEC-9K9W4H", "XEC-9N6SQ4", "XEC-9SAE5P", "XEC-A26HYR", "XEC-A3QZEV", "XEC-A4V89G", "XEC-AFZM9G",
+  "XEC-AH75UM", "XEC-APYBE6", "XEC-AQWRK6", "XEC-AVHV6B", "XEC-B2YJ8R", "XEC-B87EAH", "XEC-BPJ78T", "XEC-BZPKK4", "XEC-C563N7", "XEC-CDCVQT",
+  "XEC-CET5NB", "XEC-CH2HQE", "XEC-CKWD4X", "XEC-CTEFJD", "XEC-CXAGAC", "XEC-CXAYCM", "XEC-CZCHYX", "XEC-D32XCX", "XEC-D39Y6Z", "XEC-D7CWV5",
+  "XEC-DAYB2J", "XEC-DD8BYP", "XEC-DGRGBS", "XEC-DPJG72", "XEC-DQNCR7", "XEC-DSQPS9", "XEC-DZ8WBN", "XEC-ENXY24", "XEC-ERZ4DP", "XEC-ES8PUH",
+  "XEC-F2HS24", "XEC-FBAHJJ", "XEC-FK9T7T", "XEC-FNH3YX", "XEC-FR46R2", "XEC-FRAZW4", "XEC-FVBYQA", "XEC-FY9HFY", "XEC-GAGEGA", "XEC-GN8QUT",
+  "XEC-GUKSWC", "XEC-GX65KT", "XEC-GY5GT6", "XEC-H5CA6D", "XEC-HGEF59", "XEC-HNECMM", "XEC-HSG89Q", "XEC-HW97R9", "XEC-HXNQUK", "XEC-HZRK5C",
+  "XEC-JQSYBV", "XEC-JW8UKZ", "XEC-JYRUMU", "XEC-JZ9SQS", "XEC-K8PMSG", "XEC-KA5HYU", "XEC-KC8ZPK", "XEC-KKKXKA", "XEC-KWB5ZF", "XEC-M92JR2",
+  "XEC-MGCQ79", "XEC-MMG63R", "XEC-MVE9Y3", "XEC-MY8VBN", "XEC-N4WUMR", "XEC-N83AWF", "XEC-NF9CQC", "XEC-NGAKR4", "XEC-NV4WZ7", "XEC-P97BBE",
+  "XEC-PBNZX6", "XEC-PCWQPD", "XEC-PHD977", "XEC-PXDFKT", "XEC-Q3D2K4", "XEC-QAVUZ4", "XEC-QKF4MP", "XEC-QNC8AQ", "XEC-QQFEMV", "XEC-R3WEUC",
+  "XEC-RA4E67", "XEC-RBMGAB", "XEC-RDWA8R", "XEC-RER5JH", "XEC-RGUBGF", "XEC-RJHFZN", "XEC-RQYWD4", "XEC-RTG57G", "XEC-RUSDUN", "XEC-S468ND",
+  "XEC-SDY8M7", "XEC-SFDHK9", "XEC-SNNV7A", "XEC-SSPJJ2", "XEC-SSRWTD", "XEC-ST5GEA", "XEC-SYW5UF", "XEC-SZ26XM", "XEC-SZ3KMX", "XEC-SZSG3H",
+  "XEC-TEKJPZ", "XEC-TJWZ58", "XEC-UB7NZT", "XEC-URW796", "XEC-UTDMMW", "XEC-UUTAS4", "XEC-UX39WP", "XEC-UZPKGK", "XEC-VGZZM4", "XEC-VM8CU5",
+  "XEC-VNFC6Z", "XEC-VSP7KX", "XEC-VUSRGJ", "XEC-W3D63R", "XEC-WCJ9A7", "XEC-WF8FAA", "XEC-WXAEEE", "XEC-X8PVGX", "XEC-XAF8T7", "XEC-XD8VY4",
+  "XEC-XQH8X9", "XEC-XUWUUV", "XEC-Y7DE3B", "XEC-Y9TTUF", "XEC-Y9ZNJB", "XEC-YBJAFA", "XEC-YE4B62", "XEC-YFXHHH", "XEC-YHYQPN", "XEC-YN2UDU",
+  "XEC-YTQFYM", "XEC-Z2H5U9", "XEC-Z3XZFW", "XEC-ZD3QTM", "XEC-ZFD8BD", "XEC-ZHV7B9", "XEC-ZHYUJF", "XEC-ZJJCGZ", "XEC-ZQ8D4C", "XEC-ZVBANG"
+];
+
+const app = initializeApp(window.firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+setPersistence(auth, browserLocalPersistence).catch(() => {});
+
+const $ = (id) => document.getElementById(id);
+const logEl = $('log');
+function log(msg, cls) {
+  const span = document.createElement('div');
+  if (cls) span.className = cls;
+  span.textContent = msg;
+  logEl.appendChild(span);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+function fmtDate(ms) {
+  if (!ms) return '';
+  try { return new Date(ms).toLocaleString('ja-JP'); } catch (_) { return String(ms); }
+}
+
+// ── 認証状態 ──
+let signedIn = false;
+onAuthStateChanged(auth, (user) => {
+  signedIn = !!user;
+  $('who').textContent = user ? `ログイン中: ${user.email}` : '未ログイン';
+  $('who').className = user ? 'sub ok' : 'sub';
+});
+
+$('btn-login').onclick = async () => {
+  try {
+    await signInWithEmailAndPassword(auth, $('adm-email').value.trim(), $('adm-pass').value);
+    log('ログインしました。', 'ok');
+  } catch (e) { log('ログイン失敗: ' + (e.code || e.message), 'err'); }
+};
+$('btn-logout').onclick = async () => { await signOut(auth); log('ログアウトしました。'); };
+
+// ── 現在の状況を確認 ──
+$('btn-check').onclick = async () => {
+  logEl.innerHTML = '';
+  log('Firestore を読み込み中…');
+  let exist = 0, used = 0, free = 0;
+  const rows = [];
+  try {
+    // コレクション全体を取得（既存ぶんも拾う）
+    const snap = await getDocs(collection(db, 'invite_codes'));
+    const map = new Map();
+    snap.forEach(d => map.set(d.id, d.data()));
+    CODES.forEach((code, i) => {
+      const data = map.get(code);
+      if (data) {
+        exist++;
+        if (data.used === true) used++; else free++;
+        rows.push({ i: i + 1, code, used: data.used === true, usedBy: data.usedBy || '', usedAt: data.usedAt || 0 });
+      } else {
+        rows.push({ i: i + 1, code, used: false, usedBy: '', usedAt: 0, missing: true });
+      }
+    });
+    $('c-exist').textContent = exist;
+    $('c-free').textContent = free;
+    $('c-used').textContent = used;
+    renderTable(rows);
+    log(`確認完了: 登録済 ${exist} / 未登録 ${200 - exist} / 使用済 ${used}`, 'ok');
+  } catch (e) {
+    log('読み込み失敗: ' + (e.code || e.message), 'err');
+    log('※ ルールで読み取りが許可されているか、ログイン済みかをご確認ください。', 'warn');
+  }
+};
+
+function renderTable(rows) {
+  const tb = $('tbody');
+  tb.innerHTML = '';
+  rows.forEach(r => {
+    const tr = document.createElement('tr');
+    const pill = r.missing
+      ? '<span class="pill" style="background:#2c3340;color:#8b93a3">未登録</span>'
+      : (r.used ? '<span class="pill used">使用済</span>' : '<span class="pill free">未使用</span>');
+    tr.innerHTML = `<td>${r.i}</td><td><code>${r.code}</code></td><td>${pill}</td><td>${r.usedBy}</td><td>${fmtDate(r.usedAt)}</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+// ── 一括登録 ──
+$('btn-seed').onclick = async () => {
+  if (!signedIn) { log('先に管理者ログインしてください。', 'warn'); return; }
+  if (!confirm('200件の招待コードを Firestore に登録します。よろしいですか？')) return;
+  $('btn-seed').disabled = true;
+  logEl.innerHTML = '';
+  log('一括登録を開始します…');
+  let created = 0, skipped = 0, failed = 0;
+  for (let i = 0; i < CODES.length; i++) {
+    const code = CODES[i];
+    const ref = doc(db, 'invite_codes', code);
+    try {
+      const snap = await getDoc(ref);
+      if (snap.exists()) { skipped++; continue; } // 既存は保護
+      await setDoc(ref, { used: false, createdAt: Date.now() });
+      created++;
+      if (created % 25 === 0) log(`… ${created} 件登録`);
+    } catch (e) {
+      failed++;
+      if (failed <= 3) log(`失敗 ${code}: ${e.code || e.message}`, 'err');
+    }
+  }
+  log(`完了: 新規 ${created} / 既存スキップ ${skipped} / 失敗 ${failed}`, failed ? 'warn' : 'ok');
+  if (failed) log('※ 失敗がある場合は Firestore ルールで invite_codes への作成が許可されているかご確認ください。', 'warn');
+  $('btn-seed').disabled = false;
+  $('btn-check').click();
+};
+
+// ── CSVダウンロード（現在の表示内容ベース、未確認なら全て未使用） ──
+$('btn-csv').onclick = () => {
+  const header = '招待コード,使用状況,使用者(uid),使用日時,メモ';
+  const lines = [header];
+  const tb = $('tbody');
+  if (tb.children.length) {
+    [...tb.children].forEach(tr => {
+      const tds = tr.querySelectorAll('td');
+      const code = tds[1].textContent;
+      const status = tds[2].textContent.trim();
+      const usedBy = tds[3].textContent;
+      const usedAt = tds[4].textContent;
+      lines.push([code, status, usedBy, usedAt, ''].map(csvCell).join(','));
+    });
+  } else {
+    CODES.forEach(code => lines.push([code, '未使用', '', '', ''].map(csvCell).join(',')));
+  }
+  const blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'invite_codes.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+function csvCell(v) {
+  v = String(v ?? '');
+  return /[",\r\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+}
+</script>
+</body>
+</html>
