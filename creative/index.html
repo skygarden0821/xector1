@@ -1,0 +1,1666 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<script>/* アプリの中（?embed=1）で開いたときは、ページ上部のバーを隠す */try{if(new URLSearchParams(location.search).get('embed')==='1')document.documentElement.classList.add('embedded')}catch(e){}</script>
+<title>Xector1 CreativeResource｜制作依頼・見積もり</title>
+<meta name="description" content="オリジナル曲、MIX、MV、イラスト、Vアバター、宣伝写真をまとめて頼めるXector1の制作窓口。選んで答えるだけで、その場で見積もりがわかります。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff;--bg-2:#f5f5f7;--text:#1d1d1f;--text-2:#6e6e73;--text-3:#86868b;
+  --line:#d2d2d7;--line-2:#e5e5ea;--fill:#f2f2f7;--blue:#0071e3;--blue-2:#0077ed;--tint:#f0f6ff;--link:#0066cc;--red:#d70015;
+  --font:"Inter","Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI","YuGothic","Meiryo",sans-serif;
+  color-scheme:light;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);background:var(--bg)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px);scroll-padding-bottom:110px;scroll-behavior:smooth}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;font-weight:400;line-height:1.75;letter-spacing:.02em;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+@media (min-width:734px){body{font-size:17px}}
+a{color:inherit}
+svg{display:block;max-width:100%}
+button{font-family:inherit;letter-spacing:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+.num{font-family:"Inter",var(--font);font-feature-settings:"tnum";letter-spacing:0}
+.jp-head{font-feature-settings:"palt";word-break:auto-phrase;text-wrap:balance}
+.nw{display:inline-block;white-space:nowrap}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;height:56px;background:rgba(255,255,255,.82);border-bottom:1px solid rgba(0,0,0,.07)}
+@supports (backdrop-filter:blur(20px)){.nav{backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px)}}
+.nav-in{display:flex;align-items:center;gap:26px;height:100%}
+.brand{margin-right:auto;font-size:15px;text-decoration:none;white-space:nowrap;letter-spacing:.01em}
+.brand b{font-weight:700}
+.brand span{color:var(--text-2);margin-left:4px}
+.nav-links{display:none;gap:24px;font-size:13px}
+.nav-links a{text-decoration:none;color:var(--text-2)}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{padding:8px 16px;border-radius:999px;background:var(--blue);color:#fff;font-size:13px;font-weight:600;line-height:1;text-decoration:none;white-space:nowrap}
+@media (min-width:960px){.nav-links{display:flex}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 26px;border:0;border-radius:999px;font-size:16px;font-weight:600;line-height:1.2;text-decoration:none;cursor:pointer;text-align:center}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-blue:hover{background:var(--blue-2)}
+.btn-gray{background:var(--fill);color:var(--text)}
+.btn-gray:hover{background:#e8e8ed}
+.btn-sm{min-height:40px;padding:0 16px;font-size:14px}
+.link{display:inline-flex;align-items:center;gap:4px;padding:0;border:0;background:none;color:var(--link);font-size:inherit;font-weight:500;text-decoration:none;cursor:pointer;text-align:left}
+.link:hover{text-decoration:underline}
+
+/* sections */
+.sec{padding:88px 0}
+.sec-2{background:var(--bg-2)}
+@media (min-width:734px){.sec{padding:116px 0}}
+.sec-head{margin:0 auto 48px;text-align:center}
+.sec-title{margin:0;font-size:clamp(1.75rem,5vw,2.75rem);font-weight:700;line-height:1.28}
+.sec-sub{max-width:34em;margin:14px auto 0;font-size:clamp(1rem,2.2vw,1.2rem);color:var(--text-2);line-height:1.7}
+
+/* hero */
+.hero{padding:56px 0 72px}
+@media (min-width:734px){.hero{padding:96px 0 100px}}
+.hero-grid{display:grid;gap:48px;align-items:center}
+@media (min-width:920px){.hero-grid{grid-template-columns:1.05fr .95fr;gap:56px}}
+.hero-visual{position:relative}
+@media (max-width:919px){.hero-visual{max-width:520px}.hero-visual .example{margin-top:-20px}}
+.hv-panel{padding:20px;background:var(--bg-2);border-radius:28px}
+.hv-panel > svg{width:100%;height:auto}
+.hero-visual .example{position:relative;width:min(300px,84%);margin:-56px 0 0 auto;padding:20px 22px 18px}
+.hero-visual .ex-row{padding:7px 0}
+.hero-visual .ex-total{padding:10px 0 12px}
+.hero h1{margin:0;font-size:clamp(2rem,5.6vw,3rem);font-weight:700;line-height:1.3;font-feature-settings:"palt"}
+.hero h1 .h1-sub{display:block;color:var(--text-3)}
+.hero-sub{max-width:31em;margin:22px 0 0;font-size:clamp(1rem,2.2vw,1.15rem);color:var(--text-2)}
+.hero-cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px;margin-top:32px}
+.assure{display:flex;flex-wrap:wrap;gap:10px 22px;margin:32px 0 0;padding:0;list-style:none;font-size:14px;color:var(--text-2)}
+.assure li{display:flex;align-items:center;gap:6px}
+.assure svg{width:16px;height:16px;flex:none;color:var(--blue)}
+.example{padding:26px 24px 22px;background:#fff;border:1px solid var(--line-2);border-radius:22px;box-shadow:0 18px 50px -20px rgba(0,0,0,.18)}
+.ex-tag{margin:0;font-size:12px;font-weight:600;color:var(--text-2)}
+.ex-title{margin:2px 0 14px;font-size:18px;font-weight:700;line-height:1.5}
+.ex-row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line-2);font-size:15px}
+.ex-total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:14px 0 16px;border-top:1px solid var(--text)}
+.ex-total span{font-size:14px;font-weight:600}
+.ex-total strong{font-size:28px;font-weight:700}
+
+/* how to */
+.howto{padding:0 0 88px}
+.howto-title{margin:0 0 20px;font-size:clamp(1.35rem,3.4vw,1.75rem);font-weight:700}
+.howto-box{display:grid;background:var(--bg-2);border-radius:26px;padding:10px 24px}
+@media (min-width:760px){.howto-box{grid-template-columns:repeat(3,1fr);padding:32px 12px}}
+.howto-step{display:flex;gap:16px;padding:20px 0;border-top:1px solid var(--line-2)}
+.howto-step:first-child{border-top:0}
+@media (min-width:760px){.howto-step{flex-direction:column;gap:14px;padding:6px 26px;border-top:0;border-left:1px solid var(--line-2)}.howto-step:first-child{border-left:0}}
+.howto-icon{display:grid;place-items:center;flex:none;width:44px;height:44px;border-radius:12px;background:#fff;color:var(--text)}
+.howto-icon svg{width:22px;height:22px}
+.howto-step h3{margin:0;font-size:16px;font-weight:700;line-height:1.5}
+.howto-step h3 small{display:block;font-size:12px;font-weight:600;color:var(--blue)}
+.howto-step p{margin:4px 0 0;font-size:14px;color:var(--text-2);line-height:1.7}
+
+/* goals */
+.goal-grid{display:grid;gap:14px}
+@media (min-width:700px){.goal-grid{grid-template-columns:1fr 1fr}}
+@media (min-width:1000px){.goal-grid{grid-template-columns:repeat(3,1fr);gap:18px}}
+.goal{display:flex;flex-direction:column;padding:26px 24px 22px;background:#fff;border-radius:22px}
+.goal-icons{display:flex;gap:6px;margin-bottom:16px}
+.gi{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:var(--bg-2);color:var(--text)}
+.gi svg{width:22px;height:22px}
+.goal h3{margin:0 0 6px;font-size:19px;font-weight:700;line-height:1.45}
+.goal p{margin:0 0 16px;font-size:14px;color:var(--text-2);line-height:1.75}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 20px;padding:0;list-style:none}
+.chips li{padding:3px 10px;border-radius:999px;background:var(--bg-2);font-size:12px;font-weight:500;line-height:1.7}
+.goal-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto}
+.goal-price{font-size:13px;color:var(--text-2);line-height:1.4}
+.goal-price b{display:block;font-size:18px;font-weight:700;color:var(--text)}
+
+/* services */
+.svc-group+.svc-group{margin-top:56px}
+.svc-group-title{margin:0 0 4px;font-size:clamp(1.3rem,3vw,1.6rem);font-weight:700}
+.svc-group-sub{margin:0 0 20px;font-size:15px;color:var(--text-2)}
+.svc-grid{display:grid;gap:16px}
+@media (min-width:900px){.svc-grid{grid-template-columns:repeat(3,1fr);gap:20px}}
+.svc{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line-2);border-radius:24px;overflow:hidden}
+.svc-viz{padding:22px 22px 16px;background:var(--bg-2)}
+.svc-viz > svg{width:100%;height:160px}
+.viz-t{font-family:var(--font)}
+.viz-label{font-size:11px;fill:var(--text-3);font-family:var(--font)}
+.svc-body{display:flex;flex-direction:column;flex:1;padding:22px 22px 22px}
+.svc-kind{margin:0;font-size:13px;font-weight:600;color:var(--text-2)}
+.svc h3{margin:2px 0 8px;font-size:21px;font-weight:700;line-height:1.4}
+.svc-desc{margin:0 0 18px;font-size:15px;color:var(--text-2);line-height:1.75}
+.svc-you{display:flex;align-items:flex-start;gap:10px;margin:0 0 16px;padding:12px 14px;border-radius:12px;background:#fff7ee;font-size:14px;line-height:1.6}
+.svc-you b{flex:none;padding:1px 8px;border-radius:6px;background:#fff;color:#b25000;font-size:11px;font-weight:600;line-height:1.8}
+.svc-from{margin:auto 0 14px;font-size:14px;color:var(--text-2)}
+.svc-from strong{font-size:21px;font-weight:700;color:var(--text)}
+.svc-from .tbd{font-size:15px;font-weight:600;color:var(--text)}
+.svc-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.speed-note{display:grid;gap:4px 28px;margin-top:28px;padding:22px 24px;background:var(--bg-2);border-radius:22px;font-size:15px}
+@media (min-width:760px){.speed-note{grid-template-columns:auto 1fr 1fr;align-items:center}}
+.speed-note b{font-weight:700}
+.speed-note span{color:var(--text-2)}
+
+/* process */
+.proc{display:grid;margin:0;padding:0;list-style:none}
+.proc li{position:relative;padding:0 0 30px 56px}
+.proc li::before{content:"";position:absolute;left:18px;top:40px;bottom:4px;width:2px;background:var(--line)}
+.proc li:last-child{padding-bottom:0}
+.proc li:last-child::before{display:none}
+.proc-n{position:absolute;left:0;top:0;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:#fff;border:1.5px solid var(--line);font-size:15px;font-weight:600}
+.proc h3{margin:0;padding-top:6px;font-size:17px;font-weight:700;line-height:1.5}
+.proc p{margin:4px 0 8px;font-size:14px;color:var(--text-2);line-height:1.7}
+.proc-tag{display:inline-block;padding:2px 9px;border-radius:6px;font-size:12px;font-weight:600;line-height:1.7;background:var(--tint);color:var(--blue)}
+.proc-tag.alt{background:#fff;color:var(--text-2);border:1px solid var(--line)}
+@media (min-width:900px){
+  .proc{grid-template-columns:repeat(5,1fr)}
+  .proc li{padding:58px 18px 0 0}
+  .proc li::before{left:44px;right:6px;top:19px;bottom:auto;width:auto;height:2px}
+  .proc li:last-child::before{display:none}
+}
+.proc-cta{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 24px;margin-top:44px}
+
+/* simulator */
+.sim{padding-bottom:0}
+.sim-grid{display:grid;gap:40px;align-items:start}
+@media (min-width:900px){.sim-grid{grid-template-columns:minmax(0,1fr) 340px;gap:48px}}
+.sim-grid.is-result{grid-template-columns:minmax(0,1fr);max-width:720px;margin:0 auto}
+.sim-grid.is-result .panel{display:none}
+.sim-top{display:flex;align-items:center;gap:14px;min-height:32px;font-size:14px;color:var(--text-2)}
+.sim-top .link{font-size:15px}
+.step-name{margin-left:auto}
+.step-name b{color:var(--text);font-weight:600}
+.segs{display:flex;gap:4px;margin:10px 0 34px}
+.segs i{flex:1;height:4px;border-radius:4px;background:var(--line-2)}
+.segs i.done{background:var(--blue);opacity:.35}
+.segs i.cur{background:var(--blue)}
+#stepHost:focus{outline:none}
+.q-title{margin:0;font-size:clamp(1.4rem,4vw,1.85rem);font-weight:700;line-height:1.45}
+.q-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:12px 0 14px}
+.tag{padding:3px 9px;border-radius:6px;background:var(--tint);color:var(--blue);font-size:12px;font-weight:600;line-height:1.6;white-space:nowrap}
+.q-note{font-size:14px;color:var(--text-2)}
+.guide-link{display:inline-flex;align-items:center;gap:6px;margin:0 0 22px;padding:0;border:0;background:none;color:var(--link);font-size:14px;cursor:pointer}
+.guide-link svg{width:16px;height:16px}
+.guide-link:hover{text-decoration:underline}
+.opts{display:grid;gap:10px}
+.opt-group{margin:22px 0 10px;font-size:13px;font-weight:600;color:var(--text-2)}
+.opt-group:first-child{margin-top:0}
+.opt,.item{position:relative;display:flex;align-items:center;gap:14px;padding:16px 18px;background:#fff;border:1px solid var(--line);border-radius:14px;transition:border-color .15s,background-color .15s,box-shadow .15s}
+.opt{cursor:pointer}
+.opt:hover{border-color:var(--text-3)}
+.opt.is-on,.item.is-on{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue);background:var(--tint)}
+.opt input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.opt:has(input:focus-visible){outline:2px solid var(--blue);outline-offset:3px}
+.ctrl{position:relative;flex:none;width:22px;height:22px;border:1.5px solid #aeaeb2;border-radius:50%;background:#fff}
+.ctrl.box{border-radius:6px}
+.is-on .ctrl{border-color:var(--blue);background:var(--blue)}
+.is-on .ctrl::after{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;border-radius:50%;background:#fff;transform:translate(-50%,-50%)}
+.is-on .ctrl.box::after{width:6px;height:11px;border-radius:0;background:none;border:solid #fff;border-width:0 2px 2px 0;transform:translate(-50%,-62%) rotate(45deg)}
+.opt-icon{flex:none;width:28px;height:28px;color:var(--text)}
+.opt-body{flex:1;min-width:0}
+.opt-name{display:block;font-size:16px;font-weight:600;line-height:1.5}
+.opt-hint{display:block;margin-top:2px;font-size:14px;color:var(--text-2);line-height:1.65}
+.opt-from{display:block;margin-top:4px;font-size:14px;font-weight:500;color:var(--text)}
+.opt-price{flex:none;font-size:15px;font-weight:500;white-space:nowrap}
+.opt-price.tbd{font-size:13px;color:var(--text-2);font-weight:500}
+.item .unit{display:block;margin-top:2px;font-size:14px;color:var(--text-2)}
+.subq{margin:0 0 28px;padding:0;border:0;min-width:0}
+.subq legend{padding:0;margin:0 0 10px;font-size:15px;font-weight:600}
+.stepper{display:inline-flex;align-items:center;gap:8px;flex:none}
+.stepper button{width:38px;height:38px;border:0;border-radius:50%;background:var(--fill);color:var(--text);font-size:20px;line-height:1;cursor:pointer}
+.stepper button:hover{background:#e8e8ed}
+.stepper button:disabled{opacity:.35;cursor:default}
+.stepper output{min-width:2ch;font-size:17px;font-weight:600;text-align:center}
+.included{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:10px;padding:14px 18px;border:1px dashed var(--line);border-radius:14px;font-size:14px;color:var(--text-2)}
+.included b{color:var(--text);font-weight:600;white-space:nowrap}
+.count{margin-top:10px}
+.note-box{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;margin-top:16px;padding:16px 18px;background:#fff;border-radius:14px;font-size:14px;color:var(--text-2)}
+.note-box b{color:var(--text);font-weight:600}
+.err{margin:16px 0 0;font-size:14px;font-weight:600;color:var(--red)}
+.q-actions{display:none;margin-top:32px}
+@media (min-width:900px){.q-actions{display:flex;justify-content:flex-end}}
+.presets{margin-top:36px;border-top:1px solid var(--line-2)}
+.presets summary{display:flex;align-items:center;gap:8px;padding:18px 0 4px;color:var(--link);font-size:15px;font-weight:500;cursor:pointer;list-style:none}
+.presets summary::-webkit-details-marker{display:none}
+.presets summary::after{content:"";width:7px;height:7px;border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;transform:translateY(-2px) rotate(45deg);transition:transform .2s}
+.presets[open] summary::after{transform:translateY(2px) rotate(-135deg)}
+.presets > p{margin:4px 0 14px;font-size:14px;color:var(--text-2)}
+.preset-grid{display:grid;gap:10px}
+@media (min-width:600px){.preset-grid{grid-template-columns:1fr 1fr}}
+.preset{display:flex;flex-direction:column;gap:2px;padding:16px 18px;border:1px solid var(--line);border-radius:14px;background:#fff;text-align:left;color:var(--text);cursor:pointer;transition:border-color .15s}
+.preset:hover{border-color:var(--blue)}
+.preset-name{font-size:15px;font-weight:600;line-height:1.5}
+.preset-items{font-size:13px;color:var(--text-2);line-height:1.6}
+.preset-price{margin-top:6px;font-size:14px;color:var(--text-2)}
+.preset-price b{font-size:16px;color:var(--text);font-weight:600}
+.sim-space{height:88px}
+@media (min-width:900px){.sim-space{height:120px}}
+
+/* panel */
+.panel{position:sticky;top:88px;display:none;padding:26px 24px 22px;background:#fff;border-radius:22px}
+@media (min-width:900px){.panel{display:block}}
+.panel h3{margin:0 0 6px;font-size:17px;font-weight:700}
+.sum-empty{margin:8px 0 18px;font-size:14px;color:var(--text-2)}
+.sum-group{padding:12px 0;border-bottom:1px solid var(--line)}
+.sum-group h4{margin:0 0 4px;font-size:12px;font-weight:600;color:var(--text-2)}
+.sum-row{display:flex;justify-content:space-between;gap:12px;font-size:14px;line-height:1.8}
+.sum-row span:last-child{white-space:nowrap}
+.sum-row .tbd{color:var(--text-2);font-size:13px}
+.sum-total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-top:16px}
+.sum-total span{font-size:14px;font-weight:600;white-space:nowrap}
+.sum-total strong{font-size:28px;font-weight:700;text-align:right}
+.sum-total strong.small{font-size:20px}
+.sum-notes{margin:8px 0 0;padding:0;list-style:none;font-size:13px;color:var(--text-2);line-height:1.7}
+.panel .fine{margin:14px 0 0;font-size:12px;color:var(--text-2);line-height:1.7}
+
+/* mobile bar */
+.mbar{position:sticky;bottom:0;z-index:30;background:rgba(255,255,255,.92);border-top:1px solid rgba(0,0,0,.08);padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px))}
+@supports (backdrop-filter:blur(20px)){.mbar{backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px)}}
+@media (min-width:900px){.mbar{display:none}}
+.mbar-in{display:flex;align-items:center;gap:12px}
+.mbar-sum{display:flex;flex-direction:column;align-items:flex-start;margin-right:auto;padding:4px 0;border:0;background:none;color:var(--text);text-align:left;cursor:pointer;line-height:1.3}
+.mbar-sum small{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-2)}
+.mbar-sum small em{font-style:normal;color:var(--link)}
+.mbar-sum strong{font-size:21px;font-weight:700}
+.mbar .btn{min-height:46px;padding:0 20px;font-size:15px}
+.mbar-detail{max-height:46vh;overflow:auto;margin-bottom:10px;padding:4px 18px 14px;background:var(--bg-2);border-radius:16px}
+.mbar-detail .sum-group:last-child{border-bottom:0}
+
+/* result */
+.receipt{margin-top:18px;padding:8px 24px 24px;background:#fff;border-radius:22px}
+.receipt .date{display:block;padding-top:16px;font-size:12px;color:var(--text-3)}
+.receipt .sum-row{font-size:15px}
+.receipt .sum-total strong{font-size:clamp(2rem,6vw,2.4rem)}
+.receipt .sum-total strong.small{font-size:clamp(1.4rem,4vw,1.7rem)}
+.fine{margin:14px 2px 0;font-size:14px;color:var(--text-2)}
+.upsell{margin-top:44px}
+.upsell h4,.send h4{margin:0 0 4px;font-size:20px;font-weight:700}
+.upsell > p,.send > p{margin:0 0 16px;font-size:14px;color:var(--text-2)}
+.up-list{display:grid;gap:10px}
+.up{display:flex;align-items:center;gap:14px;padding:16px 18px;border:1px solid var(--line);border-radius:14px;background:#fff}
+.up .opt-body b{display:block;font-size:15px;font-weight:600;line-height:1.5}
+.up .opt-body span{display:block;font-size:13px;color:var(--text-2);line-height:1.6}
+.up .btn{flex:none}
+.up .opt-body .up-from{margin-top:4px;font-size:13px;font-weight:500;color:var(--text)}
+.send{margin-top:48px}
+.field{display:block;margin-bottom:16px}
+.field span{display:block;margin-bottom:6px;font-size:14px;font-weight:600}
+.field input,.field textarea{width:100%;padding:13px 16px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--text);font:400 16px/1.6 var(--font);letter-spacing:.02em}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(0,113,227,.16)}
+.field textarea{min-height:120px;resize:vertical}
+.field textarea::placeholder{color:var(--text-3)}
+.actions{display:grid;gap:10px;margin-top:6px}
+.actions .btn{width:100%}
+.preview{margin-top:16px;font-size:14px}
+.preview summary{color:var(--link);cursor:pointer}
+.preview pre{margin:12px 0 0;padding:16px;max-height:300px;overflow:auto;white-space:pre-wrap;word-break:break-word;background:#fff;border-radius:14px;font:400 13px/1.8 var(--font)}
+.result-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 24px;margin-top:32px;font-size:15px}
+
+/* guide dialog */
+.guide{width:min(740px,calc(100% - 40px));max-width:none;max-height:calc(100vh - 48px);padding:0;border:0;border-radius:24px;background:#fff;color:var(--text);box-shadow:0 30px 90px -20px rgba(0,0,0,.4);overflow:hidden}
+.guide[open]{display:flex;flex-direction:column}
+.guide::backdrop{background:rgba(0,0,0,.42)}
+@media (max-width:733px){.guide{width:100%;max-height:92vh;margin:auto 0 0;border-radius:22px 22px 0 0}}
+.g-head{display:flex;align-items:flex-start;gap:16px;padding:22px 24px 14px}
+.g-tabwrap{padding:0 24px 14px;border-bottom:1px solid var(--line-2)}
+.g-tabs{display:flex;gap:4px;padding:4px;background:var(--fill);border-radius:12px;overflow-x:auto;scrollbar-width:none}
+.g-tabs::-webkit-scrollbar{display:none}
+.g-tab{flex:1;min-width:max-content;padding:8px 12px;border:0;border-radius:9px;background:none;color:var(--text-2);font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.g-tab[aria-selected="true"]{background:#fff;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.g-lead{margin:20px 0 0;padding:16px 18px;border-radius:14px;background:var(--bg-2);font-size:15px;line-height:1.8}
+.g-lead b{font-weight:700}
+.g-vs{display:grid;gap:12px}
+@media (min-width:600px){.g-vs{grid-template-columns:1fr 1fr}}
+.g-box{padding:20px;border-radius:16px;background:var(--bg-2)}
+.g-box.good{background:var(--tint)}
+.g-box h4{margin:0 0 12px;font-size:15px;font-weight:700}
+.g-box.good h4{color:var(--blue)}
+.g-box.you h4{color:#b25000}
+.g-box.you{background:#fff7ee}
+.actor{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:6px;font-size:11px;font-weight:600;line-height:1.7;vertical-align:1px;white-space:nowrap}
+.actor.you{background:#fff1e0;color:#b25000}
+.actor.x1{background:var(--tint);color:var(--blue)}
+.actor.both{background:var(--fill);color:var(--text-2)}
+.g-flow .actor{display:inline-block;font-size:11px;line-height:1.7;margin-left:8px}
+.g-flow .actor.you{color:#b25000}
+.g-flow .actor.x1{color:var(--blue)}
+.g-flow .actor.both{color:var(--text-2)}
+.g-head p{margin:0;font-size:13px;font-weight:600;color:var(--text-2)}
+.g-head h2{margin:2px 0 0;font-size:22px;font-weight:700;line-height:1.4}
+.g-close{display:grid;place-items:center;flex:none;width:36px;height:36px;margin-left:auto;border:0;border-radius:50%;background:var(--fill);color:var(--text);cursor:pointer}
+.g-close svg{width:14px;height:14px}
+.g-body{flex:1;min-height:0;overflow:auto;padding:6px 24px 28px;overscroll-behavior:contain}
+.g-viz{margin:18px 0 4px;padding:20px;background:var(--bg-2);border-radius:18px}
+.g-viz > svg{width:100%;height:170px}
+.g-sec{padding-top:26px}
+.g-sec h3{margin:0 0 10px;font-size:17px;font-weight:700}
+.g-sec > p{margin:0;font-size:15px;color:var(--text-2);line-height:1.85}
+.g-check,.g-dot{margin:0;padding:0;list-style:none;display:grid;gap:8px;font-size:15px}
+.g-check li,.g-dot li{position:relative;padding-left:28px;line-height:1.7}
+.g-check li::before{content:"";position:absolute;left:4px;top:5px;width:6px;height:11px;border:solid var(--blue);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.g-dot li::before{content:"";position:absolute;left:7px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--text-3)}
+.g-flow{margin:0;padding:0;list-style:none;display:grid;gap:0}
+.g-flow li{position:relative;padding:0 0 18px 44px}
+.g-flow li::before{content:"";position:absolute;left:14px;top:32px;bottom:2px;width:2px;background:var(--line-2)}
+.g-flow li:last-child{padding-bottom:0}
+.g-flow li:last-child::before{display:none}
+.g-flow .n{position:absolute;left:0;top:0;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--text);color:#fff;font-size:13px;font-weight:600}
+.g-flow b{display:block;padding-top:3px;font-size:15px;font-weight:600;line-height:1.5}
+.g-flow span{display:block;font-size:14px;color:var(--text-2);line-height:1.7}
+.g-compare{display:grid;gap:10px}
+@media (min-width:560px){.g-compare{grid-template-columns:1fr 1fr}}
+.g-compare div{padding:18px;background:var(--bg-2);border-radius:14px}
+.g-compare b{display:block;font-size:15px;font-weight:700;margin-bottom:4px}
+.g-compare span{font-size:14px;color:var(--text-2);line-height:1.75}
+.g-price{margin:0;padding:0;list-style:none}
+.g-price li{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:12px 0;border-top:1px solid var(--line-2);font-size:15px}
+.g-price li small{display:block;font-size:13px;color:var(--text-2);line-height:1.6}
+.g-price li > span:last-child{white-space:nowrap;font-weight:500}
+.g-price .sub{padding-top:16px;border-top:0;font-size:12px;font-weight:600;color:var(--text-3)}
+.g-price-note{margin:12px 0 0!important;font-size:13px!important}
+.g-foot{display:flex;gap:10px;padding:14px 24px calc(14px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line-2);background:#fff}
+.g-foot .btn{flex:1;min-height:48px}
+.g-foot .btn-gray{flex:0 0 auto;padding:0 24px}
+
+/* works */
+.works-block+.works-block{margin-top:64px}
+.works-block h3{margin:0;font-size:clamp(1.3rem,3vw,1.6rem);font-weight:700}
+.works-block>p{margin:6px 0 22px;font-size:15px;color:var(--text-2)}
+.works-grid{display:grid;gap:14px}
+@media (min-width:734px){.works-grid{grid-template-columns:repeat(3,1fr);gap:18px}}
+.work{display:flex;flex-direction:column;justify-content:space-between;gap:26px;min-height:176px;padding:26px 24px 22px;background:var(--bg-2);border-radius:22px;text-decoration:none;color:var(--text)}
+.work-num{display:block;font-size:clamp(1.9rem,4vw,2.4rem);font-weight:700;line-height:1.15}
+.work-num small{font-size:.55em}
+.work-num.word{font-size:1.6rem}
+.work-cap{display:block;margin-top:6px;font-size:14px;color:var(--text-2)}
+.work .link{font-size:15px}
+.work:hover .link{text-decoration:underline}
+.work-soon{padding:26px 24px;background:var(--bg-2);border-radius:22px;font-size:15px;color:var(--text-2)}
+
+/* flow */
+.flow{display:grid;gap:12px;margin:0;padding:0;list-style:none}
+@media (min-width:760px){.flow{grid-template-columns:repeat(4,1fr);gap:16px}}
+.flow li{padding:24px 22px;background:#fff;border-radius:22px}
+.flow .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--text);color:#fff;font-size:14px;font-weight:600;line-height:1}
+.flow h3{margin:14px 0 4px;font-size:17px;font-weight:700;line-height:1.5}
+.flow p{margin:0;font-size:14px;color:var(--text-2)}
+
+/* faq */
+.faq{max-width:800px;margin:0 auto;border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{position:relative;padding:22px 44px 22px 0;list-style:none;cursor:pointer;font-size:17px;font-weight:600;line-height:1.55}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";position:absolute;right:8px;top:50%;width:10px;height:10px;border-right:1.8px solid var(--text-2);border-bottom:1.8px solid var(--text-2);transform:translateY(-70%) rotate(45deg);transition:transform .2s}
+.faq details[open] summary::after{transform:translateY(-25%) rotate(-135deg)}
+.faq p{max-width:40em;margin:0 0 24px;font-size:16px;color:var(--text-2)}
+
+.plist{max-width:820px;margin:0 auto;border-top:1px solid var(--line)}
+.pl-item{border-bottom:1px solid var(--line)}
+.pl-item summary{display:flex;align-items:center;gap:12px;padding:20px 4px;list-style:none;cursor:pointer}
+.pl-item summary::-webkit-details-marker{display:none}
+.pl-item summary::after{content:"";flex:none;width:9px;height:9px;margin-left:6px;border-right:1.8px solid var(--text-2);border-bottom:1.8px solid var(--text-2);transform:translateY(-3px) rotate(45deg);transition:transform .2s}
+.pl-item[open] summary::after{transform:translateY(2px) rotate(-135deg)}
+.pl-icon{flex:none;width:26px;height:26px;color:var(--text)}
+.pl-name{flex:1;font-size:17px;font-weight:600}
+.pl-from{font-size:14px;color:var(--text-2);white-space:nowrap}
+.pl-body{padding:0 4px 22px 42px}
+.pl-rows{margin:0;padding:0;list-style:none}
+.pl-rows li{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:10px 0;border-top:1px solid var(--line-2);font-size:15px}
+.pl-rows li:first-child{border-top:0}
+.pl-rows small{display:block;font-size:13px;color:var(--text-2)}
+.pl-rows li > span:last-child{white-space:nowrap;font-weight:600}
+.pl-sub{margin:14px 0 2px;font-size:12px;font-weight:600;color:var(--text-3)}
+.pl-more{margin-top:12px;font-size:15px}
+.pl-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 20px;max-width:820px;margin:28px auto 0;font-size:14px;color:var(--text-2);text-align:center}
+@media (max-width:600px){.pl-body{padding-left:4px}}
+.contact{text-align:center}
+.contact-cta{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:34px}
+footer{background:var(--bg-2);font-size:12px;color:var(--text-2)}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;padding:18px 22px 32px;border-top:1px solid var(--line)}
+footer a{color:var(--text-2)}
+
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));z-index:70;width:max-content;max-width:calc(100% - 32px);padding:13px 20px;border-radius:14px;background:rgba(29,29,31,.94);color:#fff;font-size:14px;line-height:1.6;opacity:0;pointer-events:none;transform:translate(-50%,12px);transition:opacity .2s,transform .2s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* アプリ内表示 */
+html.embedded{scroll-padding-top:16px}
+.embedded .nav{display:none}
+.embedded .panel{top:20px}
+.embedded .hero{padding-top:40px}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+<defs>
+<linearGradient id="gStage" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2e2366"/><stop offset="1" stop-color="#110e24"/></linearGradient>
+<linearGradient id="gJacket" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a99bff"/><stop offset="1" stop-color="#ffa6c9"/></linearGradient>
+<linearGradient id="gBackdrop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ece7e1"/><stop offset="1" stop-color="#d6cdc3"/></linearGradient>
+<linearGradient id="gGame" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8fd8ff"/><stop offset="1" stop-color="#b9a6ff"/></linearGradient>
+<linearGradient id="gSpot" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".38"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<filter id="fShadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#000" flood-opacity=".13"/></filter>
+<clipPath id="cJacket"><rect x="72" y="30" width="76" height="76" rx="12"/></clipPath><clipPath id="cIconIl"><circle cx="72" cy="60" r="17.5"/></clipPath><clipPath id="cThumbIl"><rect x="85.5" y="140" width="26" height="26" rx="5"/></clipPath><clipPath id="cStandIl"><rect x="184" y="18" width="88" height="144" rx="11"/></clipPath><clipPath id="cGameAv"><rect x="20" y="18" width="200" height="144" rx="9"/></clipPath>
+</defs>
+<symbol id="chara" viewBox="0 0 100 100">
+<path d="M21 50c0-23 12-38 29-38s29 15 29 38v36H21z" fill="#5a4bd1"/>
+<rect x="44" y="62" width="12" height="14" fill="#f3c9b4"/>
+<path d="M16 100c2-17 15-27 34-27s32 10 34 27z" fill="#2a2a33"/>
+<path d="M42 73l8 11 8-11z" fill="#fff"/>
+<ellipse cx="50" cy="46" rx="20" ry="22" fill="#ffe6d8"/>
+<path d="M29 46c-1-18 8-29 21-29s22 11 21 29c-4-6-9-10-14-11l-4 8-3-8c-8 1-14 5-21 11z" fill="#6f5ff0"/>
+<ellipse cx="42" cy="51" rx="3.3" ry="4.4" fill="#2b2352"/>
+<ellipse cx="58" cy="51" rx="3.3" ry="4.4" fill="#2b2352"/>
+<circle cx="43.1" cy="49.4" r="1.2" fill="#fff"/>
+<circle cx="59.1" cy="49.4" r="1.2" fill="#fff"/>
+<ellipse cx="37.5" cy="57.5" rx="3.2" ry="1.7" fill="#ff9fa8" opacity=".55"/>
+<ellipse cx="62.5" cy="57.5" rx="3.2" ry="1.7" fill="#ff9fa8" opacity=".55"/>
+<path d="M47 59.5q3 2.6 6 0" stroke="#c45f5a" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+</symbol>
+<symbol id="charaFull" viewBox="0 0 60 140">
+<path d="M14 31c0-15 7-25 16-25s16 10 16 25v27H14z" fill="#5a4bd1"/>
+<rect x="27" y="39" width="6" height="7" fill="#f3c9b4"/>
+<ellipse cx="30" cy="28" rx="11.5" ry="12.5" fill="#ffe6d8"/>
+<path d="M18 28c-.6-10 4.6-16.5 12-16.5s12.6 6.5 12 16.5c-2.4-3.6-5.2-5.8-8-6.4l-2.3 4.6-1.7-4.6c-4.6.6-8 2.8-12 6.4z" fill="#6f5ff0"/>
+<ellipse cx="25.4" cy="30.6" rx="1.9" ry="2.5" fill="#2b2352"/>
+<ellipse cx="34.6" cy="30.6" rx="1.9" ry="2.5" fill="#2b2352"/>
+<path d="M28.3 35.6q1.7 1.4 3.4 0" stroke="#c45f5a" stroke-width="1" fill="none" stroke-linecap="round"/>
+<path d="M18 50c0-3 5-5.5 12-5.5s12 2.5 12 5.5l2.5 30h-29z" fill="#2a2a33"/>
+<path d="M26 45l4 8 4-8z" fill="#fff"/>
+<rect x="11.5" y="49" width="6" height="30" rx="3" fill="#2a2a33"/>
+<rect x="42.5" y="49" width="6" height="30" rx="3" fill="#2a2a33"/>
+<circle cx="14.5" cy="81" r="3" fill="#ffe6d8"/>
+<circle cx="45.5" cy="81" r="3" fill="#ffe6d8"/>
+<path d="M15.5 79h29l4 21h-37z" fill="#6f5ff0"/>
+<rect x="21" y="99" width="6" height="30" rx="3" fill="#ffe6d8"/>
+<rect x="33" y="99" width="6" height="30" rx="3" fill="#ffe6d8"/>
+<rect x="18.5" y="126" width="10.5" height="7" rx="3.5" fill="#2a2a33"/>
+<rect x="31" y="126" width="10.5" height="7" rx="3.5" fill="#2a2a33"/>
+</symbol>
+</svg>
+
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top"><b>Xector1</b><span>CreativeResource</span></a>
+    <nav class="nav-links" aria-label="ページ内">
+      <a href="#goals">やりたいこと</a>
+      <a href="#services">つくれるもの</a>
+      <a href="#price">料金表</a>
+      <a href="#estimate">見積もり</a>
+      <a href="#faq">よくある質問</a>
+    </nav>
+    <a class="nav-cta" href="#estimate">見積もる</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <h1><span class="nw">曲も、</span><span class="nw">ビジュアルも、</span><span class="nw">映像も。</span><span class="h1-sub"><span class="nw">まとめて</span><span class="nw">頼めます。</span></span></h1>
+        <p class="hero-sub">Xector1の制作窓口です。オリジナル曲やスタジオでのレコーディング、MIX、イラスト、Vアバター、MV、宣伝写真まで。作りたいものを選んで質問に答えるだけで、その場で見積もりが出ます。</p>
+        <div class="hero-cta">
+          <a class="btn btn-blue" href="#estimate">見積もりをはじめる</a>
+          <a class="link" href="#goals">やりたいことから探す ›</a>
+        </div>
+        <ul class="assure">
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>作ったものはすべて商用利用OK</li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>サービスごとに初心者向けガイド付き</li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>LINEで気軽に相談</li>
+        </ul>
+      </div>
+      <div class="hero-visual">
+      <div class="hv-panel" id="heroViz"></div>
+      <aside class="example" aria-label="見積もり例">
+        <p class="ex-tag">見積もり例</p>
+        <h2 class="ex-title">歌ってみたを投稿したい</h2>
+        <div class="ex-row"><span>MIX（フルコーラス）</span><span class="num">20000円</span></div>
+        <div class="ex-row"><span>動画エンコード</span><span class="num">1000円</span></div>
+        <div class="ex-total"><span>合計（目安）</span><strong class="num">21000円</strong></div>
+        <button class="link" type="button" data-preset="cover">この例で見積もる ›</button>
+      </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="howto" aria-labelledby="howto-title">
+    <div class="wrap">
+      <h2 class="howto-title jp-head" id="howto-title">使い方は3ステップ</h2>
+      <div class="howto-box">
+        <div class="howto-step">
+          <span class="howto-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2" fill="currentColor"/></svg></span>
+          <div><h3><small>ステップ1</small>作りたいものを選ぶ</h3><p>迷ったら、やりたいことから選べます。いくつ選んでも大丈夫です。</p></div>
+        </div>
+        <div class="howto-step">
+          <span class="howto-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5l1.8 1.8L9 5"/><path d="M4 13.5l1.8 1.8L9 12"/><path d="M12.5 7h7.5M12.5 14h7.5M4.5 19.5h15.5"/></svg></span>
+          <div><h3><small>ステップ2</small>質問に答える</h3><p>わからない言葉があれば、その場でガイドを開けます。金額はすぐに反映されます。</p></div>
+        </div>
+        <div class="howto-step">
+          <span class="howto-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 5.5h16a1.5 1.5 0 0 1 1.5 1.5v9a1.5 1.5 0 0 1-1.5 1.5H10l-4.5 3.5V17.5H4A1.5 1.5 0 0 1 2.5 16V7A1.5 1.5 0 0 1 4 5.5z"/></svg></span>
+          <div><h3><small>ステップ3</small>LINEで送る</h3><p>出た見積もりをそのまま送れば、担当から連絡します。あとから追加もできます。</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-2" id="goals" aria-labelledby="goals-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="sec-title jp-head" id="goals-title">やりたいことから選ぶ</h2>
+        <p class="sec-sub jp-head">何を頼めばいいかわからなくても大丈夫です。近いものを選ぶと、必要な内容が入った見積もりがすぐに出ます。</p>
+      </div>
+      <div class="goal-grid" id="goalGrid"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="services" aria-labelledby="svc-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="sec-title jp-head" id="svc-title">つくれるもの</h2>
+        <p class="sec-sub jp-head">ひとつだけでも、組み合わせても頼めます。「くわしく見る」から、何をするのか、いくらかかるのか、あなたとXector1がそれぞれ何をするのかを確認できます。</p>
+      </div>
+      <div class="svc-group">
+        <h3 class="svc-group-title">音と映像をつくる</h3>
+        <p class="svc-group-sub">曲づくりから、仕上げ、MVまで。</p>
+        <div class="svc-grid" id="svcAV"></div>
+      </div>
+      <div class="svc-group">
+        <h3 class="svc-group-title">見た目をつくる</h3>
+        <p class="svc-group-sub">アイコンや立ち絵、動くアバター、写真まで。</p>
+        <div class="svc-grid" id="svcLook"></div>
+      </div>
+      <div class="speed-note">
+        <b>急ぎのときは</b>
+        <span>スピード納品（3〜9日）<span class="num">+10000円</span></span>
+        <span>最短納品（1〜2日）<span class="num">+20000円</span></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-2" id="process" aria-labelledby="proc-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="sec-title jp-head" id="proc-title">1曲ができるまで</h2>
+        <p class="sec-sub jp-head">オリジナル曲は、この順番で完成します。全部まとめてでも、必要な工程だけでも頼めます。</p>
+      </div>
+      <ol class="proc">
+        <li><span class="proc-n num">1</span><h3>作詞</h3><p>歌詞を書きます。</p><span class="proc-tag">楽曲制作</span></li>
+        <li><span class="proc-n num">2</span><h3>トラック制作</h3><p>歌を乗せる伴奏（トラック）を作り、曲の雰囲気を決めます。</p><span class="proc-tag">楽曲制作</span></li>
+        <li><span class="proc-n num">3</span><h3>レコーディング</h3><p>スタジオで歌を録音します。1時間7600円、4時間30000円。</p><span class="proc-tag">スタジオ録音</span></li>
+        <li><span class="proc-n num">4</span><h3>MIX・マスタリング</h3><p>歌と伴奏を整えて、1曲に仕上げます。</p><span class="proc-tag">MIX・マスタリング</span></li>
+        <li><span class="proc-n num">5</span><h3>公開</h3><p>MVや宣伝写真と一緒に、動画や配信で届けます。</p><span class="proc-tag alt">MV・宣伝写真</span></li>
+      </ol>
+      <div class="proc-cta">
+        <button class="btn btn-blue" type="button" data-start="music">楽曲制作を見積もる</button>
+        <button class="link" type="button" data-guide="music">楽曲制作をくわしく見る ›</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="price" aria-labelledby="price-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="sec-title jp-head" id="price-title">料金表</h2>
+        <p class="sec-sub jp-head">何にいくらかかるかを、サービスごとにまとめました。タップすると中身が開きます。</p>
+      </div>
+      <div class="plist" id="plist"></div>
+      <div class="pl-foot"><span>表示は目安です。正式な金額は、内容を確認してからお知らせします。</span><button class="btn btn-gray btn-sm" type="button" data-act="copyprice">料金表をコピー</button></div>
+    </div>
+  </section>
+
+  <section class="sec sec-2 sim" id="estimate" aria-labelledby="sim-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="sec-title jp-head" id="sim-title">見積もりシミュレーター</h2>
+        <p class="sec-sub jp-head">質問に答えるたびに、見積もりにすぐ反映されます。</p>
+      </div>
+      <div class="sim-grid" id="simGrid">
+        <div id="simTop">
+          <div class="sim-top">
+            <button class="link" type="button" id="backBtn">‹ 戻る</button>
+            <span class="step-name" id="stepName"></span>
+          </div>
+          <div class="segs" id="segs" aria-hidden="true"></div>
+          <div id="stepHost" tabindex="-1"></div>
+          <div class="sim-space"></div>
+        </div>
+        <aside class="panel" aria-labelledby="panel-title">
+          <h3 id="panel-title">あなたの見積もり</h3>
+          <div id="panelBody"></div>
+          <p class="fine">目安の金額です。正式な金額は、内容を確認してからお知らせします。</p>
+        </aside>
+      </div>
+    </div>
+    <div class="mbar" id="mbar">
+      <div class="wrap">
+        <div class="mbar-detail" id="mbarDetail" hidden></div>
+        <div class="mbar-in">
+          <button class="mbar-sum" type="button" id="mbarToggle" aria-expanded="false" aria-controls="mbarDetail">
+            <small>合計（目安）<em id="mbarToggleText">内訳を見る</em></small>
+            <strong class="num" id="mbarTotal">0円</strong>
+          </button>
+          <button class="btn btn-blue" type="button" id="mNext">次へ</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="works" aria-labelledby="works-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="sec-title jp-head" id="works-title">実績とサンプル</h2>
+        <p class="sec-sub jp-head">Xector1と一緒に動いているイラストレーターやMIXエンジニアが担当します。</p>
+      </div>
+      <div class="works-block">
+        <h3>MV</h3>
+        <p>撮影から編集まで担当したMVです。</p>
+        <div class="works-grid">
+          <a class="work" href="https://www.youtube.com/watch?v=xXd5G2iCCww" target="_blank" rel="noopener"><span><span class="work-num num">37<small>万回再生</small></span><span class="work-cap">YouTube</span></span><span class="link">動画を見る ›</span></a>
+          <a class="work" href="https://www.youtube.com/watch?v=UeQJYMF5JPg" target="_blank" rel="noopener"><span><span class="work-num num">13<small>万回再生</small></span><span class="work-cap">YouTube</span></span><span class="link">動画を見る ›</span></a>
+          <a class="work" href="https://www.youtube.com/watch?v=hE-6ec0sqLw" target="_blank" rel="noopener"><span><span class="work-num num">10<small>万回再生</small></span><span class="work-cap">YouTube</span></span><span class="link">動画を見る ›</span></a>
+        </div>
+      </div>
+      <div class="works-block">
+        <h3>MIX・マスタリング</h3>
+        <p>同じ歌声の、処理前と処理後を聴き比べてみてください。</p>
+        <div class="works-grid">
+          <a class="work" href="https://www.youtube.com/watch?v=kxyoK5Trb8Y" target="_blank" rel="noopener"><span><span class="work-num word">処理前</span><span class="work-cap">録ったままの音源</span></span><span class="link">聴いてみる ›</span></a>
+          <a class="work" href="https://www.youtube.com/watch?v=u8FDJXRSnz8" target="_blank" rel="noopener"><span><span class="work-num word">処理後</span><span class="work-cap">MIX・マスタリングしたあと</span></span><span class="link">聴いてみる ›</span></a>
+          <a class="work" href="https://www.youtube.com/watch?v=eGvFwCurPm8" target="_blank" rel="noopener"><span><span class="work-num word">サンプル</span><span class="work-cap">別の曲のMIX</span></span><span class="link">聴いてみる ›</span></a>
+        </div>
+      </div>
+      <div class="works-block">
+        <h3>イラスト・Vアバター・写真</h3>
+        <p>クリエイターごとの作品を掲載予定です。</p>
+        <div class="work-soon">作品ページは準備中です。どんなタッチで作れるか知りたい方は、LINEで気軽に聞いてください。</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-2" aria-labelledby="flow-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="sec-title jp-head" id="flow-title">送ったあとの流れ</h2>
+        <p class="sec-sub jp-head">見積もりを送ってから納品まで、この順番で進みます。途中でほかの制作を追加することもできます。</p>
+      </div>
+      <ol class="flow">
+        <li><span class="n">1</span><h3>担当から連絡</h3><p>送ってもらった内容を担当が確認して、LINEで連絡します。</p></li>
+        <li><span class="n">2</span><h3>正式なお見積り</h3><p>細かい内容をすり合わせて、正式な金額をお知らせします。</p></li>
+        <li><span class="n">3</span><h3>制作スタート</h3><p>内容が決まったら、制作チームが作りはじめます。</p></li>
+        <li><span class="n">4</span><h3>確認して納品</h3><p>仕上がりを確認してもらい、データでお渡しします。</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec" id="faq" aria-labelledby="faq-title">
+    <div class="wrap">
+      <div class="sec-head"><h2 class="sec-title jp-head" id="faq-title">よくある質問</h2></div>
+      <div class="faq">
+        <details><summary>自分は何をすればいいですか？</summary><p>サービスごとの「くわしく見る」にある「役割分担」に、あなたがやることとXector1がやることを分けてまとめています。わからないときは、そのままLINEで聞いてください。</p></details>
+        <details><summary>MIX・マスタリングって何ですか？</summary><p>MIXは、録音した歌声と伴奏の音量バランスや音質を整えて、ひとつの作品として聴ける音源にする作業です。マスタリングは最後の仕上げで、曲全体の音の大きさや聴こえ方をそろえます。</p></details>
+        <details><summary>楽曲制作は、途中の工程からでも頼めますか？</summary><p>はい。作詞だけ、トラック制作だけ、録音から、など必要な工程だけ選べます。歌詞やメロディがすでにある場合は、そのデータを送ってください。</p></details>
+        <details><summary>レコーディングは何時間あればいいですか？</summary><p>スタジオは1時間（7600円）と4時間（30000円）から選べます。目安がわからなければ1時間を選んでおけば、相談しながら調整できます。</p></details>
+        <details><summary>Vアバターの2Dと3Dは、どう違いますか？</summary><p>2D（Live2D）はイラストをパーツに分けて動かす方式で、正面からの表情が豊かです。3Dは立体のモデルで、横を向いたり全身で動いたりできます。どちらがいいか迷ったら、相談しながら決められます。</p></details>
+        <details><summary>作ったものは、どこまで使っていいですか？</summary><p>ここで依頼したものは、すべて商用利用できます。グッズにしたり、配信サービスに登録したり、活動のために使うぶんには自由に使ってください。</p></details>
+        <details><summary>シミュレーターの金額で決まりですか？</summary><p>シミュレーターの金額は目安です。「個別見積もり」と表示される項目は、内容を聞いてから金額をお知らせします。</p></details>
+        <details><summary>あとから制作を追加できますか？</summary><p>できます。見積もり結果の「あわせて頼めるもの」から追加するか、依頼後にLINEで伝えてください。</p></details>
+        <details><summary>急ぎでお願いできますか？</summary><p>スピード納品（3〜9日）は+10000円、最短納品（1〜2日）は+20000円で対応しています。シミュレーターの「納期」の質問で選べます。</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-2 contact" id="contact" aria-labelledby="contact-title">
+    <div class="wrap">
+      <div class="sec-head" style="margin-bottom:0">
+        <h2 class="sec-title jp-head" id="contact-title">質問・相談はこちら</h2>
+        <p class="sec-sub jp-head">何を頼めばいいか決まっていなくても大丈夫です。見積もりについての質問も、LINEで受け付けています。</p>
+      </div>
+      <div class="contact-cta">
+        <a class="btn btn-blue" href="#" data-line-add>LINEで相談する</a>
+        <a class="btn btn-gray" href="#" data-form target="_blank" rel="noopener">フォームから依頼する</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© Xector1合同会社</span>
+    <a href="https://sites.google.com/view/xector1creativeresource/tokusho" target="_blank" rel="noopener">特定商取引法に基づく表記</a>
+  </div>
+</footer>
+
+<dialog class="guide" id="guide" aria-labelledby="gTitle"></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  /* ===== 設定：LINEの情報が決まったらここを埋める ===== */
+  var CONFIG = {
+    FORM_URL: 'https://forms.gle/wFoujvkfWBbSNfLM8',
+    LINE_ID: '',       /* 例 '@xector1'：入れると見積もり文面が入った状態でLINEが開く */
+    LINE_ADD_URL: ''   /* 友だち追加・相談用のURL */
+  };
+  var TBD = null; /* 料金未定＝個別見積もり。決まったら数字を入れる */
+
+  /* ===== アイコン・ビジュアル ===== */
+  var ICON = {
+    music: '<svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20.5V6.5l11-2.5v13.5"/><circle cx="8" cy="20.5" r="3"/><circle cx="19" cy="17.5" r="3"/></svg>',
+    mix: '<svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M7 4v20M14 4v20M21 4v20"/><rect x="4.5" y="15" width="5" height="3.5" rx="1.75" fill="#fff"/><rect x="11.5" y="8" width="5" height="3.5" rx="1.75" fill="#fff"/><rect x="18.5" y="12.5" width="5" height="3.5" rx="1.75" fill="#fff"/></svg>',
+    mv: '<svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="3.5" y="7" width="15" height="14" rx="3"/><path d="M18.5 12.5l6-3.5v10l-6-3.5z"/></svg>',
+    illust: '<svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 23l4.8-1.2L22.3 9.3a2.5 2.5 0 0 0-3.6-3.6L6.2 18.2z"/><path d="M16.9 7.5l3.6 3.6"/></svg>',
+    avatar: '<svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="14" cy="11" r="6"/><path d="M5.5 24c1.2-4.6 4.4-7 8.5-7s7.3 2.4 8.5 7"/><path d="M3.5 9.5v3M24.5 9.5v3"/></svg>',
+    photo: '<svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 9.5A2.5 2.5 0 0 1 6.5 7h2.8l1.7-2.5h6l1.7 2.5h2.8A2.5 2.5 0 0 1 24 9.5v11a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 4 20.5z"/><circle cx="14" cy="14.5" r="4.5"/></svg>'
+  };
+  var T = 'class="viz-t"';
+  var VIZN = {};
+  VIZN.music = '<svg viewBox="0 0 320 180" role="img" aria-label="配信されたオリジナル曲のイメージ">' +
+   '<g filter="url(#fShadow)"><rect x="56" y="14" width="208" height="154" rx="18" fill="#fff"/></g>' +
+   '<rect x="72" y="30" width="76" height="76" rx="12" fill="url(#gJacket)"/>' +
+   '<circle cx="134" cy="44" r="18" fill="#fff" opacity=".22"/><circle cx="84" cy="96" r="10" fill="#fff" opacity=".18"/>' +
+   '<g clip-path="url(#cJacket)"><use href="#chara" x="78" y="42" width="64" height="64"/></g>' +
+   '<text x="160" y="46" ' + T + ' font-size="12" font-weight="700" fill="#1d1d1f">はじまりの歌</text>' +
+   '<text x="160" y="62" ' + T + ' font-size="9" fill="#86868b">あなたの名前</text>' +
+   '<rect x="160" y="74" width="46" height="17" rx="8.5" fill="#eaf2ff"/><text x="183" y="85.6" ' + T + ' font-size="8.5" font-weight="700" fill="#0071e3" text-anchor="middle">配信中</text>' +
+   '<rect x="72" y="122" width="176" height="4" rx="2" fill="#e5e5ea"/><rect x="72" y="122" width="74" height="4" rx="2" fill="#1d1d1f"/><circle cx="146" cy="124" r="5" fill="#1d1d1f"/>' +
+   '<g fill="#1d1d1f"><path d="M128 146l-9 5.5 9 5.5z"/><rect x="116" y="146" width="2.4" height="11" rx="1"/><circle cx="160" cy="151.5" r="12"/><path d="M192 146l9 5.5-9 5.5z"/><rect x="201.6" y="146" width="2.4" height="11" rx="1"/></g>' +
+   '<path d="M156.5 145.5v12l9.5-6z" fill="#fff"/></svg>';
+  VIZN.mv = '<svg viewBox="0 0 320 180" role="img" aria-label="ステージで歌う姿を撮影したMVのイメージ">' +
+   '<rect x="10" y="6" width="300" height="168" rx="14" fill="url(#gStage)"/>' +
+   '<path d="M160 6L104 146h112z" fill="url(#gSpot)"/>' +
+   '<g opacity=".55"><circle cx="54" cy="46" r="7" fill="#b9a6ff"/><circle cx="270" cy="38" r="9" fill="#ffa6c9"/><circle cx="246" cy="92" r="5" fill="#8fd8ff"/><circle cx="74" cy="108" r="5" fill="#ffa6c9"/><circle cx="286" cy="120" r="4" fill="#b9a6ff"/></g>' +
+   '<ellipse cx="160" cy="142" rx="64" ry="7" fill="#fff" opacity=".08"/>' +
+   '<path d="M152 56c0-10 3.6-16 8-16s8 6 8 16" fill="#0a0913"/>' +
+   '<circle cx="160" cy="62" r="13" fill="#0a0913"/><path d="M136 142c0-32 9-56 24-56s24 24 24 56z" fill="#0a0913"/>' +
+   '<path d="M176 92c6 4 9 10 6 18" stroke="#0a0913" stroke-width="7" fill="none" stroke-linecap="round"/><circle cx="173" cy="72" r="4.5" fill="#3a3a44"/><path d="M175 75l7 18" stroke="#0a0913" stroke-width="4" stroke-linecap="round"/>' +
+   '<rect x="26" y="152" width="268" height="3" rx="1.5" fill="#fff" opacity=".22"/><rect x="26" y="152" width="112" height="3" rx="1.5" fill="#ff6fa5"/><circle cx="138" cy="153.5" r="5" fill="#fff"/>' +
+   '<text x="26" y="168" ' + T + ' font-size="8" fill="#fff" opacity=".7">1:24</text><text x="294" y="168" ' + T + ' font-size="8" fill="#fff" opacity=".7" text-anchor="end">3:58</text></svg>';
+  VIZN.illust = '<svg viewBox="0 0 320 180" role="img" aria-label="SNSのアイコンと立ち絵に使われたイラストのイメージ">' +
+   '<g filter="url(#fShadow)"><rect x="40" y="8" width="118" height="172" rx="20" fill="#fff"/></g>' +
+   '<rect x="48" y="16" width="102" height="42" rx="12" fill="url(#gJacket)"/>' +
+   '<circle cx="72" cy="60" r="20" fill="#fff"/>' +
+   '<g clip-path="url(#cIconIl)"><rect x="54" y="42" width="36" height="36" fill="#efeaff"/><use href="#chara" x="53" y="44" width="38" height="38"/></g>' +
+   '<text x="56" y="96" ' + T + ' font-size="10" font-weight="700" fill="#1d1d1f">あなたの名前</text>' +
+   '<text x="56" y="108" ' + T + ' font-size="8" fill="#86868b">@your_name</text>' +
+   '<rect x="56" y="118" width="84" height="4.5" rx="2.25" fill="#e5e5ea"/><rect x="56" y="127" width="62" height="4.5" rx="2.25" fill="#e5e5ea"/>' +
+   '<g><rect x="56" y="140" width="26" height="26" rx="5" fill="#efeaff"/><rect x="85.5" y="140" width="26" height="26" rx="5" fill="#ffe8f1"/><rect x="115" y="140" width="26" height="26" rx="5" fill="#e6f5ff"/></g>' +
+   '<g clip-path="url(#cThumbIl)"><use href="#chara" x="85" y="142" width="27" height="27"/></g>' +
+   '<g filter="url(#fShadow)"><rect x="176" y="10" width="104" height="160" rx="16" fill="#fff"/></g>' +
+   '<rect x="184" y="18" width="88" height="144" rx="11" fill="#f3f0ff"/>' +
+   '<circle cx="250" cy="44" r="16" fill="#fff" opacity=".7"/>' +
+   '<g clip-path="url(#cStandIl)"><use href="#charaFull" x="198" y="22" width="60" height="140"/></g></svg>';
+  VIZN.avatar = '<svg viewBox="0 0 320 180" role="img" aria-label="Vアバターで配信している画面のイメージ">' +
+   '<g filter="url(#fShadow)"><rect x="10" y="8" width="300" height="164" rx="14" fill="#1c1c1e"/></g>' +
+   '<rect x="20" y="18" width="200" height="144" rx="9" fill="url(#gGame)"/>' +
+   '<path d="M20 120l40-26 34 18 44-34 52 30 30-12v57a9 9 0 0 1-9 9H29a9 9 0 0 1-9-9z" fill="#fff" opacity=".35"/>' +
+   '<circle cx="186" cy="48" r="12" fill="#fff" opacity=".55"/>' +
+   '<rect x="28" y="26" width="34" height="15" rx="4" fill="#ff3b30"/><text x="45" y="36.8" ' + T + ' font-size="8.5" font-weight="700" fill="#fff" text-anchor="middle">LIVE</text>' +
+   '<text x="68" y="37" ' + T + ' font-size="8" fill="#fff" font-weight="600">1203人が視聴中</text>' +
+   '<g clip-path="url(#cGameAv)"><use href="#chara" x="24" y="76" width="88" height="88"/></g>' +
+   '<rect x="228" y="18" width="72" height="144" rx="9" fill="#2c2c2e"/>' +
+   '<g><circle cx="238" cy="34" r="4" fill="#ffa6c9"/><rect x="246" y="30" width="46" height="8" rx="4" fill="#3a3a3c"/>' +
+   '<circle cx="238" cy="54" r="4" fill="#8fd8ff"/><rect x="246" y="50" width="38" height="8" rx="4" fill="#3a3a3c"/>' +
+   '<circle cx="238" cy="74" r="4" fill="#b9a6ff"/><rect x="246" y="70" width="46" height="18" rx="6" fill="#3a3a3c"/>' +
+   '<circle cx="238" cy="102" r="4" fill="#ffd60a"/><rect x="246" y="98" width="30" height="8" rx="4" fill="#3a3a3c"/>' +
+   '<circle cx="238" cy="122" r="4" fill="#ffa6c9"/><rect x="246" y="118" width="42" height="8" rx="4" fill="#ff6fa5" opacity=".8"/></g>' +
+   '<rect x="234" y="142" width="60" height="12" rx="6" fill="#3a3a3c"/></svg>';
+  VIZN.photo = '<svg viewBox="0 0 320 180" role="img" aria-label="スタジオで宣伝写真を撮影しているイメージ">' +
+   '<rect x="10" y="6" width="300" height="168" rx="14" fill="url(#gBackdrop)"/>' +
+   '<path d="M10 128q150-16 300 0v32a14 14 0 0 1-14 14H24a14 14 0 0 1-14-14z" fill="#c9bfb4" opacity=".55"/>' +
+   '<rect x="34" y="34" width="36" height="48" rx="5" fill="#fff" opacity=".95"/><path d="M52 82v70" stroke="#8e8e93" stroke-width="2"/><path d="M40 152h24" stroke="#8e8e93" stroke-width="2" stroke-linecap="round"/>' +
+   '<path d="M70 40l70 26v40l-70-18z" fill="#fff" opacity=".18"/>' +
+   '<path d="M159 54c0-15 7-22 17-22s17 7 17 22v30c-4 3-8 3-11 1v-26h-12v26c-3 2-7 2-11-1z" fill="#3b3430"/>' +
+   '<ellipse cx="176" cy="54" rx="13" ry="15" fill="#e9cbb6"/>' +
+   '<path d="M163 52c0-12 5.5-18 13-18s13 6 13 18c-4-5-8-7-13-7s-9 2-13 7z" fill="#3b3430"/>' +
+   '<path d="M140 174c1-40 16-68 36-68s35 28 36 68z" fill="#4a4f5c"/><path d="M168 106l8 14 8-14z" fill="#f2f2f2"/>' +
+   '<rect x="154" y="32" width="44" height="44" fill="none" stroke="#ffd60a" stroke-width="1.8"/>' +
+   '<g stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round"><path d="M26 34V20h14"/><path d="M294 34V20h-14"/><path d="M26 146v14h14"/><path d="M294 146v14h-14"/></g>' +
+   '<text x="160" y="24" ' + T + ' font-size="8" fill="#fff" font-weight="600" text-anchor="middle">ISO 200　1/125　F2.8</text></svg>';
+  var VIZ = { music: VIZN.music, mix: '', mv: VIZN.mv, illust: VIZN.illust, avatar: VIZN.avatar, photo: VIZN.photo };
+  (function(){
+    var n = 46, before = '', after = '';
+    for (var i = 0; i < n; i++){
+      var x = 10 + i * (300 / (n - 1));
+      var hb = Math.min(46, 3 + Math.abs(Math.sin(i * 2.3) * Math.cos(i * 0.7)) * 40 + (i % 9 === 4 ? 10 : 0));
+      var env = Math.sin(Math.PI * (i + 1) / (n + 1));
+      var ha = 10 + env * 18 + Math.abs(Math.sin(i * 1.9)) * 6;
+      before += '<rect x="' + (x - 1.5).toFixed(1) + '" y="' + (50 - hb / 2).toFixed(1) + '" width="3" height="' + hb.toFixed(1) + '" rx="1.5"/>';
+      after += '<rect x="' + (x - 1.5).toFixed(1) + '" y="' + (128 - ha / 2).toFixed(1) + '" width="3" height="' + ha.toFixed(1) + '" rx="1.5"/>';
+    }
+    VIZ.mix = '<svg viewBox="0 0 320 160" role="img" aria-label="MIX前後の波形のイメージ"><text x="10" y="14" class="viz-label">録音したまま</text><g fill="#c7c7cc">' + before + '</g><text x="10" y="92" class="viz-label">MIXしたあと</text><g fill="#0071e3">' + after + '</g></svg>';
+  })();
+
+  /* ===== メニューと料金 ===== */
+  var SERVICES = [
+    { id: 'music', you: '曲のイメージを伝えて、歌う',  group: 'av',   kind: '楽曲制作',          title: 'オリジナル曲を作る',   desc: '作詞とトラック制作から、スタジオでの歌の録音まで。必要な工程だけ選んで頼めます。', from: 2000,
+      pick: 'オリジナル曲を作りたい', pickSub: '作詞・トラック制作・レコーディング' },
+    { id: 'mix', you: '歌を録って、データを送る',    group: 'av',   kind: 'MIX・マスタリング', title: '録った歌を仕上げる',   desc: '録音した歌声と伴奏を整えて、投稿や配信にそのまま使える音源にします。', from: 8000,
+      pick: '録った歌を仕上げたい', pickSub: 'MIX・マスタリング' },
+    { id: 'mv', you: '曲を用意して、撮影で歌う',     group: 'av',   kind: 'MV撮影・映像編集',  title: 'MVを撮る',             desc: '大阪府内での撮影から、MVとしての編集まで。撮影だけでも頼めます。', from: 30000,
+      pick: 'MVを撮りたい', pickSub: '撮影・映像編集（大阪府内）' },
+    { id: 'illust', you: '見た目の希望を伝えて、下書きを確認する', group: 'look', kind: 'イラスト',          title: 'イラストを描く',       desc: 'アイコン、立ち絵、デフォルメ、告知用のキービジュアルまで。グッズにも使えます。', from: 4500,
+      pick: 'イラストがほしい', pickSub: 'アイコン・立ち絵・キービジュアル' },
+    { id: 'avatar', you: 'キャラクターのイメージを伝える', group: 'look', kind: 'Vアバター',         title: 'Vアバターを作る',      desc: 'VTuberとして配信で動くキャラクターを作ります。2D（Live2D）と3Dから選べます。', from: TBD,
+      pick: 'Vアバターがほしい', pickSub: 'VTuberとして動くキャラクター' },
+    { id: 'photo', you: '衣装を用意して、撮影に参加する',  group: 'look', kind: '宣伝写真',          title: '宣伝写真を撮る',       desc: 'プロフィールやSNS、告知、オーディションの応募に使う写真を撮影します。ロケでもスタジオでも撮れます。', from: 15000,
+      pick: '宣伝写真を撮りたい', pickSub: 'アーティスト写真・宣材写真' }
+  ];
+  var SVC = {}; SERVICES.forEach(function(s){ SVC[s.id] = s; });
+  var CAT_ORDER = ['music', 'mix', 'mv', 'illust', 'avatar', 'photo'];
+
+  var MUSIC = [
+    { id: 'lyrics', label: '作詞', hint: '歌詞を書きます', price: 2000 },
+    { id: 'track',  label: 'トラック制作', hint: '歌を乗せる伴奏（トラック）を作り、曲の雰囲気を決めます', price: 10000 }
+  ];
+  var REC = {
+    none: { label: '録音しなくていい', hint: '自分で録った歌のデータがある、または今回は録音しない', lines: [] },
+    h1:   { label: 'スタジオで1時間録音する', hint: 'スタジオ5100円＋エンジニア2500円', lines: [['スタジオ（1時間）', 5100], ['エンジニア（1時間）', 2500]] },
+    h4:   { label: 'スタジオで4時間録音する', hint: 'スタジオ20000円＋エンジニア10000円', lines: [['スタジオ（4時間）', 20000], ['エンジニア（4時間）', 10000]] }
+  };
+  var MIX = {
+    len: {
+      full: { label: 'フルコーラス', hint: '1曲まるごと仕上げます', price: 20000 },
+      one:  { label: 'ワンコーラス', hint: 'ショート動画用や、まず試したいときに', price: 8000 }
+    },
+    opts: [
+      { id: 'pitch',   label: 'ピッチ・リズム補正', hint: '音程やリズムのズレを整えます', price: 5000 },
+      { id: 'harmony', label: 'ハモリ生成', hint: 'ハモリを録っていなくても、ハモリパートを作ります', price: 5000 },
+      { id: 'collab',  label: 'コラボ', hint: '2人以上で歌うときに', price: 5000 },
+      { id: 'encode',  label: '動画エンコード', hint: 'YouTubeなどにそのまま投稿できる動画ファイルに書き出します', price: 1000 }
+    ]
+  };
+  var ILLUST = [
+    { id: 'icon',   label: 'SNSアイコン（バストアップ）', hint: '胸から上。配信やSNSのアイコンに', price: 9000 },
+    { id: 'stand',  label: '立ち絵（全身）', hint: '頭から足まで。プロフィールや配信画面に', price: 18000 },
+    { id: 'deform', label: 'デフォルメイラスト', hint: '頭身を小さくしたかわいい絵柄。スタンプやグッズに', price: 4500 },
+    { id: 'kv',     label: '企画キービジュアル', hint: '新曲や企画の告知に使うメインの1枚', price: 25000 }
+  ];
+  var AVATAR = {
+    type: {
+      '2d':      { label: '2D（Live2D）', hint: 'イラストをパーツに分けて動かします。正面からの表情が豊かです', price: TBD },
+      '3d':      { label: '3D', hint: '立体のモデルです。横を向いたり、全身で動いたりできます', price: TBD },
+      undecided: { label: 'まだ決めていない', hint: '相談しながら決められます', price: TBD }
+    },
+    art: {
+      'new':  { label: '新しく描いてほしい', hint: 'キャラクターのデザインから作ります' },
+      have:   { label: 'すでにイラストがある', hint: 'そのイラストをもとに、動くように作ります' }
+    }
+  };
+  var PHOTO = {
+    use: [
+      { id: 'sns', label: 'SNS・プロフィール' },
+      { id: 'promo', label: '告知・ジャケット' },
+      { id: 'audition', label: 'オーディション・出演の応募' }
+    ],
+    base: { label: '基本撮影（1時間・大阪府内）', hint: 'カメラマンによる撮影と、撮影データのお渡し', price: 15000 },
+    extend: 5000,
+    retouch: 2000,
+    place: {
+      self:      { label: 'ロケで撮る', hint: '屋外や、自分で用意した場所。スタジオ代はかかりません' },
+      studio:    { label: 'スタジオで撮る', hint: '背景や光を整えた環境で撮れます' },
+      undecided: { label: 'まだ決めていない', hint: '使い道を聞いてから提案します' }
+    },
+    hours: {
+      h1: { label: '1時間', hint: '1着で、表情やポーズを変えながら撮影', studio: 5000 },
+      h4: { label: '4時間', hint: '衣装や場所を変えて、じっくり撮影', studio: 20000 }
+    }
+  };
+  var MV = {
+    base: { label: 'MV撮影（大阪府内）', price: 30000 },
+    opts: [
+      { id: 'edit', label: '撮影MVの映像編集', hint: '撮影した素材を、MVとして1本に仕上げます', price: 50000 },
+      { id: 'cut',  label: 'カット別撮影', hint: 'シーンを分けて撮影したいときに', price: 20000 },
+      { id: 'data', label: '撮影データのお渡し', hint: '撮った素材を受け取って、自分でも使いたいときに', price: 2000 }
+    ],
+    place: {
+      self:    { label: '屋外や、自分で用意した場所', hint: '追加料金はかかりません' },
+      studio:  { label: 'スタジオを借りて撮りたい', hint: 'スタジオ代が別途かかります' },
+      outside: { label: '大阪府外で撮りたい', hint: '場所を聞いてからご相談します' }
+    }
+  };
+  var SPEED = {
+    normal: { label: '通常の納期でOK', hint: '急ぎでなければこちら', price: 0, line: '通常納期' },
+    speed:  { label: '急ぎたい', hint: '3〜9日で納品します', price: 10000, line: 'スピード納品（3〜9日）' },
+    rush:   { label: 'とにかく早くほしい', hint: '1〜2日で納品します', price: 20000, line: '最短納品（1〜2日）' }
+  };
+  var CAT_NAMES = { music: '楽曲制作', mix: 'MIX・マスタリング', mv: 'MV撮影・映像', illust: 'イラスト', avatar: 'Vアバター', photo: '宣伝写真' };
+  var STEP_LABEL = { cats: '作るもの', music: '楽曲制作の工程', rec: 'レコーディング', 'mix-length': 'MIXの長さ', 'mix-options': 'MIXのオプション', 'mv-options': 'MVの内容', 'mv-place': '撮影場所', illust: 'イラストの種類', avatar: 'Vアバターの内容', photo: '宣伝写真の内容', speed: '納期', result: '見積もり' };
+  var FIRST_STEP = { music: 'music', mix: 'rec', mv: 'mv-options', illust: 'illust', avatar: 'avatar', photo: 'photo' };
+  var STEP_CAT = { music: 'music', 'mix-length': 'mix', 'mix-options': 'mix', 'mv-options': 'mv', 'mv-place': 'mv', illust: 'illust', avatar: 'avatar', photo: 'photo' };
+
+  var PRESETS = [
+    { id: 'cover', svcs: ['mix'], name: '歌ってみたを投稿したい', desc: '録ったカバー曲をMIXで仕上げて、そのまま投稿できる動画ファイルにします。', chips: ['MIX・マスタリング', '動画エンコード'],
+      apply: function(s){ s.cats.add('mix'); s.mix.opts.add('encode'); } },
+    { id: 'original', svcs: ['music', 'mix', 'illust'], name: 'オリジナル曲を出したい', desc: '作詞とトラック制作、スタジオ録音から仕上げ、告知用のビジュアルまでまとめて頼めます。', chips: ['作詞', 'トラック制作', 'スタジオ録音1時間', 'MIX・マスタリング', 'キービジュアル'],
+      apply: function(s){ s.cats.add('music'); s.cats.add('mix'); s.cats.add('illust'); s.music.add('lyrics'); s.music.add('track'); s.rec = 'h1'; s.illust.kv = 1; } },
+    { id: 'songmv', svcs: ['mix', 'mv'], name: '歌とMVをまとめて仕上げたい', desc: 'スタジオで録った歌をMIXで仕上げて、MVの撮影と編集まで通して頼めます。', chips: ['スタジオ録音1時間', 'MIX・マスタリング', 'ピッチ補正', 'ハモリ生成', 'MV撮影・編集'],
+      apply: function(s){ s.cats.add('mix'); s.cats.add('mv'); s.rec = 'h1'; s.mix.opts.add('pitch'); s.mix.opts.add('harmony'); s.mv.opts.add('edit'); } },
+    { id: 'vtuber', svcs: ['avatar', 'illust'], name: 'VTuberとしてデビューしたい', desc: '配信で動くVアバターと、SNS用のアイコンをまとめて用意します。', chips: ['Vアバター', 'SNSアイコン'],
+      apply: function(s){ s.cats.add('avatar'); s.cats.add('illust'); s.illust.icon = 1; } },
+    { id: 'visual', svcs: ['illust'], name: '配信用のビジュアルをそろえたい', desc: 'アイコンと立ち絵で、プロフィールや配信画面の見た目を整えます。', chips: ['SNSアイコン', '立ち絵'],
+      apply: function(s){ s.cats.add('illust'); s.illust.icon = 1; s.illust.stand = 1; } },
+    { id: 'photo', svcs: ['photo'], name: 'プロフィール写真を整えたい', desc: 'SNSのプロフィールや告知に使える宣伝写真を、スタジオで撮影します。', chips: ['宣伝写真', 'スタジオ1時間'],
+      apply: function(s){ s.cats.add('photo'); s.photo.use.add('sns'); s.photo.place = 'studio'; } }
+  ];
+
+  /* ===== 初心者向けガイド ===== */
+  var GUIDES = {
+    music: {
+      what: 'あなただけのオリジナル曲を作ります。歌詞を書く「作詞」と、歌を乗せる伴奏を作る「トラック制作」を、必要なほうだけ選んで頼めます。スタジオでの歌の録音や、MIX・マスタリングまで続けて頼めば、そのまま配信できる1曲に仕上がります。',
+      when: ['自分だけの曲で活動したい', '歌詞やメロディのアイデアを、ちゃんとした曲にしたい', 'カバーだけでなく、オリジナル曲も配信したい'],
+      get: '作詞なら歌詞、トラック制作なら伴奏の音源、レコーディングなら録音した歌のデータをお渡しします。完成した1曲にするには、MIX・マスタリングもあわせて頼むのがおすすめです。',
+      lead: '本来は、作詞・作曲の知識や作曲ソフト、録音スタジオの手配まで自分でそろえる必要があります。頼めば、<b>あなたは曲のイメージを伝えて歌うだけ</b>です。',
+      self: ['作詞やメロディづくりの知識を身につける', '作曲ソフト（DAW）や音源ソフトをそろえて、使い方を覚える', '伴奏の打ち込みやアレンジの技術を身につける', '録音スタジオとエンジニアを自分で探して予約する', '1曲を完成させるまでの長い作業時間'],
+      merit: ['曲のイメージを伝えるだけで、オリジナル曲が形になる', '作詞から録音、MIXまで同じ窓口で完結する', '自分は歌うことに集中できる', 'オリジナル曲があると、配信やライブで活動の幅が広がる'],
+      you: ['作りたい曲の雰囲気や、参考にしたい曲を伝える', '歌詞のテーマやメロディのアイデアがあれば共有する', '途中の歌詞やトラックを確認する', 'スタジオで歌う（レコーディングを頼む場合）'],
+      we: ['作詞', 'トラック制作', 'レコーディングのスタジオとエンジニアの手配', 'MIX・マスタリングへの引き継ぎ（頼む場合）'],
+      flow: [['イメージを伝える', '作りたい曲の雰囲気や参考曲を伝えます。', 'you'], ['作詞・トラック制作', '選んだ工程をこちらで制作します。', 'x1'], ['内容を確認', '歌詞やトラックを聴いて確認してもらいます。', 'you'], ['レコーディング', 'スタジオで歌います。スタジオとエンジニアはこちらで手配します。', 'both'], ['MIX・マスタリング', '歌と伴奏を整えて1曲に仕上げます（頼む場合）。', 'x1']]
+    },
+    mix: {
+      what: '録音した歌声と伴奏を、聴きやすい1曲に整える作業です。歌声の音量や響き、伴奏とのバランスを調整して、動画や配信サービスで流しても違和感のない音に仕上げます。',
+      when: ['歌ってみたを投稿したい', '自分で録った歌を、ちゃんとした音で出したい', 'オリジナル曲を配信したい'],
+      get: '仕上がった音源のデータをお渡しします。動画エンコードを付ければ、そのまま投稿できる動画ファイルにもできます。',
+      lead: '本来は、MIX用のソフトや機材をそろえて、音づくりの技術を身につける必要があります。頼めば、<b>あなたは歌を録って送るだけ</b>です。',
+      self: ['MIX用のソフト（DAW）やプラグインをそろえる', '細かい音の違いがわかるヘッドホンやスピーカーを用意する', '音量バランスや響き、ピッチ補正のやり方を覚える', '仕上がりが良いかどうかを、自分で判断する'],
+      merit: ['歌を録って送るだけで、聴きやすい音源に仕上がる', 'ピッチ補正やハモリづくりまで任せられる', '投稿用の動画ファイルへの書き出しまで頼める', '機材やソフトをそろえる費用と時間がかからない'],
+      you: ['歌を録音する（スタジオ録音を頼むこともできます）', '歌声だけの音声データと、伴奏の音源を送る', '参考にしたい曲があれば伝える', '仕上がりを聴いて確認する'],
+      we: ['MIX（音量・響き・バランスの調整）', 'マスタリング（最後の仕上げ）', 'ピッチ補正・ハモリ生成・動画エンコード（頼む場合）', '仕上がった音源データのお渡し'],
+      flow: [['録音する', '歌声だけの音声と伴奏を用意します。スタジオ録音を頼めば、スタジオとエンジニアはこちらで手配します。', 'you'], ['データを送る', '録音データと伴奏の音源を送ります。', 'you'], ['MIX', '歌声の音量や響きを整え、伴奏とのバランスをとります。', 'x1'], ['マスタリング', '曲全体の音の大きさや聴こえ方をそろえます。', 'x1'], ['確認して納品', '仕上がりを聴いてもらい、音源データでお渡しします。', 'both']]
+    },
+    mv: {
+      what: '曲に合わせた映像を撮影して、ミュージックビデオ（MV）に仕上げます。撮影だけ頼んで編集は自分でする、撮影から編集まで通して頼む、どちらも選べます。',
+      when: ['新曲を映像付きでYouTubeに公開したい', '歌っている姿を映像で見せたい', '活動の代表作になる映像がほしい'],
+      get: '編集まで頼んだ場合は、完成したMVをお渡しします。撮影した素材データだけを受け取ることもできます（オプション）。',
+      lead: '本来は、機材や撮影場所、撮影する人を用意して、何時間もかけて編集する必要があります。頼めば、<b>あなたは曲を用意して撮影で歌うだけ</b>です。',
+      self: ['カメラや照明、三脚などの機材をそろえる', '撮影場所を探して、予約や許可をとる', '撮影してくれる人を探す', '編集ソフトを覚えて、何時間もかけて編集する'],
+      merit: ['撮影も編集も任せて、歌とパフォーマンスに集中できる', '大阪府内なら撮影場所も一緒に決められる', '活動の代表作になる映像が手に入る'],
+      you: ['曲の音源を用意する', 'どんな雰囲気にしたいかを伝える', '衣装を用意して、撮影で歌う・演じる'],
+      we: ['撮影（大阪府内）', '映像編集（頼む場合）', 'スタジオの手配（スタジオ代は別途）', '完成したMVや撮影データのお渡し'],
+      flow: [['曲とイメージを共有', '曲の音源と、どんな雰囲気にしたいかを共有します。', 'you'], ['場所と日程を決める', '大阪府内の撮影場所と日程を一緒に決めます。', 'both'], ['撮影', 'あなたは出演、撮影はこちらで行います。', 'both'], ['編集', '撮影した素材をMVに仕上げます（頼む場合）。', 'x1'], ['確認して納品', '仕上がりを確認してもらい、データでお渡しします。', 'both']]
+    },
+    illust: {
+      what: '活動の顔になるイラストを描きます。SNSや配信のアイコン、全身の立ち絵、グッズ向けのデフォルメ、告知用のキービジュアルなど、使い道に合わせて描き分けます。',
+      when: ['アイコンを自分らしくしたい', '配信画面やプロフィールに立ち絵を置きたい', '新曲や企画を告知したい', 'グッズを作りたい'],
+      get: 'イラストの画像データをお渡しします。グッズや告知にもそのまま使えます。',
+      lead: '本来は、イラストレーターを探して、見積もりや連絡、商用利用していいかの確認まで自分で進める必要があります。頼めば、<b>あなたは見た目の希望を伝えて、下書きを確認するだけ</b>です。',
+      self: ['自分で描く場合は、絵の技術と作業時間が必要', 'イラストレーターを自分で探して依頼する', '見積もりや連絡、修正のやりとりを自分で進める', 'グッズや配信に使っていいか、権利を自分で確認する'],
+      merit: ['窓口がひとつなので、やりとりがスムーズ', '商用利用OKなので、グッズや配信にそのまま使える', '使い道に合わせて描き分けてもらえる'],
+      you: ['髪型や服装、雰囲気などの希望を伝える', '参考画像があれば送る', '下書きを確認する'],
+      we: ['イラストレーターとのやりとり', '下書き・清書・色塗り', '画像データのお渡し'],
+      flow: [['イメージを伝える', '見た目の希望や使う場所を伝えます。', 'you'], ['下書き', 'ポーズや構図を下書きにします。', 'x1'], ['下書きを確認', '気になるところがあれば、ここで伝えます。', 'you'], ['清書・色塗り', '線を整えて色を塗り、仕上げます。', 'x1'], ['納品', '画像データでお渡しします。', 'x1']]
+    },
+    avatar: {
+      what: 'VTuberとして配信するときに、あなたの代わりに動くキャラクター（アバター）を作ります。カメラで読み取った顔の動きに合わせて、まばたきや口、顔の向きが連動するので、顔を出さずに配信や動画投稿ができます。',
+      compare: [['2D（Live2D）', 'イラストを目・口・髪などのパーツに分けて動かす方式です。正面からの表情が豊かで、VTuberでよく使われています。'], ['3D', '立体のキャラクターモデルです。横や後ろを向いたり、全身で動いたりできます。']],
+      when: ['VTuberとして配信をはじめたい', '顔を出さずに活動したい', '今あるイラストのキャラクターを動かしたい'],
+      get: '配信ソフトで動かせるアバターのデータをお渡しします。',
+      lead: '本来は、動かすためのイラストとモデリングの専門技術が必要で、デザインとモデリングの担当を別々に探すことも多いです。頼めば、<b>あなたはキャラクターのイメージを伝えるだけ</b>です。',
+      self: ['動かすことを前提に、キャラクターをパーツに分けて描く', 'Live2Dや3Dのモデリングソフトを覚える', 'まばたきや口の動きなどを細かく調整する', 'デザインとモデリングの担当を別々に探して依頼する'],
+      merit: ['デザインから動く状態まで、まとめて任せられる', '配信ソフトですぐに使える形で受け取れる', '顔を出さずに活動をはじめられる'],
+      you: ['キャラクターの見た目や性格のイメージを伝える', 'すでにイラストがあれば、そのデータを送る', 'デザインや動きを確認する'],
+      we: ['キャラクターデザイン・イラスト（パーツ分け）', 'モデリング（動くように組み立てる）', '動きの調整', 'アバターのデータのお渡し'],
+      flow: [['イメージを伝える', '見た目や性格、雰囲気を伝えます。', 'you'], ['デザイン・イラスト', '動かすことを前提に、パーツを分けて描きます。', 'x1'], ['デザインを確認', '見た目を確認してもらいます。', 'you'], ['モデリング', 'パーツを組み立てて、動くように設定します。', 'x1'], ['動きを確認して納品', '表情や動きを確認してもらい、調整してお渡しします。', 'both']]
+    },
+    photo: {
+      what: 'プロフィールやSNS、告知、オーディションの応募などに使う写真を撮影します。「アー写（アーティスト写真）」や「宣材写真」とも呼ばれ、活動の第一印象を決める1枚になります。',
+      when: ['SNSやプロフィールの写真を整えたい', 'オーディションや出演の申し込みに写真が必要', 'ライブや新曲の告知に使いたい'],
+      get: '撮影した写真のデータをお渡しします。特に使いたい写真は、レタッチ（肌や背景を整える仕上げ）も1枚から頼めます。',
+      lead: '本来は、カメラマンやスタジオを探して、撮った写真を自分で選んで加工する必要があります。頼めば、<b>あなたは衣装を用意して撮影に参加するだけ</b>です。',
+      self: ['撮影してくれるカメラマンを探す', 'スタジオや照明を用意する', '撮影した中から写真を選んで、加工する', '自撮りだと、画質や光で印象が弱くなりやすい'],
+      merit: ['プロの撮影で、活動の第一印象が上がる', 'スタジオの手配から撮影まで任せられる', '使いたい写真はレタッチで仕上げてもらえる'],
+      you: ['使い道と、どんな雰囲気にしたいかを決める', '衣装を用意して、撮影に参加する', '撮影した写真から使うものを選ぶ'],
+      we: ['カメラマンによる撮影', 'スタジオの手配（スタジオで撮る場合）', '撮影データのお渡し', 'レタッチ（頼む場合）'],
+      flow: [['使い道と雰囲気を決める', 'どこで使う写真か、どんな雰囲気にしたいかを一緒に決めます。', 'both'], ['場所と時間を決める', 'ロケかスタジオか、1時間か4時間かを決めます。スタジオはこちらで手配します。', 'both'], ['撮影', '衣装や表情、ポーズを変えながら撮影します。', 'both'], ['写真を選ぶ', '撮影した写真から、使いたいものを選びます。', 'you'], ['レタッチ・納品', '選んだ写真を仕上げて、データでお渡しします。', 'x1']],
+      examples: [['ロケで1時間', [['基本撮影', 15000]]], ['スタジオで1時間', [['基本撮影', 15000], ['スタジオ（1時間）', 5000]]], ['スタジオで4時間', [['基本撮影', 15000], ['撮影延長（3時間）', 15000], ['スタジオ（4時間）', 20000]]]]
+    }
+  };
+
+  /* ===== 状態 ===== */
+  /* アプリにログイン中なら、登録名を「お名前」に自動で入れる */
+  var DEFAULT_NAME = '';
+  try { DEFAULT_NAME = (localStorage.getItem('xector1_name') || '').trim(); } catch (e) {}
+  function freshState(){
+    return {
+      cats: new Set(),
+      music: new Set(),
+      rec: 'none',
+      mix: { len: 'full', songs: 1, opts: new Set() },
+      mv: { opts: new Set(), place: 'self' },
+      illust: { icon: 0, stand: 0, deform: 0, kv: 0 },
+      avatar: { type: '2d', art: 'new' },
+      photo: { use: new Set(), place: 'studio', hours: 'h1', retouch: 0 },
+      speed: 'normal',
+      name: DEFAULT_NAME, memo: ''
+    };
+  }
+  var state = freshState();
+  var steps = [], idx = 0, detailOpen = false;
+
+  function $(s, r){ return (r || document).querySelector(s); }
+  function $$(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+  function yen(n){ return String(n) + '円'; }
+  function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]; }); }
+  function priceText(p){ return p === null ? '個別見積もり' : p ? yen(p) : '追加なし'; }
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var host = $('#stepHost');
+
+  /* ===== 計算 ===== */
+  function calc(st){
+    st = st || state;
+    var groups = [], notes = [], total = 0, tbdCats = [];
+    function add(g, label, price){
+      var grp = null;
+      for (var i = 0; i < groups.length; i++) if (groups[i].name === g) grp = groups[i];
+      if (!grp){ grp = { name: g, items: [] }; groups.push(grp); }
+      grp.items.push({ label: label, price: price });
+      if (price === null){ if (tbdCats.indexOf(g) < 0) tbdCats.push(g); }
+      else total += price;
+    }
+    if (st.cats.has('music')){
+      MUSIC.forEach(function(m){ if (st.music.has(m.id)) add(CAT_NAMES.music, m.label, m.price); });
+    }
+    if ((st.cats.has('music') || st.cats.has('mix')) && st.rec !== 'none'){
+      REC[st.rec].lines.forEach(function(l){ add('レコーディング', l[0], l[1]); });
+    }
+    if (st.cats.has('mix')){
+      var n = st.mix.songs, L = MIX.len[st.mix.len], suf = n > 1 ? ' × ' + n + '曲' : '';
+      add(CAT_NAMES.mix, L.label + suf, L.price * n);
+      MIX.opts.forEach(function(o){ if (st.mix.opts.has(o.id)) add(CAT_NAMES.mix, o.label + suf, o.price * n); });
+    }
+    if (st.cats.has('mv')){
+      add(CAT_NAMES.mv, MV.base.label, MV.base.price);
+      MV.opts.forEach(function(o){ if (st.mv.opts.has(o.id)) add(CAT_NAMES.mv, o.label, o.price); });
+      if (st.mv.place === 'studio') notes.push('MV撮影のスタジオ代は別途かかります');
+      if (st.mv.place === 'outside') notes.push('大阪府外でのMV撮影は、場所を聞いてからご相談します');
+    }
+    if (st.cats.has('illust')){
+      ILLUST.forEach(function(it){
+        var q = st.illust[it.id];
+        if (q > 0) add(CAT_NAMES.illust, it.label + (q > 1 ? ' × ' + q : ''), it.price * q);
+      });
+    }
+    if (st.cats.has('avatar')){
+      var T = AVATAR.type[st.avatar.type];
+      add(CAT_NAMES.avatar, (st.avatar.type === 'undecided' ? '2D・3Dは相談して決める' : T.label) + '／' + (st.avatar.art === 'new' ? 'イラストから' : 'イラストあり'), T.price);
+    }
+    if (st.cats.has('photo')){
+      var H = PHOTO.hours[st.photo.hours];
+      add(CAT_NAMES.photo, PHOTO.base.label, PHOTO.base.price);
+      if (st.photo.hours === 'h4') add(CAT_NAMES.photo, '撮影延長（3時間）', PHOTO.extend * 3);
+      if (st.photo.place === 'studio') add(CAT_NAMES.photo, 'スタジオ（' + H.label + '）', H.studio);
+      if (st.photo.retouch > 0) add(CAT_NAMES.photo, 'レタッチ' + (st.photo.retouch > 1 ? ' × ' + st.photo.retouch : ''), PHOTO.retouch * st.photo.retouch);
+      if (st.photo.place === 'undecided') notes.push('宣伝写真をスタジオで撮る場合は、スタジオ代（1時間5000円・4時間20000円）が加わります');
+    }
+    if (st.cats.size){
+      var sp = SPEED[st.speed];
+      add('納期', sp.line, sp.price);
+    }
+    if (tbdCats.length) notes.unshift(tbdCats.join('、') + 'は、内容を聞いてから個別にお見積りします');
+    return { groups: groups, notes: notes, total: total, tbd: tbdCats.length > 0, empty: !groups.length };
+  }
+  function totalText(r){
+    if (r.empty) return '0円';
+    if (r.tbd && r.total === 0) return '個別見積もり';
+    return yen(r.total) + (r.tbd ? '〜' : '');
+  }
+
+  /* ===== ステップ ===== */
+  function buildSteps(){
+    var s = ['cats'];
+    if (state.cats.has('music')) s.push('music');
+    if (state.cats.has('music') || state.cats.has('mix')) s.push('rec');
+    if (state.cats.has('mix')) s.push('mix-length', 'mix-options');
+    if (state.cats.has('mv')) s.push('mv-options', 'mv-place');
+    if (state.cats.has('illust')) s.push('illust');
+    if (state.cats.has('avatar')) s.push('avatar');
+    if (state.cats.has('photo')) s.push('photo');
+    s.push('speed', 'result');
+    return s;
+  }
+
+  var BOOK = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 3.5c2-.8 3.8-.6 5.5.6v9c-1.7-1.2-3.5-1.4-5.5-.6z"/><path d="M13.5 3.5c-2-.8-3.8-.6-5.5.6v9c1.7-1.2 3.5-1.4 5.5-.6z"/></svg>';
+  function head(title, tag, note, guide){
+    return '<h3 class="q-title jp-head">' + title + '</h3><div class="q-meta"><span class="tag">' + tag + '</span>' + (note ? '<span class="q-note">' + note + '</span>' : '') + '</div>' +
+      (guide ? '<button class="guide-link" type="button" data-guide="' + guide + '">' + BOOK + CAT_NAMES[guide] + 'をくわしく見る</button>' : '<div style="height:8px"></div>');
+  }
+  function priceHTML(p, plus){
+    if (p === null) return '<span class="opt-price tbd">個別見積もり</span>';
+    if (p === undefined || p === '') return '';
+    return '<span class="opt-price num">' + (plus ? '+' : '') + yen(p) + '</span>';
+  }
+  function opt(type, name, value, label, hint, price, checked, icon, extra){
+    return '<label class="opt' + (checked ? ' is-on' : '') + '"><input type="' + type + '" name="' + name + '" value="' + value + '"' + (checked ? ' checked' : '') + '>' +
+      '<span class="ctrl' + (type === 'checkbox' ? ' box' : '') + '" aria-hidden="true"></span>' +
+      (icon ? '<span class="opt-icon" aria-hidden="true">' + icon + '</span>' : '') +
+      '<span class="opt-body"><span class="opt-name">' + label + '</span>' + (hint ? '<span class="opt-hint">' + hint + '</span>' : '') + (extra || '') + '</span>' +
+      (price || '') + '</label>';
+  }
+  function stepper(key, val, label, min, max){
+    return '<div class="stepper" data-key="' + key + '" data-min="' + min + '" data-max="' + max + '">' +
+      '<button type="button" data-delta="-1" aria-label="' + label + 'を1つ減らす"' + (val <= min ? ' disabled' : '') + '>−</button>' +
+      '<output class="num">' + val + '</output>' +
+      '<button type="button" data-delta="1" aria-label="' + label + 'を1つ増やす"' + (val >= max ? ' disabled' : '') + '>+</button></div>';
+  }
+  function nextLabel(){
+    var nx = steps[idx + 1];
+    return nx === 'result' ? '見積もりを見る' : '次へ：' + STEP_LABEL[nx];
+  }
+  function actions(){ return '<div class="q-actions"><button class="btn btn-blue" type="button" data-act="next">' + nextLabel() + '</button></div>'; }
+  function fromText(p){ return p === null ? '個別見積もり' : yen(p) + 'から'; }
+
+  function stepHTML(id){
+    var h = '';
+    switch (id){
+      case 'cats':
+        h += head('何を作りたいですか？', '複数選択OK', '選んだものに合わせて、次の質問が変わります。');
+        [['av', '音と映像'], ['look', '見た目']].forEach(function(g){
+          h += '<p class="opt-group">' + g[1] + '</p><div class="opts">';
+          SERVICES.filter(function(s){ return s.group === g[0]; }).forEach(function(s){
+            h += opt('checkbox', 'cat', s.id, s.pick, s.pickSub, '', state.cats.has(s.id), ICON[s.id], '<span class="opt-from num">' + fromText(s.from) + '</span>');
+          });
+          h += '</div>';
+        });
+        h += '<p class="err" id="stepErr" hidden></p>' + actions();
+        h += '<details class="presets"><summary>迷ったら、やりたいことから選ぶ</summary><p>押すと、その内容ですぐに見積もりが出ます。あとから変更もできます。</p><div class="preset-grid">';
+        PRESETS.forEach(function(p){
+          var st = freshState(); p.apply(st);
+          h += '<button class="preset" type="button" data-preset="' + p.id + '"><span class="preset-name">' + p.name + '</span><span class="preset-items">' + p.chips.join('＋') + '</span><span class="preset-price">合計 <b class="num">' + totalText(calc(st)) + '</b></span></button>';
+        });
+        h += '</div></details>';
+        break;
+      case 'music':
+        h += head('楽曲制作のどこをお願いしますか？', '複数選択OK', '自分でできている工程は、外したままで大丈夫です。歌の録音は次の質問で選べます。', 'music') + '<div class="opts">';
+        MUSIC.forEach(function(m){ h += opt('checkbox', 'music', m.id, m.label, m.hint, priceHTML(m.price), state.music.has(m.id)); });
+        h += '</div>';
+        h += state.cats.has('mix')
+          ? '<div class="note-box"><span><b>MIX・マスタリングも追加済みです。</b>歌と伴奏を整えて、1曲に仕上げます。</span></div>'
+          : '<div class="note-box"><span><b>曲を完成させるには、MIX・マスタリングも必要です。</b>歌と伴奏を整えて1曲に仕上げる工程です。</span><button class="btn btn-gray btn-sm" type="button" data-act="addmix">MIX・マスタリングも追加する</button></div>';
+        h += '<p class="err" id="stepErr" hidden></p>' + actions();
+        break;
+      case 'rec':
+        h += head('歌の録音はどうしますか？', '1つ選ぶ', '時間の目安がわからなければ、1時間を選んでおけば相談しながら調整できます。');
+        h += '<div class="opts">';
+        Object.keys(REC).forEach(function(k){
+          var v = REC[k], sum = v.lines.reduce(function(a, l){ return a + l[1]; }, 0);
+          h += opt('radio', 'rec', k, v.label, v.hint, sum ? priceHTML(sum) : '', state.rec === k);
+        });
+        h += '</div><div class="note-box"><span><b>スタジオ録音とは？</b>録音専用のスタジオで、エンジニアが機材の操作や音のチェックを担当します。自宅で録るより雑音が少なく、MIXで仕上げやすい音で録れます。</span></div>' + actions();
+        break;
+      case 'mix-length':
+        h += head('MIXする長さを選んでください', '1つ選ぶ', '', 'mix') + '<div class="opts">';
+        Object.keys(MIX.len).forEach(function(k){ var v = MIX.len[k]; h += opt('radio', 'mixlen', k, v.label, v.hint, priceHTML(v.price), state.mix.len === k); });
+        h += '</div><div class="item count"><span class="opt-body"><span class="opt-name">曲数</span><span class="unit">同じ内容で何曲お願いしますか？</span></span>' + stepper('mix.songs', state.mix.songs, '曲数', 1, 10) + '</div>';
+        h += actions();
+        break;
+      case 'mix-options':
+        h += head('追加でお願いしたいことはありますか？', '複数選択OK', 'なければ、何も選ばずに次へ進めます。' + (state.mix.songs > 1 ? '曲数ぶんの料金で計算します。' : ''), 'mix') + '<div class="opts">';
+        MIX.opts.forEach(function(o){ h += opt('checkbox', 'mixopt', o.id, o.label, o.hint, priceHTML(o.price, true), state.mix.opts.has(o.id)); });
+        h += '</div>' + actions();
+        break;
+      case 'mv-options':
+        h += head('撮影のほかに、必要なものはありますか？', '複数選択OK', 'なければ、何も選ばずに次へ進めます。', 'mv');
+        h += '<div class="included"><span>' + MV.base.label + 'は基本料金に入っています</span><b class="num">' + yen(MV.base.price) + '</b></div><div class="opts">';
+        MV.opts.forEach(function(o){ h += opt('checkbox', 'mvopt', o.id, o.label, o.hint, priceHTML(o.price, true), state.mv.opts.has(o.id)); });
+        h += '</div>' + actions();
+        break;
+      case 'mv-place':
+        h += head('MVはどこで撮影しますか？', '1つ選ぶ', '場所によって、別途費用がかかる場合があります。', 'mv') + '<div class="opts">';
+        Object.keys(MV.place).forEach(function(k){ var v = MV.place[k]; h += opt('radio', 'mvplace', k, v.label, v.hint, '', state.mv.place === k); });
+        h += '</div>' + actions();
+        break;
+      case 'illust':
+        h += head('必要なイラストと数を選んでください', '数を選ぶ', '＋を押すと追加されます。', 'illust') + '<div class="opts">';
+        ILLUST.forEach(function(it){
+          var q = state.illust[it.id];
+          h += '<div class="item' + (q > 0 ? ' is-on' : '') + '"><span class="opt-body"><span class="opt-name">' + it.label + '</span><span class="unit">' + it.hint + '</span><span class="unit num">1点 ' + yen(it.price) + '</span></span>' + stepper('illust.' + it.id, q, it.label, 0, 10) + '</div>';
+        });
+        h += '</div><p class="err" id="stepErr" hidden></p>' + actions();
+        break;
+      case 'avatar':
+        h += head('Vアバターについて教えてください', '1つずつ選ぶ', '迷ったら「まだ決めていない」で大丈夫です。料金は内容を聞いてから個別にお見積りします。', 'avatar');
+        h += '<fieldset class="subq"><legend>どんなアバターにしますか？</legend><div class="opts">';
+        Object.keys(AVATAR.type).forEach(function(k){ var v = AVATAR.type[k]; h += opt('radio', 'avtype', k, v.label, v.hint, '', state.avatar.type === k); });
+        h += '</div></fieldset><fieldset class="subq"><legend>キャラクターのイラストはありますか？</legend><div class="opts">';
+        Object.keys(AVATAR.art).forEach(function(k){ var v = AVATAR.art[k]; h += opt('radio', 'avart', k, v.label, v.hint, '', state.avatar.art === k); });
+        h += '</div></fieldset>' + actions();
+        break;
+      case 'photo':
+        h += head('宣伝写真について教えてください', '選ぶ', '使い道がわかると、雰囲気やポーズを提案しやすくなります。', 'photo');
+        h += '<fieldset class="subq"><legend>どこで使う予定ですか？（複数選択OK）</legend><div class="opts">';
+        PHOTO.use.forEach(function(u){ h += opt('checkbox', 'phuse', u.id, u.label, '', '', state.photo.use.has(u.id)); });
+        h += '</div></fieldset><fieldset class="subq"><legend>どこで撮影しますか？</legend><div class="opts">';
+        Object.keys(PHOTO.place).forEach(function(k){ var v = PHOTO.place[k]; h += opt('radio', 'phplace', k, v.label, v.hint, k === 'studio' ? '<span class="opt-price num">+スタジオ代</span>' : '', state.photo.place === k); });
+        h += '</div></fieldset><fieldset class="subq"><legend>撮影時間はどのくらいにしますか？</legend><div class="opts">';
+        Object.keys(PHOTO.hours).forEach(function(k){ var v = PHOTO.hours[k]; h += opt('radio', 'phhours', k, v.label, v.hint + (state.photo.place === 'studio' ? '。スタジオ' + yen(v.studio) : ''), k === 'h4' ? priceHTML(PHOTO.extend * 3, true) : '<span class="opt-price">基本料金</span>', state.photo.hours === k); });
+        h += '</div></fieldset><fieldset class="subq"><legend>レタッチ（写真の仕上げ）は何枚にしますか？</legend>';
+        h += '<div class="item' + (state.photo.retouch > 0 ? ' is-on' : '') + '"><span class="opt-body"><span class="opt-name">レタッチ</span><span class="unit">肌や背景などを整えて、特に使いたい写真を仕上げます</span><span class="unit num">1枚 ' + yen(PHOTO.retouch) + '</span></span>' + stepper('photo.retouch', state.photo.retouch, 'レタッチの枚数', 0, 20) + '</div></fieldset>' + actions();
+        break;
+      case 'speed':
+        var sched = ['music', 'mv', 'avatar', 'photo'].filter(function(c){ return state.cats.has(c); }).map(function(c){ return CAT_NAMES[c]; });
+        h += head('いつまでに必要ですか？', '1つ選ぶ', sched.length ? sched.join('、') + 'の日程は、内容を聞いてから相談して決めます。' : '') + '<div class="opts">';
+        Object.keys(SPEED).forEach(function(k){ var v = SPEED[k]; h += opt('radio', 'speed', k, v.label, v.hint, v.price ? priceHTML(v.price, true) : '', state.speed === k); });
+        h += '</div>' + actions();
+        break;
+      case 'result':
+        h += resultHTML();
+        break;
+    }
+    return h;
+  }
+
+  function listHTML(r){
+    if (r.empty) return '<p class="sum-empty">まだ何も選ばれていません。作りたいものを選ぶと、ここに内訳が出ます。</p>';
+    var g = '';
+    r.groups.forEach(function(grp){
+      g += '<div class="sum-group"><h4>' + grp.name + '</h4>';
+      grp.items.forEach(function(it){ g += '<div class="sum-row"><span>' + it.label + '</span><span class="num' + (it.price === null ? ' tbd' : '') + '">' + priceText(it.price) + '</span></div>'; });
+      g += '</div>';
+    });
+    return g;
+  }
+  function notesHTML(r){ return r.notes.length ? '<ul class="sum-notes">' + r.notes.map(function(n){ return '<li>※' + n + '</li>'; }).join('') + '</ul>' : ''; }
+  function totalHTML(r){
+    var t = totalText(r);
+    return '<div class="sum-total"><span>合計（目安）</span><strong class="num' + (t === '個別見積もり' ? ' small' : '') + '">' + t + '</strong></div>' + notesHTML(r);
+  }
+  function today(){
+    var d = new Date();
+    return d.getFullYear() + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0');
+  }
+
+  function upsellList(){
+    var out = [], has = function(c){ return state.cats.has(c); };
+    function push(id, why){ if (!has(id) && !out.some(function(o){ return o[0] === id; })) out.push([id, why]); }
+    if (has('music')) push('mix', '作った曲を1曲に仕上げるには、MIX・マスタリングが必要です。');
+    if (has('music') || has('mix')) push('mv', '曲に映像を付けて、YouTubeなどで公開できます。');
+    if (has('music') || has('mix')) push('illust', '新曲の告知に使うキービジュアルも描けます。');
+    if (has('illust')) push('avatar', '描いたキャラクターを、配信で動くアバターにできます。');
+    if (has('mv')) push('photo', 'MVと同じ雰囲気で、告知用の写真もそろえられます。');
+    if (has('avatar')) push('illust', 'SNS用のアイコンや立ち絵もあわせて用意できます。');
+    push('music', 'カバーだけでなく、オリジナル曲も作れます。');
+    push('photo', 'プロフィールや告知に使う写真を撮影します。');
+    push('mix', '録った歌を、聴きやすい音源に仕上げます。');
+    push('illust', 'アイコンや立ち絵で、活動の見た目を整えます。');
+    return out.slice(0, 3);
+  }
+
+  function resultHTML(){
+    var r = calc(), ups = upsellList(), u = '';
+    ups.forEach(function(x){
+      var s = SVC[x[0]];
+      u += '<div class="up"><span class="opt-icon" aria-hidden="true">' + ICON[s.id] + '</span><span class="opt-body"><b>' + s.title + '</b><span>' + x[1] + '</span><span class="up-from num">' + fromText(s.from) + '</span></span><button class="btn btn-gray btn-sm" type="button" data-start="' + s.id + '">追加する</button></div>';
+    });
+    return '<h3 class="q-title jp-head">見積もりができました</h3>' +
+      '<div class="q-meta"><span class="q-note">内容と金額を確認して、よければLINEで送ってください。</span></div>' +
+      '<div class="receipt"><span class="date num">' + today() + ' 作成</span>' + listHTML(r) + totalHTML(r) + '</div>' +
+      '<p class="fine">この金額は目安です。送ってもらったら、担当が内容を確認して正式な金額をお知らせします。</p>' +
+      (ups.length ? '<div class="upsell"><h4>あわせて頼めるもの</h4><p>「追加する」を押すと、その質問に答えたあと、この見積もりに戻ってきます。</p><div class="up-list">' + u + '</div></div>' : '') +
+      '<div class="send">' +
+        '<h4>この内容で相談する</h4>' +
+        '<p>名前とやりたいことを添えてもらえると、そのあとのやりとりがスムーズです。</p>' +
+        '<label class="field"><span>お名前（活動名でもOK）</span><input type="text" id="fName" autocomplete="nickname" value="' + esc(state.name) + '"></label>' +
+        '<label class="field"><span>やりたいことや、参考にしたい作品（任意）</span><textarea id="fMemo" rows="4" placeholder="例：秋にオリジナル曲を出したい。雰囲気はこの曲に近い感じ、など">' + esc(state.memo) + '</textarea></label>' +
+        '<div class="actions">' +
+          '<button class="btn btn-blue" type="button" data-act="line">LINEでこの内容を送る</button>' +
+          '<a class="btn btn-gray" href="' + CONFIG.FORM_URL + '" target="_blank" rel="noopener" data-act="form">フォームから依頼する</a>' +
+        '</div>' +
+        '<details class="preview"><summary>送る内容を確認する</summary><pre id="preview"></pre></details>' +
+      '</div>' +
+      '<div class="result-nav"><button class="link" type="button" data-act="edit">内容を変える</button><button class="link" type="button" data-act="copy">内容をコピー</button><button class="link" type="button" data-act="restart">最初からやり直す</button></div>';
+  }
+
+  function buildText(){
+    var r = calc(), L = ['【Xector1 CreativeResource 見積もりシミュレーション】'];
+    if (state.name.trim()) L.push('お名前：' + state.name.trim());
+    r.groups.forEach(function(grp){
+      L.push('', '■' + grp.name);
+      grp.items.forEach(function(it){ L.push('・' + it.label + '　' + priceText(it.price)); });
+    });
+    if (state.cats.has('photo') && state.photo.use.size) L.push('', '■宣伝写真の使い道', PHOTO.use.filter(function(u){ return state.photo.use.has(u.id); }).map(function(u){ return u.label; }).join('、'));
+    L.push('', '合計（目安）：' + totalText(r));
+    r.notes.forEach(function(n){ L.push('※' + n); });
+    if (state.memo.trim()) L.push('', '■やりたいこと・参考', state.memo.trim());
+    return L.join('\n');
+  }
+
+  /* ===== 描画 ===== */
+  function updateSummary(){
+    var r = calc();
+    $('#panelBody').innerHTML = listHTML(r) + (r.empty ? '<div class="sum-total"><span>合計（目安）</span><strong class="num">0円</strong></div>' : totalHTML(r));
+    $('#mbarTotal').textContent = totalText(r);
+    $('#mbarDetail').innerHTML = listHTML(r) + notesHTML(r);
+  }
+  function updateChrome(){
+    var id = steps[idx], isResult = id === 'result', qCount = steps.length - 1;
+    $('#stepName').innerHTML = isResult ? '<b>見積もり</b>' : '<span class="num">' + (idx + 1) + ' / ' + qCount + '</span>　<b>' + STEP_LABEL[id] + '</b>';
+    var segs = '';
+    for (var i = 0; i < steps.length; i++) segs += '<i class="' + (i < idx ? 'done' : i === idx ? 'cur' : '') + '"></i>';
+    $('#segs').innerHTML = segs;
+    $('#backBtn').style.visibility = idx === 0 ? 'hidden' : 'visible';
+    $('#simGrid').classList.toggle('is-result', isResult);
+    $('#mbar').hidden = isResult;
+    $('#mNext').textContent = steps[idx + 1] === 'result' ? '見積もりを見る' : '次へ';
+    var qa = $('.q-actions .btn', host); if (qa) qa.textContent = nextLabel();
+  }
+  function render(){
+    host.innerHTML = stepHTML(steps[idx]);
+    updateChrome();
+    updateSummary();
+    if (steps[idx] === 'result') updatePreview();
+  }
+  function updatePreview(){ var p = $('#preview'); if (p) p.textContent = buildText(); }
+  function scrollToSim(force){
+    var top = $('#simTop'), y = top.getBoundingClientRect().top;
+    if (force || y < 70 || y > window.innerHeight * .6) top.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+    host.focus({ preventScroll: true });
+  }
+  function showErr(msg){ var e = $('#stepErr'); if (e){ e.textContent = msg; e.hidden = false; } }
+  function validate(){
+    var id = steps[idx];
+    if (id === 'cats' && !state.cats.size){ showErr('作りたいものを1つ以上選んでください。'); return false; }
+    if (id === 'music' && !state.music.size){ showErr('作詞かトラック制作を1つ以上選んでください。'); return false; }
+    if (id === 'illust'){
+      var sum = 0;
+      Object.keys(state.illust).forEach(function(k){ sum += state.illust[k]; });
+      if (!sum){ showErr('イラストを1つ以上追加してください。不要な場合は、最初の質問で「イラストがほしい」を外してください。'); return false; }
+    }
+    return true;
+  }
+  function goNext(){
+    if (!validate()) return;
+    if (idx < steps.length - 1){ idx++; closeDetail(); render(); scrollToSim(); }
+  }
+  function syncOn(){ $$('.opt', host).forEach(function(l){ var i = $('input', l); l.classList.toggle('is-on', !!(i && i.checked)); }); }
+  function closeDetail(){ detailOpen = false; $('#mbarDetail').hidden = true; $('#mbarToggle').setAttribute('aria-expanded', 'false'); $('#mbarToggleText').textContent = '内訳を見る'; }
+
+  function applyPreset(pid){
+    var p = PRESETS.filter(function(x){ return x.id === pid; })[0];
+    if (!p) return;
+    var keep = { name: state.name, memo: state.memo };
+    state = freshState(); state.name = keep.name; state.memo = keep.memo;
+    p.apply(state);
+    steps = buildSteps(); idx = steps.length - 1;
+    closeGuide(); render(); scrollToSim(true);
+  }
+  function startWith(cat){
+    state.cats.add(cat);
+    steps = buildSteps();
+    idx = steps.indexOf(FIRST_STEP[cat]);
+    closeGuide(); render(); scrollToSim(true);
+  }
+
+  /* ===== ガイド ===== */
+  var dlg = $('#guide');
+  function guidePrices(id){
+    var rows = [], tbdNote = false;
+    function row(label, hint, p, plus){ rows.push('<li><span>' + label + (hint ? '<small>' + hint + '</small>' : '') + '</span><span class="num">' + (p === null ? '個別見積もり' : (plus ? '+' : '') + yen(p)) + '</span></li>'); if (p === null) tbdNote = true; }
+    function recRows(){ rows.push('<li class="sub">レコーディング（スタジオ）</li>'); ['h1', 'h4'].forEach(function(k){ var v = REC[k]; row(k === 'h1' ? '1時間' : '4時間', v.hint, v.lines[0][1] + v.lines[1][1]); }); }
+    if (id === 'music'){ MUSIC.forEach(function(m){ row(m.label, m.hint, m.price); }); recRows(); }
+    if (id === 'mix'){ Object.keys(MIX.len).forEach(function(k){ row(MIX.len[k].label, MIX.len[k].hint, MIX.len[k].price); }); rows.push('<li class="sub">オプション</li>'); MIX.opts.forEach(function(o){ row(o.label, o.hint, o.price, true); }); recRows(); }
+    if (id === 'mv'){ row(MV.base.label, '', MV.base.price); rows.push('<li class="sub">オプション</li>'); MV.opts.forEach(function(o){ row(o.label, o.hint, o.price, true); }); rows.push('<li><span>スタジオレンタル</span><span>スタジオ代</span></li>'); }
+    if (id === 'illust') ILLUST.forEach(function(it){ row(it.label, it.hint, it.price); });
+    if (id === 'avatar'){ row('2D（Live2D）', '', AVATAR.type['2d'].price); row('3D', '', AVATAR.type['3d'].price); }
+    if (id === 'photo'){
+      row(PHOTO.base.label, PHOTO.base.hint, PHOTO.base.price);
+      rows.push('<li class="sub">オプション</li>');
+      row('撮影延長', '1時間ごと', PHOTO.extend, true);
+      row('スタジオ（1時間）', '', PHOTO.hours.h1.studio, true);
+      row('スタジオ（4時間）', '', PHOTO.hours.h4.studio, true);
+      row('レタッチ', '1枚ごと。肌や背景を整えて仕上げます', PHOTO.retouch, true);
+      rows.push('<li class="sub">料金の例</li>' + GUIDES.photo.examples.map(function(e, i){
+        var t = e[1].reduce(function(a, l){ return a + l[1]; }, 0);
+        return '<li><span>' + ['①', '②', '③'][i] + ' ' + e[0] + '<small>' + e[1].map(function(l){ return l[0] + ' ' + yen(l[1]); }).join('＋') + '</small></span><span class="num">' + yen(t) + '</span></li>';
+      }).join(''));
+    }
+    return '<ul class="g-price">' + rows.join('') + '</ul>' + (tbdNote ? '<p class="g-price-note">内容によって金額が変わるため、見積もりを送ってもらったあとに個別にお知らせします。</p>' : '<p class="g-price-note">表示は目安です。正式な金額は、内容を確認してからお知らせします。</p>');
+  }
+  var GTABS = ['概要', '頼むメリット', '役割分担', '料金'];
+  var ACTOR = { you: 'あなた', x1: 'Xector1', both: 'いっしょに' };
+  var gState = { id: null, tab: 0 };
+  function list(cls, arr){ return '<ul class="' + cls + '">' + arr.map(function(x){ return '<li>' + x + '</li>'; }).join('') + '</ul>'; }
+  function guidePanels(id){
+    var g = GUIDES[id], p = [];
+    var a = '<div class="g-viz">' + VIZ[id] + '</div>';
+    a += '<section class="g-sec"><h3>これは何？</h3><p>' + g.what + '</p></section>';
+    if (g.compare) a += '<section class="g-sec"><h3>2Dと3Dの違い</h3><div class="g-compare">' + g.compare.map(function(c){ return '<div><b>' + c[0] + '</b><span>' + c[1] + '</span></div>'; }).join('') + '</div></section>';
+    a += '<section class="g-sec"><h3>こんなときにおすすめ</h3>' + list('g-check', g.when) + '</section>';
+    a += '<section class="g-sec"><h3>できあがるもの</h3><p>' + g.get + '</p></section>';
+    p.push(a);
+    var b = '<p class="g-lead">' + g.lead + '</p>';
+    b += '<section class="g-sec"><div class="g-vs"><div class="g-box"><h4>自分でやるなら、これが必要</h4>' + list('g-dot', g.self) + '</div><div class="g-box good"><h4>Xector1に頼むと</h4>' + list('g-check', g.merit) + '</div></div></section>';
+    p.push(b);
+    var c = '<section class="g-sec"><div class="g-vs"><div class="g-box you"><h4>あなたがやること</h4>' + list('g-dot', g.you) + '</div><div class="g-box good"><h4>Xector1がやること</h4>' + list('g-check', g.we) + '</div></div></section>';
+    c += '<section class="g-sec"><h3>進め方</h3><ol class="g-flow">' + g.flow.map(function(f, i){ return '<li><span class="n num">' + (i + 1) + '</span><b>' + f[0] + '<span class="actor ' + f[2] + '">' + ACTOR[f[2]] + '</span></b><span>' + f[1] + '</span></li>'; }).join('') + '</ol></section>';
+    p.push(c);
+    p.push('<section class="g-sec"><h3>' + SVC[id].kind + 'の料金</h3>' + guidePrices(id) + '</section>');
+    return p;
+  }
+  function guideShell(id){
+    var s2 = SVC[id], panels = guidePanels(id);
+    return '<div class="g-head"><div><p>' + s2.kind + '</p><h2 id="gTitle">' + s2.title + '</h2></div><button class="g-close" type="button" data-act="gclose" aria-label="閉じる"><svg viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg></button></div>' +
+      '<div class="g-tabwrap"><div class="g-tabs" role="tablist">' + GTABS.map(function(t, i){ return '<button class="g-tab" type="button" role="tab" data-gtab="' + i + '" aria-selected="false">' + t + '</button>'; }).join('') + '</div></div>' +
+      '<div class="g-body">' + panels.map(function(pn, i){ return '<div class="g-panel" role="tabpanel" data-panel="' + i + '" hidden>' + pn + '</div>'; }).join('') + '</div>' +
+      '<div class="g-foot" id="gFoot"></div>';
+  }
+  function setGuideTab(i){
+    gState.tab = i;
+    $$('.g-tab', dlg).forEach(function(b, j){ b.setAttribute('aria-selected', j === i ? 'true' : 'false'); if (j === i && b.scrollIntoView) b.scrollIntoView({ block: 'nearest', inline: 'nearest' }); });
+    $$('.g-panel', dlg).forEach(function(pn, j){ pn.hidden = j !== i; });
+    var body = $('.g-body', dlg); if (body) body.scrollTop = 0;
+    var left = i === 0 ? '<button class="btn btn-gray" type="button" data-act="gclose">閉じる</button>' : '<button class="btn btn-gray" type="button" data-act="gprev">‹ 前へ</button>';
+    var right = i < GTABS.length - 1 ? '<button class="btn btn-blue" type="button" data-act="gnext">次へ：' + GTABS[i + 1] + '</button>' : '<button class="btn btn-blue" type="button" data-start="' + gState.id + '">見積もりに入れる</button>';
+    $('#gFoot').innerHTML = left + right;
+  }
+  function openGuide(id, tab){
+    gState = { id: id, tab: tab || 0 };
+    dlg.innerHTML = guideShell(id);
+    if (typeof dlg.showModal === 'function'){ if (!dlg.open) dlg.showModal(); } else { dlg.setAttribute('open', ''); }
+    document.documentElement.style.overflow = 'hidden';
+    setGuideTab(gState.tab);
+  }
+  function closeGuide(){
+    if (dlg.open){ if (typeof dlg.close === 'function') dlg.close(); else dlg.removeAttribute('open'); }
+    document.documentElement.style.overflow = '';
+  }
+  dlg.addEventListener('close', function(){ document.documentElement.style.overflow = ''; });
+  dlg.addEventListener('click', function(e){ if (e.target === dlg) closeGuide(); });
+
+  /* ===== ページ内のカード ===== */
+  function renderGoals(){
+    $('#goalGrid').innerHTML = PRESETS.map(function(p){
+      var st = freshState(); p.apply(st);
+      return '<article class="goal"><div class="goal-icons" aria-hidden="true">' + p.svcs.map(function(id){ return '<span class="gi">' + ICON[id] + '</span>'; }).join('') + '</div><h3>' + p.name + '</h3><p>' + p.desc + '</p><ul class="chips">' + p.chips.map(function(c){ return '<li>' + c + '</li>'; }).join('') + '</ul>' +
+        '<div class="goal-foot"><span class="goal-price">合計（目安）<b class="num">' + totalText(calc(st)) + '</b></span><button class="btn btn-blue btn-sm" type="button" data-preset="' + p.id + '">この内容で見積もる</button></div></article>';
+    }).join('');
+  }
+  function renderServices(){
+    function card(s){
+      return '<article class="svc"><div class="svc-viz">' + VIZ[s.id] + '</div><div class="svc-body"><p class="svc-kind">' + s.kind + '</p><h3>' + s.title + '</h3><p class="svc-desc">' + s.desc + '</p>' +
+        '<p class="svc-you"><b>あなたがやること</b><span>' + s.you + '</span></p>' +
+        '<p class="svc-from">' + (s.from === null ? '<span class="tbd">個別見積もり</span>' : '<strong class="num">' + s.from + '</strong>円から') + '</p>' +
+        '<div class="svc-actions"><button class="btn btn-gray btn-sm" type="button" data-guide="' + s.id + '">くわしく見る</button><button class="btn btn-blue btn-sm" type="button" data-start="' + s.id + '">見積もる</button></div></div></article>';
+    }
+    $('#svcAV').innerHTML = SERVICES.filter(function(s){ return s.group === 'av'; }).map(card).join('');
+    $('#svcLook').innerHTML = SERVICES.filter(function(s){ return s.group === 'look'; }).map(card).join('');
+  }
+
+  function priceGroups(){
+    var G = [];
+    G.push({ id: 'music', name: '楽曲制作', rows: MUSIC.map(function(m){ return [m.label, yen(m.price)]; }) });
+    G.push({ id: 'music', icon: 'music', name: 'レコーディング', rows: ['h1', 'h4'].map(function(k){ var v = REC[k]; return [k === 'h1' ? '1時間' : '4時間', yen(v.lines[0][1] + v.lines[1][1]), 'スタジオ' + yen(v.lines[0][1]) + '＋エンジニア' + yen(v.lines[1][1])]; }) });
+    G.push({ id: 'mix', name: 'MIX・マスタリング', rows: Object.keys(MIX.len).map(function(k){ return [MIX.len[k].label, yen(MIX.len[k].price)]; }), opts: MIX.opts.map(function(o){ return [o.label, '+' + yen(o.price)]; }) });
+    G.push({ id: 'mv', name: 'MV撮影・映像', rows: [[MV.base.label, yen(MV.base.price)]], opts: MV.opts.map(function(o){ return [o.label, '+' + yen(o.price)]; }).concat([['スタジオレンタル', 'スタジオ代を加算']]) });
+    G.push({ id: 'illust', name: 'イラスト', rows: ['kv', 'stand', 'icon', 'deform'].map(function(k){ var it = ILLUST.filter(function(x){ return x.id === k; })[0]; return [it.label, yen(it.price)]; }) });
+    G.push({ id: 'avatar', name: 'Vアバター', rows: [['2D（Live2D）／3D', '個別見積もり']] });
+    G.push({ id: 'photo', name: '宣伝写真', rows: [[PHOTO.base.label, yen(PHOTO.base.price), '撮影データのお渡し込み']], opts: [['撮影延長', '+' + yen(PHOTO.extend) + '／1時間'], ['スタジオ', '1時間' + yen(PHOTO.hours.h1.studio) + '／4時間' + yen(PHOTO.hours.h4.studio)], ['レタッチ', '+' + yen(PHOTO.retouch) + '／1枚']] });
+    G.push({ id: null, name: '納期オプション', rows: [[SPEED.speed.line, '+' + yen(SPEED.speed.price)], [SPEED.rush.line, '+' + yen(SPEED.rush.price)]] });
+    return G;
+  }
+  function fromOf(g){
+    var nums = g.rows.map(function(r){ var m = r[1].match(/^\+?(\d+)円$/); return m ? +m[1] : null; }).filter(function(n){ return n !== null; });
+    if (g.id === null) return '';
+    if (!nums.length) return '個別見積もり';
+    return Math.min.apply(null, nums) + '円から';
+  }
+  var CLOCK = '<svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="14" cy="14" r="10"/><path d="M14 8.5V14l3.5 2.5"/></svg>';
+  var MIC = '<svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="10" y="3.5" width="8" height="14" rx="4"/><path d="M6.5 13.5a7.5 7.5 0 0 0 15 0M14 21v4"/></svg>';
+  function renderPrices(){
+    var html = priceGroups().map(function(g, gi){
+      var icon = g.id === null ? CLOCK : (g.name.indexOf('レコーディング') === 0 ? MIC : ICON[g.id]);
+      function rowsHTML(rows){ return '<ul class="pl-rows">' + rows.map(function(r){ return '<li><span>' + r[0] + (r[2] ? '<small>' + r[2] + '</small>' : '') + '</span><span class="num">' + r[1] + '</span></li>'; }).join('') + '</ul>'; }
+      return '<details class="pl-item"><summary><span class="pl-icon" aria-hidden="true">' + icon + '</span><span class="pl-name">' + g.name + '</span><span class="pl-from num">' + fromOf(g) + '</span></summary>' +
+        '<div class="pl-body">' + rowsHTML(g.rows) + (g.opts ? '<p class="pl-sub">オプション</p>' + rowsHTML(g.opts) : '') +
+        (g.id ? '<div class="pl-more"><button class="link" type="button" data-guide="' + g.id + '" data-tab="2">何をしてくれるのか、あなたがやることを見る ›</button></div>' : '') + '</div></details>';
+    }).join('');
+    $('#plist').innerHTML = html;
+  }
+  function priceMemo(){
+    var L = ['【Xector1 CreativeResource 料金表】'];
+    priceGroups().forEach(function(g){
+      L.push('', '■' + g.name);
+      g.rows.forEach(function(r){ L.push(r[0] + '：' + r[1] + (r[2] ? '（' + r[2] + '）' : '')); });
+      if (g.opts){ L.push('［オプション］'); g.opts.forEach(function(r){ L.push(r[0] + '：' + r[1].replace(/^\+/, '＋')); }); }
+    });
+    return L.join('\n');
+  }
+
+  /* ===== イベント ===== */
+  $('#backBtn').addEventListener('click', function(){ if (idx > 0){ idx--; render(); scrollToSim(); } });
+  $('#mNext').addEventListener('click', goNext);
+  $('#mbarToggle').addEventListener('click', function(){
+    detailOpen = !detailOpen;
+    $('#mbarDetail').hidden = !detailOpen;
+    this.setAttribute('aria-expanded', detailOpen ? 'true' : 'false');
+    $('#mbarToggleText').textContent = detailOpen ? '内訳を閉じる' : '内訳を見る';
+  });
+
+  host.addEventListener('change', function(e){
+    var t = e.target;
+    if (t.name === 'cat'){
+      if (t.checked) state.cats.add(t.value); else state.cats.delete(t.value);
+      steps = buildSteps();
+      var err = $('#stepErr'); if (err) err.hidden = true;
+    }
+    else if (t.name === 'music'){ t.checked ? state.music.add(t.value) : state.music.delete(t.value); var e2 = $('#stepErr'); if (e2) e2.hidden = true; }
+    else if (t.name === 'mixlen') state.mix.len = t.value;
+    else if (t.name === 'mixopt') t.checked ? state.mix.opts.add(t.value) : state.mix.opts.delete(t.value);
+    else if (t.name === 'mvopt') t.checked ? state.mv.opts.add(t.value) : state.mv.opts.delete(t.value);
+    else if (t.name === 'mvplace') state.mv.place = t.value;
+    else if (t.name === 'avtype') state.avatar.type = t.value;
+    else if (t.name === 'avart') state.avatar.art = t.value;
+    else if (t.name === 'phuse') t.checked ? state.photo.use.add(t.value) : state.photo.use.delete(t.value);
+    else if (t.name === 'phplace'){ state.photo.place = t.value; syncOn(); updateSummary(); var y = window.scrollY; render(); window.scrollTo(0, y); return; }
+    else if (t.name === 'phhours') state.photo.hours = t.value;
+    else if (t.name === 'rec') state.rec = t.value;
+    else if (t.name === 'speed') state.speed = t.value;
+    else return;
+    syncOn(); updateChrome(); updateSummary();
+  });
+  host.addEventListener('input', function(e){
+    if (e.target.id === 'fName'){ state.name = e.target.value; updatePreview(); }
+    if (e.target.id === 'fMemo'){ state.memo = e.target.value; updatePreview(); }
+  });
+  host.addEventListener('click', function(e){
+    var b = e.target.closest('button[data-delta]');
+    if (!b) return;
+    var st = b.closest('.stepper'), path = st.dataset.key.split('.');
+    var min = +st.dataset.min, max = +st.dataset.max;
+    var v = Math.max(min, Math.min(max, state[path[0]][path[1]] + (+b.dataset.delta)));
+    state[path[0]][path[1]] = v;
+    $('output', st).textContent = v;
+    var btns = $$('button', st);
+    btns[0].disabled = v <= min; btns[1].disabled = v >= max;
+    var item = st.closest('.item');
+    if (item && min === 0) item.classList.toggle('is-on', v > 0);
+    var err = $('#stepErr'); if (err) err.hidden = true;
+    updateSummary();
+  });
+
+  document.addEventListener('click', function(e){
+    var gt = e.target.closest('[data-gtab]');
+    if (gt){ setGuideTab(+gt.dataset.gtab); return; }
+    var g = e.target.closest('[data-guide]');
+    if (g){ openGuide(g.dataset.guide, g.dataset.tab ? +g.dataset.tab : 0); return; }
+    var s = e.target.closest('[data-start]');
+    if (s){ startWith(s.dataset.start); return; }
+    var pr = e.target.closest('[data-preset]');
+    if (pr){ applyPreset(pr.dataset.preset); return; }
+    var a = e.target.closest('[data-act]');
+    if (!a) return;
+    var act = a.dataset.act;
+    if (act === 'gclose') closeGuide();
+    else if (act === 'gnext') setGuideTab(Math.min(GTABS.length - 1, gState.tab + 1));
+    else if (act === 'gprev') setGuideTab(Math.max(0, gState.tab - 1));
+    else if (act === 'copyprice') copyText(priceMemo()).then(function(ok){ toast(ok ? '料金表をコピーしました。メモに貼り付けて使えます。' : 'コピーできませんでした。'); });
+    else if (act === 'next') goNext();
+    else if (act === 'addmix'){ state.cats.add('mix'); steps = buildSteps(); render(); toast('MIX・マスタリングを見積もりに追加しました。'); }
+    else if (act === 'line'){
+      var text = buildText();
+      if (CONFIG.LINE_ID){
+        window.open('https://line.me/R/oaMessage/' + encodeURIComponent(CONFIG.LINE_ID) + '/?' + encodeURIComponent(text), '_blank', 'noopener');
+      } else {
+        copyText(text).then(function(ok){
+          toast(ok ? '見積もり内容をコピーしました。Xector1公式LINEのトークに貼り付けて送ってください。' : 'コピーできませんでした。「送る内容を確認する」を開いて、長押しでコピーしてください。');
+        });
+      }
+    } else if (act === 'form'){
+      copyText(buildText()).then(function(ok){ if (ok) toast('見積もり内容もコピーしておきました。フォームに貼り付けて使えます。'); });
+    } else if (act === 'copy'){
+      copyText(buildText()).then(function(ok){
+        toast(ok ? '見積もり内容をコピーしました。' : 'コピーできませんでした。「送る内容を確認する」を開いて、長押しでコピーしてください。');
+      });
+    } else if (act === 'edit'){
+      idx = 0; render(); scrollToSim();
+    } else if (act === 'restart'){
+      state = freshState(); steps = buildSteps(); idx = 0; render(); scrollToSim();
+    }
+  });
+
+  function copyText(t){
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      return navigator.clipboard.writeText(t).then(function(){ return true; }, function(){ return fallbackCopy(t); });
+    }
+    return Promise.resolve(fallbackCopy(t));
+  }
+  function fallbackCopy(t){
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = t; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      var ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return ok;
+    } catch (err){ return false; }
+  }
+  var toastTimer;
+  function toast(msg){
+    var el = $('#toast');
+    el.textContent = msg; el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 4200);
+  }
+
+  $$('[data-form]').forEach(function(a){ a.href = CONFIG.FORM_URL; });
+  $$('[data-line-add]').forEach(function(a){
+    if (CONFIG.LINE_ADD_URL){ a.href = CONFIG.LINE_ADD_URL; a.target = '_blank'; a.rel = 'noopener'; }
+    else a.addEventListener('click', function(e){ e.preventDefault(); toast('LINEのURLは設定待ちです（下書き）。'); });
+  });
+
+  $('#heroViz').innerHTML = VIZ.avatar;
+  renderGoals();
+  renderPrices();
+  renderServices();
+  steps = buildSteps(); idx = 0; render();
+})();
+</script>
+</body>
+</html>

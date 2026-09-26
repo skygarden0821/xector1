@@ -2192,3 +2192,16 @@ body.locked { overflow: hidden; }
   to   { opacity: 1; transform: translateY(0); }
 }
 .welcome-name { color: #fff; }
+
+/* ═══════════════════════════════════════════════════════════
+   制作（CreativeResource）— creative/index.html を画面いっぱいに表示
+   ═══════════════════════════════════════════════════════════ */
+#page-seisaku { padding: 0; }
+.seisaku-frame {
+  display: block;
+  width: 100%;
+  height: calc(100vh - var(--bar-h) - var(--nav-h));
+  height: calc(100dvh - var(--bar-h) - var(--nav-h));
+  border: 0;
+  background: #fff;
+}

@@ -777,6 +777,7 @@ function goPage(p) {
   if (p === currentPage && document.querySelector('.page.active')) {
     // 同じタブ再タップ：トップへスクロールのみ
     $('scroll-area').scrollTo({ top: 0, behavior: 'smooth' });
+    if (p === 'seisaku') { try { $('seisaku-frame').contentWindow.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) {} }
     return;
   }
   currentPage = p;
@@ -798,7 +799,24 @@ function goPage(p) {
   if (p === 'home') renderHome();
   if (p === 'tips') renderTips();
   if (p === 'settings') prefill();
+  if (p === 'seisaku') loadSeisaku();
 }
+
+// ─── 制作ページ（CreativeResource）───
+// 初めて開いたときだけ読み込み、画面の高さ（上のバーと下のメニューの間）にぴったり合わせる
+function loadSeisaku() {
+  const f = $('seisaku-frame');
+  if (!f) return;
+  if (!f.getAttribute('src')) f.setAttribute('src', f.dataset.src);
+  sizeSeisaku();
+}
+function sizeSeisaku() {
+  const f = $('seisaku-frame'), sa = $('scroll-area');
+  if (!f || !sa) return;
+  const pb = parseFloat(getComputedStyle(sa).paddingBottom) || 0;
+  f.style.height = Math.max(320, sa.clientHeight - pb) + 'px';
+}
+window.addEventListener('resize', sizeSeisaku);
 
 // 光のラインエフェクト（アプリバー直下を一瞬ウィンと走る）
 function fireSweep() {
