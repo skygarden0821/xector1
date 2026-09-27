@@ -197,12 +197,100 @@ a:hover .yt-play,.ph-yt:hover .yt-play{background:#ff0033}
 
 /* simulator */
 .sim{padding-bottom:0}
-.sim-grid{display:grid;gap:40px;align-items:start}
+.sim-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:40px;align-items:start}
+#simTop{min-width:0}
 @media (min-width:900px){.sim-grid{grid-template-columns:minmax(0,1fr) 340px;gap:48px}}
 .sim-grid.is-result{grid-template-columns:minmax(0,1fr);max-width:720px;margin:0 auto}
 .sim-grid.is-result .panel{display:none}
 .sim-top{display:flex;align-items:center;gap:14px;min-height:32px;font-size:14px;color:var(--text-2)}
 .sim-top .link{font-size:15px}
+.sim-top{margin-bottom:22px}
+.steps3{display:flex;align-items:center;gap:8px;margin:0 0 0 auto;padding:0;list-style:none;font-size:13px;color:var(--text-3)}
+.steps3 li{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.steps3 li+li::before{content:"";width:12px;height:1px;background:var(--line)}
+.steps3 li.cur{color:var(--text);font-weight:700}
+.steps3 li.done{color:var(--blue)}
+.sim-lead{display:block;margin:6px 0 4px}
+/* メニュー */
+.set-row{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 12px;margin:0 -2px;scrollbar-width:none}
+.set-row::-webkit-scrollbar{display:none}
+.set,.mitem{display:flex;flex-direction:column;padding:0;border:0;border-radius:18px;background:#fff;overflow:hidden;text-align:left;color:var(--text);cursor:pointer;box-shadow:0 0 0 1px var(--line-2);transition:box-shadow .15s,transform .1s}
+.set:hover,.mitem:hover{box-shadow:0 0 0 2px var(--blue)}
+.set:active,.mitem:active{transform:scale(.98)}
+.set{flex:0 0 232px;scroll-snap-align:start}
+.set-media{display:block;height:122px}
+.set-media .ph,.mitem-media .ph,.side-media .ph{height:100%}
+.set-body,.mitem-body{display:flex;flex-direction:column;gap:2px;padding:12px 14px 14px}
+.set-body b,.mitem-body b{font-size:15px;font-weight:700;line-height:1.45}
+.set-body small,.mitem-body small{font-size:12px;color:var(--text-2);line-height:1.55}
+.set-body em,.mitem-body em{margin-top:6px;font-style:normal;font-size:16px;font-weight:700}
+.set-body i{font-style:normal;font-size:12px;color:var(--text-2)}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (min-width:600px){.menu-grid{grid-template-columns:repeat(3,1fr)}}
+.mitem-media{position:relative;display:block;height:112px}
+.mitem.is-on{box-shadow:0 0 0 2px var(--blue)}
+.mitem-badge{position:absolute;left:8px;top:8px;padding:2px 8px;border-radius:6px;background:var(--blue);color:#fff;font-size:11px;font-weight:700}
+/* カスタマイズ */
+.cz{margin-top:16px;background:#fff;border-radius:22px;overflow:hidden}
+.cz-head{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line-2)}
+.thumb{display:block;flex:none;width:52px;height:52px;border-radius:12px;overflow:hidden}
+.thumb .ph{width:100%;height:100%}
+.cz-title{flex:1;min-width:0}
+.cz-title small{display:block;font-size:11px;font-weight:700;color:var(--blue)}
+.cz-title b{display:block;font-size:17px;font-weight:700;line-height:1.4}
+.cz-sub{font-size:16px;font-weight:700;white-space:nowrap}
+.cz-x{display:grid;place-items:center;flex:none;width:32px;height:32px;border:0;border-radius:50%;background:var(--fill);color:var(--text-2);font-size:18px;line-height:1;cursor:pointer}
+.cz-body{padding:4px 16px 18px}
+.cz-plain .cz-head{border-bottom:0;padding-bottom:0}
+.cz-note{margin:12px 0 0;font-size:13px;color:var(--text-2)}
+.grp{padding-top:16px}
+.grp-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.grp-label{font-size:14px;font-weight:700}
+.chips-row{display:grid;gap:8px}
+.chips-row.c1{grid-template-columns:1fr}
+.chips-row.c2{grid-template-columns:1fr 1fr}
+.chips-row.c3{grid-template-columns:repeat(3,1fr)}
+@media (max-width:520px){.chips-row.c3{grid-template-columns:1fr}}
+.chip{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:60px;padding:12px 14px;border:1.5px solid var(--line);border-radius:14px;background:#fff;color:var(--text);text-align:left;cursor:pointer;transition:border-color .15s,background-color .15s,transform .1s}
+.chip:hover{border-color:var(--text-3)}
+.chip:active{transform:scale(.98)}
+.chip.is-on{border-color:var(--blue);background:var(--tint);box-shadow:0 0 0 1px var(--blue)}
+.chip.is-on::after{content:"";position:absolute;right:10px;top:10px;width:18px;height:18px;border-radius:50%;background:var(--blue) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/11px no-repeat}
+.chip-name{padding-right:22px;font-size:15px;font-weight:600;line-height:1.4}
+.chip-sub{font-size:12px;color:var(--text-2);line-height:1.5}
+.chip-price{margin-top:auto;padding-top:4px;font-size:14px;font-weight:700}
+.pattern{margin-top:12px;padding:14px;border-radius:14px;background:var(--bg-2)}
+.pattern p{margin:0 0 8px;font-size:12px;font-weight:700;color:var(--text-2)}
+.pt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pt{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border:1.5px solid transparent;border-radius:12px;background:#fff;color:var(--text);text-align:left;cursor:pointer}
+.pt span{font-size:12px;color:var(--text-2)}
+.pt b{font-size:20px;font-weight:700}
+.pt.is-on{border-color:var(--blue)}
+.pt.is-on b{color:var(--blue)}
+.qty-list{display:grid;gap:8px}
+.base-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:var(--bg-2);font-size:15px;font-weight:600}
+.base-row small{display:block;font-size:12px;font-weight:400;color:var(--text-2)}
+.base-row b{white-space:nowrap}
+.cz .guide-link{margin:16px 0 0}
+.side{margin-top:24px}
+.side h4{margin:0 0 10px;font-size:17px;font-weight:700}
+.side-row{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;scrollbar-width:none}
+.side-row::-webkit-scrollbar{display:none}
+.side-card{display:flex;flex-direction:column;gap:4px;flex:0 0 220px;scroll-snap-align:start;padding:0 0 14px;background:#fff;border-radius:18px;overflow:hidden}
+.side-media{display:block;height:96px;margin-bottom:8px}
+.side-card > b,.side-card > small,.side-foot{padding:0 14px}
+.side-card > b{font-size:15px;font-weight:700}
+.side-card > small{flex:1;font-size:12px;color:var(--text-2);line-height:1.6}
+.side-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}
+.side-foot em{font-style:normal;font-size:13px;font-weight:600}
+.panel-btn{width:100%;margin-top:16px}
+.ex-pat{margin:10px 0 14px;padding:12px 14px;border-radius:14px;background:var(--bg-2)}
+.ex-pat p{margin:0 0 4px;font-size:12px;font-weight:700;color:var(--text-2)}
+.ex-pat div{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:3px 0;font-size:14px}
+.ex-pat b{font-size:20px;font-weight:700;white-space:nowrap}
+.ex-row span:first-child{white-space:nowrap}
+.ex-row span:last-child{text-align:right}
+.goal-price small{display:block;margin-top:2px;font-size:12px;color:var(--text-2)}
 .step-name{margin-left:auto}
 .step-name b{color:var(--text);font-weight:600}
 .segs{display:flex;gap:4px;margin:10px 0 34px}
@@ -542,7 +630,8 @@ html.embedded{scroll-padding-top:16px}
         <h2 class="ex-title">歌ってみたを投稿したい</h2>
         <div class="ex-row"><span>MIX（フルコーラス）</span><span class="num">20000円</span></div>
         <div class="ex-row"><span>動画エンコード</span><span class="num">1000円</span></div>
-        <div class="ex-total"><span>合計（目安）</span><strong class="num">21000円</strong></div>
+        <div class="ex-row"><span>録音</span><span>自宅 0円／スタジオ 30000円</span></div>
+        <div class="ex-pat"><p>合計のパターン</p><div><span>自宅で録音</span><b class="num">21000円</b></div><div><span>スタジオ録音（4時間）</span><b class="num">51000円</b></div></div>
         <button class="link" type="button" data-preset="cover">この例で見積もる ›</button>
       </aside>
       </div>
@@ -638,21 +727,21 @@ html.embedded{scroll-padding-top:16px}
     <div class="wrap">
       <div class="sec-head">
         <h2 class="sec-title jp-head" id="sim-title">見積もりシミュレーター</h2>
-        <p class="sec-sub jp-head">質問に答えるたびに、見積もりにすぐ反映されます。</p>
+        <p class="sec-sub jp-head">メニューを選んで、タップでカスタマイズするだけ。金額はその場で変わります。</p>
       </div>
       <div class="sim-grid" id="simGrid">
         <div id="simTop">
           <div class="sim-top">
             <button class="link" type="button" id="backBtn">‹ 戻る</button>
-            <span class="step-name" id="stepName"></span>
+            <ol class="steps3" id="steps3" aria-label="進み具合"><li>メニュー</li><li>カスタマイズ</li><li>確認</li></ol>
           </div>
-          <div class="segs" id="segs" aria-hidden="true"></div>
           <div id="stepHost" tabindex="-1"></div>
           <div class="sim-space"></div>
         </div>
         <aside class="panel" aria-labelledby="panel-title">
           <h3 id="panel-title">あなたの見積もり</h3>
           <div id="panelBody"></div>
+          <button class="btn btn-blue panel-btn" type="button" id="panelBtn" data-act="next">注文内容を確認する</button>
           <p class="fine">目安の金額です。正式な金額は、内容を確認してからお知らせします。</p>
         </aside>
       </div>
@@ -731,7 +820,7 @@ html.embedded{scroll-padding-top:16px}
         <details><summary>自分は何をすればいいですか？</summary><p>サービスごとの「くわしく見る」にある「役割分担」に、あなたがやることとXector1がやることを分けてまとめています。わからないときは、そのままLINEで聞いてください。</p></details>
         <details><summary>MIX・マスタリングって何ですか？</summary><p>MIXは、録音した歌声と伴奏の音量バランスや音質を整えて、ひとつの作品として聴ける音源にする作業です。マスタリングは最後の仕上げで、曲全体の音の大きさや聴こえ方をそろえます。</p></details>
         <details><summary>楽曲制作は、途中の工程からでも頼めますか？</summary><p>はい。作詞だけ、トラック制作だけ、録音から、など必要な工程だけ選べます。歌詞やメロディがすでにある場合は、そのデータを送ってください。</p></details>
-        <details><summary>レコーディングは何時間あればいいですか？</summary><p>スタジオは1時間（7600円）と4時間（30000円）から選べます。目安がわからなければ1時間を選んでおけば、相談しながら調整できます。</p></details>
+        <details><summary>レコーディングはどうすればいいですか？</summary><p>シミュレーターでは「自宅で録音する（0円）」と「スタジオで録音する（4時間・30000円）」から選べます。予算を抑えたい場合は、宅録の音源を送ってもらえれば大丈夫です。スタジオを1時間（7600円）だけ使いたい場合は、見積もりを送るときにひとこと添えてください。</p></details>
         <details><summary>Vアバターの2Dと3Dは、どう違いますか？</summary><p>2D（Live2D）はイラストをパーツに分けて動かす方式で、正面からの表情が豊かです。3Dは立体のモデルで、横を向いたり全身で動いたりできます。どちらがいいか迷ったら、相談しながら決められます。</p></details>
         <details><summary>作ったものは、どこまで使っていいですか？</summary><p>ここで依頼したものは、すべて商用利用できます。グッズにしたり、配信サービスに登録したり、活動のために使うぶんには自由に使ってください。</p></details>
         <details><summary>シミュレーターの金額で決まりですか？</summary><p>シミュレーターの金額は目安です。「個別見積もり」と表示される項目は、内容を聞いてから金額をお知らせします。</p></details>
@@ -749,7 +838,6 @@ html.embedded{scroll-padding-top:16px}
       </div>
       <div class="contact-cta">
         <a class="btn btn-blue" href="#" data-line-add>LINEで相談する</a>
-        <a class="btn btn-gray" href="#" data-form target="_blank" rel="noopener">フォームから依頼する</a>
       </div>
     </div>
   </section>
@@ -769,9 +857,8 @@ html.embedded{scroll-padding-top:16px}
 (function(){
   /* ===== 設定：LINEの情報が決まったらここを埋める ===== */
   var CONFIG = {
-    FORM_URL: 'https://forms.gle/wFoujvkfWBbSNfLM8',
-    LINE_ID: '',       /* 例 '@xector1'：入れると見積もり文面が入った状態でLINEが開く */
-    LINE_ADD_URL: ''   /* 友だち追加・相談用のURL */
+    LINE_ID: '@864vkdpq',       /* 例 '@xector1'：入れると見積もり文面が入った状態でLINEが開く */
+    LINE_ADD_URL: 'https://line.me/R/ti/p/%40864vkdpq'   /* 友だち追加・相談用のURL */
   };
   var TBD = null; /* 料金未定＝個別見積もり。決まったら数字を入れる */
 
@@ -937,10 +1024,10 @@ html.embedded{scroll-padding-top:16px}
   var PRESETS = [
     { id: 'cover', media: 'img:cover:cover', svcs: ['mix'], name: '歌ってみたを投稿したい', desc: '録ったカバー曲をMIXで仕上げて、そのまま投稿できる動画ファイルにします。', chips: ['MIX・マスタリング', '動画エンコード'],
       apply: function(s){ s.cats.add('mix'); s.mix.opts.add('encode'); } },
-    { id: 'original', media: 'img:original:cover:42% 38%', svcs: ['music', 'mix', 'illust'], name: 'オリジナル曲を出したい', desc: '作詞とトラック制作、スタジオ録音から仕上げ、告知用のビジュアルまでまとめて頼めます。', chips: ['作詞', 'トラック制作', 'スタジオ録音1時間', 'MIX・マスタリング', 'キービジュアル'],
-      apply: function(s){ s.cats.add('music'); s.cats.add('mix'); s.cats.add('illust'); s.music.add('lyrics'); s.music.add('track'); s.rec = 'h1'; s.illust.kv = 1; } },
-    { id: 'songmv', media: 'yt:mv3', svcs: ['mix', 'mv'], name: '歌とMVをまとめて仕上げたい', desc: 'スタジオで録った歌をMIXで仕上げて、MVの撮影と編集まで通して頼めます。', chips: ['スタジオ録音1時間', 'MIX・マスタリング', 'ピッチ補正', 'ハモリ生成', 'MV撮影・編集'],
-      apply: function(s){ s.cats.add('mix'); s.cats.add('mv'); s.rec = 'h1'; s.mix.opts.add('pitch'); s.mix.opts.add('harmony'); s.mv.opts.add('edit'); } },
+    { id: 'original', media: 'img:original:cover:42% 38%', svcs: ['music', 'mix', 'illust'], name: 'オリジナル曲を出したい', desc: '作詞とトラック制作、スタジオ録音から仕上げ、告知用のビジュアルまでまとめて頼めます。', chips: ['作詞', 'トラック制作', 'スタジオ録音4時間', 'MIX・マスタリング', 'キービジュアル'],
+      apply: function(s){ s.cats.add('music'); s.cats.add('mix'); s.cats.add('illust'); s.music.add('lyrics'); s.music.add('track'); s.rec = 'h4'; s.illust.kv = 1; } },
+    { id: 'songmv', media: 'yt:mv3', svcs: ['mix', 'mv'], name: '歌とMVをまとめて仕上げたい', desc: 'スタジオで録った歌をMIXで仕上げて、MVの撮影と編集まで通して頼めます。', chips: ['スタジオ録音4時間', 'MIX・マスタリング', 'ピッチ補正', 'ハモリ生成', 'MV撮影・編集'],
+      apply: function(s){ s.cats.add('mix'); s.cats.add('mv'); s.rec = 'h4'; s.mix.opts.add('pitch'); s.mix.opts.add('harmony'); s.mv.opts.add('edit'); } },
     { id: 'vtuber', media: 'img:avatar:contain:#f4efe4', svcs: ['avatar', 'illust'], name: 'VTuberとしてデビューしたい', desc: '配信で動くVアバターと、SNS用のアイコンをまとめて用意します。', chips: ['Vアバター', 'SNSアイコン'],
       apply: function(s){ s.cats.add('avatar'); s.cats.add('illust'); s.illust.icon = 1; } },
     { id: 'visual', media: 'img:tachie:contain:#fff', svcs: ['illust'], name: '配信用のビジュアルをそろえたい', desc: 'アイコンと立ち絵で、プロフィールや配信画面の見た目を整えます。', chips: ['SNSアイコン', '立ち絵'],
@@ -1040,7 +1127,7 @@ html.embedded{scroll-padding-top:16px}
     };
   }
   var state = freshState();
-  var steps = [], idx = 0, detailOpen = false;
+  var detailOpen = false;
 
   function $(s, r){ return (r || document).querySelector(s); }
   function $$(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
@@ -1110,36 +1197,50 @@ html.embedded{scroll-padding-top:16px}
     return yen(r.total) + (r.tbd ? '〜' : '');
   }
 
-  /* ===== ステップ ===== */
-  function buildSteps(){
-    var s = ['cats'];
-    if (state.cats.has('music')) s.push('music');
-    if (state.cats.has('music') || state.cats.has('mix')) s.push('rec');
-    if (state.cats.has('mix')) s.push('mix-length', 'mix-options');
-    if (state.cats.has('mv')) s.push('mv-options', 'mv-place');
-    if (state.cats.has('illust')) s.push('illust');
-    if (state.cats.has('avatar')) s.push('avatar');
-    if (state.cats.has('photo')) s.push('photo');
-    s.push('speed', 'result');
+  /* ===== 見積もりシミュレーター（メニュー → カスタマイズ → 確認） ===== */
+  var screen = 'menu';
+  var order = [];
+  var SCREENS = [['menu', 'メニュー'], ['custom', 'カスタマイズ'], ['confirm', '確認']];
+  var SVC_IMG = { music: 'img:original:cover:34% 30%', mix: 'img:cover:cover:50% 40%', mv: 'img:band:cover:50% 55%', illust: 'img:tachie:cover:50% 8%', avatar: 'img:avatar:cover:50% 12%', photo: 'img:photo:cover:50% 16%' };
+  var REC_CHOICES = [['none', '自宅で録音する', 0, '録った音源を送るだけ'], ['h4', 'スタジオで録音する', 30000, '4時間（スタジオ＋エンジニア）']];
+  var BOOK = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 3.5c2-.8 3.8-.6 5.5.6v9c-1.7-1.2-3.5-1.4-5.5-.6z"/><path d="M13.5 3.5c-2-.8-3.8-.6-5.5.6v9c1.7-1.2 3.5-1.4 5.5-.6z"/></svg>';
+
+  function fromText(p){ return p === null ? '個別見積もり' : yen(p) + 'から'; }
+  function thumb(id, cls){ return '<span class="thumb' + (cls ? ' ' + cls : '') + '">' + goalMedia(SVC_IMG[id]) + '</span>'; }
+  function cloneState(){
+    var s = freshState();
+    s.cats = new Set(state.cats); s.music = new Set(state.music); s.rec = state.rec;
+    s.mix = { len: state.mix.len, songs: state.mix.songs, opts: new Set(state.mix.opts) };
+    s.mv = { opts: new Set(state.mv.opts), place: state.mv.place };
+    s.illust = Object.assign({}, state.illust); s.avatar = Object.assign({}, state.avatar);
+    s.photo = { use: new Set(state.photo.use), place: state.photo.place, hours: state.photo.hours, retouch: state.photo.retouch };
+    s.speed = state.speed; s.name = state.name; s.memo = state.memo;
     return s;
   }
+  function addDefaults(st, cat){
+    if (cat === 'music' && !st.music.size){ st.music.add('lyrics'); st.music.add('track'); }
+    if (cat === 'illust'){ var n = 0; Object.keys(st.illust).forEach(function(k){ n += st.illust[k]; }); if (!n) st.illust.icon = 1; }
+  }
+  function addCat(cat){ if (!state.cats.has(cat)){ state.cats.add(cat); addDefaults(state, cat); } if (order.indexOf(cat) < 0) order.push(cat); }
+  function removeCat(cat){ state.cats.delete(cat); order = order.filter(function(c){ return c !== cat; }); }
+  function syncOrder(){
+    order = order.filter(function(c){ return state.cats.has(c); });
+    CAT_ORDER.forEach(function(c){ if (state.cats.has(c) && order.indexOf(c) < 0) order.push(c); });
+  }
+  function altRecTotal(st){
+    if (!(st.cats.has('mix') || st.cats.has('music'))) return null;
+    var other = st.rec === 'h4' ? 'none' : 'h4';
+    var s2 = { cats: st.cats, music: st.music, rec: other, mix: st.mix, mv: st.mv, illust: st.illust, avatar: st.avatar, photo: st.photo, speed: st.speed };
+    return { label: other === 'h4' ? 'スタジオ録音（4時間）なら' : '自宅録音なら', total: totalText(calc(s2)) };
+  }
 
-  var BOOK = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 3.5c2-.8 3.8-.6 5.5.6v9c-1.7-1.2-3.5-1.4-5.5-.6z"/><path d="M13.5 3.5c-2-.8-3.8-.6-5.5.6v9c1.7-1.2 3.5-1.4 5.5-.6z"/></svg>';
-  function head(title, tag, note, guide){
-    return '<h3 class="q-title jp-head">' + title + '</h3><div class="q-meta"><span class="tag">' + tag + '</span>' + (note ? '<span class="q-note">' + note + '</span>' : '') + '</div>' +
-      (guide ? '<button class="guide-link" type="button" data-guide="' + guide + '">' + BOOK + CAT_NAMES[guide] + 'をくわしく見る</button>' : '<div style="height:8px"></div>');
+  function chip(kind, path, val, name, price, on, sub){
+    return '<button type="button" class="chip' + (on ? ' is-on' : '') + '" data-' + kind + '="' + path + '" data-val="' + val + '" aria-pressed="' + (on ? 'true' : 'false') + '">' +
+      '<span class="chip-name">' + name + '</span>' + (sub ? '<span class="chip-sub">' + sub + '</span>' : '') +
+      (price !== '' ? '<span class="chip-price num">' + price + '</span>' : '') + '</button>';
   }
-  function priceHTML(p, plus){
-    if (p === null) return '<span class="opt-price tbd">個別見積もり</span>';
-    if (p === undefined || p === '') return '';
-    return '<span class="opt-price num">' + (plus ? '+' : '') + yen(p) + '</span>';
-  }
-  function opt(type, name, value, label, hint, price, checked, icon, extra){
-    return '<label class="opt' + (checked ? ' is-on' : '') + '"><input type="' + type + '" name="' + name + '" value="' + value + '"' + (checked ? ' checked' : '') + '>' +
-      '<span class="ctrl' + (type === 'checkbox' ? ' box' : '') + '" aria-hidden="true"></span>' +
-      (icon ? '<span class="opt-icon" aria-hidden="true">' + icon + '</span>' : '') +
-      '<span class="opt-body"><span class="opt-name">' + label + '</span>' + (hint ? '<span class="opt-hint">' + hint + '</span>' : '') + (extra || '') + '</span>' +
-      (price || '') + '</label>';
+  function group(label, tag, chipsHTML, cols, extra){
+    return '<div class="grp"><div class="grp-head"><span class="grp-label">' + label + '</span><span class="tag">' + tag + '</span></div><div class="chips-row c' + (cols || 2) + '">' + chipsHTML + '</div>' + (extra || '') + '</div>';
   }
   function stepper(key, val, label, min, max){
     return '<div class="stepper" data-key="' + key + '" data-min="' + min + '" data-max="' + max + '">' +
@@ -1147,115 +1248,113 @@ html.embedded{scroll-padding-top:16px}
       '<output class="num">' + val + '</output>' +
       '<button type="button" data-delta="1" aria-label="' + label + 'を1つ増やす"' + (val >= max ? ' disabled' : '') + '>+</button></div>';
   }
-  function nextLabel(){
-    var nx = steps[idx + 1];
-    return nx === 'result' ? '見積もりを見る' : '次へ：' + STEP_LABEL[nx];
+  function qtyRow(key, val, name, hint, unit, min, max){
+    return '<div class="item' + (val > 0 && min === 0 ? ' is-on' : '') + '"><span class="opt-body"><span class="opt-name">' + name + '</span>' + (hint ? '<span class="unit">' + hint + '</span>' : '') + (unit ? '<span class="unit num">' + unit + '</span>' : '') + '</span>' + stepper(key, val, name, min, max) + '</div>';
   }
-  function actions(){ return '<div class="q-actions"><button class="btn btn-blue" type="button" data-act="next">' + nextLabel() + '</button></div>'; }
-  function fromText(p){ return p === null ? '個別見積もり' : yen(p) + 'から'; }
-
-  function stepHTML(id){
-    var h = '';
-    switch (id){
-      case 'cats':
-        h += head('何を作りたいですか？', '複数選択OK', '選んだものに合わせて、次の質問が変わります。');
-        [['av', '音と映像'], ['look', '見た目']].forEach(function(g){
-          h += '<p class="opt-group">' + g[1] + '</p><div class="opts">';
-          SERVICES.filter(function(s){ return s.group === g[0]; }).forEach(function(s){
-            h += opt('checkbox', 'cat', s.id, s.pick, s.pickSub, '', state.cats.has(s.id), ICON[s.id], '<span class="opt-from num">' + fromText(s.from) + '</span>');
-          });
-          h += '</div>';
-        });
-        h += '<p class="err" id="stepErr" hidden></p>' + actions();
-        h += '<details class="presets"><summary>迷ったら、やりたいことから選ぶ</summary><p>押すと、その内容ですぐに見積もりが出ます。あとから変更もできます。</p><div class="preset-grid">';
-        PRESETS.forEach(function(p){
-          var st = freshState(); p.apply(st);
-          h += '<button class="preset" type="button" data-preset="' + p.id + '"><span class="preset-name">' + p.name + '</span><span class="preset-items">' + p.chips.join('＋') + '</span><span class="preset-price">合計 <b class="num">' + totalText(calc(st)) + '</b></span></button>';
-        });
-        h += '</div></details>';
-        break;
-      case 'music':
-        h += head('楽曲制作のどこをお願いしますか？', '複数選択OK', '自分でできている工程は、外したままで大丈夫です。歌の録音は次の質問で選べます。', 'music') + '<div class="opts">';
-        MUSIC.forEach(function(m){ h += opt('checkbox', 'music', m.id, m.label, m.hint, priceHTML(m.price), state.music.has(m.id)); });
-        h += '</div>';
-        h += state.cats.has('mix')
-          ? '<div class="note-box"><span><b>MIX・マスタリングも追加済みです。</b>歌と伴奏を整えて、1曲に仕上げます。</span></div>'
-          : '<div class="note-box"><span><b>曲を完成させるには、MIX・マスタリングも必要です。</b>歌と伴奏を整えて1曲に仕上げる工程です。</span><button class="btn btn-gray btn-sm" type="button" data-act="addmix">MIX・マスタリングも追加する</button></div>';
-        h += '<p class="err" id="stepErr" hidden></p>' + actions();
-        break;
-      case 'rec':
-        h += head('歌の録音はどうしますか？', '1つ選ぶ', '時間の目安がわからなければ、1時間を選んでおけば相談しながら調整できます。');
-        h += '<div class="opts">';
-        Object.keys(REC).forEach(function(k){
-          var v = REC[k], sum = v.lines.reduce(function(a, l){ return a + l[1]; }, 0);
-          h += opt('radio', 'rec', k, v.label, v.hint, sum ? priceHTML(sum) : '', state.rec === k);
-        });
-        h += '</div><div class="note-box"><span><b>スタジオ録音とは？</b>録音専用のスタジオで、エンジニアが機材の操作や音のチェックを担当します。自宅で録るより雑音が少なく、MIXで仕上げやすい音で録れます。</span></div>' + actions();
-        break;
-      case 'mix-length':
-        h += head('MIXする長さを選んでください', '1つ選ぶ', '', 'mix') + '<div class="opts">';
-        Object.keys(MIX.len).forEach(function(k){ var v = MIX.len[k]; h += opt('radio', 'mixlen', k, v.label, v.hint, priceHTML(v.price), state.mix.len === k); });
-        h += '</div><div class="item count"><span class="opt-body"><span class="opt-name">曲数</span><span class="unit">同じ内容で何曲お願いしますか？</span></span>' + stepper('mix.songs', state.mix.songs, '曲数', 1, 10) + '</div>';
-        h += actions();
-        break;
-      case 'mix-options':
-        h += head('追加でお願いしたいことはありますか？', '複数選択OK', 'なければ、何も選ばずに次へ進めます。' + (state.mix.songs > 1 ? '曲数ぶんの料金で計算します。' : ''), 'mix') + '<div class="opts">';
-        MIX.opts.forEach(function(o){ h += opt('checkbox', 'mixopt', o.id, o.label, o.hint, priceHTML(o.price, true), state.mix.opts.has(o.id)); });
-        h += '</div>' + actions();
-        break;
-      case 'mv-options':
-        h += head('撮影のほかに、必要なものはありますか？', '複数選択OK', 'なければ、何も選ばずに次へ進めます。', 'mv');
-        h += '<div class="included"><span>' + MV.base.label + 'は基本料金に入っています</span><b class="num">' + yen(MV.base.price) + '</b></div><div class="opts">';
-        MV.opts.forEach(function(o){ h += opt('checkbox', 'mvopt', o.id, o.label, o.hint, priceHTML(o.price, true), state.mv.opts.has(o.id)); });
-        h += '</div>' + actions();
-        break;
-      case 'mv-place':
-        h += head('MVはどこで撮影しますか？', '1つ選ぶ', '場所によって、別途費用がかかる場合があります。', 'mv') + '<div class="opts">';
-        Object.keys(MV.place).forEach(function(k){ var v = MV.place[k]; h += opt('radio', 'mvplace', k, v.label, v.hint, '', state.mv.place === k); });
-        h += '</div>' + actions();
-        break;
-      case 'illust':
-        h += head('必要なイラストと数を選んでください', '数を選ぶ', '＋を押すと追加されます。', 'illust') + '<div class="opts">';
-        ILLUST.forEach(function(it){
-          var q = state.illust[it.id];
-          h += '<div class="item' + (q > 0 ? ' is-on' : '') + '"><span class="opt-body"><span class="opt-name">' + it.label + '</span><span class="unit">' + it.hint + '</span><span class="unit num">1点 ' + yen(it.price) + '</span></span>' + stepper('illust.' + it.id, q, it.label, 0, 10) + '</div>';
-        });
-        h += '</div><p class="err" id="stepErr" hidden></p>' + actions();
-        break;
-      case 'avatar':
-        h += head('Vアバターについて教えてください', '1つずつ選ぶ', '迷ったら「まだ決めていない」で大丈夫です。料金は内容を聞いてから個別にお見積りします。', 'avatar');
-        h += '<fieldset class="subq"><legend>どんなアバターにしますか？</legend><div class="opts">';
-        Object.keys(AVATAR.type).forEach(function(k){ var v = AVATAR.type[k]; h += opt('radio', 'avtype', k, v.label, v.hint, '', state.avatar.type === k); });
-        h += '</div></fieldset><fieldset class="subq"><legend>キャラクターのイラストはありますか？</legend><div class="opts">';
-        Object.keys(AVATAR.art).forEach(function(k){ var v = AVATAR.art[k]; h += opt('radio', 'avart', k, v.label, v.hint, '', state.avatar.art === k); });
-        h += '</div></fieldset>' + actions();
-        break;
-      case 'photo':
-        h += head('宣伝写真について教えてください', '選ぶ', '使い道がわかると、雰囲気やポーズを提案しやすくなります。', 'photo');
-        h += '<fieldset class="subq"><legend>どこで使う予定ですか？（複数選択OK）</legend><div class="opts">';
-        PHOTO.use.forEach(function(u){ h += opt('checkbox', 'phuse', u.id, u.label, '', '', state.photo.use.has(u.id)); });
-        h += '</div></fieldset><fieldset class="subq"><legend>どこで撮影しますか？</legend><div class="opts">';
-        Object.keys(PHOTO.place).forEach(function(k){ var v = PHOTO.place[k]; h += opt('radio', 'phplace', k, v.label, v.hint, k === 'studio' ? '<span class="opt-price num">+スタジオ代</span>' : '', state.photo.place === k); });
-        h += '</div></fieldset><fieldset class="subq"><legend>撮影時間はどのくらいにしますか？</legend><div class="opts">';
-        Object.keys(PHOTO.hours).forEach(function(k){ var v = PHOTO.hours[k]; h += opt('radio', 'phhours', k, v.label, v.hint + (state.photo.place === 'studio' ? '。スタジオ' + yen(v.studio) : ''), k === 'h4' ? priceHTML(PHOTO.extend * 3, true) : '<span class="opt-price">基本料金</span>', state.photo.hours === k); });
-        h += '</div></fieldset><fieldset class="subq"><legend>レタッチ（写真の仕上げ）は何枚にしますか？</legend>';
-        h += '<div class="item' + (state.photo.retouch > 0 ? ' is-on' : '') + '"><span class="opt-body"><span class="opt-name">レタッチ</span><span class="unit">肌や背景などを整えて、特に使いたい写真を仕上げます</span><span class="unit num">1枚 ' + yen(PHOTO.retouch) + '</span></span>' + stepper('photo.retouch', state.photo.retouch, 'レタッチの枚数', 0, 20) + '</div></fieldset>' + actions();
-        break;
-      case 'speed':
-        var sched = ['music', 'mv', 'avatar', 'photo'].filter(function(c){ return state.cats.has(c); }).map(function(c){ return CAT_NAMES[c]; });
-        h += head('いつまでに必要ですか？', '1つ選ぶ', sched.length ? sched.join('、') + 'の日程は、内容を聞いてから相談して決めます。' : '') + '<div class="opts">';
-        Object.keys(SPEED).forEach(function(k){ var v = SPEED[k]; h += opt('radio', 'speed', k, v.label, v.hint, v.price ? priceHTML(v.price, true) : '', state.speed === k); });
-        h += '</div>' + actions();
-        break;
-      case 'result':
-        h += resultHTML();
-        break;
+  function recGroup(){
+    var chips = REC_CHOICES.map(function(c){ return chip('set', 'rec', c[0], c[1], c[2] ? '+' + yen(c[2]) : '0円', state.rec === c[0], c[3]); }).join('');
+    var pat = REC_CHOICES.map(function(c){
+      var st = cloneState(); st.rec = c[0];
+      return '<button type="button" class="pt' + (state.rec === c[0] ? ' is-on' : '') + '" data-set="rec" data-val="' + c[0] + '"><span>' + (c[0] === 'none' ? '自宅で録音' : 'スタジオで録音（4時間）') + '</span><b class="num">' + totalText(calc(st)) + '</b></button>';
+    }).join('');
+    return group('録音方法', '1つ選ぶ', chips, 2, '<div class="pattern"><p>合計のパターン</p><div class="pt-grid">' + pat + '</div></div>');
+  }
+  function subtotal(cat, withRec){
+    var r = calc(), names = [CAT_NAMES[cat]]; if (withRec) names.push('レコーディング');
+    var t = 0, tbd = false, any = false;
+    r.groups.forEach(function(g){ if (names.indexOf(g.name) > -1) g.items.forEach(function(it){ any = true; if (it.price === null) tbd = true; else t += it.price; }); });
+    if (!any) return '';
+    if (tbd && !t) return '個別見積もり';
+    return yen(t) + (tbd ? '〜' : '');
+  }
+  function sectionHTML(cat, isMain, showRec){
+    var s = SVC[cat], h = '';
+    h += '<section class="cz" id="cz-' + cat + '"><div class="cz-head">' + thumb(cat) + '<div class="cz-title"><small>' + (isMain ? 'メイン' : '追加') + '</small><b>' + s.title + '</b></div><span class="cz-sub num">' + subtotal(cat, showRec) + '</span><button type="button" class="cz-x" data-act="remove" data-cat="' + cat + '" aria-label="' + s.title + 'を外す">×</button></div><div class="cz-body">';
+    if (cat === 'music'){
+      h += group('お願いする工程', '複数OK', MUSIC.map(function(m){ return chip('toggle', 'music', m.id, m.label, yen(m.price), state.music.has(m.id), m.hint); }).join(''));
+      if (showRec) h += recGroup();
     }
+    if (cat === 'mix'){
+      if (showRec) h += recGroup();
+      h += group('MIXする長さ', '1つ選ぶ', Object.keys(MIX.len).map(function(k){ var v = MIX.len[k]; return chip('set', 'mix.len', k, v.label, yen(v.price), state.mix.len === k, v.hint); }).join(''));
+      h += '<div class="grp">' + qtyRow('mix.songs', state.mix.songs, '曲数', '同じ内容で何曲お願いしますか？', '', 1, 10) + '</div>';
+      h += group('オプション', '複数OK', MIX.opts.map(function(o){ return chip('toggle', 'mix.opts', o.id, o.label, '+' + yen(o.price), state.mix.opts.has(o.id), o.hint); }).join(''), 1);
+    }
+    if (cat === 'mv'){
+      h += '<div class="grp"><div class="base-row"><span>' + MV.base.label + '<small>基本料金に入っています</small></span><b class="num">' + yen(MV.base.price) + '</b></div></div>';
+      h += group('オプション', '複数OK', MV.opts.map(function(o){ return chip('toggle', 'mv.opts', o.id, o.label, '+' + yen(o.price), state.mv.opts.has(o.id), o.hint); }).join(''), 1);
+      h += group('撮影場所', '1つ選ぶ', Object.keys(MV.place).map(function(k){ var v = MV.place[k]; return chip('set', 'mv.place', k, v.label, k === 'self' ? '0円' : k === 'studio' ? 'スタジオ代' : '相談', state.mv.place === k, v.hint); }).join(''), 3);
+    }
+    if (cat === 'illust'){
+      h += '<div class="grp"><div class="grp-head"><span class="grp-label">イラストの種類と数</span><span class="tag">数を選ぶ</span></div><div class="qty-list">' +
+        ILLUST.map(function(it){ return qtyRow('illust.' + it.id, state.illust[it.id], it.label, it.hint, '1点 ' + yen(it.price), 0, 10); }).join('') + '</div></div>';
+    }
+    if (cat === 'avatar'){
+      h += group('どんなアバター？', '1つ選ぶ', Object.keys(AVATAR.type).map(function(k){ var v = AVATAR.type[k]; return chip('set', 'avatar.type', k, v.label, '', state.avatar.type === k, v.hint); }).join(''), 3);
+      h += group('キャラクターのイラスト', '1つ選ぶ', Object.keys(AVATAR.art).map(function(k){ var v = AVATAR.art[k]; return chip('set', 'avatar.art', k, v.label, '', state.avatar.art === k, v.hint); }).join(''));
+      h += '<p class="cz-note">Vアバターは、内容を聞いてから個別にお見積りします。</p>';
+    }
+    if (cat === 'photo'){
+      var H = PHOTO.hours[state.photo.hours];
+      h += '<div class="grp"><div class="base-row"><span>' + PHOTO.base.label + '<small>' + PHOTO.base.hint + '</small></span><b class="num">' + yen(PHOTO.base.price) + '</b></div></div>';
+      h += group('撮影場所', '1つ選ぶ', Object.keys(PHOTO.place).map(function(k){ var v = PHOTO.place[k]; return chip('set', 'photo.place', k, v.label, k === 'self' ? '0円' : k === 'studio' ? '+' + yen(H.studio) : '', state.photo.place === k, v.hint); }).join(''), 3);
+      h += group('撮影時間', '1つ選ぶ', Object.keys(PHOTO.hours).map(function(k){ var v = PHOTO.hours[k]; return chip('set', 'photo.hours', k, v.label, k === 'h4' ? '+' + yen(PHOTO.extend * 3) : '基本料金', state.photo.hours === k, v.hint); }).join(''));
+      h += '<div class="grp">' + qtyRow('photo.retouch', state.photo.retouch, 'レタッチ', '肌や背景を整えて、特に使いたい写真を仕上げます', '1枚 ' + yen(PHOTO.retouch), 0, 20) + '</div>';
+      h += group('使い道', '複数OK', PHOTO.use.map(function(u){ return chip('toggle', 'photo.use', u.id, u.label, '', state.photo.use.has(u.id)); }).join(''), 3);
+    }
+    h += '<p class="err" id="err-' + cat + '" hidden></p>';
+    h += '<button class="guide-link" type="button" data-guide="' + cat + '">' + BOOK + '何をするのか、くわしく見る</button>';
+    return h + '</div></section>';
+  }
+
+  function menuHTML(){
+    var h = '<h3 class="q-title jp-head">メニューを選んでください</h3><p class="q-note sim-lead">セットか単品を選ぶと、次の画面でタップだけでカスタマイズできます。</p>';
+    h += '<p class="opt-group">人気のセット</p><div class="set-row">' + PRESETS.map(function(p){
+      var st = freshState(); p.apply(st); var alt = altRecTotal(st);
+      return '<button type="button" class="set" data-preset="' + p.id + '"><span class="set-media">' + goalMedia(p.media) + '</span><span class="set-body"><b>' + p.name + '</b><small>' + p.chips.join('＋') + '</small><em class="num">' + totalText(calc(st)) + '</em>' + (alt ? '<i>' + alt.label + ' ' + alt.total + '</i>' : '') + '</span></button>';
+    }).join('') + '</div>';
+    h += '<p class="opt-group">単品から選ぶ</p><div class="menu-grid">' + SERVICES.map(function(s){
+      var on = state.cats.has(s.id);
+      return '<button type="button" class="mitem' + (on ? ' is-on' : '') + '" data-act="pick" data-cat="' + s.id + '"><span class="mitem-media">' + goalMedia(SVC_IMG[s.id]) + (on ? '<span class="mitem-badge">選択中</span>' : '') + '</span><span class="mitem-body"><b>' + s.pick + '</b><small>' + s.kind + '</small><em class="num">' + fromText(s.from) + '</em></span></button>';
+    }).join('') + '</div>';
+    return h;
+  }
+  function sideList(){
+    var out = [], has = function(c){ return state.cats.has(c); };
+    function push(id, why){ if (!has(id) && !out.some(function(o){ return o[0] === id; })) out.push([id, why]); }
+    if (has('music')) push('mix', '作った曲を1曲に仕上げるなら、MIX・マスタリングも');
+    if (has('music') || has('mix')) push('mv', '曲に映像を付けて、YouTubeで公開できます');
+    if (has('music') || has('mix')) push('illust', '新曲の告知に使うキービジュアルも描けます');
+    if (has('illust')) push('avatar', '描いたキャラクターを、配信で動くアバターに');
+    if (has('mv')) push('photo', 'MVと同じ雰囲気で、告知用の写真もそろえられます');
+    if (has('avatar')) push('illust', 'SNS用のアイコンや立ち絵もあわせて');
+    push('music', 'カバーだけでなく、オリジナル曲も作れます');
+    push('mix', '録った歌を、聴きやすい音源に仕上げます');
+    push('mv', '曲に映像を付けて、YouTubeで公開できます');
+    push('illust', 'アイコンや立ち絵で、活動の見た目を整えます');
+    push('avatar', '顔を出さずに配信できるキャラクターを作ります');
+    push('photo', 'プロフィールや告知に使う写真を撮影します');
+    return out;
+  }
+  function customHTML(){
+    syncOrder();
+    var recAt = order.filter(function(c){ return c === 'mix' || c === 'music'; })[0];
+    var h = '<h3 class="q-title jp-head">カスタマイズ</h3><p class="q-note sim-lead">タップするだけで切り替わり、金額にすぐ反映されます。</p>';
+    order.forEach(function(c, i){ h += sectionHTML(c, i === 0, c === recAt); });
+    var side = sideList();
+    if (side.length) h += '<section class="side"><h4>一緒にいかがですか？</h4><div class="side-row">' + side.map(function(x){
+      var s = SVC[x[0]];
+      return '<div class="side-card"><span class="side-media">' + goalMedia(SVC_IMG[s.id]) + '</span><b>' + s.title + '</b><small>' + x[1] + '</small><div class="side-foot"><em class="num">' + fromText(s.from) + '</em><button type="button" class="btn btn-gray btn-sm" data-act="add" data-cat="' + s.id + '">＋ 追加</button></div></div>';
+    }).join('') + '</div></section>';
+    var sched = ['music', 'mv', 'avatar', 'photo'].filter(function(c){ return state.cats.has(c); }).map(function(c){ return CAT_NAMES[c]; });
+    h += '<section class="cz cz-plain" id="cz-speed"><div class="cz-head"><div class="cz-title"><small>全体</small><b>納期</b></div></div><div class="cz-body">' +
+      group('いつまでに必要ですか？', '1つ選ぶ', Object.keys(SPEED).map(function(k){ var v = SPEED[k]; return chip('set', 'speed', k, v.label, v.price ? '+' + yen(v.price) : '0円', state.speed === k, v.hint); }).join(''), 3) +
+      (sched.length ? '<p class="cz-note">' + sched.join('、') + 'の日程は、内容を聞いてから相談して決めます。</p>' : '') + '</div></section>';
     return h;
   }
 
   function listHTML(r){
-    if (r.empty) return '<p class="sum-empty">まだ何も選ばれていません。作りたいものを選ぶと、ここに内訳が出ます。</p>';
+    if (r.empty) return '<p class="sum-empty">まだ何も選ばれていません。メニューから選ぶと、ここに内訳が出ます。</p>';
     var g = '';
     r.groups.forEach(function(grp){
       g += '<div class="sum-group"><h4>' + grp.name + '</h4>';
@@ -1273,34 +1372,12 @@ html.embedded{scroll-padding-top:16px}
     var d = new Date();
     return d.getFullYear() + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0');
   }
-
-  function upsellList(){
-    var out = [], has = function(c){ return state.cats.has(c); };
-    function push(id, why){ if (!has(id) && !out.some(function(o){ return o[0] === id; })) out.push([id, why]); }
-    if (has('music')) push('mix', '作った曲を1曲に仕上げるには、MIX・マスタリングが必要です。');
-    if (has('music') || has('mix')) push('mv', '曲に映像を付けて、YouTubeなどで公開できます。');
-    if (has('music') || has('mix')) push('illust', '新曲の告知に使うキービジュアルも描けます。');
-    if (has('illust')) push('avatar', '描いたキャラクターを、配信で動くアバターにできます。');
-    if (has('mv')) push('photo', 'MVと同じ雰囲気で、告知用の写真もそろえられます。');
-    if (has('avatar')) push('illust', 'SNS用のアイコンや立ち絵もあわせて用意できます。');
-    push('music', 'カバーだけでなく、オリジナル曲も作れます。');
-    push('photo', 'プロフィールや告知に使う写真を撮影します。');
-    push('mix', '録った歌を、聴きやすい音源に仕上げます。');
-    push('illust', 'アイコンや立ち絵で、活動の見た目を整えます。');
-    return out.slice(0, 3);
-  }
-
-  function resultHTML(){
-    var r = calc(), ups = upsellList(), u = '';
-    ups.forEach(function(x){
-      var s = SVC[x[0]];
-      u += '<div class="up"><span class="opt-icon" aria-hidden="true">' + ICON[s.id] + '</span><span class="opt-body"><b>' + s.title + '</b><span>' + x[1] + '</span><span class="up-from num">' + fromText(s.from) + '</span></span><button class="btn btn-gray btn-sm" type="button" data-start="' + s.id + '">追加する</button></div>';
-    });
+  function confirmHTML(){
+    var r = calc();
     return '<h3 class="q-title jp-head">見積もりができました</h3>' +
       '<div class="q-meta"><span class="q-note">内容と金額を確認して、よければLINEで送ってください。</span></div>' +
       '<div class="receipt"><span class="date num">' + today() + ' 作成</span>' + listHTML(r) + totalHTML(r) + '</div>' +
       '<p class="fine">この金額は目安です。送ってもらったら、担当が内容を確認して正式な金額をお知らせします。</p>' +
-      (ups.length ? '<div class="upsell"><h4>あわせて頼めるもの</h4><p>「追加する」を押すと、その質問に答えたあと、この見積もりに戻ってきます。</p><div class="up-list">' + u + '</div></div>' : '') +
       '<div class="send">' +
         '<h4>この内容で相談する</h4>' +
         '<p>名前とやりたいことを添えてもらえると、そのあとのやりとりがスムーズです。</p>' +
@@ -1308,13 +1385,11 @@ html.embedded{scroll-padding-top:16px}
         '<label class="field"><span>やりたいことや、参考にしたい作品（任意）</span><textarea id="fMemo" rows="4" placeholder="例：秋にオリジナル曲を出したい。雰囲気はこの曲に近い感じ、など">' + esc(state.memo) + '</textarea></label>' +
         '<div class="actions">' +
           '<button class="btn btn-blue" type="button" data-act="line">LINEでこの内容を送る</button>' +
-          '<a class="btn btn-gray" href="' + CONFIG.FORM_URL + '" target="_blank" rel="noopener" data-act="form">フォームから依頼する</a>' +
         '</div>' +
         '<details class="preview"><summary>送る内容を確認する</summary><pre id="preview"></pre></details>' +
       '</div>' +
-      '<div class="result-nav"><button class="link" type="button" data-act="edit">内容を変える</button><button class="link" type="button" data-act="copy">内容をコピー</button><button class="link" type="button" data-act="restart">最初からやり直す</button></div>';
+      '<div class="result-nav"><button class="link" type="button" data-act="back">‹ カスタマイズに戻る</button><button class="link" type="button" data-act="copy">内容をコピー</button><button class="link" type="button" data-act="restart">最初からやり直す</button></div>';
   }
-
   function buildText(){
     var r = calc(), L = ['【Xector1 CreativeResource 見積もりシミュレーション】'];
     if (state.name.trim()) L.push('お名前：' + state.name.trim());
@@ -1322,6 +1397,7 @@ html.embedded{scroll-padding-top:16px}
       L.push('', '■' + grp.name);
       grp.items.forEach(function(it){ L.push('・' + it.label + '　' + priceText(it.price)); });
     });
+    if ((state.cats.has('mix') || state.cats.has('music')) && state.rec === 'none') L.push('', '■録音', '・自宅で録音（音源を送付）');
     if (state.cats.has('photo') && state.photo.use.size) L.push('', '■宣伝写真の使い道', PHOTO.use.filter(function(u){ return state.photo.use.has(u.id); }).map(function(u){ return u.label; }).join('、'));
     L.push('', '合計（目安）：' + totalText(r));
     r.notes.forEach(function(n){ L.push('※' + n); });
@@ -1336,47 +1412,54 @@ html.embedded{scroll-padding-top:16px}
     $('#mbarTotal').textContent = totalText(r);
     $('#mbarDetail').innerHTML = listHTML(r) + notesHTML(r);
   }
+  function nextText(){ return screen === 'menu' ? 'カスタマイズへ' : '確認へ進む'; }
   function updateChrome(){
-    var id = steps[idx], isResult = id === 'result', qCount = steps.length - 1;
-    $('#stepName').innerHTML = isResult ? '<b>見積もり</b>' : '<span class="num">' + (idx + 1) + ' / ' + qCount + '</span>　<b>' + STEP_LABEL[id] + '</b>';
-    var segs = '';
-    for (var i = 0; i < steps.length; i++) segs += '<i class="' + (i < idx ? 'done' : i === idx ? 'cur' : '') + '"></i>';
-    $('#segs').innerHTML = segs;
-    $('#backBtn').style.visibility = idx === 0 ? 'hidden' : 'visible';
-    $('#simGrid').classList.toggle('is-result', isResult);
-    $('#mbar').hidden = isResult;
-    $('#mNext').textContent = steps[idx + 1] === 'result' ? '見積もりを見る' : '次へ';
-    var qa = $('.q-actions .btn', host); if (qa) qa.textContent = nextLabel();
+    var i = SCREENS.map(function(x){ return x[0]; }).indexOf(screen);
+    $$('#steps3 li').forEach(function(li, j){ li.className = j < i ? 'done' : j === i ? 'cur' : ''; });
+    $('#backBtn').style.visibility = screen === 'menu' ? 'hidden' : 'visible';
+    $('#simGrid').classList.toggle('is-result', screen === 'confirm');
+    var showBar = screen !== 'confirm' && order.length > 0;
+    $('#mbar').hidden = !showBar;
+    $('#mNext').textContent = nextText();
+    var pb = $('#panelBtn'); pb.hidden = !showBar; pb.textContent = screen === 'menu' ? 'カスタマイズへ' : '注文内容を確認する';
   }
   function render(){
-    host.innerHTML = stepHTML(steps[idx]);
+    syncOrder();
+    if (screen === 'custom' && !order.length) screen = 'menu';
+    host.innerHTML = screen === 'menu' ? menuHTML() : screen === 'custom' ? customHTML() : confirmHTML();
+    hydrate(host);
     updateChrome();
     updateSummary();
-    if (steps[idx] === 'result') updatePreview();
+    if (screen === 'confirm') updatePreview();
+  }
+  function rerender(sel){
+    var y = window.scrollY;
+    render();
+    window.scrollTo(0, y);
+    if (sel){ var el = host.querySelector(sel); if (el) el.focus({ preventScroll: true }); }
   }
   function updatePreview(){ var p = $('#preview'); if (p) p.textContent = buildText(); }
-  function scrollToSim(force){
-    var top = $('#simTop'), y = top.getBoundingClientRect().top;
-    if (force || y < 70 || y > window.innerHeight * .6) top.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+  function scrollToSim(){
+    $('#simTop').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
     host.focus({ preventScroll: true });
   }
-  function showErr(msg){ var e = $('#stepErr'); if (e){ e.textContent = msg; e.hidden = false; } }
+  function scrollToEl(el){ if (el) el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' }); }
   function validate(){
-    var id = steps[idx];
-    if (id === 'cats' && !state.cats.size){ showErr('作りたいものを1つ以上選んでください。'); return false; }
-    if (id === 'music' && !state.music.size){ showErr('作詞かトラック制作を1つ以上選んでください。'); return false; }
-    if (id === 'illust'){
-      var sum = 0;
-      Object.keys(state.illust).forEach(function(k){ sum += state.illust[k]; });
-      if (!sum){ showErr('イラストを1つ以上追加してください。不要な場合は、最初の質問で「イラストがほしい」を外してください。'); return false; }
-    }
+    var bad = null;
+    function err(cat, msg){ var e = $('#err-' + cat); if (e){ e.textContent = msg; e.hidden = false; } if (!bad) bad = $('#cz-' + cat); }
+    if (state.cats.has('music') && !state.music.size) err('music', '作詞かトラック制作を1つ以上選んでください。');
+    if (state.cats.has('illust')){ var n = 0; Object.keys(state.illust).forEach(function(k){ n += state.illust[k]; }); if (!n) err('illust', 'イラストを1つ以上追加してください。不要なら右上の×で外せます。'); }
+    if (bad){ scrollToEl(bad); return false; }
     return true;
   }
   function goNext(){
-    if (!validate()) return;
-    if (idx < steps.length - 1){ idx++; closeDetail(); render(); scrollToSim(); }
+    if (screen === 'menu'){ if (order.length){ screen = 'custom'; render(); scrollToSim(); } return; }
+    if (screen === 'custom'){ if (!validate()) return; closeDetail(); screen = 'confirm'; render(); scrollToSim(); }
   }
-  function syncOn(){ $$('.opt', host).forEach(function(l){ var i = $('input', l); l.classList.toggle('is-on', !!(i && i.checked)); }); }
+  function goBack(){
+    if (screen === 'confirm') screen = 'custom'; else if (screen === 'custom') screen = 'menu';
+    render(); scrollToSim();
+  }
   function closeDetail(){ detailOpen = false; $('#mbarDetail').hidden = true; $('#mbarToggle').setAttribute('aria-expanded', 'false'); $('#mbarToggleText').textContent = '内訳を見る'; }
 
   function applyPreset(pid){
@@ -1385,14 +1468,15 @@ html.embedded{scroll-padding-top:16px}
     var keep = { name: state.name, memo: state.memo };
     state = freshState(); state.name = keep.name; state.memo = keep.memo;
     p.apply(state);
-    steps = buildSteps(); idx = steps.length - 1;
-    closeGuide(); render(); scrollToSim(true);
+    order = p.svcs.filter(function(c){ return state.cats.has(c); });
+    screen = 'custom';
+    closeGuide(); render(); scrollToSim();
   }
   function startWith(cat){
-    state.cats.add(cat);
-    steps = buildSteps();
-    idx = steps.indexOf(FIRST_STEP[cat]);
-    closeGuide(); render(); scrollToSim(true);
+    addCat(cat);
+    screen = 'custom';
+    closeGuide(); render();
+    scrollToEl($('#cz-' + cat));
   }
 
   /* ===== ガイド ===== */
@@ -1483,7 +1567,7 @@ html.embedded{scroll-padding-top:16px}
     $('#goalGrid').innerHTML = PRESETS.map(function(p){
       var st = freshState(); p.apply(st);
       return '<article class="goal"><div class="goal-media">' + goalMedia(p.media) + '</div><h3>' + p.name + '</h3><p>' + p.desc + '</p><ul class="chips">' + p.chips.map(function(c){ return '<li>' + c + '</li>'; }).join('') + '</ul>' +
-        '<div class="goal-foot"><span class="goal-price">合計（目安）<b class="num">' + totalText(calc(st)) + '</b></span><button class="btn btn-blue btn-sm" type="button" data-preset="' + p.id + '">この内容で見積もる</button></div></article>';
+        '<div class="goal-foot"><span class="goal-price">合計（目安）<b class="num">' + totalText(calc(st)) + '</b>' + (function(){ var alt = altRecTotal(st); return alt ? '<small class="num">' + alt.label + ' ' + alt.total + '</small>' : ''; })() + '</span><button class="btn btn-blue btn-sm" type="button" data-preset="' + p.id + '">この内容で見積もる</button></div></article>';
     }).join('');
     hydrate($('#goalGrid'));
   }
@@ -1540,7 +1624,7 @@ html.embedded{scroll-padding-top:16px}
   }
 
   /* ===== イベント ===== */
-  $('#backBtn').addEventListener('click', function(){ if (idx > 0){ idx--; render(); scrollToSim(); } });
+  $('#backBtn').addEventListener('click', goBack);
   $('#mNext').addEventListener('click', goNext);
   $('#mbarToggle').addEventListener('click', function(){
     detailOpen = !detailOpen;
@@ -1549,46 +1633,33 @@ html.embedded{scroll-padding-top:16px}
     $('#mbarToggleText').textContent = detailOpen ? '内訳を閉じる' : '内訳を見る';
   });
 
-  host.addEventListener('change', function(e){
-    var t = e.target;
-    if (t.name === 'cat'){
-      if (t.checked) state.cats.add(t.value); else state.cats.delete(t.value);
-      steps = buildSteps();
-      var err = $('#stepErr'); if (err) err.hidden = true;
-    }
-    else if (t.name === 'music'){ t.checked ? state.music.add(t.value) : state.music.delete(t.value); var e2 = $('#stepErr'); if (e2) e2.hidden = true; }
-    else if (t.name === 'mixlen') state.mix.len = t.value;
-    else if (t.name === 'mixopt') t.checked ? state.mix.opts.add(t.value) : state.mix.opts.delete(t.value);
-    else if (t.name === 'mvopt') t.checked ? state.mv.opts.add(t.value) : state.mv.opts.delete(t.value);
-    else if (t.name === 'mvplace') state.mv.place = t.value;
-    else if (t.name === 'avtype') state.avatar.type = t.value;
-    else if (t.name === 'avart') state.avatar.art = t.value;
-    else if (t.name === 'phuse') t.checked ? state.photo.use.add(t.value) : state.photo.use.delete(t.value);
-    else if (t.name === 'phplace'){ state.photo.place = t.value; syncOn(); updateSummary(); var y = window.scrollY; render(); window.scrollTo(0, y); return; }
-    else if (t.name === 'phhours') state.photo.hours = t.value;
-    else if (t.name === 'rec') state.rec = t.value;
-    else if (t.name === 'speed') state.speed = t.value;
-    else return;
-    syncOn(); updateChrome(); updateSummary();
-  });
   host.addEventListener('input', function(e){
     if (e.target.id === 'fName'){ state.name = e.target.value; updatePreview(); }
     if (e.target.id === 'fMemo'){ state.memo = e.target.value; updatePreview(); }
   });
   host.addEventListener('click', function(e){
     var b = e.target.closest('button[data-delta]');
-    if (!b) return;
-    var st = b.closest('.stepper'), path = st.dataset.key.split('.');
-    var min = +st.dataset.min, max = +st.dataset.max;
-    var v = Math.max(min, Math.min(max, state[path[0]][path[1]] + (+b.dataset.delta)));
-    state[path[0]][path[1]] = v;
-    $('output', st).textContent = v;
-    var btns = $$('button', st);
-    btns[0].disabled = v <= min; btns[1].disabled = v >= max;
-    var item = st.closest('.item');
-    if (item && min === 0) item.classList.toggle('is-on', v > 0);
-    var err = $('#stepErr'); if (err) err.hidden = true;
-    updateSummary();
+    if (b){
+      var st = b.closest('.stepper'), path = st.dataset.key.split('.');
+      var min = +st.dataset.min, max = +st.dataset.max;
+      state[path[0]][path[1]] = Math.max(min, Math.min(max, state[path[0]][path[1]] + (+b.dataset.delta)));
+      rerender('.stepper[data-key="' + st.dataset.key + '"] [data-delta="' + b.dataset.delta + '"]');
+      return;
+    }
+    var c = e.target.closest('[data-set],[data-toggle]');
+    if (c){
+      var val = c.dataset.val, key, p;
+      if (c.dataset.set){
+        key = c.dataset.set; p = key.split('.');
+        if (p.length === 1) state[p[0]] = val; else state[p[0]][p[1]] = val;
+        rerender('.chip[data-set="' + key + '"][data-val="' + val + '"]');
+      } else {
+        key = c.dataset.toggle; p = key.split('.');
+        var set = p.length === 1 ? state[p[0]] : state[p[0]][p[1]];
+        if (set.has(val)) set.delete(val); else set.add(val);
+        rerender('.chip[data-toggle="' + key + '"][data-val="' + val + '"]');
+      }
+    }
   });
 
   document.addEventListener('click', function(e){
@@ -1607,26 +1678,26 @@ html.embedded{scroll-padding-top:16px}
     else if (act === 'gnext') setGuideTab(Math.min(GTABS.length - 1, gState.tab + 1));
     else if (act === 'gprev') setGuideTab(Math.max(0, gState.tab - 1));
     else if (act === 'next') goNext();
-    else if (act === 'addmix'){ state.cats.add('mix'); steps = buildSteps(); render(); toast('MIX・マスタリングを見積もりに追加しました。'); }
+    else if (act === 'back') goBack();
+    else if (act === 'pick'){ var cat = a.dataset.cat; addCat(cat); screen = 'custom'; render(); scrollToEl($('#cz-' + cat)); }
+    else if (act === 'add'){ var c2 = a.dataset.cat; addCat(c2); rerender(); scrollToEl($('#cz-' + c2)); toast(SVC[c2].title + 'を追加しました。'); }
+    else if (act === 'remove'){ removeCat(a.dataset.cat); render(); if (screen === 'menu') scrollToSim(); }
     else if (act === 'line'){
       var text = buildText();
       if (CONFIG.LINE_ID){
         window.open('https://line.me/R/oaMessage/' + encodeURIComponent(CONFIG.LINE_ID) + '/?' + encodeURIComponent(text), '_blank', 'noopener');
+        copyText(text).then(function(ok){ if (ok) toast('LINEを開きます。文面が入っていなければ、コピー済みの内容を貼り付けてください。'); });
       } else {
         copyText(text).then(function(ok){
           toast(ok ? '見積もり内容をコピーしました。Xector1公式LINEのトークに貼り付けて送ってください。' : 'コピーできませんでした。「送る内容を確認する」を開いて、長押しでコピーしてください。');
         });
       }
-    } else if (act === 'form'){
-      copyText(buildText()).then(function(ok){ if (ok) toast('見積もり内容もコピーしておきました。フォームに貼り付けて使えます。'); });
     } else if (act === 'copy'){
       copyText(buildText()).then(function(ok){
         toast(ok ? '見積もり内容をコピーしました。' : 'コピーできませんでした。「送る内容を確認する」を開いて、長押しでコピーしてください。');
       });
-    } else if (act === 'edit'){
-      idx = 0; render(); scrollToSim();
     } else if (act === 'restart'){
-      state = freshState(); steps = buildSteps(); idx = 0; render(); scrollToSim();
+      state = freshState(); order = []; screen = 'menu'; render(); scrollToSim();
     }
   });
 
@@ -1654,7 +1725,6 @@ html.embedded{scroll-padding-top:16px}
     toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 4200);
   }
 
-  $$('[data-form]').forEach(function(a){ a.href = CONFIG.FORM_URL; });
   $$('[data-line-add]').forEach(function(a){
     if (CONFIG.LINE_ADD_URL){ a.href = CONFIG.LINE_ADD_URL; a.target = '_blank'; a.rel = 'noopener'; }
     else a.addEventListener('click', function(e){ e.preventDefault(); toast('LINEのURLは設定待ちです（下書き）。'); });
@@ -1665,7 +1735,7 @@ html.embedded{scroll-padding-top:16px}
   renderGoals();
   renderPrices();
   renderServices();
-  steps = buildSteps(); idx = 0; render();
+  render();
 })();
 </script>
 </body>
